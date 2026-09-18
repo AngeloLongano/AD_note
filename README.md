@@ -39,6 +39,11 @@ heading e block ID, `<br>` e delimitatori matematici compatibili con Obsidian.
 
 ## Comandi
 
+- `just mdx` rigenera l'MDX dal Markdown sorgente;
+- `just dev` rigenera il contenuto e avvia Astro;
+- `just check` esegue i controlli del progetto;
+- `just build` genera il sito statico;
+- `just pages` simula localmente la build per GitHub Pages;
 - `npm run content:build` genera solo l'MDX;
 - `npm run dev` genera il contenuto e avvia Astro;
 - `npm run check` controlla componenti e TypeScript;

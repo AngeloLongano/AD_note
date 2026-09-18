@@ -1,8 +1,5 @@
 # Algoritmi Distribuiti
 
-Carlo Uguzzoni  
-23/9/24 - 20/12/24
-
 ## Indice
 
 - [[#1 Introduzione|1 Introduzione]]

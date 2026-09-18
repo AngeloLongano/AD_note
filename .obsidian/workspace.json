@@ -79,8 +79,7 @@
               "title": "Segnalibri"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -190,21 +189,53 @@
       "bases:Crea nuova Base": false
     }
   },
-  "active": "17ba5ddf354c7035",
+  "active": "0849b469fbcee247",
   "lastOpenFiles": [
-    "Senza nome.base",
-    "Senza nome 1.base",
+    "dist/index.html",
+    "dist/widgets/master-theorem/index.html",
+    "dist/widgets/master-theorem",
+    "dist/widgets",
+    "dist/_astro/KaTeX_Fraktur-Regular.CB_wures.ttf",
+    "dist/_astro/MasterTheoremWidget.CYn32hDj.css",
+    "dist/_astro/KaTeX_Typewriter-Regular.D3Ib7_Hf.ttf",
+    "dist/_astro/KaTeX_Typewriter-Regular.CO6r4hn1.woff2",
+    "dist/_astro/KaTeX_Typewriter-Regular.C0xS9mPB.woff",
+    "dist/_astro/KaTeX_Size4-Regular.Dl5lxZxV.woff2",
+    "dist/_astro/KaTeX_Size4-Regular.DWFBv043.ttf",
+    "dist/vertexcoverILP.png",
+    "dist/vertex_covers.png",
+    "dist/christof3.png",
+    "dist/christof2.png",
+    "dist/christof1.png",
+    "dist/Screenshot 2024-11-26 120047.png",
+    "dist/Screenshot 2024-11-26 114626.png",
+    "dist/Screenshot 2024-11-26 114109.png",
+    "dist/Screenshot 2024-11-26 112958.png",
+    "dist/Screenshot 2024-11-26 112658.png",
+    "ROADMAP-fonte-di-verita.md",
+    "README.md",
     "Algoritmi Distribuiti.md",
-    "assets/Screenshot 2024-09-24 111824.png",
-    "assets/Screenshot 2024-09-24 111746.png",
-    "assets/Screenshot 2024-11-22 173344.png",
-    "assets/Screenshot 2024-11-12 121505.png",
-    "assets/Screenshot 2024-10-15 121746.png",
-    "assets/Screenshot 2024-11-26 112658.png",
-    "assets/vertex_covers.png",
-    "assets/Screenshot 2024-10-02 110633.png",
-    "assets/Screenshot 2024-11-08 172142.png",
-    "assets/Screenshot 2024-11-15 181853.png",
-    "assets"
+    "node_modules/parse-entities/node_modules/@types/unist/README.md",
+    "node_modules/parse-entities/readme.md",
+    "node_modules/@mdx-js/mdx/readme.md",
+    "node_modules/@types/mdx/README.md",
+    "node_modules/array-iterate/readme.md",
+    "node_modules/inline-style-parser/README.md",
+    "node_modules/style-to-object/README.md",
+    "node_modules/unist-util-visit-children/readme.md",
+    "node_modules/unist-util-modify-children/readme.md",
+    "node_modules/parse-latin/readme.md",
+    "node_modules/retext-stringify/readme.md",
+    "node_modules/retext-latin/readme.md",
+    "node_modules/retext/readme.md",
+    "node_modules/micromark-util-events-to-acorn/readme.md",
+    "node_modules/micromark-extension-mdx-md/readme.md",
+    "node_modules/micromark-extension-mdxjs/readme.md",
+    "node_modules/micromark-extension-gfm-task-list-item/readme.md",
+    "node_modules/micromark-factory-mdx-expression/readme.md",
+    "node_modules/micromark-extension-mdxjs-esm/readme.md",
+    "node_modules/micromark-extension-mdx-expression/readme.md",
+    "node_modules/micromark-extension-mdx-jsx/readme.md",
+    "node_modules/mdast-util-mdx/readme.md"
   ]
 }

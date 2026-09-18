@@ -1,7 +1,7 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import SiteHeader from '../components/SiteHeader.astro';
-import Note from '../content/generated/algoritmi-distribuiti.mdx';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import Note from "../content/generated/algoritmi-distribuiti.mdx";
 ---
 
 <BaseLayout title="Algoritmi Distribuiti — Appunti">
@@ -12,25 +12,29 @@ import Note from '../content/generated/algoritmi-distribuiti.mdx';
       <p>In questa dispensa</p>
       <a href="#1-introduzione">01 <span>Introduzione</span></a>
       <a href="#2-teoria-della-complessità">02 <span>Complessità</span></a>
-      <a href="#3-algoritmi-distribuiti">03 <span>Algoritmi distribuiti</span></a>
+      <a href="#3-algoritmi-distribuiti"
+        >03 <span>Algoritmi distribuiti</span></a
+      >
       <a href="#4-algoritmi-di-routing">04 <span>Routing</span></a>
       <a href="#5-errori-e-fallimenti">05 <span>Errori e fallimenti</span></a>
       <a href="#6-strutture-dati-distribuite">06 <span>Strutture dati</span></a>
     </aside>
     <main id="appunti" class="prose">
-      <div class="intro-label">Dispensa · AA 2024/25</div>
+      <div class="intro-label">Dispensa · AA 2025/26</div>
       <Note />
     </main>
   </div>
 </BaseLayout>
 
 <script>
-  const progress = document.querySelector<HTMLElement>('.reading-progress span');
+  const progress = document.querySelector<HTMLElement>(
+    ".reading-progress span",
+  );
   const updateProgress = () => {
     if (!progress) return;
     const available = document.documentElement.scrollHeight - innerHeight;
     progress.style.width = `${available > 0 ? (scrollY / available) * 100 : 0}%`;
   };
-  addEventListener('scroll', updateProgress, { passive: true });
+  addEventListener("scroll", updateProgress, { passive: true });
   updateProgress();
 </script>
