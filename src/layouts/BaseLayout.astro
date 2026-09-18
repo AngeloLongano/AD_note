@@ -1,0 +1,33 @@
+---
+import '../styles/global.css';
+import 'katex/dist/katex.min.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Appunti ragionati di Algoritmi Distribuiti, con laboratori interattivi.'
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="author" content="Carlo Uguzzoni, Angelo Longano, GPT-5.6-SOL" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%230d3b35%22/><path d=%22M8 22 16 7l8 15h-4l-1.7-3.5h-5L11.5 22z%22 fill=%22%23fff%22/></svg>" />
+  </head>
+  <body>
+    <slot />
+    <footer class="site-footer">
+      <p>Appunti e progetto a cura di <strong>Carlo Uguzzoni</strong>, <strong>Angelo Longano</strong> e <strong>GPT-5.6-SOL</strong>.</p>
+    </footer>
+  </body>
+</html>

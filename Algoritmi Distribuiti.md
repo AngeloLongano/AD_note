@@ -6,7 +6,7 @@ Carlo Uguzzoni
 ## Indice
 
 - [[#1 Introduzione|1 Introduzione]]
-  - [[#1.1 Ricorrenze e Master Theorem|1.1 Ricorrenze e Master Theorem]]
+  - [[#1.1 Ricorrenze e Master Theorem (facoltativo)|1.1 Ricorrenze e Master Theorem (facoltativo)]]
 - [[#2 Teoria della Complessità|2 Teoria della Complessità]]
   - [[#2.1 Classificazione dei problemi per complessità|2.1 Classificazione dei problemi per complessità]]
   - [[#2.2 Approssimazioni di problemi NP-hard|2.2 Approssimazioni di problemi NP-hard]]
@@ -169,9 +169,29 @@ Di conseguenza, le classi definite mediante costi polinomiali non cambiano passa
 
 La tesi di Church-Turing **ordinaria** riguarda invece quali funzioni siano effettivamente calcolabili.
 
-### 1.1 Ricorrenze e Master Theorem
+### 1.1 Ricorrenze e Master Theorem (facoltativo)
 
-> **Fuori dal nucleo documentato.** Ricorrenze e Master Theorem non compaiono nei materiali ufficiali Montangero presenti nella repository né nei due capitoli di ripasso/complessità usati per il consolidamento. La voce resta nell'indice soltanto per rendere esplicita questa verifica; non viene trattata come argomento d'esame senza una conferma ulteriore del docente.
+> **Integrazione di ripasso, fuori dal nucleo documentato.** Il Master Theorem non compare nei materiali ufficiali Montangero disponibili nella repository; trattare l'argomento come contenuto d'esame richiede quindi una conferma del docente.
+
+Una **ricorrenza** descrive il costo di un algoritmo ricorsivo in funzione del costo di istanze più piccole. Per molti algoritmi divide et impera ha la forma:
+
+$$T(n) = aT(n/b) + f(n),$$
+
+dove $a$ è il numero di sottoproblemi, $n/b$ la dimensione di ciascuno e $f(n)$ il lavoro svolto fuori dalle chiamate ricorsive; serve inoltre un caso base, per esempio $T(1)=\Theta(1)$.
+
+Il **Master Theorem** consente di stimare direttamente l'ordine di crescita di questa forma di ricorrenza. Posto $p=\log_b a$, confrontiamo $f(n)$ con $n^p$:
+
+1. se $f(n)=O(n^{p-\varepsilon})$, prevale il costo ricorsivo e $T(n)=\Theta(n^p)$;
+2. se $f(n)=\Theta(n^p)$, i costi sono bilanciati e $T(n)=\Theta(n^p\log n)$;
+3. se $f(n)=\Omega(n^{p+\varepsilon})$ e vale una condizione di regolarità, prevale il lavoro esterno e $T(n)=\Theta(f(n))$.
+
+**Esempio — Merge Sort.** La ricorrenza è $T(n)=2T(n/2)+\Theta(n)$. Poiché $a=2$, $b=2$ e $n^{\log_2 2}=n$, si applica il secondo caso: $T(n)=\Theta(n\log n)$.
+
+[Apri il laboratorio interattivo](http://localhost:4321/widgets/master-theorem)
+
+Il teorema non si applica direttamente a ricorrenze con sottoproblemi di dimensioni diverse, come $T(n)=T(n/3)+T(2n/3)+n$, né a forme decrementali come $T(n)=T(n-1)+n$.
+
+**Riferimenti nei materiali disponibili:** la ricorrenza di Merge Sort è riportata in `materials/files/pdf_text/Cap3_IntroductionToAlgorithms.md`, righe 292–295, e nel PDF sorgente `class_notes/0-pre/1_extra_Cap3_IntroductionToAlgorithms.pdf`, pagina 7. Il Master Theorem è qui aggiunto come ripasso, non come contenuto attestato dalle dispense.
 
 ## 2 Teoria della Complessità
 

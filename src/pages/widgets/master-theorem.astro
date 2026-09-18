@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import MasterTheoremWidget from '../../components/widgets/MasterTheoremWidget.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout title="Master Theorem — Laboratorio interattivo">
+  <SiteHeader />
+  <main class="laboratory">
+    <a class="back-link" href={`${base}/#11-ricorrenze-e-master-theorem-facoltativo`}>← Torna agli appunti</a>
+    <header class="lab-intro">
+      <p>Algoritmi Distribuiti · Laboratorio</p>
+      <h1>Confronta i termini di una ricorrenza</h1>
+      <p>Modifica i parametri per vedere quale parte della ricorrenza determina il costo asintotico.</p>
+    </header>
+    <MasterTheoremWidget standalone />
+  </main>
+</BaseLayout>

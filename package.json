@@ -1,0 +1,25 @@
+{
+  "name": "algoritmi-distribuiti-notes",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "content:build": "node scripts/build-content.mjs",
+    "dev": "npm run content:build && astro dev",
+    "build": "npm run content:build && astro build",
+    "preview": "astro preview",
+    "check": "npm run content:build && astro check"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.1",
+    "@astrojs/mdx": "latest",
+    "astro": "latest",
+    "katex": "latest",
+    "rehype-katex": "latest",
+    "remark-math": "latest"
+  },
+  "devDependencies": {
+    "@astrojs/check": "latest",
+    "typescript": "latest"
+  }
+}

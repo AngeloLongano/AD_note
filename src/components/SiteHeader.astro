@@ -1,0 +1,14 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<header class="site-header">
+  <a class="brand" href={`${base}/`} aria-label="Algoritmi Distribuiti — home">
+    <span class="brand-mark">AD</span>
+    <span>Algoritmi Distribuiti</span>
+  </a>
+  <nav aria-label="Navigazione principale">
+    <a href={`${base}/#appunti`}>Appunti</a>
+    <a href={`${base}/widgets/master-theorem`}>Laboratori</a>
+  </nav>
+</header>
