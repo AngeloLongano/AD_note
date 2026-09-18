@@ -73,6 +73,8 @@ Un **problema computazionale** $\Pi$ è una questione di carattere generale che 
 Un'**istanza** del problema si ottiene assegnando valori specifici ai parametri.
 *Esempio: «ordinare una sequenza di numeri» è un problema; ordinare $\{5,2,9,1\}$ è una sua istanza.*
 
+_La notazione funzionale descrive direttamente il caso in cui il risultato è determinato univocamente. Quando sono ammesse più soluzioni, la stessa notazione va intesa in senso più generale: un algoritmo corretto può restituire una qualunque soluzione ammissibile; in un problema di ottimizzazione deve restituirne una ottima._
+
 ###### Classificazione per tipo di soluzione
 
 I problemi si classificano in base al tipo di soluzione cercata:
@@ -90,14 +92,12 @@ I problemi si classificano in base al tipo di soluzione cercata:
 
 Un **algoritmo** è una procedura generale per risolvere un problema definita tramite una **sequenza di passi finita**, **ben ordinata**, **non ambigua**, effettivamente **realizzabile** e che **termina** in tempo finito.
 
-Un algoritmo per il problema Π è **corretto** se, per ogni istanza $i ∈ I$, produce la soluzione corrispondente $Π(i) ∈ S$.
+Un algoritmo per il problema $\Pi$ è **corretto** se, per ogni istanza $i \in I$, termina e produce il risultato richiesto; nella notazione funzionale, $\Pi(i) \in S$.
 
-Due proprietà chiave:
+Fra gli algoritmi corretti interessa poi l'**efficienza**, cioè il costo in termini di risorse di calcolo, misurato rispetto a un modello e non a una particolare macchina:
 
-- **Correttezza:** L'algoritmo deve terminare e produrre l'output corretto per _ogni_ istanza valida
-- **Efficienza:** Misuriamo quanto "costa" l'algoritmo in termini di risorse (indipendentemente dalla macchina).
-  - Tempo: Numero di operazioni
-  - Spazio: Numero di celle di memoria
+- **tempo:** numero di operazioni elementari;
+- **spazio:** numero di celle di memoria.
 
 ###### Dimensione del problema
 
@@ -123,27 +123,31 @@ L'upper bound di un algoritmo corretto è anche un **upper bound del problema**.
 
 In base al costo computazionale, i problemi si classificano in:
 
-1. **Problemi Trattabili (facili, classe P)**: Esiste un algoritmo che li risolve in tempo **polinomiale** _(es. $O(n), O(n^2), O(n \log n)$)_ $$ T(n) ∈ O(n^k), k ≥ 0 $$
-   - _Esempi:_ Ordinamento, Cammino Minimo (Dijkstra), Spanning Tree.
-   - _Perché:_ Se raddoppio l'input, il tempo aumenta di un fattore gestibile.
+1. **Problemi trattabili (facili):** esiste un algoritmo che li risolve in tempo **polinomiale**. In altre parole, esiste una costante $k \ge 0$ tale che
+   $$T(n) \in O(n^k).$$
+   Sono polinomiali, per esempio, i costi $O(n)$, $O(n\log n)$ e $O(n^2)$.
+   Per i problemi decisionali, questa è la classe $P$, che sarà definita formalmente nel capitolo successivo.
+   - _Esempi:_ ordinamento, cammino minimo, costruzione di uno spanning tree.
 
-2. **Problemi Presumibilmente Intrattabili (difficili)**: non abbiamo un algoritmo di costo polinomiale, ma non è stato dimostrato che non esista
-   - _Esempio:_ il problema del commesso viaggiatore._
+2. **Problemi presumibilmente intrattabili (difficili):** non conosciamo un algoritmo di costo polinomiale, ma non è stato dimostrato che non esista.
+   - _Esempio:_ la versione esatta del problema del commesso viaggiatore.
 
-3. **Problemi Intrattabili**: si può dimostrare che non esiste un algoritmo di costo polinomiale. Il costo necessario è quindi **superpolinomiale**, ma non per forza esponenziale: “non polinomiale” ed “esponenziale” non sono sinonimi.
+3. **Problemi intrattabili:** si può dimostrare che non esiste un algoritmo di costo polinomiale. Il costo necessario è quindi **superpolinomiale**, ma non per forza esponenziale: “non polinomiale” ed “esponenziale” non sono sinonimi.
    - _Esempi:_ produrre esplicitamente tutti i sottoinsiemi o tutte le permutazioni; Torre di Hanoi, se l'output richiesto è la sequenza completa delle mosse.
-   - _Perché:_ Un costo superpolinomiale può crescere molto rapidamente con la dimensione dell'input; per esempio, nei costi esponenziali o fattoriali anche un piccolo aumento dell'input può produrre un grande aumento del tempo.
+   - Un costo superpolinomiale può crescere molto rapidamente con la dimensione dell'input; per esempio, nei costi esponenziali o fattoriali anche un piccolo aumento dell'input può produrre un grande aumento del tempo.
 
-4. **Problemi Irrisolvibili**: si può dimostrare che non esiste alcun algoritmo risolutivo (indipendentemente dal costo)
-   - Esempio: **Problema della fermata** (dato un algoritmo A con input D, l'esecuzione di A con input D termina in tempo finito?)
+4. **Problemi irrisolvibili:** si può dimostrare che non esiste alcun algoritmo risolutivo, indipendentemente dal costo.
+   - _Esempio:_ **problema della fermata** (dato un algoritmo $A$ con input $D$, l'esecuzione di $A$ con input $D$ termina in tempo finito?).
 
 ###### Perché il polinomiale è la soglia di trattabilità?
 
-- Esistono pochi problemi trattabili con algoritmi polinomiali di grado alto
-- In molti problemi, lo spazio delle soluzioni è esponenziale: trovare un algoritmo polinomiale significa "fare meglio" di un algoritmo di forza bruta
-- Le istanze worst case sono spesso rare o poco probabili
-- Costi peggiori del polinomiale diventano rapidamente intrattabili al crescere della dimensione delle istanze
-- È una misura indipendente dal progresso tecnologico
+- Esistono pochi problemi trattabili per i quali si conoscono soltanto algoritmi polinomiali di grado alto.
+- In molti problemi lo spazio delle soluzioni è esponenziale: trovare un algoritmo polinomiale significa “fare meglio” di un algoritmo di forza bruta.
+- In molti problemi trattabili, le istanze worst case sono poche o si presentano con bassa probabilità; negli altri casi il costo è migliore.
+- I costi superpolinomiali diventano rapidamente proibitivi al crescere della dimensione delle istanze.
+- La distinzione tra costo polinomiale e superpolinomiale è stabile rispetto ai miglioramenti tecnologici.
+
+La polinomialità è una nozione teorica di trattabilità: un algoritmo polinomiale di grado elevato o con costanti molto grandi può comunque essere poco pratico.
 
 _DOMANDA: l’appartenenza dei problemi a queste classi di problemi, non potrebbe dipendere dal modello di calcolo?_
 
