@@ -65,117 +65,109 @@ Carlo Uguzzoni
 
 ## 1 Introduzione
 
-###### Teoria della Complessità
+###### Problema computazionale
 
-Branca dell'Informatica che mira a classificare i problemi in base alla difficoltà di risoluzione. Non si cerca dunque una metodologia risolutiva, ma piuttosto di quantificare le risorse necessarie per la risoluzione.
-Questo apparato teorico nasce assieme all'Informatica stessa. Serve infatti un certo set-up di teoria e metodi per approcciare la risoluzione di problemi in modo organico.
+Un **problema computazionale** $\Pi$ è una questione generale che dipende da parametri i cui valori non sono specificati. Si definisce tramite:
 
-###### Problemi
+- **INPUT:** insieme $I$ dei possibili input;
+- **OUTPUT:** insieme $S$ delle possibili soluzioni;
+- **FUNZIONE:** $\Pi : I \to S$.
 
-Non è scontato definire un problema. L'accezione di questo termine non è innanzitutto negativa, come lo vorrebbe la lingua italiana. Un problema è qualcosa che nasce da una necessità, la quale può emergere in un certo momento.
-Ci riferiamo in particolare ad un problema computazionale $\Pi$, ovvero una questione di carattere generale alla quale si deve dare una risposta e che dipende da vari parametri i cui valori non sono specificati.
-Formalmente:
+Un'**istanza** si ottiene assegnando valori specifici ai parametri.
 
-$$\begin{aligned}
-                \Pi : I \to S
-\end{aligned}$$
+*Esempio: «ordinare una sequenza di numeri» è un problema; ordinare $\{5,2,9,1\}$ è una sua istanza.*
 
-dove $I$ è l'insieme dei parametri e $S$ è l'insieme delle possibili soluzioni.
-Questa definizione non prende in considerazione input caratteristici, ci focalizziamo sul tipo di parametri piuttosto che sui loro valori. Un'istanza del problema è associata ad una particolare combinazione di parametri specifici.
+###### Classificazione per tipo di soluzione
 
-###### Classificazione di problemi
+1. **Problemi decisionali:** la risposta è binaria, **SÌ/NO**.
 
-Possiamo classificare i problemi in base al tipo di soluzione che vogliamo trovare.
+   *Esempio: «Il numero $x$ è primo?» oppure «Esiste un cammino da $A$ a $B$ di lunghezza $\leq K$?».*
 
-- Decisionali: possono dare solo due risposte: sì e no. Esempio: test di primalità
+2. **Problemi di ricerca:** cerchiamo una soluzione che soddisfi determinate proprietà.
 
-- Di ricerca: richiedono di andare a cercare, tra tutte le possibili soluzioni, quella che soddisfa una certa condizione. Esempio: ordinare una sequenza di numeri in ordine crescente
+   *Esempio: «Trova un cammino da $A$ a $B$».*
 
-- Di ottimizzazione: le soluzioni ammissibili hanno associato un costo. Non vogliamo solo una soluzione con caratteristiche particolari, ma anche che ottimizzi (ovvero minimizzi/massimizzi) una certa funzione obiettivo. Esempio: determinare i cammini minimi da singola sorgente
+3. **Problemi di ottimizzazione:** cerchiamo la soluzione **migliore** tra quelle ammissibili, minimizzando o massimizzando una funzione obiettivo.
 
-###### Cercare una soluzione
+   *Esempio: «Trova il cammino più breve da $A$ a $B$».*
 
-Cercare una soluzione corrisponde essenzialmente a definire un algoritmo. Secondo Knuth, *un algoritmo è una procedura generale per risolvere un problema definita tramite una sequenza di passi finita, non ambigua, effettivamente realizzabile e che, una volta eseguita, termina in un tempo finito*.
-Un algoritmo per il problema $\Pi$ è corretto se, per ogni instanza $i \in I$ del problema, produce la soluzione corrispondente $\Pi(i) \in S$. Se non lo è:
+###### Algoritmi
 
-- Non termina
+Un **algoritmo** è una procedura generale per risolvere un problema. È formato da una sequenza di passi:
 
-- Termina con una soluzione sbagliata
+- **finita** e **ben ordinata**;
+- **non ambigua**;
+- effettivamente **realizzabile**;
+- che **termina** in tempo finito.
 
-###### Algoritmi efficienti
+Un algoritmo per $\Pi$ è **corretto** se, per ogni istanza $i \in I$:
 
-Quando eseguiamo algoritmi attingiamo ad un certo pool di risorse. Tra queste sono importanti:
+1. termina;
+2. produce la soluzione corretta $\Pi(i) \in S$.
 
-- Tempo: quanto l'algoritmo impiega ad eseguire
+Le due proprietà principali sono:
 
-- Spazio: memoria utilizzata
-
-Nella pratica quello che conta di più oggigiorno è il tempo: mentre la memoria può essere riutilizzata, non si può fare altrettanto con il tempo.
-Per determinare tempo e spazio è innanzitutto fondamentale conoscere il modello di calcolo. Il rischio, se non si considera un modello aderente al contesto applicativo reale, è quello di non avere gli stessi risultati dimostrati teoricamente.
-
-###### Modello RAM
-
-Considera:
-
-- Un processore
-
-- Una memoria, con tempo di accesso unitario alle celle
-
-- Esecuzione di un'istruzione alla volta
-
-- ISA definito: ALU, load/store, controllo di flusso
-
-- Tipi di dato definiti, limitando il numero di word per dato
-
-###### Misure di efficienza
-
-Per quanto riguarda lo spazio, vogliamo conoscere il numero di celle di memoria necessarie all'algoritmo per lavorare (oltre a quelle adibite ad input/output). La misurazione del tempo non è altrettanto semplice: ci si basa sul numero di operazioni di base che vogliamo fare piuttosto che sui tempi effettivi di esecuzione, strettamente legati al modello di calcolo. Il numero di operazioni elementari dipende naturalmente dall'istanza del problema $\Pi$, motivo per cui consideriamo tipicamente il peggior tempo di esecuzione possibile (worst case) per un algoritmo in esame.
+- **CORRETTEZZA:** produce l'output corretto per ogni istanza valida;
+- **EFFICIENZA:** usa una quantità limitata di risorse.
+  - **Tempo:** numero di operazioni elementari.
+  - **Spazio:** numero di celle di memoria.
 
 ###### Dimensione del problema
 
-Misura la quantità di informazione necessaria per specificare l'istanza del problema (ovvero il suo input). Le alternative sono due:
+La **dimensione** misura la quantità di informazione necessaria per rappresentare un'istanza:
 
-- Criterio di costo logaritmico: il più preciso di tutti, anche se a granularità forse un po' troppo fina. Ci dice quanti bit sono necessari per la rappresentazione dei dati in input
+- **criterio di costo logaritmico:** numero di bit necessari per rappresentare l'input;
+- **criterio di costo uniforme:** numero di elementi che compongono l'input.
 
-- Criterio di costo uniforme: si focalizza sul numero di "elementi" necessari a rappresentare l'input
+###### Analisi asintotica
 
-Usare un criterio piuttosto che l'altro dipende dal problema in esame. Ad esempio, per un test di primalità è sufficiente un criterio di costo logaritmico, mentre per funzioni con input più corposi è forse necessario servirsi di un criterio di costo uniforme.
+Il tempo non si misura in secondi, ma come **numero di operazioni elementari** in funzione della dimensione dell'input $n$.
 
-###### Costo e complessità computazionale di un problema
+- **Caso peggiore (worst case):** massimo tempo richiesto da un'istanza di dimensione $n$. Rappresenta la garanzia fornita dall'algoritmo.
+- **$O(f(n))$:** limite superiore asintotico.
+- **$\Omega(f(n))$:** limite inferiore asintotico.
+- **$\Theta(f(n))$:** ordine di crescita asintotico esatto, a meno di fattori costanti.
 
-Come abbiamo già detto, il costo computazionale worst case di un algoritmo è il numero di operazioni elementari necessarie all'algoritmo per risolvere il problema su qualunque istanza (come dice il nome, anche la peggiore).
-Esistono tipicamente più algoritmi per risolvere uno stesso problema. Potrebbe interessarci, in particolare, studiare i costi associati direttamente allo specifico problema. In questo caso parliamo di costi computazionali. Un algoritmo corretto per il problema fornisce un upper bound alla complessità del problema. Un lower bound alla complessità di un problema stabilisce il numero di operazioni elementari necessarie ad ogni algoritmo per risolvere il problema nel caso peggiore.
-Guardando il solo algoritmo non è possibile stabilire quale sia il numero di operazioni minime per risolvere il problema. Potrebbe, al netto di dimostrazioni in senso contrario, esistere un algoritmo migliore per la risoluzione del problema, che abbassi tale lower bound. In sintesi, per trovare un upper bound alla soluzione di un problema basta prendere l'upper bound di un algoritmo che lo risolve. Viceversa, per trovare un lower bound ai costi di risoluzione di un problema è necessario studiare a fondo il problema stesso.
+L'upper bound di un algoritmo corretto è anche un **upper bound del problema**. Un **lower bound del problema** deve invece valere per ogni algoritmo che lo risolve.
 
-###### Notazione asintotica
+![[assets/Ordini di crescita - O-grande.png|900]]
 
-Ci permette di esprimere upper e lower bounds al costo di algoritmi e problemi. In particolare, il termine "asintotico" si riferisce al comportamento di algoritmi e problemi verso l'infinito. Definito un modello di calcolo di riferimento, questa notazione rende indipendente la misura di efficienza dall'esecutore.
+###### Classificazione per difficoltà
 
-- O-grande: siano $f, g : \mathbb{N} \to \mathbb{R}$, diciamo che $f(n) \in O(g(n)) \iff \exists c > 0, n_0 \in \mathbb{N} : f(n) \leq c \cdot g(n), \forall n \geq n_0$
+1. **Problemi trattabili:** esiste un algoritmo che li risolve in tempo **polinomiale**:
 
-  ![[assets/Screenshot 2024-09-24 111746.png|700]]
+   $$T(n) \in O(n^k), \qquad k \geq 0$$
 
-- Omega: siano $f, g : \mathbb{N} \to \mathbb{R}$, diciamo che $f(n) \in \Omega(g(n)) \iff \exists c > 0, n_0 \in \mathbb{N} : f(n) \geq c \cdot g(n), \forall n \geq n_0$
+   Per i problemi decisionali questa nozione corrisponde alla classe **P**.
 
-  ![[assets/Screenshot 2024-09-24 111815.png|700]]
+   *Esempi: ordinamento, cammino minimo e costruzione di uno spanning tree.*
 
-- Theta: siano $f, g : \mathbb{N} \to \mathbb{R}$, diciamo che $f(n) \in \Theta(g(n)) \iff \exists c_1, c_2 > 0, n_0 \in \mathbb{N} : c_1 \cdot g(n) \leq f(n) \leq c_2 \cdot g(n), \forall n \geq n_0$. La situazione ideale di un problema od algoritmo è quella in cui abbiamo un $\Theta$ e $c_1 = c_2$. In tal caso, il comportamento è quanto più stabile possibile
+2. **Problemi presumibilmente intrattabili:** non conosciamo algoritmi polinomiali, ma non è stato dimostrato che non possano esistere.
 
-  ![[assets/Screenshot 2024-09-24 111824.png|700]]
+   *Esempio: il problema del commesso viaggiatore.*
 
-###### Classificazione dei problemi
+3. **Problemi intrattabili:** è dimostrato che non esiste un algoritmo di costo polinomiale. Il costo necessario è quindi **superpolinomiale**, ma non necessariamente esponenziale: **non polinomiale** ed **esponenziale** non sono sinonimi.
 
-In base al proprio costo computazionale, possiamo classificare i problemi.
+   *Esempi: produrre esplicitamente tutti i sottoinsiemi o tutte le permutazioni; produrre l'intera sequenza delle mosse della Torre di Hanoi.*
 
-- Trattabili: possono essere risolti da un algoritmo con costo computazionale polinomiale rispetto la dimensione dell'input. Difficilmente il grado del polinomio è alto e spesso, pur essendo il worst case polinomiale, il caso medio è poco costoso. I problemi trattabili sono indifferenti rispetto al progresso tecnologico, perché si adattano bene sia a vecchie che nuove tecnologie. Viceversa, per costi computazionali più alti anche l'avanzamento tecnologico potrebbe non essere sufficiente a garantire una certa efficienza
+4. **Problemi irrisolvibili:** è dimostrato che non esiste alcun algoritmo risolutivo, indipendentemente dal costo.
 
-- Presumibilmente intrattabili (difficili): non è noto alcun algoritmo con costo computazionale polinomiale, ma non è stato neppure dimostrato che un tale algoritmo non esista. Questa categoria comprende molti dei problemi più interessanti da studiare (es. il Commesso Viaggiatore)
+   *Esempio: il **problema della fermata** chiede se l'esecuzione di un algoritmo $A$ su un input $D$ terminerà in tempo finito.*
 
-- Intrattabili: è dimostrato che non possa esistere un algoritmo con costo computazionale polinomiale per la loro risoluzione. Ad esempio, la Torre di Hanoi è un problema intrattabile. Tipicamente questo tipo di problemi sono artificiosi; nascono dalla logica matematica piuttosto che dall'osservazione del mondo naturale
+###### Perché il polinomiale è la soglia di trattabilità?
 
-- Irrisolvibili: si può dimostrare che non esista un algoritmo per risolvere questo tipo di problemi, indipendentemente dal costo
+- Gli algoritmi polinomiali usati nella pratica hanno generalmente grado contenuto.
+- Permettono di evitare la forza bruta quando lo spazio delle soluzioni è esponenziale.
+- Costi esponenziali o fattoriali crescono rapidamente anche per piccoli aumenti dell'input.
+- La distinzione rimane stabile rispetto al progresso tecnologico e al modello di calcolo ragionevole adottato.
 
-L'appartenenza dei problemi a queste classi non dipende dal modello di calcolo ragionevole adottato. Più precisamente, la **tesi di Church-Turing estesa** afferma che i modelli di calcolo ragionevoli si possono simulare a vicenda con uno slowdown al più polinomiale. La tesi di Church-Turing nella sua formulazione ordinaria riguarda invece quali funzioni siano effettivamente calcolabili, non il costo della simulazione.
+###### Tesi di Church-Turing estesa
+
+Modelli di calcolo diversi, ma ragionevoli, si possono simulare a vicenda con uno **slowdown polinomiale**. Sono quindi **polinomialmente equivalenti** alla macchina di Turing.
+
+Di conseguenza, le classi definite mediante costi polinomiali non cambiano passando da un modello ragionevole a un altro.
+
+La tesi di Church-Turing **ordinaria** riguarda invece quali funzioni siano effettivamente calcolabili.
 
 ### 1.1 Ricorrenze e Master Theorem
 
