@@ -2,3 +2,9 @@ node_modules/
 dist/
 .astro/
 src/content/generated/
+teacher_slides/
+AGENTS.md
+assets_my_notes/
+my_notes.md
+Feedback.md
+ROADMAP.md

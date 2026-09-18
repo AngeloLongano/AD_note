@@ -64,50 +64,40 @@
 
 ###### Problema computazionale
 
-Un **problema computazionale** $\Pi$ è una questione generale che dipende da parametri i cui valori non sono specificati. Si definisce tramite:
+Un **problema computazionale** $\Pi$ è una questione di carattere generale che dipende da parametri i cui valori non sono specificati. Si definisce tramite:
 
 - **INPUT:** insieme $I$ dei possibili input;
 - **OUTPUT:** insieme $S$ delle possibili soluzioni;
 - **FUNZIONE:** $\Pi : I \to S$.
 
-Un'**istanza** si ottiene assegnando valori specifici ai parametri.
-
+Un'**istanza** del problema si ottiene assegnando valori specifici ai parametri.
 *Esempio: «ordinare una sequenza di numeri» è un problema; ordinare $\{5,2,9,1\}$ è una sua istanza.*
 
 ###### Classificazione per tipo di soluzione
 
-1. **Problemi decisionali:** la risposta è binaria, **SÌ/NO**.
+I problemi si classificano in base al tipo di soluzione cercata:
 
-   *Esempio: «Il numero $x$ è primo?» oppure «Esiste un cammino da $A$ a $B$ di lunghezza $\leq K$?».*
+1. **Problemi Decisionali**: la risposta è binaria (**SÌ/NO**)
+   - _Esempio:_ "Il numero $x$ è primo?" o "Esiste un cammino da A a B di lunghezza $\le K$?"
 
-2. **Problemi di ricerca:** cerchiamo una soluzione che soddisfi determinate proprietà.
+2. **Problemi di Ricerca**: cerchiamo una soluzione che soddisfi certe proprietà.
+   - _Esempio:_ "Trovami un cammino da A a B".
 
-   *Esempio: «Trova un cammino da $A$ a $B$».*
-
-3. **Problemi di ottimizzazione:** cerchiamo la soluzione **migliore** tra quelle ammissibili, minimizzando o massimizzando una funzione obiettivo.
-
-   *Esempio: «Trova il cammino più breve da $A$ a $B$».*
+3. **Problemi di Ottimizzazione**: Cerchiamo la soluzione **migliore** (minimo costo o massimo guadagno) tra tutte quelle ammissibili.
+   - _Esempio:_ "Trovami il cammino _più breve_ da A a B".
 
 ###### Algoritmi
 
-Un **algoritmo** è una procedura generale per risolvere un problema. È formato da una sequenza di passi:
+Un **algoritmo** è una procedura generale per risolvere un problema definita tramite una **sequenza di passi finita**, **ben ordinata**, **non ambigua**, effettivamente **realizzabile** e che **termina** in tempo finito.
 
-- **finita** e **ben ordinata**;
-- **non ambigua**;
-- effettivamente **realizzabile**;
-- che **termina** in tempo finito.
+Un algoritmo per il problema Π è **corretto** se, per ogni istanza $i ∈ I$, produce la soluzione corrispondente $Π(i) ∈ S$.
 
-Un algoritmo per $\Pi$ è **corretto** se, per ogni istanza $i \in I$:
+Due proprietà chiave:
 
-1. termina;
-2. produce la soluzione corretta $\Pi(i) \in S$.
-
-Le due proprietà principali sono:
-
-- **CORRETTEZZA:** produce l'output corretto per ogni istanza valida;
-- **EFFICIENZA:** usa una quantità limitata di risorse.
-  - **Tempo:** numero di operazioni elementari.
-  - **Spazio:** numero di celle di memoria.
+- **Correttezza:** L'algoritmo deve terminare e produrre l'output corretto per _ogni_ istanza valida
+- **Efficienza:** Misuriamo quanto "costa" l'algoritmo in termini di risorse (indipendentemente dalla macchina).
+  - Tempo: Numero di operazioni
+  - Spazio: Numero di celle di memoria
 
 ###### Dimensione del problema
 
@@ -131,32 +121,31 @@ L'upper bound di un algoritmo corretto è anche un **upper bound del problema**.
 
 ###### Classificazione per difficoltà
 
-1. **Problemi trattabili:** esiste un algoritmo che li risolve in tempo **polinomiale**:
+In base al costo computazionale, i problemi si classificano in:
 
-   $$T(n) \in O(n^k), \qquad k \geq 0$$
+1. **Problemi Trattabili (facili, classe P)**: Esiste un algoritmo che li risolve in tempo **polinomiale** _(es. $O(n), O(n^2), O(n \log n)$)_ $$ T(n) ∈ O(n^k), k ≥ 0 $$
+   - _Esempi:_ Ordinamento, Cammino Minimo (Dijkstra), Spanning Tree.
+   - _Perché:_ Se raddoppio l'input, il tempo aumenta di un fattore gestibile.
 
-   Per i problemi decisionali questa nozione corrisponde alla classe **P**.
+2. **Problemi Presumibilmente Intrattabili (difficili)**: non abbiamo un algoritmo di costo polinomiale, ma non è stato dimostrato che non esista
+   - _Esempio:_ il problema del commesso viaggiatore._
 
-   *Esempi: ordinamento, cammino minimo e costruzione di uno spanning tree.*
+3. **Problemi Intrattabili**: si può dimostrare che non esiste un algoritmo di costo polinomiale. Il costo necessario è quindi **superpolinomiale**, ma non per forza esponenziale: “non polinomiale” ed “esponenziale” non sono sinonimi.
+   - _Esempi:_ produrre esplicitamente tutti i sottoinsiemi o tutte le permutazioni; Torre di Hanoi, se l'output richiesto è la sequenza completa delle mosse.
+   - _Perché:_ Un costo superpolinomiale può crescere molto rapidamente con la dimensione dell'input; per esempio, nei costi esponenziali o fattoriali anche un piccolo aumento dell'input può produrre un grande aumento del tempo.
 
-2. **Problemi presumibilmente intrattabili:** non conosciamo algoritmi polinomiali, ma non è stato dimostrato che non possano esistere.
-
-   *Esempio: il problema del commesso viaggiatore.*
-
-3. **Problemi intrattabili:** è dimostrato che non esiste un algoritmo di costo polinomiale. Il costo necessario è quindi **superpolinomiale**, ma non necessariamente esponenziale: **non polinomiale** ed **esponenziale** non sono sinonimi.
-
-   *Esempi: produrre esplicitamente tutti i sottoinsiemi o tutte le permutazioni; produrre l'intera sequenza delle mosse della Torre di Hanoi.*
-
-4. **Problemi irrisolvibili:** è dimostrato che non esiste alcun algoritmo risolutivo, indipendentemente dal costo.
-
-   *Esempio: il **problema della fermata** chiede se l'esecuzione di un algoritmo $A$ su un input $D$ terminerà in tempo finito.*
+4. **Problemi Irrisolvibili**: si può dimostrare che non esiste alcun algoritmo risolutivo (indipendentemente dal costo)
+   - Esempio: **Problema della fermata** (dato un algoritmo A con input D, l'esecuzione di A con input D termina in tempo finito?)
 
 ###### Perché il polinomiale è la soglia di trattabilità?
 
-- Gli algoritmi polinomiali usati nella pratica hanno generalmente grado contenuto.
-- Permettono di evitare la forza bruta quando lo spazio delle soluzioni è esponenziale.
-- Costi esponenziali o fattoriali crescono rapidamente anche per piccoli aumenti dell'input.
-- La distinzione rimane stabile rispetto al progresso tecnologico e al modello di calcolo ragionevole adottato.
+- Esistono pochi problemi trattabili con algoritmi polinomiali di grado alto
+- In molti problemi, lo spazio delle soluzioni è esponenziale: trovare un algoritmo polinomiale significa "fare meglio" di un algoritmo di forza bruta
+- Le istanze worst case sono spesso rare o poco probabili
+- Costi peggiori del polinomiale diventano rapidamente intrattabili al crescere della dimensione delle istanze
+- È una misura indipendente dal progresso tecnologico
+
+_DOMANDA: l’appartenenza dei problemi a queste classi di problemi, non potrebbe dipendere dal modello di calcolo?_
 
 ###### Tesi di Church-Turing estesa
 
@@ -167,8 +156,6 @@ Di conseguenza, le classi definite mediante costi polinomiali non cambiano passa
 La tesi di Church-Turing **ordinaria** riguarda invece quali funzioni siano effettivamente calcolabili.
 
 ### 1.1 Ricorrenze e Master Theorem (facoltativo)
-
-> **Integrazione di ripasso, fuori dal nucleo documentato.** Il Master Theorem non compare nei materiali ufficiali Montangero disponibili nella repository; trattare l'argomento come contenuto d'esame richiede quindi una conferma del docente.
 
 Una **ricorrenza** descrive il costo di un algoritmo ricorsivo in funzione del costo di istanze più piccole. Per molti algoritmi divide et impera ha la forma:
 
@@ -294,7 +281,7 @@ Molti problemi NP-hard hanno importanti applicazioni e non possono essere ignora
 Nel contesto dei problemi NP-hard, come abbiamo accennato, possiamo tentare di individuare soluzioni accettabili approssimando quella ottima. Applicando un algoritmo di approssimazione la soluzione restituita non è ottima, però la si può tentare di ottenere a costo polinomiale.
 Il fattore di approssimazione ($\alpha \geq 1$) quantifica l'errore associato ad un algoritmo di approssimazione. Possiamo esprimere con un numero il rapporto tra la soluzione approssimata e quella ottima. Se è possibile dare un bound a questo rapporto, quel bound è proprio il fattore di approssimazione $\alpha$. Formalmente, per ogni istanza $i \in I$ del problema $\Pi$:
 
-$$\begin{aligned}
+$$ \begin{aligned}
                     \frac{cost(approx)}{cost(opt)} \leq \alpha
 \end{aligned}$$
 
@@ -312,22 +299,22 @@ Formalizziamo il tutto in pseudo-codice:
 
 **Algorithm 1 Risoluzione Ciclo Hamiltoniano con TSP** ^algorithm-1
 
-> 1. **function** HCtoTSP($G$)  
+> 1. **function** HCtoTSP($G$)
 > 2.  $E^\prime \gets \{\{u, v\} : u, v \in V, u \neq v\}$<br>
-> 3.  **for all** $(u, v)$ in $E^\prime$ **do**  
-> 4.   **if** $(u, v) \in E$ **then**  
-> 5.    $C(u, v) \gets 0$  
-> 6.   **else**  
-> 7.    $C(u, v) \gets k, k > 0$  
-> 8.   **end if**  
-> 9.  **end for**  
-> 10.  $G^\prime = (V, E^\prime, C)$  
-> 11.  $H^* \gets TSP(G^\prime)$  
-> 12.  **if** $C(H^*) == 0$ **then**  
-> 13.   **return** sì  
-> 14.  **else**  
-> 15.   **return** no  
-> 16.  **end if**  
+> 3.  **for all** $(u, v)$ in $E^\prime$ **do**
+> 4.   **if** $(u, v) \in E$ **then**
+> 5.    $C(u, v) \gets 0$
+> 6.   **else**
+> 7.    $C(u, v) \gets k, k > 0$
+> 8.   **end if**
+> 9.  **end for**
+> 10.  $G^\prime = (V, E^\prime, C)$
+> 11.  $H^* \gets TSP(G^\prime)$
+> 12.  **if** $C(H^*) == 0$ **then**
+> 13.   **return** sì
+> 14.  **else**
+> 15.   **return** no
+> 16.  **end if**
 > 17. **end function**
 
 Abbiamo appena dimostrato che possiamo risolvere il ciclo Hamiltoniano usando un algoritmo per TSP. La trasformazione richiede tempo polinomiale: nel caso non diretto il grafo completo ha $\frac{n(n-1)}{2}$ archi, e la costruzione dei pesi richiede $O(n^2)$ operazioni.
@@ -340,11 +327,13 @@ Poiché il ciclo Hamiltoniano è NP-completo e si riduce in tempo polinomiale a 
 La dimostrazione è per assurdo. Supponiamo che esista un algoritmo polinomiale $A$ con fattore costante $\rho$ e usiamolo per decidere il problema NP-completo del ciclo Hamiltoniano. Data un'istanza $G=(V,E)$ di quest'ultimo problema, poniamo $n=|V|$ e costruiamo il grafo completo $G'=(V,E')$ con costi
 
 $$
+
 c(e)=
 \begin{cases}
 1 & \text{se } e\in E,\\
 M=\lceil \rho n\rceil+1 & \text{se } e\notin E.
 \end{cases}
+
 $$
 
 La costruzione richiede $O(n^2)$ operazioni e il valore $M$ ha una rappresentazione di lunghezza polinomiale. Consideriamo i due casi:
@@ -383,12 +372,12 @@ Ora vediamo nel dettaglio diversi algoritmi di approssimazione per TSP.
 
   **Algorithm 2 2-approssimazione di TSP** ^algorithm-2
 
-  > 1. **function** 2-approx($G$)  
-  > 2.  $T^* \gets MSTPrim(G)$  
-  > 3.  $G^\prime \gets doubleEdges(T^*)$  
+  > 1. **function** 2-approx($G$)
+  > 2.  $T^* \gets MSTPrim(G)$
+  > 3.  $G^\prime \gets doubleEdges(T^*)$
   > 4.  $E \gets EulerTour(G^\prime)$<br>
-  > 5.  $H \gets removeShortcuts(E)$  
-  > 6.  **return** $H$  
+  > 5.  $H \gets removeShortcuts(E)$
+  > 6.  **return** $H$
   > 7. **end function**
 
   Ora dobbiamo dimostrare che l'algoritmo appena definito ha $\alpha = 2$.
@@ -449,15 +438,15 @@ Ora vediamo nel dettaglio diversi algoritmi di approssimazione per TSP.
 
   **Algorithm 3 Algoritmo di Christofides per TSP** ^algorithm-3
 
-  > 1. **function** Christofides-approx($G$)  
-  > 2.  $T^* \gets MSTPrim(G)$  
-  > 3.  $U \gets getOddDegreeNodes(T^*)$  
-  > 4.  $G^\prime \gets getInducedSubgraph(G, U)$  
+  > 1. **function** Christofides-approx($G$)
+  > 2.  $T^* \gets MSTPrim(G)$
+  > 3.  $U \gets getOddDegreeNodes(T^*)$
+  > 4.  $G^\prime \gets getInducedSubgraph(G, U)$
   > 5.  $E^* \gets minimumWeightPerfectMatching(G^\prime)$<br>
   > 6.  $F \gets multisetUnion(T^*, E^*)$<br>
   > 7.  $E \gets EulerTour(F)$<br>
-  > 8.  $H \gets removeShortcuts(E)$  
-  > 9.  **return** $H$  
+  > 8.  $H \gets removeShortcuts(E)$
+  > 9.  **return** $H$
   > 10. **end function**
 
   Facciamo un passo indietro. Ora dimostriamo che esistono sempre un numero pari di nodi di grado dispari nel nostro spanning tree. Nei grafi non diretti abbiamo che:
@@ -531,24 +520,24 @@ Vediamo lo pseudo-codice del caso ricorsivo che abbiamo visto, riferendoci ad un
 
 **Algorithm 4 Algoritmo ricorsivo generico per B&B** ^algorithm-4
 
-> 1. $BCS \gets null$  
+> 1. $BCS \gets null$
 > 2. $UB \gets \infty$<br>
-> 3. **function** B&B(S)  
+> 3. **function** B&B(S)
 > 4.  **if** $lowerBound(S) \geq UB$ **then**<br>
-> 5.   **return**  
-> 6.  **end if**  
+> 5.   **return**
+> 6.  **end if**
 > 7.  **if** $S$ represents a single feasible solution **then**<br>
 > 8.   **if** $cost(S) < UB$ **then**<br>
-> 9.    $BCS \gets S$  
+> 9.    $BCS \gets S$
 > 10.    $UB \gets cost(S)$<br>
-> 11.   **end if**  
-> 12.  **else**  
-> 13.   **for all** $S_i$ in $branch(S)$ **do**  
-> 14.    $B\&B(S_i)$  
-> 15.   **end for**  
-> 16.  **end if**  
-> 17.  **return**  
-> 18. **end function**  
+> 11.   **end if**
+> 12.  **else**
+> 13.   **for all** $S_i$ in $branch(S)$ **do**
+> 14.    $B\&B(S_i)$
+> 15.   **end for**
+> 16.  **end if**
+> 17.  **return**
+> 18. **end function**
 > 19. **return** $BCS$
 
 Nello pseudo-codice si suppone che la funzione di branching ritorni al chiamante qualora $|S_i| = 1$. Un'immagine può aiutarci a visualizzare la dinamica.
@@ -655,13 +644,13 @@ L'algoritmo greedy proposto per il Vertex Cover Problem è detto "Approx-Vertex-
 
 **Algorithm 6 Algoritmo greedy per Vertex Cover** ^algorithm-6
 
-> 1. **function** Approx-Vertex-Cover($G$)  
-> 2.  $C \gets \emptyset$  
-> 3.  **while** $E \neq \emptyset$ **do**  
-> 4.   $(u, v) \gets getRandomEdge(E)$  
-> 5.   $C \gets C \cup \{u, v\}$  
-> 6.   $E \gets E \setminus incidentEdges(\{u, v\})$  
-> 7.  **end while**  
+> 1. **function** Approx-Vertex-Cover($G$)
+> 2.  $C \gets \emptyset$
+> 3.  **while** $E \neq \emptyset$ **do**
+> 4.   $(u, v) \gets getRandomEdge(E)$
+> 5.   $C \gets C \cup \{u, v\}$
+> 6.   $E \gets E \setminus incidentEdges(\{u, v\})$
+> 7.  **end while**
 > 8.  **return** $C$<br>
 > 9. **end function**
 
@@ -2111,3 +2100,4 @@ I puntatori immediati restano così connessi; le finger table che contengono $x$
 La continuità del routing non recupera automaticamente i dati memorizzati soltanto sul nodo guasto. Per tollerare la perdita di nodi, ogni coppia chiave-valore viene replicata sui primi $r$ successori del nodo responsabile. Dopo un fallimento, il primo successore vivo diventa responsabile e la replicazione viene ricostituita in background. L'aumento di $r$ migliora la tolleranza ai guasti consecutivi, al costo di più memoria e traffico di aggiornamento.
 
 In condizioni stabili la finger table mantiene lookup attesi in $O(\log n)$ hop; successor list e fallback preservano la raggiungibilità durante la stabilizzazione, mentre la replica è il meccanismo separato che preserva i valori.
+$$

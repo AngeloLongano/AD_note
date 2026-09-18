@@ -10,18 +10,65 @@
           {
             "id": "17ba5ddf354c7035",
             "type": "leaf",
+            "pinned": true,
             "state": {
               "type": "markdown",
               "state": {
                 "file": "Algoritmi Distribuiti.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
+              "pinned": true,
               "icon": "lucide-file",
               "title": "Algoritmi Distribuiti"
             }
+          },
+          {
+            "id": "18b70d1ea31f455a",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "my_notes.md",
+                "mode": "source",
+                "source": false
+              },
+              "pinned": true,
+              "icon": "lucide-file",
+              "title": "my_notes"
+            }
+          },
+          {
+            "id": "4e2a638e9f5f81b7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ROADMAP.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ROADMAP"
+            }
+          },
+          {
+            "id": "f6e53caf34aeccdf",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Feedback.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Feedback"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -189,53 +236,53 @@
       "bases:Crea nuova Base": false
     }
   },
-  "active": "0849b469fbcee247",
+  "active": "18b70d1ea31f455a",
   "lastOpenFiles": [
-    "dist/index.html",
-    "dist/widgets/master-theorem/index.html",
-    "dist/widgets/master-theorem",
-    "dist/widgets",
-    "dist/_astro/KaTeX_Fraktur-Regular.CB_wures.ttf",
-    "dist/_astro/MasterTheoremWidget.CYn32hDj.css",
-    "dist/_astro/KaTeX_Typewriter-Regular.D3Ib7_Hf.ttf",
-    "dist/_astro/KaTeX_Typewriter-Regular.CO6r4hn1.woff2",
-    "dist/_astro/KaTeX_Typewriter-Regular.C0xS9mPB.woff",
-    "dist/_astro/KaTeX_Size4-Regular.Dl5lxZxV.woff2",
-    "dist/_astro/KaTeX_Size4-Regular.DWFBv043.ttf",
-    "dist/vertexcoverILP.png",
-    "dist/vertex_covers.png",
-    "dist/christof3.png",
-    "dist/christof2.png",
-    "dist/christof1.png",
-    "dist/Screenshot 2024-11-26 120047.png",
-    "dist/Screenshot 2024-11-26 114626.png",
-    "dist/Screenshot 2024-11-26 114109.png",
-    "dist/Screenshot 2024-11-26 112958.png",
-    "dist/Screenshot 2024-11-26 112658.png",
-    "ROADMAP-fonte-di-verita.md",
-    "README.md",
     "Algoritmi Distribuiti.md",
-    "node_modules/parse-entities/node_modules/@types/unist/README.md",
-    "node_modules/parse-entities/readme.md",
-    "node_modules/@mdx-js/mdx/readme.md",
-    "node_modules/@types/mdx/README.md",
-    "node_modules/array-iterate/readme.md",
-    "node_modules/inline-style-parser/README.md",
-    "node_modules/style-to-object/README.md",
-    "node_modules/unist-util-visit-children/readme.md",
-    "node_modules/unist-util-modify-children/readme.md",
-    "node_modules/parse-latin/readme.md",
-    "node_modules/retext-stringify/readme.md",
-    "node_modules/retext-latin/readme.md",
-    "node_modules/retext/readme.md",
-    "node_modules/micromark-util-events-to-acorn/readme.md",
-    "node_modules/micromark-extension-mdx-md/readme.md",
-    "node_modules/micromark-extension-mdxjs/readme.md",
-    "node_modules/micromark-extension-gfm-task-list-item/readme.md",
-    "node_modules/micromark-factory-mdx-expression/readme.md",
-    "node_modules/micromark-extension-mdxjs-esm/readme.md",
-    "node_modules/micromark-extension-mdx-expression/readme.md",
-    "node_modules/micromark-extension-mdx-jsx/readme.md",
-    "node_modules/mdast-util-mdx/readme.md"
+    "Feedback.md",
+    "ROADMAP.md",
+    "my_notes.md",
+    "Teoria della complessità - merge.md",
+    "ROADMAP-fonte-di-verita.md",
+    "assets_my_notes/05-spanning-tree-construction-image_9.png",
+    "assets_my_notes/05-spanning-tree-construction-image_8.png",
+    "assets_my_notes/05-spanning-tree-construction-image_7.png",
+    "assets_my_notes/05-spanning-tree-construction-image_6.png",
+    "assets_my_notes/05-spanning-tree-construction-image_5.png",
+    "assets_my_notes/05-spanning-tree-construction-image_4.png",
+    "assets_my_notes/05-spanning-tree-construction-image_3.png",
+    "assets_my_notes/05-spanning-tree-construction-image_2.png",
+    "assets_my_notes/05-spanning-tree-construction-image_11.png",
+    "assets_my_notes/05-spanning-tree-construction-image_10.png",
+    "assets_my_notes",
+    "assets/my_notes",
+    "README.md",
+    "AGENTS.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-603.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-602.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-601.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-600.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-599.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-598.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-597.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-596.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-595.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-594.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-593.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-592.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-591.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-590.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-589.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-588.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-587.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-586.md",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/images",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/manifest.json",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages",
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS",
+    "teacher_slides/knowledge_parsed/based_by/Cormen Introduction to Algorithms/pages",
+    "teacher_slides/knowledge_parsed/based_by/Cormen Introduction to Algorithms/manifest.json",
+    "teacher_slides/knowledge_parsed/based_by/Cormen Introduction to Algorithms/images",
+    "teacher_slides/knowledge_parsed/based_by/Cormen Introduction to Algorithms"
   ]
 }
