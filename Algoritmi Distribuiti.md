@@ -6,20 +6,26 @@ Carlo Uguzzoni
 ## Indice
 
 - [[#1 Introduzione|1 Introduzione]]
+  - [[#1.1 Ricorrenze e Master Theorem|1.1 Ricorrenze e Master Theorem]]
 - [[#2 Teoria della Complessità|2 Teoria della Complessità]]
   - [[#2.1 Classificazione dei problemi per complessità|2.1 Classificazione dei problemi per complessità]]
   - [[#2.2 Approssimazioni di problemi NP-hard|2.2 Approssimazioni di problemi NP-hard]]
+    - [[#Self-reduction del Vertex Cover|Self-reduction del Vertex Cover]]
+    - [[#Inapprossimabilità del TSP generale|Inapprossimabilità del TSP generale]]
 - [[#3 Algoritmi distribuiti|3 Algoritmi distribuiti]]
   - [[#3.1 Teoria della computazione distribuita|3.1 Teoria della computazione distribuita]]
   - [[#3.2 Leader election in alberi|3.2 Leader election in alberi]]
   - [[#3.3 Leader election in anelli|3.3 Leader election in anelli]]
   - [[#3.4 Leader election in grafi generici|3.4 Leader election in grafi generici]]
+    - [[#Protocollo YO-YO|Protocollo YO-YO]]
   - [[#3.5 Leader election in anelli sincroni|3.5 Leader election in anelli sincroni]]
 - [[#4 Algoritmi di routing|4 Algoritmi di routing]]
 - [[#5 Errori e fallimenti|5 Errori e fallimenti]]
   - [[#5.1 Consensus problem con fallimenti sui collegamenti|5.1 Consensus problem con fallimenti sui collegamenti]]
   - [[#5.2 Consensus problem con fallimenti sui nodi|5.2 Consensus problem con fallimenti sui nodi]]
+    - [[#Consensus deterministico con fallimenti bizantini|Consensus deterministico con fallimenti bizantini]]
 - [[#6 Strutture dati distribuite|6 Strutture dati distribuite]]
+  - [[#Chord: leave, failure e replicazione|Chord: leave, failure e replicazione]]
 
 ## List of Algorithms
 
@@ -27,7 +33,35 @@ Carlo Uguzzoni
 2. [[#^algorithm-2|2-approssimazione di TSP]]
 3. [[#^algorithm-3|Algoritmo di Christofides per TSP]]
 4. [[#^algorithm-4|Algoritmo ricorsivo generico per B&B]]
-5. [[#^algorithm-5|Algoritmo greedy per Vertex Cover]]
+5. [[#^algorithm-5|Self-reduction del Vertex Cover]]
+6. [[#^algorithm-6|Algoritmo greedy per Vertex Cover]]
+7. [[#^algorithm-7|Relax & Round per Vertex Cover]]
+
+### Protocolli distribuiti
+
+1. [[#Esempio di costruzione e valutazione di un algoritmo distribuito|Flooding / Broadcast]]
+2. [[#Il wake-up problem|WFlood / Wake-up]]
+3. [[#Protocollo Shout|SHOUT e SHOUT+]]
+4. [[#Costruzione dello spanning tree tramite traversal|DFT e variante Visited/Ack]]
+5. [[#Tecnica di saturazione|Saturazione su alberi]]
+6. [[#All The Way|All The Way]]
+7. [[#As Far As It Can|As Far As It Can]]
+8. [[#Controlled Distance|Controlled Distance (Hirschberg–Sinclair)]]
+9. [[#Flood|FloodMax su grafi generici]]
+10. [[#Protocollo YO-YO|YO-YO]]
+11. [[#Speeding|Speeding]]
+12. [[#Waiting|Waiting e Universal Waiting]]
+13. [[#Elezione casuale del leader|Leader election randomizzata]]
+14. [[#Gossiping|Gossiping]]
+15. [[#Iterating|Distance-vector / Bellman–Ford distribuito]]
+16. [[#Min-Hop routing|Min-Hop routing]]
+17. [[#Algoritmo di Dijkstra|Dijkstra distribuito]]
+18. [[#Flooding in grafi completi con fallimenti nei collegamenti|Flooding tollerante a link failure]]
+19. [[#Consensus in sistemi sincroni|Consensus sincrono con crash]]
+20. [[#Consensus in sistemi asincroni|Ben-Or randomizzato]]
+21. [[#Consensus deterministico con fallimenti bizantini|RegisteredMail / TellZero-Byz]]
+22. [[#Consensus problem con fallimenti bizantini|Consensus randomizzato bizantino]]
+23. [[#Chord|Chord: lookup, join, stabilize, leave e failure]]
 
 ## 1 Introduzione
 
@@ -125,7 +159,7 @@ Ci permette di esprimere upper e lower bounds al costo di algoritmi e problemi. 
 
   ![[assets/Screenshot 2024-09-24 111815.png|700]]
 
-- Theta: siano $f, g : \mathbb{N} \to \mathbb{R}$, diciamo che $f(n) \in \Theta(g(n)) \iff \exists c_1, c_2 > 0, n_0 \in \mathbb{N} : c_1 \cdot g(n) \leq f(n) \leq c_2 \cdot g(n), \forall n \geq n_0$. La situaizone ideale di un problema od algoritmo è quella in cui abbiamo un $\Theta$ e $c_1 = c_2$. In tal caso, il comportamento è quanto più stabile possibile
+- Theta: siano $f, g : \mathbb{N} \to \mathbb{R}$, diciamo che $f(n) \in \Theta(g(n)) \iff \exists c_1, c_2 > 0, n_0 \in \mathbb{N} : c_1 \cdot g(n) \leq f(n) \leq c_2 \cdot g(n), \forall n \geq n_0$. La situazione ideale di un problema od algoritmo è quella in cui abbiamo un $\Theta$ e $c_1 = c_2$. In tal caso, il comportamento è quanto più stabile possibile
 
   ![[assets/Screenshot 2024-09-24 111824.png|700]]
 
@@ -135,13 +169,17 @@ In base al proprio costo computazionale, possiamo classificare i problemi.
 
 - Trattabili: possono essere risolti da un algoritmo con costo computazionale polinomiale rispetto la dimensione dell'input. Difficilmente il grado del polinomio è alto e spesso, pur essendo il worst case polinomiale, il caso medio è poco costoso. I problemi trattabili sono indifferenti rispetto al progresso tecnologico, perché si adattano bene sia a vecchie che nuove tecnologie. Viceversa, per costi computazionali più alti anche l'avanzamento tecnologico potrebbe non essere sufficiente a garantire una certa efficienza
 
-- Presumibilmente trattabili (difficili): non esiste un algoritmo con costo computazionale polinomiale, ma non si è dimostrato che non esiste. Tipicamente è più complesso definire un algoritmo con tali requisiti che dimostrare la sua non-esistenza. Questa categoria di problemi sono i più interessanti (es. il Commesso Viaggiatore) da studiare
+- Presumibilmente intrattabili (difficili): non è noto alcun algoritmo con costo computazionale polinomiale, ma non è stato neppure dimostrato che un tale algoritmo non esista. Questa categoria comprende molti dei problemi più interessanti da studiare (es. il Commesso Viaggiatore)
 
 - Intrattabili: è dimostrato che non possa esistere un algoritmo con costo computazionale polinomiale per la loro risoluzione. Ad esempio, la Torre di Hanoi è un problema intrattabile. Tipicamente questo tipo di problemi sono artificiosi; nascono dalla logica matematica piuttosto che dall'osservazione del mondo naturale
 
 - Irrisolvibili: si può dimostrare che non esista un algoritmo per risolvere questo tipo di problemi, indipendentemente dal costo
 
-L'appartenenza dei problemi a queste classi non dipende dal modello di calcolo. La tesi di Church-Turing afferma che, *a prescindere dal modello di calcolo, a patto che esso sia ragionevole, ogni modello può simularne ogni altro con uno slow-down polinomiale*.
+L'appartenenza dei problemi a queste classi non dipende dal modello di calcolo ragionevole adottato. Più precisamente, la **tesi di Church-Turing estesa** afferma che i modelli di calcolo ragionevoli si possono simulare a vicenda con uno slowdown al più polinomiale. La tesi di Church-Turing nella sua formulazione ordinaria riguarda invece quali funzioni siano effettivamente calcolabili, non il costo della simulazione.
+
+### 1.1 Ricorrenze e Master Theorem
+
+> **Fuori dal nucleo documentato.** Ricorrenze e Master Theorem non compaiono nei materiali ufficiali Montangero presenti nella repository né nei due capitoli di ripasso/complessità usati per il consolidamento. La voce resta nell'indice soltanto per rendere esplicita questa verifica; non viene trattata come argomento d'esame senza una conferma ulteriore del docente.
 
 ## 2 Teoria della Complessità
 
@@ -156,11 +194,6 @@ In questo capitolo consideriamo perlopiù problemi decisionali. Si possono tipic
 ###### Problemi P
 
 Problemi decisionali facili. Basta individuare un algoritmo risolutivo di costo polinomiale per ascrivere un problema a questa categoria.
-Nonostante vi siano algoritmi decisionali non polinomiali, possiamo individuare algoritmi polinomiali per verificare la correttezza di una loro possibile soluzione. Un esempio interessante è quello dei cicli Hamiltoniani.
-
-![[assets/Screenshot 2024-09-24 143525.png|700]]
-
-In questo caso, l'algoritmo ha un costo computazionale fattoriale (si tratta di generare tutte le possibili permutazioni dei nodi ed analizzarle singolarmente), mentre la verifica ha un costo lineare con la dimensione dell'input (basta scorrere l'intera catena in oggetto per verificare la correttezza della soluzione).
 
 ###### Verificare la soluzione di un problema
 
@@ -184,6 +217,10 @@ La soluzione di un problema $\Pi$ si può dunque considerare verificata quando v
 
 Problemi decisionali verificabili con un algoritmo verificatore di costo polinomiale.
 
+Un esempio è il problema del ciclo Hamiltoniano: non è noto un algoritmo polinomiale che lo risolva, mentre una soluzione candidata si verifica in tempo polinomiale controllando che la sequenza visiti ogni vertice una sola volta, che ogni coppia consecutiva sia collegata e che l'ultimo vertice sia collegato al primo. L'algoritmo esaustivo che prova tutte le permutazioni richiede tempo fattoriale, ma questo non dimostra che ogni possibile algoritmo debba avere quel costo.
+
+![[assets/Screenshot 2024-09-24 143525.png|700]]
+
 ![[assets/Screenshot 2024-09-25 112302.png|800]]
 
 Dire che $P \subseteq NP$ equivale a dire che qualsiasi problema che può essere risolto in tempo polinomiale può anche essere verificato in tempo polinomiale. La dimostrazione essenzialmente usa uno stesso algoritmo $A$ per risoluzione e verifica, mostrando che i tempi ed i risultati sono gli stessi.
@@ -196,7 +233,7 @@ In questo scenario hanno particolare rilievo certi problemi $NP$ che sembrano pi
 ###### Riduzione di Karp
 
 Si dice che un problema $A$ è riducibile a un problema $B$ tramite riduzione di Karp se esiste una funzione computabile in tempo polinomiale che trasforma istanze di $A$ in istanze di $B$ tali che la risposta a queste istanze sia la stessa.
-Questa riduzione è fondamentale per dimostrare che un problema è NP-completo: se un problema noto NP-completo si riduce tramite riduzione di Karp a un altro problema, allora anche quest'ultimo è NP-completo.
+Questa riduzione è fondamentale per confrontare la difficoltà dei problemi. Se un problema noto NP-completo si riduce tramite riduzione di Karp a un problema $B$, allora $B$ è NP-hard; per concludere che $B$ è NP-completo bisogna dimostrare anche che $B \in NP$.
 
 ![[assets/Screenshot 2024-09-24 145852.png|800]]
 
@@ -231,7 +268,7 @@ Si prenda ad esempio il problema del commesso viaggiatore (TSP). L'input è un g
 ###### Problemi NP-hard
 
 Un problema $A$ è NP-hard se $\forall B \in NP : B \leq_p A$.
-Notiamo che questa è esattamente la seconda proprietà che definisce i problemi NP-completi. Ciò che manca è l'ipotesi di appartenenza ad $NP$, percui possiamo espandere le casistiche possibili già osservate, a seconda che $P = NP$ o meno.
+Notiamo che questa è esattamente la seconda proprietà che definisce i problemi NP-completi. Ciò che manca è l'ipotesi di appartenenza ad $NP$, per cui possiamo espandere le casistiche possibili già osservate, a seconda che $P = NP$ o meno.
 
 ![[assets/Screenshot 2024-09-24 154654.png|800]]
 
@@ -267,7 +304,7 @@ Formalizziamo il tutto in pseudo-codice:
 **Algorithm 1 Risoluzione Ciclo Hamiltoniano con TSP** ^algorithm-1
 
 > 1. **function** HCtoTSP($G$)  
-> 2.  $E^\prime \gets \{(u, v) : (u, v) \in V, u \neq v\}$  
+> 2.  $E^\prime \gets \{\{u, v\} : u, v \in V, u \neq v\}$<br>
 > 3.  **for all** $(u, v)$ in $E^\prime$ **do**  
 > 4.   **if** $(u, v) \in E$ **then**  
 > 5.    $C(u, v) \gets 0$  
@@ -284,8 +321,33 @@ Formalizziamo il tutto in pseudo-codice:
 > 16.  **end if**  
 > 17. **end function**
 
-Abbiamo appena dimostrato che possiamo risolvere il ciclo Hamiltoniano con TSP. La trasformazione può avvenire senz'altro in tempo polinomiale, perché i nodi sono al massimo $\frac{n \cdot (n - 1)}{2}$ ed i confronti fatti alla fine del procedimento sono lineari con $n$.
-Siccome non sappiamo ancora se $P = NP$, abbiamo per ipotesi che $P \neq NP$. Perciò, la possibilità di trovare una soluzione polinomiale a TSP genera un assurdo: cioè che il ciclo Hamiltoniano sia risolvibile a sua volta in tempo polinomiale, collassando $NP$ in $P$ (ovvero determinando $NP = P$).
+Abbiamo appena dimostrato che possiamo risolvere il ciclo Hamiltoniano usando un algoritmo per TSP. La trasformazione richiede tempo polinomiale: nel caso non diretto il grafo completo ha $\frac{n(n-1)}{2}$ archi, e la costruzione dei pesi richiede $O(n^2)$ operazioni.
+Poiché il ciclo Hamiltoniano è NP-completo e si riduce in tempo polinomiale a TSP, la riduzione dimostra direttamente che TSP è NP-hard. Non occorre assumere $P \neq NP$ per questa conclusione; tale ipotesi serve soltanto per dedurre che TSP non possa avere un algoritmo polinomiale.
+
+###### Inapprossimabilità del TSP generale
+
+> **Teorema.** Se $P \neq NP$, per ogni costante $\rho \geq 1$ non esiste un algoritmo polinomiale di $\rho$-approssimazione per il TSP generale.
+
+La dimostrazione è per assurdo. Supponiamo che esista un algoritmo polinomiale $A$ con fattore costante $\rho$ e usiamolo per decidere il problema NP-completo del ciclo Hamiltoniano. Data un'istanza $G=(V,E)$ di quest'ultimo problema, poniamo $n=|V|$ e costruiamo il grafo completo $G'=(V,E')$ con costi
+
+$$
+c(e)=
+\begin{cases}
+1 & \text{se } e\in E,\\
+M=\lceil \rho n\rceil+1 & \text{se } e\notin E.
+\end{cases}
+$$
+
+La costruzione richiede $O(n^2)$ operazioni e il valore $M$ ha una rappresentazione di lunghezza polinomiale. Consideriamo i due casi:
+
+- Se $G$ contiene un ciclo Hamiltoniano, lo stesso ciclo esiste in $G'$ e ha costo $n$. Poiché tutti gli archi costano almeno 1, l'ottimo vale esattamente $OPT(G')=n$. La garanzia di approssimazione impone quindi $cost(A(G'))\leq \rho n$.
+- Se $G$ non contiene un ciclo Hamiltoniano, ogni tour di $G'$ usa almeno un arco non appartenente a $E$. Il suo costo è dunque almeno
+
+  $$M+(n-1)>\rho n.$$
+
+  Una soluzione ammissibile non può costare meno dell'ottimo, quindi anche $cost(A(G'))>\rho n$.
+
+Controllando se il costo restituito da $A$ è al più $\rho n$ potremmo pertanto decidere in tempo polinomiale se $G$ possiede un ciclo Hamiltoniano. Ne seguirebbe $P=NP$, contro l'ipotesi. Il risultato riguarda il **TSP generale**: i costi costruiti non soddisfano necessariamente la disuguaglianza triangolare e quindi non esclude approssimazioni costanti per il TSP metrico.
 
 ###### Approssimazioni di TSP
 
@@ -300,7 +362,10 @@ Come abbiamo già visto, TSP è NP-hard. Il fattore di approssimazione di TSP su
 In questo contesto, verificare la disuguaglianza triangolare significa, in modo molto pratico, che passare direttamente da un nodo $u$ ad un nodo adiacente $z$ è meno costoso che effettuare un passaggio intermedio tramite un terzo nodo $v$ adiacente ad entrambi. Questa è una condizione tutto sommato naturale, soddisfatta in diverse applicazioni.
 Ora vediamo nel dettaglio diversi algoritmi di approssimazione per TSP.
 
-- **Algoritmo di 2-approssimazione**: si costruisce per prima cosa un albero di copertura $T^*$ (partendo da nodo casuale), poi si raddoppiano tutti gli archi. A questo punto, abbiamo un grado pari per ogni nodo appartenente al grafo. Si procede cercando un ciclo Euleriano (cioè passante una ed una sola volta per ogni arco del grafo) $E$, sul nuovo $T^*$ con archi raddoppiati. Il modo più facile per individuare $E$ è una visita in profondità in pre-ordine. Il ciclo Hamiltoniano $H$ si ricava da $E$ calcolando le "shortcuts", ovvero eliminando dal percorso della visita tutti gli archi già visitati, da sinistra verso destra.
+- **Algoritmo di 2-approssimazione**: si costruisce per prima cosa un minimum spanning tree $T^*$, poi se ne raddoppiano tutti gli archi. Nel multigrafo risultante ogni vertice ha grado pari, quindi si può calcolare un ciclo euleriano $E$, per esempio mediante una visita DFS che percorra anche i ritorni lungo gli archi duplicati. Il ciclo Hamiltoniano $H$ si ricava percorrendo $E$ e saltando ogni vertice già visitato.
+
+  > **AA 2025/26.** Questo algoritmo non è stato svolto a lezione. Le dispense ufficiali richiedono comunque di conoscerne l'analisi nella misura necessaria a comprendere l'analisi di Christofides.
+
   Nell'immagine sotto sono riportate in sequenza le azioni appena spiegate. Del grafo, che naturalmente è supposto essere completo, si mostrano per semplicità solo gli archi di $T^*, E, H$.
 
   ![[assets/2-approx.jpg|1000]]
@@ -312,7 +377,7 @@ Ora vediamo nel dettaglio diversi algoritmi di approssimazione per TSP.
   > 1. **function** 2-approx($G$)  
   > 2.  $T^* \gets MSTPrim(G)$  
   > 3.  $G^\prime \gets doubleEdges(T^*)$  
-  > 4.  $E \gets DFSPreOrder(G^\prime)$  
+  > 4.  $E \gets EulerTour(G^\prime)$<br>
   > 5.  $H \gets removeShortcuts(E)$  
   > 6.  **return** $H$  
   > 7. **end function**
@@ -330,15 +395,15 @@ Ora vediamo nel dettaglio diversi algoritmi di approssimazione per TSP.
                           cost(H) \leq cost(E) = 2 \cdot cost(T^*)
   \end{aligned}$$
 
-  Se prendiamo $H^*$ (il cammino Hamiltoniano di costo minimo) e rimuoviamo casualmente un collegamento, otteniamo uno spanning tree $T$ (non necessariamente minimo). Abbiamo quindi che:
+  Se prendiamo $H^*$ (il ciclo Hamiltoniano di costo minimo) e ne rimuoviamo un arco, otteniamo uno spanning tree $T$ (non necessariamente minimo). Abbiamo quindi che:
 
   $$\begin{aligned}
                           cost(T^*) \leq cost(T) \leq cost(H^*)
   \end{aligned}$$
 
-  - La prima disuguaglianza vale perché tutti i collegamenti hanno pesi non-negativi, perciò rimuovendone un numero maggiore di 0 diminuisce necessariamente il costo complessivo
+  - La prima disuguaglianza vale perché $T^*$ è un minimum spanning tree, quindi non costa più di qualunque altro spanning tree $T$
 
-  - La seconda disuguaglianza vale perché $T^*$ è il minimum spanning tree
+  - La seconda disuguaglianza vale perché $T$ si ottiene rimuovendo un arco da $H^*$ e i pesi sono non-negativi, quindi $cost(T) \leq cost(H^*)$
 
   Collegando questa catena di disuguaglianze a quella impostata sopra, mettiamo in relazione $cost(H)$ e $cost(H^*)$, trovando infine che:
 
@@ -366,8 +431,8 @@ Ora vediamo nel dettaglio diversi algoritmi di approssimazione per TSP.
 
   ![[assets/christof1.png|800]]
 
-  Nell'esempio specifico c'è un perfect matching individuato da ogni possibile coppia di nodi, ma questo è comunque sempre possibile, a patto che $G^\prime$ abbia $|V|$ pari e sia completo. Andremo a dimostrare che l'insieme dei nodi $|V|$ di $G^\prime$ è sempre pari una volta completata la specifica dell'algoritmo di Christofides.
-  Infine, uniamo $T^*$ ed $E^*$, poi cerchiamo il ciclo euleriano $E$. Analogamente alla 2-approssimazione eseguiamo la visita in profondità in pre-ordine rimuovendo gli archi precedentemente visitati (shortcuts), trovando il ciclo Hamiltoniano $H$.
+  Nell'esempio specifico c'è un perfect matching individuato da ogni possibile coppia di nodi, ma questo è comunque sempre possibile, a patto che $G^\prime$ abbia un numero pari di vertici e sia completo. Dimostreremo infatti che l'insieme $U$ dei vertici di grado dispari ha sempre cardinalità pari.
+  Infine, uniamo come multinsieme gli archi di $T^*$ ed $E^*$, poi calcoliamo un ciclo euleriano $E$. Analogamente alla 2-approssimazione percorriamo $E$ e saltiamo i vertici già visitati (shortcut), ottenendo il ciclo Hamiltoniano $H$.
 
   ![[assets/christof2.png|700]]
 
@@ -379,9 +444,9 @@ Ora vediamo nel dettaglio diversi algoritmi di approssimazione per TSP.
   > 2.  $T^* \gets MSTPrim(G)$  
   > 3.  $U \gets getOddDegreeNodes(T^*)$  
   > 4.  $G^\prime \gets getInducedSubgraph(G, U)$  
-  > 5.  $E^* \gets perfectMatching(G^\prime)$  
-  > 6.  $F \gets union(T^*, E^*)$  
-  > 7.  $E \gets DFSPreorder(F)$  
+  > 5.  $E^* \gets minimumWeightPerfectMatching(G^\prime)$<br>
+  > 6.  $F \gets multisetUnion(T^*, E^*)$<br>
+  > 7.  $E \gets EulerTour(F)$<br>
   > 8.  $H \gets removeShortcuts(E)$  
   > 9.  **return** $H$  
   > 10. **end function**
@@ -458,15 +523,15 @@ Vediamo lo pseudo-codice del caso ricorsivo che abbiamo visto, riferendoci ad un
 **Algorithm 4 Algoritmo ricorsivo generico per B&B** ^algorithm-4
 
 > 1. $BCS \gets null$  
-> 2. $LB \gets \infty$  
+> 2. $UB \gets \infty$<br>
 > 3. **function** B&B(S)  
-> 4.  **if** $lowerBound(S) > LB$ **then**  
+> 4.  **if** $lowerBound(S) \geq UB$ **then**<br>
 > 5.   **return**  
 > 6.  **end if**  
-> 7.  **if** $S$ has a solution **then**  
-> 8.   **if** $cost(S) \leq LB$ **then**  
+> 7.  **if** $S$ represents a single feasible solution **then**<br>
+> 8.   **if** $cost(S) < UB$ **then**<br>
 > 9.    $BCS \gets S$  
-> 10.    $LB \gets cost(S)$  
+> 10.    $UB \gets cost(S)$<br>
 > 11.   **end if**  
 > 12.  **else**  
 > 13.   **for all** $S_i$ in $branch(S)$ **do**  
@@ -537,6 +602,41 @@ $$\begin{aligned}
 
 ![[assets/vertex_covers.png|500]]
 
+###### Self-reduction del Vertex Cover
+
+> **AA 2025/26 — facoltativo.** Le dispense correnti presentano questa self-reduction come approfondimento facoltativo.
+
+La versione decisionale del problema, indicata con $VCD$, riceve un grafo $G=(V,E)$ e un intero $k$ e domanda se esista un vertex cover di cardinalità al più $k$. Essa è NP-completa. Se disponessimo di un algoritmo per la versione di ottimizzazione $VC_{opt}$, basterebbe invocarlo una volta e confrontare la cardinalità della soluzione con $k$; dunque
+
+$$VCD\leq_T^p VC_{opt},$$
+
+e questo prova che $VC_{opt}$ è NP-hard.
+
+Per Vertex Cover vale anche la riduzione nell'altra direzione: usando un oracolo decisionale $A(G,k)$ possiamo determinare sia la cardinalità sia i vertici di una soluzione ottima. Questa trasformazione è una riduzione di Turing in tempo polinomiale, perché effettua più chiamate adattive all'oracolo.
+
+**Fase 1 — cardinalità ottima.** La proprietà interrogata è monotona: se $G$ ha un vertex cover di cardinalità al più $k$, allora ne ha uno di cardinalità al più $k'$ per ogni $k'\geq k$. Una ricerca binaria nell'intervallo $[0,|V|]$ trova quindi il minimo $k^*$ tale che $A(G,k^*)=\mathrm{YES}$ usando $O(\log |V|)$ chiamate.
+
+**Fase 2 — ricostruzione.** Manteniamo un grafo corrente $G_c$, il budget residuo $k$ e un insieme $U$ di vertici non ancora esaminati. Per ogni vertice $v$ proviamo temporaneamente a rimuoverlo:
+
+**Algorithm 5 Self-reduction del Vertex Cover** ^algorithm-5
+
+> 1. **function** SelfReductionVC($G$)<br>
+> 2.  $k \gets BinarySearchMinimum(\lambda j.\ A(G,j), 0, |V|)$<br>
+> 3.  $C \gets \emptyset$; $G_c \gets G$; $U \gets V$<br>
+> 4.  **while** $E(G_c)\neq\emptyset$ **do**<br>
+> 5.   scegli $v\in U$; $U\gets U\setminus\{v\}$<br>
+> 6.   $G'\gets G_c-v$<br>
+> 7.   **if** $A(G',k-1)=\mathrm{YES}$ **then**<br>
+> 8.    $C\gets C\cup\{v\}$; $G_c\gets G'$; $k\gets k-1$<br>
+> 9.   **end if**<br>
+> 10.  **end while**<br>
+> 11.  **return** $C$<br>
+> 12. **end function**
+
+Se la risposta alla riga 7 è `YES`, esiste una copertura del grafo corrente che contiene $v$: si sceglie $v$ e restano da selezionare al più $k-1$ vertici in $G_c-v$. Se la risposta è `NO`, nessuna copertura ottima compatibile con le scelte già fatte contiene $v$; il vertice viene soltanto marcato come esaminato e **non** si modifica $G_c$. Questo ultimo dettaglio è essenziale: eliminare definitivamente anche nel caso `NO` potrebbe far dimenticare archi che la soluzione deve ancora coprire.
+
+L'invariante è che il grafo corrente possiede un vertex cover di cardinalità al più al budget residuo $k$. Quando non restano archi, $C$ copre tutti gli archi eliminati dalle scelte effettuate. La ricostruzione usa al più $|V|$ chiamate all'oracolo; insieme alla ricerca binaria, il totale è $O(|V|+\log |V|)$, quindi polinomiale.
+
 ###### Approccio greedy al Vertex Cover Problem
 
 Per questo tipo di problema, una possibile soluzione consiste in un insieme di vertici.
@@ -544,7 +644,7 @@ Un'idea per affrontare il Vertex Cover Problem potrebbe essere quella di coprire
 Nemmeno partire dai nodi con un numero più alto di archi incidenti è una buona strategia.
 L'algoritmo greedy proposto per il Vertex Cover Problem è detto "Approx-Vertex-Problem". Di seguito è riportato lo pseudo-codice:
 
-**Algorithm 5 Algoritmo greedy per Vertex Cover** ^algorithm-5
+**Algorithm 6 Algoritmo greedy per Vertex Cover** ^algorithm-6
 
 > 1. **function** Approx-Vertex-Cover($G$)  
 > 2.  $C \gets \emptyset$  
@@ -553,7 +653,8 @@ L'algoritmo greedy proposto per il Vertex Cover Problem è detto "Approx-Vertex-
 > 5.   $C \gets C \cup \{u, v\}$  
 > 6.   $E \gets E \setminus incidentEdges(\{u, v\})$  
 > 7.  **end while**  
-> 8. **end function**
+> 8.  **return** $C$<br>
+> 9. **end function**
 
 Quello che si fa nella pratica è espandere la copertura partendo da archi casuali di $G$. L'algoritmo è greedy perché ad ogni passo va ad aggiungere un pezzo alla soluzione, che è sempre ammissibile perché vengono via via considerati tutti gli archi fino all'esaurimento di $E$.
 Andiamo a vedere ora qual'è l'efficienza di questo approccio. Sia $E^\prime \subseteq E$ l'insieme degli archi selezionati durante l'esecuzione dell'algoritmo. La relazione tra $|E^\prime|$ e $|C|$ è:
@@ -563,7 +664,7 @@ $$\begin{aligned}
 \end{aligned}$$
 
 perché per ogni arco in $E^\prime$ andiamo ad aggiungere 2 nodi a $C$.
-Inoltre, i nodi in $E^\prime$ sono tutti disgiunti. Per questo motivo la soluzione ottima deve comprendere almeno un nodo per ogni arco di $E^\prime$. Per questo possiamo dire che:
+Inoltre, gli archi in $E^\prime$ sono tutti disgiunti, cioè formano un matching. Per questo motivo la soluzione ottima deve comprendere almeno un vertice per ogni arco di $E^\prime$. Possiamo quindi dire che:
 
 $$\begin{aligned}
                     |E^\prime| \leq |OPT|
@@ -617,6 +718,14 @@ $$\begin{aligned}
                     \end{cases}
 \end{aligned}$$
 
+**Algorithm 7 Relax & Round per Vertex Cover** ^algorithm-7
+
+> 1. **function** RelaxAndRoundVC($G$)<br>
+> 2.  $X^*\gets solveFractionalVertexCoverLP(G)$<br>
+> 3.  $C\gets\{v\in V:X_v^*\geq\frac{1}{2}\}$<br>
+> 4.  **return** $C$<br>
+> 5. **end function**
+
 Se il segno di uguaglianza riguardasse il caso di non appartenenza, vi sarebbe la possibilità che non scegliere alcun nodo in $(u, v)$ nel caso particolare in cui $X_u = X_v = \frac{1}{2}$, soddisfi il vincolo $X_v + X_u \geq 1$, contraddicendo il suo stesso scopo. Ora andiamo ad ottenere il valore dell'errore di approssimazione $\alpha$ associato a questo metodo. L'insieme di tutte le soluzioni possibili per il problema di LP sono tutte le possibili combinazioni di valori in $[0, 1]$ degli $X_v$, delle quali le soluzioni possibili per il problema di PLI sono un sottoinsieme. Questo significa che risolvere il problema di ILP fornisce automaticamente una soluzione ammissibile di quello di LP. La soluzione di ILP è più formalmente un sottoinsieme proprio di quella di LP.
 Nei due insiemi possono esistere due ottimi diversi, contestualmente al problema di riferimento. Non necessariamente questi coincidono, e lo fanno solo quando la soluzione di LP è intera. La soluzione di LP inoltre è quella con il costo minore (o uguale), peraltro questo fatto è deducibile dalla rappresentazione insiemistica appena data.
 
@@ -624,7 +733,7 @@ $$\begin{aligned}
                     OPT_{LP} \leq OPT_{ILP}
 \end{aligned}$$
 
-Osserviamo che per ogni nodo $v \in V$, la soluzione arrotondata $X_v$ è almeno il doppio di quella ottima $X_V^*$ trovata da LP.
+Osserviamo che per ogni nodo $v \in V$, la variabile arrotondata $X_v$ è al massimo il doppio del corrispondente valore $X_v^*$ nella soluzione ottima del rilassamento LP.
 
 $$\begin{aligned}
                     X_v \leq 2 \cdot X_v^*
@@ -641,13 +750,15 @@ Vediamo ora se l'analisi è tight. Prendiamo questa volta i grafi che sono cicli
 
 ![[assets/vertexcoverILP.png|500]]
 
+> **Programma AA 2025/26.** La variante pesata del Vertex Cover è indicata dalle dispense ufficiali come non materiale d'esame. L'estensione pesata di Relax & Round è quindi un approfondimento e non viene inclusa in questa trattazione principale.
+
 ## 3 Algoritmi distribuiti
 
 ### 3.1 Teoria della computazione distribuita
 
 ###### Ambienti distribuiti
 
-Un ambiente distribuito comprende più agenti (oppure nodi, entità, ecc\...), ognuno dei quali ha una capacità computazionale propria. Tutti questi agenti lavorano per assolvere a qualche tipo di compito, coordinandosi tra loro tramite uno scambio di messaggi ed eseguendo una computazione locale. Non vi è una memoria condivisa tra questi agenti, per definizione.
+Un ambiente distribuito comprende più agenti (oppure nodi, entità, ecc\...), ognuno dei quali ha una capacità computazionale propria. Tutti questi agenti lavorano per assolvere a qualche tipo di compito, coordinandosi tra loro tramite uno scambio di messaggi ed eseguendo una computazione locale. Nel modello message-passing adottato dal corso non vi è memoria condivisa; non si tratta però di una proprietà universale di ogni possibile sistema distribuito.
 Per risolvere problemi in questo contesto, dobbiamo andare a definire un algoritmo che specifichi cosa ciascun agente debba fare, prevedendo in questo modo anche il loro comportamento collettivo. I principi di correttezza ed efficienza di un algoritmo valgono anche in questo caso.
 Mentre è facile trovare le differenze tra un sistema distribuito ed uno semplice, può risultare più complicato a prima vista trovarle con un sistema parallelo.
 
@@ -659,17 +770,17 @@ Per astrarre un sistema distribuito possiamo usare i grafi. I nodi rappresentano
 
 ###### Entità
 
-Ogni entità riceve in input una parte del problema e deve produrre un output compatibile a quello definito dall'algoritmo risolutivo, che in questo contesto si può dire anche "protocollo". Tutte le entità eseguono esattamente lo stesso codice.
+Ogni entità riceve in input una parte del problema e deve produrre un output compatibile a quello definito dall'algoritmo risolutivo, che in questo contesto si può dire anche "protocollo". Nel modello simmetrico del corso tutte le entità eseguono lo stesso codice; eventuali ruoli diversi dipendono dallo stato iniziale o dagli input locali.
 Ad ogni entità è associato uno stato. Per ogni protocollo sono definiti un numero finito di stati che possono venire associati alle entità che lo eseguono. Mentre un'entità si trova in uno stato, possono essere innescati degli eventi, come la ricezione di messaggi, il clock interno od impulsi spontanei (come ad esempio quando un utente interagisce con un ATM che si trova in uno stato "idle", e questo reagisce di conseguenza). Questi eventi fanno sì che, a seconda dello stato in cui si trova, l'entità reagisca facendo qualcosa e spostandosi eventualmente verso un altro stato.
 Un'azione è un insieme atomico di attività che seguono il protocollo, messo in atto dalle entità in relazione ad eventi. Queste attività possono essere ad esempio calcolo, invio di messaggi, cambio di stato, set/reset del clock, ecc\...
 Le azioni che un'entità compie dipendono solo dallo stato in cui si trova e dall'evento che la interessa. Occorre definire in modo deterministico ogni possibile interazione stato/azione, anche qualora non vi sia nulla da fare.
-Essendo il protocollo vigente lo stesso per tutti gli agenti, diciamo che il sistema distribuito è simmetrico. Ciascun sistema distribuito può essere reso simmetrico. Una differenza del comportamento di diverse entità come quella dell'esempio che segue è del tutto apparente, perché queste eseguono comunque lo stesso codice.
+Quando il protocollo è lo stesso per tutti gli agenti, diciamo che il sistema distribuito è simmetrico. Una differenza del comportamento di diverse entità come quella dell'esempio che segue può dipendere soltanto dal loro stato o input, pur eseguendo lo stesso codice.
 
 ![[assets/Screenshot 2024-10-08 122127.png|500]]
 
 ###### Comunicazione
 
-Siccome i canali di comunicazione monodirezionali sono ormai poco usati (oggigiorno rimane utilizzata praticamente solo la radiotrasmissione), distinguiamo tra vicini in ingresso e vicini in uscita per la comunicazione dei nodi all'interno di un sitema distribuito.
+Siccome i canali di comunicazione monodirezionali sono ormai poco usati (oggigiorno rimane utilizzata praticamente solo la radiotrasmissione), distinguiamo tra vicini in ingresso e vicini in uscita per la comunicazione dei nodi all'interno di un sistema distribuito.
 
 ###### Assiomi
 
@@ -688,7 +799,7 @@ Imporre restrizioni limita l'applicazione del protocollo. Possiamo trovare restr
 - Comunicazione: possiamo ad esempio imporre un invio di tipo FIFO (cioè nello stesso ordine di invio) od una precisa direzionalità dei collegamenti all'interno del modello
 
 - Affidabilità: possiamo chiedere che il sistema sia in grado di accorgersi di eventuali fallimenti su collegamenti od entità (fault detection). Questa può sembrare una restrizione semplice, ma nella realtà non lo è per niente.
-  Si possono anche imporre restrizioni sui tipi di fallimenti che possono accadere: consegna garantita dei messaggi, affidabilità parziale/totale, ecc\... Affidabilità parziale significa assicurare che non ci saranno più guasti, mentre totale che non ce ne siano stati in precedenza
+  Si possono anche imporre restrizioni sui tipi di fallimenti che possono accadere: consegna garantita dei messaggi, affidabilità parziale/totale, ecc\... Nella terminologia delle slide, affidabilità parziale significa che da ora in poi non avverranno guasti, anche se possono essercene stati in precedenza; affidabilità totale significa che non sono avvenuti guasti e non ne avverranno
 
 - Connettività: possiamo richiedere che il grafo $G$ che rappresenta il modello sia fortemente connesso
 
@@ -747,23 +858,21 @@ Passiamo ora a misurare i costi:
                           |N(s)| + \sum_{x \neq s} N(x) - 1 = \sum_{x} |N(x)| - \sum_{x \neq s} 1 = 2 \cdot m - (n - 1)
   \end{aligned}$$
 
-  In particolare, sommiamo tutti i vicini dell'initiatior e, per ogni altro nodo, tutti i loro vicini meno 1, che è quello dal quale ricevono il messaggio. $\sum_{x} |N(x)| = 2 \cdot m$ è il numero totale di archi in un grafo non direzionato
+  In particolare, sommiamo tutti i vicini dell'initiator e, per ogni altro nodo, tutti i loro vicini meno quello dal quale ricevono il messaggio. Per il lemma della stretta di mano, $\sum_x |N(x)|=2m$: è la somma dei gradi, nella quale ogni arco non diretto viene contato due volte
 
-- Tempo di esecuzione: se consideriamo trasmissioni ideali di durata unitaria, il tempo di copertura totale del grafo da parte dell'algoritmo dipende in buona parte da dove si trova l'initiator rispetto a tutti gli altri nodi. In particolare, il nodo chiave per determinare il peggior tempo di trasmissione del messaggio a tutto il sistema diventa il nodo più lontano dall'initiator, cioè il diametro $D$ del grafo $G$.
-  Possiamo quindi affermare che il costo in termini di tempo è al più $D(G) \leq n - 1 \in O(n)$. Abbiamo $D(G) = n - 1$ solo quando il $G$ è un'unica catena.
-  Anche senza ipotesi di propagazione in tempo unitario (modello asincrono), il tempo peggiore è sicuramente limitato dall'alto da $n - 1$, mentre non possiamo dire con certezza che sia limitato da $D(G)$.
+- Tempo di esecuzione: nel modello ideale sincrono, con una trasmissione per unità di tempo, un'esecuzione con iniziatore $s$ termina dopo la sua eccentricità $r(s)=\max_y d(s,y)$. Nel caso peggiore rispetto alla scelta dell'iniziatore, $\max_s r(s)=D(G)\leq n-1$.
+  Nel modello asincrono il tempo fisico non è limitato senza un bound sui ritardi. Se si usa invece il **causal time**, cioè la lunghezza della catena causale di messaggi, la prima ricezione può seguire un cammino semplice non minimo: il bound superiore generale è $n-1$, che può essere maggiore di $D(G)$.
 
 Possiamo ora stabilire se sia possibile ridurre il numero di messaggi inviati od il tempo ideale, ma per farlo è necessario trovare il lower bound del problema.
 
-- Tempo di esecuzione: nell'istanza peggiore possibile, il tempo richiesto per eseguire il flooding è lo stesso che il messaggio impiega a raggiungere il nodo più lontano dall'initiator, ovvero $D(G)$, a prescindere dall'algoritmo utilizzato. Il nostro algoritmo per il flooding ha dunque una complessità ottimale dal punto di vista del tempo
+- Tempo di esecuzione: nel modello ideale e nel caso peggiore rispetto alla scelta dell'iniziatore, qualunque algoritmo deve raggiungere una coppia di nodi a distanza $D(G)$. Flooding raggiunge quindi il lower bound $D(G)$ ed è ottimale in ideal time. Questa conclusione non identifica $D(G)$ con il causal time di ogni esecuzione asincrona
 
-- Messaggi inviati: il minimo numero di messaggi è invece $n - 1 \in \Omega (n)$. Ciascun nodo deve infatti ricevere almeno un messaggio, o non potrà mai terminare l'algoritmo. C'è dunque un gap tra la performance di flooding ed il lower bound appena trovato.
-  È comunque possibile che siamo stati troppo ottimisti nell'indicare il lower bound. Se ci pensiamo, è vero che ogni nodo necessita di ricevere almeno un messaggio, però nel caso in cui un singolo arco collegasse due distinte aree di $G$ non potremmo non passarci. È possibile dimostrare che non possiamo non inviare almeno un messaggio per ogni arco, percui aggiorniamo il nostro lower bound a $m \in \Omega (m)$.
+- Messaggi inviati: il bound immediato è $n-1\in\Omega(n)$, perché ogni nodo diverso dall'iniziatore deve ricevere almeno un messaggio. Le slide dimostrano inoltre un lower bound worst-case $\Omega(m)$ per protocolli uniformi sulle topologie arbitrarie sotto le restrizioni standard, senza conoscenza globale sufficiente a evitare a priori determinati archi. Il bound non afferma che su ogni topologia nota servano $m$ messaggi: sul grafo completo conosciuto, per esempio, il simple broadcast ne usa soltanto $n-1$.
   Asintoticamente il costo di flooding raggiunge il lower bound, però si può tentare di chiudere un gap di fattore 2:
 
   - Nel caso in cui $G$ fosse un albero, avremmo che $m = n - 1$. Con questa specifica topologia possiamo toccare esattamente il lower bound. In questo modo abbiamo dimostrato che il lower bound non può essere alzato.
 
-  - Con un grafo completo abbiamo $m = \frac{n \cdot (n - 1)}{2}$. Un flooding su di un grafo completo è estremamente sconveniente, perché consiste di esattamente due invii per un totale di $n^2$. In questo caso basta un semplice broadcasting da parte dell'initiator. Questo si può realizzare facendo in modo che tutti i nodi siano a conoscenza della topologia del sistema. Gli invii totali sono $n - 1$ ed il tempo ottimale impiegato è soltanto 1 (che è anche il diametro del grafo)
+  - Con un grafo completo abbiamo $m = \frac{n(n-1)}{2}$. Flooding invia esattamente $2m-n+1=(n-1)^2$ messaggi, cioè $\Theta(n^2)$. Se almeno l'iniziatore sa che tutti gli altri nodi sono suoi vicini, basta invece un simple broadcast: $n-1$ messaggi e ideal time 1, pari al diametro
 
   - Per tutti quei grafi che non sono né alberi né grafi completi, tutto dipende dal valore di $m$: se il grafo è sparso ci si avvicina al lower bound, viceversa si inviano molti messaggi inutili
 
@@ -777,7 +886,7 @@ Il wake-up è un momento in cui la rete si mette in attività: uno o più agenti
 
 - Messaggi inviati:
 
-  - Nel caso in cui ci sia un solo initiator, il problema è semplicemente flooding, quindi devono essere inviati $2 \cdot m - 1$ messaggi
+  - Nel caso in cui ci sia un solo initiator, il problema coincide con flooding, quindi vengono inviati $2m-n+1$ messaggi
 
   - Nel caso migliore, cioè quello in cui tutti siano initiator, viaggiano 2 messaggi su ogni arco, quindi $2 \cdot m$
 
@@ -801,7 +910,7 @@ Le restrizioni che supponiamo sono:
 ###### Protocollo Shout
 
 Dal punto di vista dei nodi, trovare lo spanning tree vuol dire arrivare ad un punto in cui si possa distinguere tra due tipi di vicini: quelli appartenenti e quelli non appartenenti allo spanning tree. Mettendo assieme tutte le singole conoscenze dei nodi, troviamo lo spanning tree $T$ su $G$.
-L'idea di questo protocollo non è molto diversa dal flooding. L'initiator chiede ai propri vicini se intendono far parte dello spanning tree e si mette in attesa di risposte. Una volta ricevuta la richiesta dell'initiator, i suoi vicini, se non l'hanno già ricevuta una o più volte rispondono "sì", oppure "no" altrimenti, poi procedono all'inoltro. La stessa dinamica si ripete per i vicini dei vicini, ecc\... Una volta che si ricevono tutte le risposte dai propri vicini, si considerano gli archi sì come non appartenenti allo spanning tree e quelli no come non appartenenti.
+L'idea di questo protocollo non è molto diversa dal flooding. L'initiator chiede ai propri vicini se intendono far parte dello spanning tree e si mette in attesa di risposte. Una volta ricevuta la richiesta dell'initiator, i suoi vicini, se non l'hanno già ricevuta rispondono "sì", oppure "no" altrimenti, poi procedono all'inoltro. La stessa dinamica si ripete per i vicini dei vicini, ecc\... Una volta ricevute tutte le risposte, gli archi associati a una risposta $YES$ appartengono allo spanning tree; quelli associati a $NO$ non vi appartengono.
 
 ![[assets/Screenshot 2024-10-11 161549.png|600]]
 
@@ -858,7 +967,7 @@ Una volta completata la visita, la radice dello spanning tree è l'initiator e l
 
 - Il nodo genitore di un nodo $x$ è quel nodo dal quale $x$ ha ricevuto per primo il forward token e restituito il return token una volta terminata la propria parte
 
-- I nodi figli di un nodo $x$ sono quei vicini di $x$ sui cui i collegamenti non sono stati percorsi da un back-edge token
+- I nodi figli di un nodo $x$ sono i vicini diversi dal parent che hanno ricevuto per la prima volta il forward token da $x$ e hanno poi restituito il return token. Equivalentemente, sono i vicini collegati a $x$ da archi dell'albero, escluso il parent
 
 Ora valutiamo i costi dell'algoritmo, che chiameremo $DFT$:
 
@@ -871,7 +980,7 @@ Ora valutiamo i costi dell'algoritmo, che chiameremo $DFT$:
 
 - Tempo di esecuzione: siccome l'esplorazione è totalmente sequenziale, i $2 \cdot m$ messaggi della catena più lunga possibile (caso peggiore) sono anche il numero di istanti massimo che l'algoritmo impiega a terminare
 
-È possibile migliorare le performances di $DFT$? Sì, però non lo si può fare senza introdurre un minimo di parallelismo. Idealmente si ptorebbe pensare di parallelizzare la visita dei back edges, il problema è che il livello di conoscenza locale dei nodi ci impedisce di sapere quando effettivamente si tratti di back edges.
+È possibile migliorare le prestazioni di $DFT$? Sì, però non lo si può fare senza introdurre un minimo di parallelismo. Idealmente si potrebbe pensare di parallelizzare la visita dei back edge; il problema è che il livello di conoscenza locale dei nodi ci impedisce di sapere quando effettivamente si tratti di back edge.
 Un nodo che inizia la visita potrebbe inviare un broadcast ai propri vicini per segnalarlo, in modo da non essere contattato in futuro e dover così restituire il back edge token.
 
 ![[assets/Screenshot 2024-10-15 121746.png|750]]
@@ -919,7 +1028,7 @@ Negli alberi, le entità sono in qualche modo coscienti di appartenere ad una si
 
 Le restrizioni più tipicamente applicate nel caso di alberi sono:
 
-- Collegamenti indiretti
+- Collegamenti bidirezionali
 
 - Connettività
 
@@ -932,15 +1041,15 @@ Le restrizioni più tipicamente applicate nel caso di alberi sono:
 ###### Tecnica di saturazione
 
 Tutti i nodi $x$ hanno un valore associato. Alla fine della computazione, ciascuno di essi deve conoscere se tale valore è il più basso o no.
-Le foglie dell'albero avviano la computazione, mandando il proprio valore verso il proprio vicino, che è sempre un nodo interno. Il vicino attende che tutti i nodi adiacenti gli inviino il loro valore, meno uno. Dopodiché, calcola il minimo tra il proprio ed i valori ricevuti, e procede all'inoltro sul collegamento mancante.
-Ad un certo punto della computazione, da qualche parte nell'albero, due nodi interni si scambieranno tra loro il valore minimo attuale ottenuto da due diverse porzioni dell'albero.
+Le foglie dell'albero avviano la computazione, mandando il proprio valore verso il proprio unico vicino, che può essere interno oppure, nel caso limite di un albero con due nodi, un'altra foglia. Un nodo attende che tutti i vicini tranne uno gli inviino il loro valore. Dopodiché calcola il minimo tra il proprio valore e quelli ricevuti e lo inoltra sul collegamento rimasto.
+Ad un certo punto della computazione, da qualche parte nell'albero, due nodi adiacenti si scambieranno tra loro il valore minimo corrente ottenuto dalle due porzioni dell'albero.
 La computazione procede propagando il minimo globale nuovamente verso la periferia dell'albero, così che alla fine tutti i nodi possano stabilire se il loro valore è corrisponde al minimo o no.
 
 ![[assets/Screenshot 2024-10-16 093901.png|1000]]
 
 La saturazione può essere iniziata da un numero arbitrario di iniziatori, che attivano tutti i nodi e fanno partire l'algoritmo dalle foglie. L'algoritmo per risvegliare i nodi è Wake-up. Questa fase si dice "attivazione".
-Le due fasi successive si dicono "saturazione" e "risoluzione". Nella prima, viene inviato un peculiare messaggio detto "di saturazione". Quando i nodi interni ricevono il messaggio di saturazione dalle foglie, passano allo stato di "processing". Tutti i nodi interni attendono $|N(x) - 1|$ messaggi di saturazione, poi calcolano il minimo e lo inoltrano sul collegamento mancante con un nuovo messaggio di saturazione.
-È possibile dimostrare che, ad un certo punto della computazione, esattamente due nodi interni si "saturano" e questi sono sempre vicini tra loro. Questi sono gli ultimi due nodi verso i quali fluiscono i messaggi di saturazione. Diverse esecuzioni possono portare a diverse paia di nodi, ma vale sempre questo fatto.
+Le due fasi successive si dicono "saturazione" e "risoluzione". Nella prima viene inviato un peculiare messaggio detto "di saturazione". Quando i nodi ricevono i messaggi di saturazione provenienti dalla periferia, passano allo stato di "processing". Ogni nodo $x$ attende $|N(x)|-1$ messaggi di saturazione, poi calcola il minimo e lo inoltra sul collegamento mancante con un nuovo messaggio di saturazione.
+È possibile dimostrare che, ad un certo punto della computazione, esattamente due nodi adiacenti si "saturano" scambiandosi il messaggio sul loro arco comune. Non è necessario che siano entrambi nodi interni: in un albero di due nodi sono entrambe foglie. Questi sono gli ultimi due nodi verso i quali fluiscono i messaggi di saturazione. Diverse esecuzioni possono portare a diverse coppie, ma la proprietà di adiacenza rimane valida.
 
 ![[assets/Screenshot 2024-10-16 094713.png|400]]
 
@@ -949,7 +1058,7 @@ Vediamo i costi relativi alla saturazione:
 
 - Messaggi inviati
 
-  - Attivazione: con $n$ iniziatori abbiamo $2 \cdot n = 2 \cdot (n - 1)$ messaggi, come avevamo visto nel paragrafo sopra
+  - Attivazione: se tutti gli $n$ nodi sono inizialmente iniziatori, Wake-up percorre ogni arco dell'albero in entrambe le direzioni, quindi usa $2(n-1)$ messaggi
 
   - Saturazione: $(n - 1) + 1 = n$ messaggi, dove i primi $n - 1$ coprono tutti gli archi dell'albero e quello tra i due nodi saturati è contato 2 volte
 
@@ -1043,7 +1152,7 @@ Il protocollo termina con una notifica del leader, perché non vi sono i presupp
 - Messaggi inviati: il caso peggiore è quello in cui i nodi sono disposti sull'anello con gli identificatori ordinati in senso crescente, e tutti i nodi si svegliano contemporaneamente. Il nodo con l'identificativo più alto è responsabile di una catena di un solo messaggio, quello con l'identificativo immediatamente più basso di due, e così via. Il numero complessivo di messaggi è:
 
   $$\begin{aligned}
-                          n + n - 1 + \dots + 2 + 1 = \frac{n \cdot (n - 1)}{2}
+                          n + (n - 1) + \dots + 2 + 1 = \frac{n \cdot (n + 1)}{2}
   \end{aligned}$$
 
   Il costo asintotico rimane $O(n^2)$, anche se lo abbiamo almeno dimezzato.
@@ -1090,7 +1199,7 @@ Controlled Distance termina sempre, perché prima o poi la distanza da percorrer
   Occorre prendere la parte intera inferiore perché un risultato che non sia intero viola gli assunti dell'algoritmo (in pratica ci dà uno spazio di lunghezza inferiore a $2^{i - 1}$ tra i candidati leader). Quindi, complessivamente, per il generico stage $i$-esimo abbiamo:
 
   $$\begin{aligned}
-                          (4 \cdot 2^i ) \cdot floor(\frac{n}{2^{i - 1} + 1}) \leq 8 \cdot 2^i \cdot \frac{n}{2^{i - 1} + 1} = 8 \cdot n \cdot \underbrace{\frac{2^{i - 1}}{2^{i - 1} + 1}}_{< 1} \leq 8 \cdot n
+                          (4 \cdot 2^i ) \cdot floor(\frac{n}{2^{i - 1} + 1}) \leq 8 \cdot 2^{i-1} \cdot \frac{n}{2^{i - 1} + 1} = 8 \cdot n \cdot \underbrace{\frac{2^{i - 1}}{2^{i - 1} + 1}}_{< 1} < 8 \cdot n
   \end{aligned}$$
 
   Per calcolare il numero complessivo di messaggi, dobbiamo considerare la somma di quelli inviati ad ogni stage.
@@ -1106,7 +1215,7 @@ Controlled Distance termina sempre, perché prima o poi la distanza da percorrer
   Il totale è:
 
   $$\begin{aligned}
-                          4 \cdot n + \sum_{i = 0}^{ceil(\log_2{n}) - 1} 8 \cdot n + 2 \cdot n + n = 7 \cdot n + 8 \cdot n \cdot (ceil(\log_2{n}) - 1) \in O(n \cdot \log_2{n})
+                          4 \cdot n + \sum_{i = 1}^{ceil(\log_2{n}) - 1} 8 \cdot n + 2 \cdot n + n = 7 \cdot n + 8 \cdot n \cdot (ceil(\log_2{n}) - 1) \in O(n \cdot \log_2{n})
   \end{aligned}$$
 
 - Tempo di esecuzione: il tempo richesto allo stage $i$ dipende essenzialmente dalla distanza percorsa dal messaggio con l'identificativo più piccolo (che chiameremo $dist(i)$), andata e ritorno. In più va aggiunta la catena di $n$ messaggi per raggiungere il nodo con l'identificativo più piccolo all'avvio dell'algoritmo (caso peggiore) più gli $n$ messaggi di notifica. Complessivamente:
@@ -1137,6 +1246,34 @@ Ogni entità mantiene il massimo identificativo visto fino a quel momento. L'ese
 - Messaggi inviati: ogni entità ad ogni round invia un messaggio ad ogni vicino, dunque abbiamo $2 \cdot m \cdot d$ messaggi totali
 
 - Tempo di esecuzione: uguale all'algoritmo di flooding, è banalmente il diametro $d$ del grafo
+
+###### Protocollo YO-YO
+
+YO-YO è un protocollo deterministico universale per grafi connessi bidirezionali con identificativi distinti; elegge il nodo con identificativo minimo. Mantiene un orientamento logico aciclico del grafo e distingue:
+
+- **source**, senza archi logici entranti e quindi ancora candidato;
+- **sink**, senza archi logici uscenti;
+- **internal**, con archi sia entranti sia uscenti.
+
+**Setup.** Ogni coppia di vicini si scambia gli identificativi e orienta logicamente il proprio arco dal valore minore verso il maggiore. L'orientamento è un DAG: un ciclo diretto imporrebbe una catena strettamente crescente di identificativi che torna al valore iniziale. Lo scambio iniziale usa due messaggi per arco, quindi $2m$ messaggi.
+
+**Iterazione.** Ogni iterazione ha due passi.
+
+1. **YO, verso il basso.** Ogni source invia il proprio identificativo sugli archi uscenti. Un nodo interno attende un valore da ogni arco entrante, ne calcola il minimo e lo inoltra su tutti gli archi uscenti. Quando il minimo raggiunge i sink comincia il passo di ritorno.
+2. **-YO, verso l'alto.** Un sink invia $YES$ sugli archi entranti dai quali ha ricevuto il minimo e $NO$ sugli altri. Un nodo interno attende un voto da ogni arco uscente: se sono tutti $YES$, propaga $YES$ solo sugli archi dai quali era arrivato il minimo e $NO$ sugli altri; se riceve almeno un $NO$, propaga $NO$ su tutti gli archi entranti. Una source che riceve soltanto $YES$ resta candidata; se riceve almeno un $NO$ è sconfitta.
+
+Prima dell'iterazione successiva, ogni arco attraversato da un $NO$ viene invertito logicamente (**flip**): in questo modo una source sconfitta diventa sink o nodo interno. L'orientamento rimane aciclico.
+
+**Pruning.** Durante il passo -YO si eliminano logicamente gli archi che non potranno influire sulle decisioni successive:
+
+- un sink con un solo arco entrante elimina quell'arco, perché la sua decisione coincide con quella del predecessore;
+- se un nodo riceve più copie dello stesso minimo, conserva un solo arco corrispondente ed elimina gli altri.
+
+Il pruning non rimuove collegamenti fisici: impedisce soltanto di riutilizzarli nelle iterazioni successive. Quando rimane una sola source, al più un'ulteriore iterazione elimina tutti gli archi residui; la source rileva di essere isolata, si dichiara leader e notifica gli altri nodi seguendo gli ultimi archi potati.
+
+**Correttezza e terminazione.** A ogni iterazione almeno una source viene sconfitta; dopo il flip né un nodo interno né un sink possono diventare source. Il minimo globale non riceve mai $NO$, quindi è l'unica source che può sopravvivere. Il grafo delle source dimezza la lunghezza dei cammini a ogni iterazione, da cui $O(\log n)$ iterazioni.
+
+**Complessità.** Senza sfruttare il risparmio del pruning, setup e notifica costano rispettivamente $2m$ e $n-1$ messaggi; ogni iterazione usa al più due messaggi per arco attivo. Ne segue l'upper bound $O(m\log n)$. Le slide sottolineano che la complessità effettiva con il pruning dipende dagli archi rimasti ed è in genere inferiore, ma non è caratterizzata da una formula esatta unica.
 
 ### 3.5 Leader election in anelli sincroni
 
@@ -1213,7 +1350,7 @@ Un buon candidato è $f(i, n) = i \cdot n$. Questa è tra l'altro la funzione mi
 
 - Numero di messaggi: vengono inviati semplicemente $n$ messaggi, da 1 bit ciascuno
 
-- Tempo di esecuzione: dipende essenzialmente dalla funzione di attesa. In questo caso è pari a: $min \cdot n + n \in O(n)$
+- Tempo di esecuzione: dipende essenzialmente dalla funzione di attesa. In questo caso è pari a $min \cdot n + n \in O(min\cdot n)$; diventa $O(n)$ solo se il minimo identificativo è limitato da una costante
 
 Cosa accade invece se non tutti i nodi partono assieme? Possiamo imporre che questi sveglino i loro vicini, mettendoli a loro volta in attesa. Nella pratica si tratta di una catena di messaggi di wake-up. Così facendo però, dobbiamo modificare la nostra funzione di attesa.
 Sia $t(i)$ l'istante di risveglio dall'entità $i$, $x$ l'identificativo del leader ed $y$ quello di ogni altro nodo. La funzione deve soddisfare la disuguaglianza:
@@ -1244,8 +1381,8 @@ $$\begin{aligned}
 Se andiamo a sostituire, verifica la seconda disuguaglianza ed in particolare il suo caso peggiore:
 
 $$\begin{aligned}
-                    f(x, n) + 2 \cdot n &= 2 \cdot n \cdot i + 2 \cdot n = 2 \cdot n \cdot (i + 1)\\
-                    &< f(y, n) = f(x + 1, n) = \dots = 2 \cdot n \cdot (i + 2)
+                    f(x, n) + 2 \cdot n &= 2 \cdot n \cdot x + 2 \cdot n = 2 \cdot n \cdot (x + 1)\\
+                    &\leq f(y, n), \qquad y\geq x+1
 \end{aligned}$$
 
 - Messaggi inviati: siccome ogni volta che si viene svegliati si tenta di svegliare il proprio vicino, sull'anello viaggiano $n$ messaggi di wake-up più $n$ notifiche, per un totale di $2 \cdot n \in O(n)$ messaggi
@@ -1277,16 +1414,16 @@ L'idea dietro all'uso di identificativi era quella di trovare, alla fine del pro
 Possiamo ad esempio utilizzare Waiting combinato ad un approccio probabilistico. I minimi fanno partire la notifica per primi e, siccome ci troviamo in un sistema sincrono, la attendono di ritorno dopo $i$ istanti di tempo. Quando arriva una notifica dopo meno di $i$ istanti, chi riceve la notifica diventa follower, altrimenti diventerà leader alla fine del processo.
 Per un singolo round abbiamo:
 
-- Dimensione dei messaggi: $O(n)$ bits
+- Comunicazione per round: $O(n)$ trasmissioni di messaggi da un bit, quindi $O(n)$ bit complessivi includendo la notifica o il riavvio; la dimensione del singolo messaggio resta $O(1)$
 
 - Tempo di esecuzione: come avevamo visto per Waiting, dipende dall'identificativo più piccolo possibile. Per minimizzarlo dobbiamo prendere almeno due identificativi diversi, più piccoli possibile. Ad esempio si può pescare da $\{0, 1\}$. In questo caso specifico il vantaggio è quello di poter condurre un round in una sola unità di tempo.
   Vogliamo però che lo 0 sia scelto con meno frequenza dell'1, per minimizzare il numero di rounds per una singola elezione. Più precisamente vogliamo ottimizzare le probabilità di successo nell'elezione del leader. Possiamo prevedere una probabilità $p = \frac{1}{n}$ per lo 0 e $p = \frac{n - 1}{n}$. Per considerare l'elezione conclusa in un solo round, un solo nodo deve scegliere 0 e tutti gli altri 1. Complessivamente abbiamo una probabilità che ciò accada di:
 
   $$\begin{aligned}
-                          P = \frac{1}{n} \cdot (\frac{n - 1}{n})^{n - 1} \underrightarrow{n \to \infty} \frac{1}{e} \sim 0.37
+                          P = n\cdot\frac{1}{n} \cdot (\frac{n - 1}{n})^{n - 1} = (\frac{n - 1}{n})^{n - 1} \xrightarrow{n \to \infty} \frac{1}{e} \sim 0.37
   \end{aligned}$$
 
-  Essenzialmente, tale probabilità corrisponde all'intersezione (AND logico) di eventi indipendenti, dunque basta moltiplicare tra loro una probabilità di successo (identificativo 0) ed $n - 1$ insuccessi (identificativo 1).
+  Per una specifica entità si moltiplicano la probabilità che scelga 0 e quelle che tutte le altre scelgano 1; il fattore $n$ conta le possibili scelte dell'unica entità che estrae 0.
   In conclusione, ci aspettiamo di avere successo una volta ogni $e$ rounds, cioè circa ogni 3, arrotondando per eccesso. Il costo complessivo è di $O(n)$ unità di tempo, contando più rounds e tempo di notifica
 
 ## 4 Algoritmi di routing
@@ -1359,7 +1496,7 @@ Questo modo di procedere è lo stesso previsto dall'algoritmo di Bellman-Ford; n
 
   Iterating invia molti più messaggi di Gossiping, però non richiede una grande quantità di memoria
 
-Ci chiediamo a questo punto se sia possibile costruire tabelle di routing con una quantità di messaggi e memoria limitata. Possiamo farlo realizzando una versione distribuita degli algoritmi di Djikstra o BFS, come vediamo nel seguito.
+Ci chiediamo a questo punto se sia possibile costruire tabelle di routing con una quantità di messaggi e memoria limitata. Possiamo farlo realizzando una versione distribuita degli algoritmi di Dijkstra o BFS, come vediamo nel seguito.
 
 ###### Min-Hop routing
 
@@ -1401,15 +1538,15 @@ Un ulteriore modo potrebbe essere quello di inviare un particolare messaggio di 
   Per tutte le iterazioni abbiamo:
 
   $$\begin{aligned}
-                      \sum_{i = 0}^{r(s)} 2 \cdot i = 2 \cdot \frac{r(s) \cdot (r(s) - 1)}{2} = r(s) \cdot (r(s) - 1) \in O(r(s)^2) \in O(n^2)
+                      \sum_{i = 1}^{r(s)} 2 \cdot i = 2 \cdot \frac{r(s) \cdot (r(s) + 1)}{2} = r(s) \cdot (r(s) + 1) \in O(r(s)^2) \in O(n^2)
   \end{aligned}$$
 
   Ancora una volta usiamo $n - 1 \in O(n)$ come upper bound per $r(s)$
 
-###### Algoritmo di Djikstra
+###### Algoritmo di Dijkstra
 
 Questa volta non supponiamo più che i pesi dei collegamenti siano tutti uguali tra loro, bensì che siano tutti positivi.
-Nella versione classica dell'algoritmo di Djikstra, ad ogni iterazione alcuni nodi fanno parte dell'albero di copertura dei cammini minimi ed altri no. Collegamenti in uscita dai primi li connettono con i secondi, generando una vera e propria "zona di confine". Ad ogni iterazione viene aggiunto all'albero di copertura dei cammini minimi (SPST) il nodo che ancora non ne fa parte verso il quale la distanza da $s$ è minima.
+Nella versione classica dell'algoritmo di Dijkstra, ad ogni iterazione alcuni nodi fanno parte dell'albero di copertura dei cammini minimi ed altri no. Collegamenti in uscita dai primi li connettono con i secondi, generando una vera e propria "zona di confine". Ad ogni iterazione viene aggiunto all'albero di copertura dei cammini minimi (SPST) il nodo che ancora non ne fa parte verso il quale la distanza da $s$ è minima.
 
 ![[assets/Screenshot 2024-11-12 095921.png|1000]]
 
@@ -1447,7 +1584,7 @@ Se supponiamo che la sorgente conosca il numero di nodi, invierà una notifica a
 
   - Notifica al nodo aggiunto all'albero: nel caso peggiore, cioè quello in cui l'albero intero sia una catena, $(i - 1) + 1$ messaggi
 
-  - Notifica di fine iterazione: uguale alla notifica, quindi al più $(n - 1) + 1$
+  - Notifica di fine iterazione: uguale alla notifica precedente, quindi al più $(i - 1) + 1=i$ messaggi
 
   percui, in tutto $4 \cdot i - 2$. Sommando per tutte le iterazioni, abbiamo:
 
@@ -1459,13 +1596,13 @@ Se supponiamo che la sorgente conosca il numero di nodi, invierà una notifica a
   Dobbiamo poi aggiungere le notifiche inviate da $y_{\hat{x}}$ ai propri vicini e gli ack relativi, per ogni nodo scoperto:
 
   $$\begin{aligned}
-                          2 \cdot \sum_{x} {deg(x) - 1} = 2 \cdot \sum_{x} deg(x) - \sum_{x} 1 = 2 \cdot (2 \cdot m) - 2 \cdot n = 4 \cdot m - 2 \cdot n
+                          2\left(\sum_{x\neq s}(deg(x)-1)+deg(s)\right)=4m-2(n-1)
   \end{aligned}$$
 
   Sommando il tutto abbiamo:
 
   $$\begin{aligned}
-                          2 \cdot (n - 1)^2 + 4 \cdot m - 2 \cdot m \in O(n^2)
+                          2 \cdot (n - 1)^2 + 4 \cdot m - 2 \cdot (n-1) \in O(n^2)
   \end{aligned}$$
 
 - Tempo di esecuzione: ad ogni iterazione vengono inviate sequenze di al più $i - 1$ messaggi ciascuna per:
@@ -1488,18 +1625,18 @@ Se supponiamo che la sorgente conosca il numero di nodi, invierà una notifica a
 
   - Primo passo della notifica di fine iterazione da $y_{\hat{x}}$ verso $\hat{x}$
 
-  Il tatale complessivo è di $4 \cdot i$ messaggi in catena per iterazione.
+  Il totale complessivo è di $4 \cdot i$ messaggi in catena per iterazione.
   Complessivamente, per tutte le iterazioni:
 
   $$\begin{aligned}
                           4 \cdot \sum_{i = 1}^{n - 1} i = 4 \cdot \frac{n \cdot (n - 1)}{2} = 2 \cdot (n) \cdot (n - 1)
   \end{aligned}$$
 
-  Manca solo la notifica di fine del protocollo, che viaggia per al più altri $n - 1$ nodi, per un totale di: $2 \cdot (n - 1) + (n - 1) \in O(n^2)$
+  Aggiungendo la catena di inizializzazione lunga 2 e la notifica finale lunga al più $n-1$, il totale è $2+2n(n-1)+(n-1)=2n^2-n-1\in O(n^2)$
 
-Se vogliamo ottenere le tabelle di routing su tutta la rete, tutti i nodi devono calcolare il proprio spanning tree. Il costo in termini di messaggi diventa di $n$ volte $O(n^2)$, cioè un algoritmo di Djikstra distribuito con ogni nodo come sorgente, cioè $O(n^3)$ in tutto. Gli algoritmi di Djistra distribuiti si possono idealmente eseguire in parallelo, inviando messaggi opportunamente contrassegnati.
-Confrontando Djikstra distribuito con Gossiping ed Iterating, possiamo dire di avere un matching dei costi con il primo (anche se i requisiti di memoria sono molto inferiori in questo caso) ed un ordine di grandezza di meno rispetto al secondo.
-L'algoritmo di Djikstra distribuito è, in qualche modo, più semplice della versione sequenziale, perché non dobbiamo attingere ad una struttura dati aggiuntiva come la coda con priorità.
+Se vogliamo ottenere le tabelle di routing su tutta la rete, tutti i nodi devono calcolare il proprio spanning tree. Il costo in termini di messaggi diventa di $n$ volte $O(n^2)$, cioè un algoritmo di Dijkstra distribuito con ogni nodo come sorgente, cioè $O(n^3)$ in tutto. Gli algoritmi di Dijkstra distribuiti si possono idealmente eseguire in parallelo, inviando messaggi opportunamente contrassegnati.
+Confrontando Dijkstra distribuito con Gossiping ed Iterating, possiamo dire di avere un matching dei costi con il primo (anche se i requisiti di memoria sono molto inferiori in questo caso) ed un ordine di grandezza di meno rispetto al secondo.
+L'algoritmo di Dijkstra distribuito è, in qualche modo, più semplice della versione sequenziale, perché non dobbiamo attingere ad una struttura dati aggiuntiva come la coda con priorità.
 
 ## 5 Errori e fallimenti
 
@@ -1528,7 +1665,7 @@ I fallimenti possono riguardare:
 
 - Entrambi
 
-###### Fault-tolerance e tolpologie di rete
+###### Fault-tolerance e topologie di rete
 
 La definizione di un protocollo fault-tolerant dipende in maniera preponderante dalla topologia del sistema. Si può disconnettere un grafo rimuovendo nodi o collegamenti.
 
@@ -1633,7 +1770,7 @@ L'impostazione del problema rimane la stessa che per i fallimenti sugli archi, c
 
 - Il grafo è completo
 
-Il take-away di questo teorema è essenzialmente l'impossibilità di costruire un software per comunicazione fault-tolerant.
+Questo è il risultato FLP: nel modello asincrono non esiste un protocollo deterministico che garantisca contemporaneamente agreement, validità e terminazione del consenso anche con un solo possibile crash. Non implica l'impossibilità generale del software fault-tolerant: si può cambiare modello o garanzia, per esempio introducendo sincronia parziale, failure detector o randomizzazione.
 Per dimostrare quanto abbiamo detto, consideriamo il seguente fatto: i ritardi di comunicazione sono finiti ma impredicibili. L'idea è che, quando un nodo attende un messaggio ed è possibile che vi siano stati dei crash, esso non può stabilire in alcun modo se il messaggio arriverà oppure no.
 In un contesto pratico, una possibile soluzione è quella di impostare dei time-out (es. TCP).
 
@@ -1709,7 +1846,7 @@ Possiamo dimostrarlo ripercorrendo la sequenza temporale all'indietro. Se un nod
 La dimostrazione appena fatta fornisce un'ulteriore garanzia a supporto della proprietà di agreement.
 Possiamo ridurre il numero di messaggi inviati dal protocollo. Infatti, i messaggi utili sono solo gli 0, perché determinano il valore dell'and logico calcolato sui nodi. Ogni 0 può dunque essere mandato una sola volta per assolvere al proprio uso. Poi, trovandoci in un sistema sincrono, non è necessario usare i messaggi per la sincronizzazione tra le entità; la computazione terminerà semplicemente dopo $F + 1$ iterazioni.
 
-- Messaggi inviati: il caso peggiore è quello in cui ogni nodo invia uno 0 a tutti i propri vicini, dunque i messaggi si riducono a $n \cdot (n - 1) \in O(n)$
+- Messaggi inviati: il caso peggiore è quello in cui ogni nodo invia uno 0 a tutti i propri vicini, dunque i messaggi si riducono a $n \cdot (n - 1) \in O(n^2)$
 
 - Tempo di esecuzione: le iterazioni rimangono $F + 1$, sempre per garantire la tolleranza a $F$ crash
 
@@ -1795,6 +1932,29 @@ Ora verifichiamo le proprietà del protocollo:
 
 Il protocollo può essere modificato per tollerare $F \leq \frac{n}{3}$ crash e terminare in un numero di rounds costante.
 
+###### Consensus deterministico con fallimenti bizantini
+
+> **Status d'esame da confermare.** Le slide ufficiali disponibili trattano integralmente questa parte, mentre gli appunti precedenti la indicavano come facoltativa. Viene quindi mantenuta come approfondimento verificato.
+
+Nel modello asincrono l'impossibilità deterministica con un solo crash vale a maggior ragione per i guasti bizantini. In un sistema **sincrono completo**, invece, si può tollerare $F<n/3$ sotto le seguenti ipotesi: avvio simultaneo, identificativi distinti non falsificabili, conoscenza degli identificativi dei vicini e valori iniziali booleani.
+
+**RegisteredMail.** Per registrare in modo coerente la proposta di uno 0 originata da $y$ al tempo $t$:
+
+1. $y$ trasmette `(init, 0, id(y), t)`;
+2. chi riceve un `init` valido direttamente da $y$ esattamente a $t+1$ trasmette `(echo, 0, id(y), t)`; messaggi con mittente, tempo o seconda registrazione incoerenti vengono ignorati;
+3. chi raccoglie almeno $F+1$ `echo` distinti ritrasmette l'`echo`, se non lo ha già fatto: almeno uno dei mittenti è non faulty;
+4. chi raccoglie almeno $n-F$ `echo` distinti accetta la proposta: almeno $n-2F$ provengono da entità non faulty.
+
+Questa soglia garantisce che una proposta accettata da una entità non faulty si propaghi a tutte le altre senza permettere a un singolo bizantino di inventare identità o tempi.
+
+**TellZero-Byz.** Il protocollo procede per stage $i=0,\ldots,F+2$, lunghi due unità di tempo.
+
+- Al tempo 0 ogni entità non faulty con valore iniziale 0 avvia una sola RegisteredMail.
+- Al tempo $2i$, per $1\le i\le F+1$, una entità non faulty che non ha ancora originato una proposta la avvia se entro quel momento ha accettato proposte da più di $F+i-1$ identità distinte.
+- Al tempo $2(F+2)$ decide 0 se ha accettato almeno $2F+1$ proposte distinte, altrimenti decide 1.
+
+Il protocollo termina per costruzione; le soglie e $F<n/3$ garantiscono non-trivialità e agreement. La durata è $O(F)$ e il conteggio delle slide è $O(n^3)$ messaggi nel caso peggiore. Il risultato si estende a domini finiti noti e, su grafi non completi, richiede connettività per nodi maggiore di $2F$.
+
 ###### Consensus problem con fallimenti bizantini
 
 In questo paragrafo affrontiamo la versione randomizzata di Consensus che contempla fallimenti bizantini sui nodi. In particolare, un nodo bizantino è un nodo che ad un generico round $r$ può assumere un comportamento inaspettato, come l'invio ai vicini di valori differenti, per minare il corretto svolgimento del protocollo. Esiste anche una versione deterministica di questo protocollo, ma è facoltativa.
@@ -1806,7 +1966,7 @@ Imponiamo le seguenti restrizioni:
 
 - Fallimenti bizantini
 
-- Identificativi unici (ancora una volta presi dall'insieme $\{0, 1\}$)
+- Identificativi unici; i valori proposti, distinti dagli identificativi, appartengono a $\{0,1\}$
 
 La dinamica del protocollo è simile alla versione di Consensus con fallimenti sui nodi (seppur in qualche misura sia più semplice, poiché mira a raggiungere un risultato più debole). Il protocollo tollera al più $F < \frac{n}{9}$ fallimenti bizantini.
 
@@ -1851,11 +2011,11 @@ Le strutture dati distribuite devono innanzitutto essere scalabili, cioè garant
 
 ###### Hash tables
 
-Sono strutture dati che memorizzano i dati sotto la forma di coppie $(key, value)$. Una apposita funzione "di hash" mappa le $key$ su un insieme di $value$, che possiamo rappresentare come un vettore. Presso ogni casella di tale vettore è posta una "lista di trabocco", cioè un altro vettore, di una dimensione massima $k$, che può raccogliere diverse istanze di dati.
+Sono strutture dati che memorizzano i dati sotto la forma di coppie $(key, value)$. Una apposita funzione di hash mappa ogni chiave su un indice, o bucket, di un vettore; il valore associato alla chiave viene memorizzato nel bucket corrispondente. Presso ogni casella può essere posta una lista di trabocco che raccoglie più coppie in caso di collisione.
 
 ![[assets/Screenshot 2024-11-20 101146.png|600]]
 
-La funzione di hash deve sparpagliare il più possibile le $key$ su differenti $value$.
+La funzione di hash deve distribuire il più uniformemente possibile le chiavi sui differenti bucket.
 In un contesto distribuito, le coppie $(key, value)$ sono dislocate su un insieme di nodi. Bisogna tenere ben presente che il numero di tali nodi non è noto e può variare dinamicamente.
 
 ###### Gli inizi
@@ -1892,8 +2052,8 @@ Chord usa SHA-1 per il mapping uniforme delle chiavi su identificatori da $m = 1
 
 ![[assets/Screenshot 2024-11-26 112149.png|400]]
 
-In questo modo, il protocollo può richiedere l'attraversamento dell'intero anello nel caso peggiore, dunque una catena di $2^m$ messaggi. Cionondimento è garantito che restiuisca sempre la chiave richiesta.
-Per ovviare a casi pessimi come quello descritto sopra, ogni nodo può tenere una tabella, detta "fingertable", nella quale conservare dati su dove trovare chiavi con valori maggiori rispetto alla propria. In particolare, le entry della tabella sono tante quanti i bit degli identificativi. Alla prima entry corrisponde la chiave $i + 1$, alla seconda $i + 2$, poi $i + 4$ e così via fino a $i + 2^m$. A ciascuna chiave è associato il nodo che la gestisce.
+In questo modo, il protocollo può richiedere l'attraversamento dell'intero anello nel caso peggiore: la catena contiene al più $n$ nodi presenti, quindi usa $O(n)$ hop. Il valore $2^m$ è la dimensione dello spazio degli identificativi, non il numero di nodi effettivamente attraversati. In assenza di guasti e con puntatori ai successori corretti, il lookup raggiunge sempre il nodo responsabile.
+Per ovviare a casi pessimi come quello descritto sopra, ogni nodo può tenere una tabella, detta "finger table", nella quale conservare informazioni su dove trovare chiavi con valori maggiori rispetto alla propria. Le entry sono tante quanti i bit degli identificativi: per $j=1,\ldots,m$, l'entry $j$ punta al successore di $(i+2^{j-1})\bmod 2^m$. Gli offset sono quindi $1,2,4,\ldots,2^{m-1}$; a ogni posizione è associato il nodo responsabile di quell'intervallo.
 
 ![[assets/Screenshot 2024-11-26 112658.png|400]]
 
@@ -1916,7 +2076,7 @@ All'inserimento di un nuovo nodo, se i successori sono aggiornati, il look-up è
 
 ![[assets/Screenshot 2024-11-26 114109.png|350]]
 
-A cadenza regolare, tutti i nodi si inviano dei messaggi di tipo $stabilize$ ai propri successori ed aspettano una notifica, aspettandosi di ricevere il proprio identificativo. Quando ciò non accade, significa che un nodo si è aggiunto all'anello. Il nodo nuovo arrivato diventa quindi il loro nuovo successore. Quando un nodo successore riceve uno $stabilize$ da un nodo con identificativo più alto del proprio predecessore, anch'esso scopre che un nuovo nodo è entrato nell'anello e lo inserisce come proprio predecessore.
+A cadenza regolare ogni nodo $A$ esegue `stabilize` interrogando il proprio successore corrente $B$ sul predecessore di $B$, diciamo $B'$. Se $B'$ appartiene all'intervallo circolare aperto $(A,B)$, allora $A$ aggiorna il proprio successore a $B'$. Infine $A$ notifica la propria esistenza al successore scelto; quest'ultimo aggiorna il proprio predecessore ad $A$ soltanto se $A$ è più vicino del predecessore già noto. Il valore restituito da $B$ è quindi il predecessore di $B$, non l'identificativo che $A$ dovrebbe aspettarsi di ricevere.
 
 ![[assets/Screenshot 2024-11-26 114626.png|1000]]
 
@@ -1924,3 +2084,21 @@ Per aggiungersi all'anello, un nuovo nodo deve conoscerne almeno uno che sia gi�
 Un nodo può uscire dall'anello principalmente in due casi: fallimento e non.
 
 ![[assets/Screenshot 2024-11-26 120047.png|600]]
+
+###### Chord: leave, failure e replicazione
+
+L'uscita di un nodo può essere **pulita** oppure dovuta a un **fallimento** improvviso.
+
+**Leave pulita.** Un nodo $x$ che può cooperare prima di uscire:
+
+1. trasferisce al proprio successore tutte le chiavi di cui è responsabile;
+2. comunica al predecessore il nuovo successore;
+3. comunica al successore il nuovo predecessore.
+
+I puntatori immediati restano così connessi; le finger table che contengono $x$ possono essere corrette gradualmente dai normali aggiornamenti periodici.
+
+**Fallimento.** Un nodo guasto non può migrare chiavi né inviare notifiche. Per non dipendere da un solo puntatore, ogni nodo mantiene una **successor list** contenente i primi $r$ successori sull'anello. Se il successore non risponde, viene sostituito con la prima entry viva della lista e `stabilize` ricostruisce progressivamente i puntatori. Se durante un lookup non risponde una finger entry, si prova una finger precedente, cioè un'alternativa che non oltrepassi la chiave; per indici bassi si ricorre anche alla successor list. Il routing può quindi continuare, eventualmente con più hop.
+
+La continuità del routing non recupera automaticamente i dati memorizzati soltanto sul nodo guasto. Per tollerare la perdita di nodi, ogni coppia chiave-valore viene replicata sui primi $r$ successori del nodo responsabile. Dopo un fallimento, il primo successore vivo diventa responsabile e la replicazione viene ricostituita in background. L'aumento di $r$ migliora la tolleranza ai guasti consecutivi, al costo di più memoria e traffico di aggiornamento.
+
+In condizioni stabili la finger table mantiene lookup attesi in $O(\log n)$ hop; successor list e fallback preservano la raggiungibilità durante la stabilizzazione, mentre la replica è il meccanismo separato che preserva i valori.
