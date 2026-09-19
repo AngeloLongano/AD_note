@@ -855,25 +855,34 @@ In questo modo, il branching è eseguito a costo polinomiale.
 
 #### Vertex Cover Problem
 
-Si tratta di un problema NP-hard di copertura: prende in ingresso un grafo $G = (V, E)$ non diretto e restituisce un vertex cover di costo minimo. Un vertex cover è un sottoinsieme $V^\prime \subseteq V$ tale che $\forall (u, v) \in E : u \in V^\prime \vee v \in V^\prime$. Ciò che rende Vertex Cover NP-hard è l'ipotesi di ottimalità imposta sul costo di $V^\prime$, in particolare:
+Dato un grafo non orientato $G=(V,E)$, un **vertex cover** è un insieme $C\subseteq V$ che contiene almeno un estremo di ogni arco:
 
-$$\begin{aligned}
-                    cost(OPT) = \min{|V^\prime|}
-\end{aligned}$$
+$$
+\forall (u,v)\in E:\quad u\in C\ \vee\ v\in C.
+$$
+
+La condizione di copertura, da sola, è facile da soddisfare: per esempio, l'intero insieme $V$ è sempre un vertex cover. La difficoltà nasce quando si richiede una soluzione di cardinalità minima. Si distinguono quindi:
+
+- **versione di ottimizzazione** $VC_{opt}$: trovare un vertex cover $C^*$ tale che $|C^*|=\min\{|C|:C\text{ è un vertex cover di }G\}$;
+- **versione decisionale** $VCD$: dati $G$ e un intero $k\leq |V|$, stabilire se esista un vertex cover di cardinalità al più $k$.
 
 ![[assets/vertex_covers.png|500]]
+
+Il problema $VCD$ è NP-completo: una copertura proposta si verifica in tempo polinomiale controllandone la cardinalità e accertando che ogni arco abbia almeno un estremo selezionato; la NP-hardness è un risultato noto. Ne segue che la versione di ottimizzazione è NP-hard. Infatti, se avessimo un algoritmo per $VC_{opt}$, potremmo invocarlo una sola volta su $G$ e rispondere `YES` a $VCD$ se e solo se la soluzione restituita ha cardinalità al più $k$:
+
+$$
+VCD\leq_T^p VC_{opt}.
+$$
+
+![[assets/vertex-cover-riduzione-vcd-vc.png|850]]
+
+Nella figura l'istanza della riduzione è la coppia $(G,k)$: il grafo $G$ viene passato all'algoritmo di ottimizzazione, mentre $k$ è usato nel confronto finale. Non si tratta di una riduzione di Karp tra problemi decisionali, ma di una riduzione di Turing con una chiamata all'oracolo di ottimizzazione.
 
 #### Self-reduction del Vertex Cover
 
 > **AA 2025/26 — facoltativo.** Le dispense correnti presentano questa self-reduction come approfondimento facoltativo.
 
-La versione decisionale del problema, indicata con $VCD$, riceve un grafo $G=(V,E)$ e un intero $k$ e domanda se esista un vertex cover di cardinalità al più $k$. Essa è NP-completa. Se disponessimo di un algoritmo per la versione di ottimizzazione $VC_{opt}$, basterebbe invocarlo una volta e confrontare la cardinalità della soluzione con $k$; dunque
-
-$$VCD\leq_T^p VC_{opt},$$
-
-e questo prova che $VC_{opt}$ è NP-hard.
-
-Per Vertex Cover vale anche la riduzione nell'altra direzione: usando un oracolo decisionale $A(G,k)$ possiamo determinare sia la cardinalità sia i vertici di una soluzione ottima. Questa trasformazione è una riduzione di Turing in tempo polinomiale, perché effettua più chiamate adattive all'oracolo.
+Vale anche la riduzione nella direzione opposta: usando un oracolo decisionale $A(G,k)$ possiamo determinare sia la cardinalità ottima sia i vertici di una soluzione che la realizza. Questa trasformazione è una riduzione di Turing in tempo polinomiale, perché effettua più chiamate adattive all'oracolo.
 
 **Fase 1 — cardinalità ottima.** La proprietà interrogata è monotona: se $G$ ha un vertex cover di cardinalità al più $k$, allora ne ha uno di cardinalità al più $k'$ per ogni $k'\geq k$. Una ricerca binaria nell'intervallo $[0,|V|]$ trova quindi il minimo $k^*$ tale che $A(G,k^*)=\mathrm{YES}$ usando $O(\log |V|)$ chiamate.
 
@@ -894,124 +903,184 @@ Per Vertex Cover vale anche la riduzione nell'altra direzione: usando un oracolo
 > 11.  **return** $C$<br>
 > 12. **end function**
 
-Se la risposta alla riga 7 è `YES`, esiste una copertura del grafo corrente che contiene $v$: si sceglie $v$ e restano da selezionare al più $k-1$ vertici in $G_c-v$. Se la risposta è `NO`, nessuna copertura ottima compatibile con le scelte già fatte contiene $v$; il vertice viene soltanto marcato come esaminato e **non** si modifica $G_c$. Questo ultimo dettaglio è essenziale: eliminare definitivamente anche nel caso `NO` potrebbe far dimenticare archi che la soluzione deve ancora coprire.
+Se la risposta alla riga 7 è `YES`, esiste una copertura del grafo corrente che contiene $v$: si sceglie $v$ e restano da selezionare al più $k-1$ vertici in $G_c-v$. Se la risposta è `NO`, nessuna copertura di $G_c$ con cardinalità al più $k$ e compatibile con le scelte già fatte può contenere $v$; il vertice viene soltanto marcato come esaminato e **non** si modifica $G_c$. Questo ultimo dettaglio è essenziale: eliminare definitivamente anche nel caso `NO` potrebbe far dimenticare archi che la soluzione deve ancora coprire.
 
-L'invariante è che il grafo corrente possiede un vertex cover di cardinalità al più al budget residuo $k$. Quando non restano archi, $C$ copre tutti gli archi eliminati dalle scelte effettuate. La ricostruzione usa al più $|V|$ chiamate all'oracolo; insieme alla ricerca binaria, il totale è $O(|V|+\log |V|)$, quindi polinomiale.
+L'invariante è che il grafo corrente possiede un vertex cover di cardinalità al più pari al budget residuo $k$. Quando non restano archi, $C$ copre tutti gli archi eliminati dalle scelte effettuate. La ricostruzione usa al più $|V|$ chiamate all'oracolo; insieme alla ricerca binaria, il totale è $O(|V|+\log |V|)$, quindi polinomiale.
 
-#### Approccio greedy al Vertex Cover Problem
+#### Approssimazione greedy del Vertex Cover
 
-Per questo tipo di problema, una possibile soluzione consiste in un insieme di vertici.
-Un'idea per affrontare il Vertex Cover Problem potrebbe essere quella di coprire il grafo partendo da un nodo $v$ e percolandovi attraverso, però la scelta casuale del nodo di partenza $v$ potrebbe pregiudicare la bontà della soluzione. Un interessante esempio è quello di un grafo a stella: la copertura ottimale è rappresentata dal solo nodo centrale, ma iniziare la copertura da uno dei nodi ad esso adiacenti basta di per sé a rovinare l'ottimalità.
-Nemmeno partire dai nodi con un numero più alto di archi incidenti è una buona strategia.
-L'algoritmo greedy proposto per il Vertex Cover Problem è detto "Approx-Vertex-Problem". Di seguito è riportato lo pseudo-codice:
+Un algoritmo greedy costruisce la soluzione incrementalmente. Per Vertex Cover, tuttavia, la scelta locale è determinante: due idee naturali producono sempre una copertura, ma non garantiscono un fattore costante; scegliere opportunamente degli archi porta invece a una 2-approssimazione.
+
+##### Prima scelta: un vertice arbitrario
+
+La prima euristica seleziona un vertice arbitrario di grado positivo, lo aggiunge alla copertura ed elimina gli archi incidenti, ripetendo finché non rimangono archi. Con liste di adiacenza e opportune marcature, il costo è $O(|V|+|E|)$ e la soluzione è ammissibile, ma il rapporto di approssimazione non è limitato da una costante.
+
+Si consideri una stella $S_k$ con un centro $c$ e $k$ foglie. L'ottimo è $C^*=\{c\}$, di cardinalità $1$; con scelte sfavorevoli, l'euristica può invece selezionare tutte le $k$ foglie. Il rapporto è quindi
+
+$$
+\frac{|C|}{|C^*|}=k,
+$$
+
+che cresce linearmente con il numero dei vertici.
+
+![[assets/vertex-cover-stella-greedy.png|700]]
+
+##### Seconda scelta: un vertice di grado massimo
+
+Per evitare il comportamento sulla stella, si può scegliere a ogni iterazione un vertice con il massimo grado corrente, cioè quello che copre il maggior numero di archi ancora scoperti. La soluzione resta ammissibile e l'algoritmo è polinomiale, ma neppure questa euristica garantisce un fattore di approssimazione costante.
+
+La figura seguente mostra un piccolo esempio. Inizialmente i quattro vertici di $A$ hanno grado $3$, mentre in $B$ vi sono due vertici di grado $4$ e quattro di grado $1$. L'algoritmo può scegliere prima i due vertici di grado $4$; sugli archi rimasti tutti i vertici hanno grado $1$ e un tie-breaking sfavorevole può fargli scegliere anche gli altri quattro vertici di $B$. Restituisce così una copertura di cardinalità $6$, mentre $A$ è una copertura ottima di cardinalità $4$: il rapporto è $3/2$.
+
+![[assets/vertex-cover-grado-massimo-esempio.png|500]]
+
+> [!example]- Approfondimento — famiglia con rapporto logaritmico
+> Il piccolo esempio spiega il meccanismo, ma non dimostra che il rapporto possa crescere senza limite. Per farlo si usa una famiglia di grafi bipartiti $B=(L,R,E)$: $L$ contiene $r$ vertici e $R$ è suddiviso in gruppi $R_1,\ldots,R_r$. Il gruppo $R_i$ contiene $\lfloor r/i\rfloor$ vertici, ciascuno adiacente a $i$ vertici di $L$, e due vertici dello stesso gruppo non condividono vicini.
+>
+> ![[assets/vertex-cover-grado-massimo-famiglia-logaritmica.png|700]]
+>
+> Con un tie-breaking sfavorevole, l'euristica può scegliere progressivamente tutti i vertici di $R_r,R_{r-1},\ldots,R_1$. L'insieme $L$ è invece un vertex cover di cardinalità $r$, perciò, indicando con $C$ la soluzione greedy e con $C^*$ l'ottimo,
+>
+> $$
+> \frac{|C|}{|C^*|}\geq \frac{|R|}{|L|}
+> =\frac{\sum_{i=1}^{r}\lfloor r/i\rfloor}{r}
+> =\Omega(\log r)=\Omega(\log n).
+> $$
+>
+> L'euristica coincide con il greedy standard per Set Cover applicato agli archi e ha anche garanzia $O(\log n)$; il suo comportamento worst-case è dunque $\Theta(\log n)$, non costante. Questa costruzione è un approfondimento esterno al materiale ufficiale del corso.[^vc-max-degree]
+
+##### Terza scelta: un arco arbitrario
+
+La scelta efficace consiste nel selezionare un arco ancora scoperto e inserire nella copertura **entrambi** i suoi estremi. La scelta dell'arco è arbitraria: non richiede casualità.
 
 **Algorithm 6 Algoritmo greedy per Vertex Cover** ^algorithm-6
 
 > 1. **function** Approx-Vertex-Cover($G$)
 > 2.  $C \gets \emptyset$
 > 3.  **while** $E \neq \emptyset$ **do**
-> 4.   $(u, v) \gets getRandomEdge(E)$
+> 4.   scegli un arco arbitrario $(u,v)\in E$
 > 5.   $C \gets C \cup \{u, v\}$
 > 6.   $E \gets E \setminus incidentEdges(\{u, v\})$
 > 7.  **end while**
 > 8.  **return** $C$<br>
 > 9. **end function**
 
-Quello che si fa nella pratica è espandere la copertura partendo da archi casuali di $G$. L'algoritmo è greedy perché ad ogni passo va ad aggiungere un pezzo alla soluzione, che è sempre ammissibile perché vengono via via considerati tutti gli archi fino all'esaurimento di $E$.
-Andiamo a vedere ora qual'è l'efficienza di questo approccio. Sia $E^\prime \subseteq E$ l'insieme degli archi selezionati durante l'esecuzione dell'algoritmo. La relazione tra $|E^\prime|$ e $|C|$ è:
+L'algoritmo termina perché a ogni iterazione elimina almeno l'arco scelto. Inoltre restituisce un vertex cover: un arco viene eliminato solo quando almeno uno dei suoi estremi è stato inserito in $C$, e alla fine tutti gli archi sono stati eliminati. Con liste di adiacenza e marcature, ogni vertice e ogni arco viene esaminato un numero costante di volte, quindi il costo è $O(|V|+|E|)$.
 
-$$\begin{aligned}
-                    2 \cdot |E^\prime| = |C|
-\end{aligned}$$
+Sia $M\subseteq E$ l'insieme degli archi scelti. Questi archi non condividono estremi, perché dopo aver scelto $(u,v)$ vengono eliminati tutti gli archi incidenti a $u$ o $v$: $M$ è dunque un **matching**. È anche **massimale**, perché al termine non esiste un altro arco disgiunto da tutti quelli in $M$ che possa esservi aggiunto.
 
-perché per ogni arco in $E^\prime$ andiamo ad aggiungere 2 nodi a $C$.
-Inoltre, gli archi in $E^\prime$ sono tutti disgiunti, cioè formano un matching. Per questo motivo la soluzione ottima deve comprendere almeno un vertice per ogni arco di $E^\prime$. Possiamo quindi dire che:
+> [!warning] Massimale non significa massimo
+> Un matching **massimale** non può essere esteso aggiungendo un arco; un matching **massimo** ha invece la cardinalità più grande possibile. L'algoritmo richiede soltanto la prima proprietà.
 
-$$\begin{aligned}
-                    |E^\prime| \leq |OPT|
-\end{aligned}$$
+Per ogni arco selezionato vengono inseriti due vertici, perciò
 
-Infine, unendo le disuguaglianze, abbiamo che:
+$$
+|C|=2|M|.
+$$
 
-$$\begin{aligned}
-                    |C| = 2 \cdot |E^\prime| \leq 2 \cdot |OPT| \iff \frac{|C|}{|OPT|} \leq 2
-\end{aligned}$$
+Ogni vertex cover, incluso quello ottimo $C^*$, deve coprire tutti gli archi di $M$. Poiché tali archi sono disgiunti, servono almeno $|M|$ vertici distinti:
 
-Dimostriamo la tightness di quest'analisi. Il nostro riferimento sono i grafi bipartiti bilanciati, ovvero grafi bipartiti nei quali la cardinalità dei due insiemi è la stessa. I nodi di ciascun insieme sono inoltre collegati a tutti quelli dell'altro (come un fully connected layer in una ANN).
-Il vertex cover ottimo è un insieme di nodi che contiene tutti quelli di uno dei due sottoinsiemi di $V$, ed ha naturalmente un costo di $\frac{n}{2}$. La soluzione peggiore possibile è quella per cui ogni iterazione dell'algoritmo scelga l'arco che collega due nodi tra loro "frontali". In questo caso il costo associato è esattamente uguale ad $n$.
+$$
+|C^*|\geq |M|.
+$$
+
+Combinando le due relazioni si ottiene
+
+$$
+|C|=2|M|\leq 2|C^*|
+\qquad\Longrightarrow\qquad
+\frac{|C|}{|C^*|}\leq 2.
+$$
+
+L'analisi è **tight**. Nel grafo bipartito completo $K_{m,m}$, tutti i vertici di una delle due partizioni formano un vertex cover ottimo di cardinalità $m$. L'algoritmo può scegliere un matching perfetto di $m$ archi e inserire entrambi gli estremi di ciascuno, restituendo tutti i $2m$ vertici. Il rapporto è esattamente $2$.
 
 ![[assets/Screenshot 2024-10-08 111957.png|800]]
 
-#### Approccio ILP al Vertex Cover Problem
+#### Relax & Round per Vertex Cover
 
-Come prima cosa, tentiamo di riscrivere il vertex cover problem come un problema di programmazione lineare intera (ILP). Creiamo le variabili intere $X_v$ che definiscono se includiamo il vertice $v \in V$ nella soluzione approssimata o meno.
+La tecnica **Relax & Round** costruisce un'altra 2-approssimazione in tre passi: formula il problema come programma lineare intero, rilassa il vincolo di interezza e arrotonda la soluzione frazionaria ottenuta.
 
-$$\begin{aligned}
-                    \forall v \in V: X_v = \begin{cases}
-                        1 & \text{se } v \in C \\
-                        0 & \text{altrimenti}
-                    \end{cases}
-\end{aligned}$$
+**1. Formulazione ILP.** Per ogni vertice $v\in V$ introduciamo una variabile binaria $x_v$:
 
-Il vincolo è quello di avere un vertex cover, ma vogliamo anche che il numero di variabili $X_v$ sia il minore possibile per soddisfare l'ipotesi di ottimalità.
+$$
+x_v=
+\begin{cases}
+1 & \text{se }v\in C,\\
+0 & \text{altrimenti.}
+\end{cases}
+$$
 
-$$\begin{aligned}
-                    \min &\sum_{v \in V} X_v\\
-                    s.t. &X_v \in \{0, 1\}, \forall v \in V\\
-                    &X_v + X_u \geq 1, \forall (u, v) \in E
-\end{aligned}$$
+Il vincolo $x_u+x_v\geq 1$ impone che ogni arco abbia almeno un estremo nella copertura; la funzione obiettivo minimizza il numero di vertici scelti:
 
-Risolvere un problema di ILP diventa però NP-hard nel momento in cui introduciamo il vincolo delle variabili intere.
-Per mettere una pezza, si può usare un approccio greedy e cercare di ottenere una soluzione approssimata. Riformuliamo il problema, rilassando il vincolo di interezza sulle variaibli $X_v$. Il nuovo problema è semplicemente di programmazione lineare (LP).
+$$
+\begin{aligned}
+\min\quad &\sum_{v\in V}x_v\\
+\text{s.t.}\quad &x_u+x_v\geq 1 &&\forall (u,v)\in E,\\
+&x_v\in\{0,1\} &&\forall v\in V.
+\end{aligned}
+$$
 
-$$\begin{aligned}
-                    \min &\sum_{v \in V} X_v\\
-                    s.t. &X_v \in [0, 1], \forall v \in V\\
-                    &X_v + X_u \geq 1, \forall (u, v) \in E
-\end{aligned}$$
+Questa formulazione è equivalente al Vertex Cover di ottimizzazione e risolverla esattamente è NP-hard.
 
-Ora non abbiamo garanzia che, per volta risolto il problema, gli $X_v$ siano interi. Più probabilmente avranno valori compresi tra 0 ed 1, che non si associano intuitivamente alla soluzione di vertex cover. Per ricondurci a quest'ultima mettiamo in atto un "rounding".
+**2. Rilassamento.** Sostituiamo il vincolo binario con $0\leq x_v\leq 1$:
 
-$$\begin{aligned}
-                    X_v = \begin{cases}
-                        1 & \text{se } X^*_v \geq \frac{1}{2}\\
-                        0 & \text{se } X^*_v < \frac{1}{2}
-                    \end{cases}
-\end{aligned}$$
+$$
+\begin{aligned}
+\min\quad &\sum_{v\in V}x_v\\
+\text{s.t.}\quad &x_u+x_v\geq 1 &&\forall (u,v)\in E,\\
+&0\leq x_v\leq 1 &&\forall v\in V.
+\end{aligned}
+$$
+
+Il rilassamento è un problema di programmazione lineare risolvibile in tempo polinomiale. Indichiamo con $x^*$ una sua soluzione ottima e con $OPT_{LP}=\sum_{v\in V}x_v^*$ il relativo costo.
+
+**3. Arrotondamento.** Trasformiamo $x^*$ in una soluzione binaria $\hat{x}$ usando la soglia $1/2$:
+
+$$
+\hat{x}_v=
+\begin{cases}
+1 & \text{se }x_v^*\geq \frac12,\\
+0 & \text{se }x_v^*<\frac12.
+\end{cases}
+$$
 
 **Algorithm 7 Relax & Round per Vertex Cover** ^algorithm-7
 
 > 1. **function** RelaxAndRoundVC($G$)<br>
-> 2.  $X^*\gets solveFractionalVertexCoverLP(G)$<br>
-> 3.  $C\gets\{v\in V:X_v^*\geq\frac{1}{2}\}$<br>
+> 2.  $x^*\gets solveFractionalVertexCoverLP(G)$<br>
+> 3.  $C\gets\{v\in V:x_v^*\geq\frac{1}{2}\}$<br>
 > 4.  **return** $C$<br>
 > 5. **end function**
 
-Se il segno di uguaglianza riguardasse il caso di non appartenenza, vi sarebbe la possibilità che non scegliere alcun nodo in $(u, v)$ nel caso particolare in cui $X_u = X_v = \frac{1}{2}$, soddisfi il vincolo $X_v + X_u \geq 1$, contraddicendo il suo stesso scopo. Ora andiamo ad ottenere il valore dell'errore di approssimazione $\alpha$ associato a questo metodo. L'insieme di tutte le soluzioni possibili per il problema di LP sono tutte le possibili combinazioni di valori in $[0, 1]$ degli $X_v$, delle quali le soluzioni possibili per il problema di PLI sono un sottoinsieme. Questo significa che risolvere il problema di ILP fornisce automaticamente una soluzione ammissibile di quello di LP. La soluzione di ILP è più formalmente un sottoinsieme proprio di quella di LP.
-Nei due insiemi possono esistere due ottimi diversi, contestualmente al problema di riferimento. Non necessariamente questi coincidono, e lo fanno solo quando la soluzione di LP è intera. La soluzione di LP inoltre è quella con il costo minore (o uguale), peraltro questo fatto è deducibile dalla rappresentazione insiemistica appena data.
+**Ammissibilità.** Per ogni arco $(u,v)$, la soluzione frazionaria soddisfa $x_u^*+x_v^*\geq 1$. I due valori non possono quindi essere entrambi strettamente minori di $1/2$: almeno uno dei due estremi viene inserito in $C$ e l'arco risulta coperto. Il segno di uguaglianza nella regola di rounding è essenziale proprio nel caso $x_u^*=x_v^*=1/2$.
 
-$$\begin{aligned}
-                    OPT_{LP} \leq OPT_{ILP}
-\end{aligned}$$
+**Fattore di approssimazione.** Ogni soluzione intera ammissibile è anche ammissibile per il rilassamento LP; dunque il dominio intero è contenuto in quello frazionario e
 
-Osserviamo che per ogni nodo $v \in V$, la variabile arrotondata $X_v$ è al massimo il doppio del corrispondente valore $X_v^*$ nella soluzione ottima del rilassamento LP.
+$$
+OPT_{LP}\leq OPT,
+$$
 
-$$\begin{aligned}
-                    X_v \leq 2 \cdot X_v^*
-\end{aligned}$$
+dove $OPT$ è il costo del vertex cover ottimo. Inoltre, per ogni vertice vale
 
-Ad esempio: $X_v = 1 \Rightarrow X_v^* \geq \frac{1}{2} \Rightarrow 2 \cdot X_v^* \geq 1$, che verifica la disuguaglianza sopra.
-Sapendo che, per costruzione della funzione obiettivo, il costo dell'approssimazione è dato dalla somma degli $X_v$, possiamo unire il tutto e trovare:
+$$
+\hat{x}_v\leq 2x_v^*:
+$$
 
-$$\begin{aligned}
-                    Approx = \sum_{v \in V} X_v \leq 2 \cdot \sum_{v \in V} X_v^* = 2 \cdot OPT_{LP} \leq 2 \cdot OPT_{ILP} \Rightarrow \frac{Approx}{OPT_{ILP}} \leq 2
-\end{aligned}$$
+se $\hat{x}_v=0$ la disuguaglianza è immediata; se $\hat{x}_v=1$, allora $x_v^*\geq 1/2$ e quindi $1\leq 2x_v^*$. Sommando sui vertici,
 
-Vediamo ora se l'analisi è tight. Prendiamo questa volta i grafi che sono cicli formati da un numero pari di nodi. Il vertex cover ottimale si ottiene prendendo un nodo sì ed uno no lungo la catena. L'ottimo di LP può assegnare $X_v = \frac{1}{2}, \forall v \in V$, percui quando si va a fare il rounding vengono scelti tutti i nodi.
+$$
+|C|=\sum_{v\in V}\hat{x}_v
+\leq 2\sum_{v\in V}x_v^*
+=2OPT_{LP}
+\leq 2OPT.
+$$
+
+L'analisi è tight per questa regola di rounding. In un ciclo con un numero pari $n$ di vertici, un vertex cover ottimo contiene un vertice sì e uno no e ha costo $n/2$. Il rilassamento ammette anche la soluzione ottima $x_v^*=1/2$ per ogni $v$; se viene restituita questa soluzione, il rounding seleziona tutti gli $n$ vertici e il rapporto è $2$. L'LP ammette anche soluzioni ottime intere su questi cicli: l'esempio mostra quindi il caso peggiore rispetto alla soluzione ottima frazionaria prodotta dal risolutore.
 
 ![[assets/vertexcoverILP.png|500]]
 
 > **Programma AA 2025/26.** La variante pesata del Vertex Cover è indicata dalle dispense ufficiali come non materiale d'esame. L'estensione pesata di Relax & Round è quindi un approfondimento e non viene inclusa in questa trattazione principale.
+
+[^vc-max-degree]: Costruzione tratta da M. Zito, [*Vertex Cover*, lecture notes COMP309 (2005), pp. 5–8](https://cgi.csc.liv.ac.uk/~michele/TEACHING/COMP309/2005/Lec10.4.4.pdf).
 
 ## 3 Algoritmi distribuiti
 

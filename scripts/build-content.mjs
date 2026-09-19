@@ -43,10 +43,10 @@ function convertObsidian(source) {
   content = content.replace(/^(\s*)\$\$(\S.*)$/gm, (_match, indent, formula) => `${indent}$$\n${indent}${formula}`);
   content = content.replace(/^(\s*)(\S.*)\$\$\s*$/gm, (_match, indent, formula) => `${indent}${formula}\n${indent}$$`);
 
-  content = content.replace(/^(\s*)!\[\[assets\/([^\]|]+)(?:\|(\d+))?\]\]$/gm, (_match, indent, file, width) => {
+  content = content.replace(/^([ \t]*(?:>[ \t]*)*)!\[\[assets\/([^\]|]+)(?:\|(\d+))?\]\]$/gm, (_match, prefix, file, width) => {
     const safePath = file.split('/').map(encodeURIComponent).join('/');
     const size = width ? ` width="${width}"` : '';
-    return `${indent}<img src="./${safePath}" alt=""${size} loading="lazy" decoding="async" />`;
+    return `${prefix}<img src="./${safePath}" alt=""${size} loading="lazy" decoding="async" />`;
   });
 
   content = content.replace(/\[\[#([^\]|]+)\|([^\]]+)\]\]/g, (_match, target, label) => {
