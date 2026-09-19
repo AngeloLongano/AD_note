@@ -364,14 +364,56 @@ I problemi NP-hard restano importanti nelle applicazioni. In base al contesto si
 
 ###### Algoritmi di approssimazione
 
-Nel contesto dei problemi NP-hard, come abbiamo accennato, possiamo tentare di individuare soluzioni accettabili approssimando quella ottima. Applicando un algoritmo di approssimazione la soluzione restituita non è ottima, però la si può tentare di ottenere a costo polinomiale.
-Il fattore di approssimazione ($\alpha \geq 1$) quantifica l'errore associato ad un algoritmo di approssimazione. Possiamo esprimere con un numero il rapporto tra la soluzione approssimata e quella ottima. Se è possibile dare un bound a questo rapporto, quel bound è proprio il fattore di approssimazione $\alpha$. Formalmente, per ogni istanza $i \in I$ del problema $\Pi$:
+Per un problema di ottimizzazione NP-hard, un **algoritmo di approssimazione** restituisce in tempo polinomiale una soluzione **ammissibile**, ma non necessariamente ottima. La sua qualità non si esprime dicendo quanto sbaglia su una certa istanza, bensì con una garanzia valida per ogni istanza di input.
 
-$$ \begin{aligned}
-                    \frac{cost(approx)}{cost(opt)} \leq \alpha
-\end{aligned}$$
+Sia $\Pi$ un problema di ottimizzazione, sia $I$ una sua istanza di dimensione $n$, e indichiamo con:
 
-Determinare il miglior valore di $\alpha$ è a carico di chi studia l'algoritmo, che deve fornire una dimostrazione formale. Tipicamente trovare un algoritmo di approssimazione non è un compito troppo complicato; la parte relativa alla dimostrazione formale invece tende ad essere più complessa. Naturalmente, un $\alpha$ più vicino ad 1 indica un'approssimazione più efficiente.
+- $OPT(I)$ il valore della soluzione ottima;
+- $ALG(I)$ il valore della soluzione restituita dall'algoritmo $ALG$.
+
+Il **fattore di approssimazione** $\rho(n) \geq 1$ (spesso indicato anche con $\alpha$) misura la qualità garantita nel caso peggiore. Assumendo valori di costo non negativi e $OPT(I)>0$, diciamo che $ALG$ è una **$\rho$-approssimazione** se, per ogni istanza $I$:
+
+- per un problema di **minimizzazione**,
+
+  $$
+  ALG(I) \leq \rho(n) \cdot OPT(I),
+  \qquad\text{equivalentemente}\qquad
+  \frac{ALG(I)}{OPT(I)} \leq \rho(n);
+  $$
+
+- per un problema di **massimizzazione**,
+
+  $$
+  ALG(I) \geq \frac{OPT(I)}{\rho(n)},
+  \qquad\text{equivalentemente}\qquad
+  \frac{OPT(I)}{ALG(I)} \leq \rho(n).
+  $$
+
+In entrambi i casi il rapporto è scelto in modo da essere almeno $1$: $\rho(n)=1$ corrisponde a un algoritmo esatto e, a parità di problema, un fattore più vicino a $1$ è migliore. Se $\rho$ è una costante, la qualità non peggiora al crescere dell'istanza; il fattore può però anche dipendere da $n$.
+
+La garanzia è di **worst-case**: non afferma che l'algoritmo ottenga sempre un rapporto uguale a $\rho$, ma che nessuna istanza può produrre un rapporto peggiore. Le istanze con ottimo nullo richiedono una convenzione separata, perché il rapporto non è definito; nei problemi studiati qui i costi sono positivi, oppure il caso $OPT(I)=0$ è banale da riconoscere e risolvere esattamente.
+
+###### Dimostrare un fattore mediante un lower bound
+
+Per provare una garanzia di approssimazione non occorre conoscere esplicitamente $OPT(I)$, che è proprio il valore difficile da calcolare. Per un problema di minimizzazione basta trovare un **lower bound** $LB(I)$ tale che
+
+$$
+LB(I) \leq OPT(I)
+$$
+
+e dimostrare che l'algoritmo produce una soluzione di costo al più $\rho(n)$ volte quel limite:
+
+$$
+ALG(I) \leq \rho(n) \cdot LB(I).
+$$
+
+Combinando le due disuguaglianze si ottiene
+
+$$
+ALG(I) \leq \rho(n) \cdot LB(I) \leq \rho(n) \cdot OPT(I),
+$$
+
+che è esattamente la definizione di $\rho$-approssimazione. Nei prossimi algoritmi il lower bound nascerà, per esempio, da un matching o da un rilassamento lineare; per la massimizzazione il ragionamento duale usa invece un upper bound su $OPT(I)$.
 
 ###### TSP è un problema NP-hard
 
