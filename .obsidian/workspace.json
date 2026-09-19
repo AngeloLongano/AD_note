@@ -66,9 +66,22 @@
               "icon": "lucide-file",
               "title": "Feedback"
             }
+          },
+          {
+            "id": "3259191757e12871",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ROADMAP.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ROADMAP"
+            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -236,26 +249,34 @@
       "bases:Crea nuova Base": false
     }
   },
-  "active": "18b70d1ea31f455a",
+  "active": "17ba5ddf354c7035",
   "lastOpenFiles": [
-    "Algoritmi Distribuiti.md",
-    "Feedback.md",
-    "ROADMAP.md",
     "my_notes.md",
+    "Algoritmi Distribuiti.md",
+    "dist/index.html",
+    "dist/widgets/sat-fnc/index.html",
+    "dist/widgets/master-theorem/index.html",
+    "dist/widgets/sat-fnc",
+    "dist/widgets/master-theorem",
+    "dist/widgets",
+    "dist/_astro/SiteHeader.BdTvFi9q.css",
+    "dist/_astro/KaTeX_Typewriter-Regular.D3Ib7_Hf.ttf",
+    "dist/_astro/KaTeX_Typewriter-Regular.CO6r4hn1.woff2",
+    "dist/_astro/KaTeX_Typewriter-Regular.C0xS9mPB.woff",
+    "dist/vertexcoverILP.png",
+    "dist/vertex_covers.png",
+    "dist/riduzione-turing.png",
+    "dist/riduzione-karp.png",
+    "dist/mappa-classi-riduzioni.svg",
+    "dist/ciclo-hamiltoniano.png",
+    "dist/christof3.png",
+    "dist/christof2.png",
+    "dist/christof1.png",
+    "dist/Screenshot 2024-11-26 120047.png",
+    "ROADMAP.md",
+    "Feedback.md",
     "Teoria della complessità - merge.md",
     "ROADMAP-fonte-di-verita.md",
-    "assets_my_notes/05-spanning-tree-construction-image_9.png",
-    "assets_my_notes/05-spanning-tree-construction-image_8.png",
-    "assets_my_notes/05-spanning-tree-construction-image_7.png",
-    "assets_my_notes/05-spanning-tree-construction-image_6.png",
-    "assets_my_notes/05-spanning-tree-construction-image_5.png",
-    "assets_my_notes/05-spanning-tree-construction-image_4.png",
-    "assets_my_notes/05-spanning-tree-construction-image_3.png",
-    "assets_my_notes/05-spanning-tree-construction-image_2.png",
-    "assets_my_notes/05-spanning-tree-construction-image_11.png",
-    "assets_my_notes/05-spanning-tree-construction-image_10.png",
-    "assets_my_notes",
-    "assets/my_notes",
     "README.md",
     "AGENTS.md",
     "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-603.md",
@@ -274,15 +295,6 @@
     "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-590.md",
     "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-589.md",
     "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-588.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-587.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-586.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/images",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/manifest.json",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS",
-    "teacher_slides/knowledge_parsed/based_by/Cormen Introduction to Algorithms/pages",
-    "teacher_slides/knowledge_parsed/based_by/Cormen Introduction to Algorithms/manifest.json",
-    "teacher_slides/knowledge_parsed/based_by/Cormen Introduction to Algorithms/images",
-    "teacher_slides/knowledge_parsed/based_by/Cormen Introduction to Algorithms"
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-587.md"
   ]
 }

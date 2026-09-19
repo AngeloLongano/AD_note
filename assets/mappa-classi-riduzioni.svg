@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1020" viewBox="0 0 1600 1020" role="img" aria-labelledby="title desc">
+  <title id="title">Mappa delle classi P, NP, NP-completi e NP-hard e delle riduzioni di Karp e di Turing</title>
+  <desc id="desc">Lo schema separa i problemi decisionali dai problemi di ricerca e ottimizzazione, mostra le relazioni tra le classi e confronta le due riduzioni.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8faf9; }
+      .panel { fill: #ffffff; stroke: #b8c8c3; stroke-width: 2; }
+      .decision { fill: #e8f4ef; stroke: #27705e; stroke-width: 3; }
+      .search { fill: #eef2f7; stroke: #64748b; stroke-width: 2.5; }
+      .opt { fill: #fff5e8; stroke: #b76b15; stroke-width: 2.5; }
+      .np { fill: #dcefe8; stroke: #27705e; stroke-width: 3; }
+      .p { fill: #fff; stroke: #27705e; stroke-width: 3; }
+      .hard { fill: #fff0dd; stroke: #b76b15; stroke-width: 3; }
+      .complete { fill: #ffe0ba; stroke: #9a5510; stroke-width: 3; }
+      .accent { fill: #0d3b35; }
+      .orange { fill: #8a4709; }
+      .ink { fill: #17231f; }
+      .muted { fill: #52615c; }
+      .line { fill: none; stroke: #36534b; stroke-width: 3; }
+      .dash { fill: none; stroke: #71837d; stroke-width: 2.5; stroke-dasharray: 9 8; }
+      .arrow { fill: none; stroke: #0d3b35; stroke-width: 3; marker-end: url(#arrow); }
+      .arrow-orange { fill: none; stroke: #9a5510; stroke-width: 3; marker-end: url(#arrow-orange); }
+      text { font-family: Arial, sans-serif; }
+      .h1 { font-size: 38px; font-weight: 750; }
+      .h2 { font-size: 26px; font-weight: 720; }
+      .h3 { font-size: 22px; font-weight: 700; }
+      .body { font-size: 20px; }
+      .small { font-size: 17px; }
+      .label { font-size: 24px; font-weight: 750; }
+      .math { font-family: Georgia, "Times New Roman", serif; font-style: italic; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#0d3b35" />
+    </marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#9a5510" />
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1600" height="1020" rx="28" />
+  <text x="70" y="68" class="h1 accent">Classi di complessità, tipi di problema e riduzioni</text>
+  <text x="70" y="103" class="body muted">Prima identifica l’output richiesto; poi scegli la nozione e la riduzione appropriate.</text>
+
+  <!-- Tipi di problema -->
+  <rect x="55" y="140" width="1490" height="220" rx="24" class="panel" />
+  <text x="82" y="181" class="h2 ink">1. Che cosa deve produrre l’algoritmo?</text>
+
+  <rect x="85" y="205" width="440" height="122" rx="18" class="decision" />
+  <text x="110" y="244" class="label accent">DECISIONE</text>
+  <text x="110" y="277" class="body ink">Output: sì / no</text>
+  <text x="110" y="307" class="small muted">Es.: «esiste un tour di costo ≤ k?»</text>
+
+  <rect x="580" y="205" width="440" height="122" rx="18" class="search" />
+  <text x="605" y="244" class="label ink">RICERCA</text>
+  <text x="605" y="277" class="body ink">Output: una soluzione ammissibile</text>
+  <text x="605" y="307" class="small muted">Es.: «trova un ciclo hamiltoniano»</text>
+
+  <rect x="1075" y="205" width="440" height="122" rx="18" class="opt" />
+  <text x="1100" y="244" class="label orange">OTTIMIZZAZIONE</text>
+  <text x="1100" y="277" class="body ink">Output: una soluzione ottima</text>
+  <text x="1100" y="307" class="small muted">Es.: «trova il tour di costo minimo»</text>
+
+  <!-- Classi -->
+  <rect x="55" y="390" width="730" height="365" rx="24" class="panel" />
+  <text x="82" y="432" class="h2 ink">2. Classi: il nucleo formale è decisionale</text>
+
+  <rect x="90" y="464" width="480" height="228" rx="72" class="np" />
+  <text x="112" y="500" class="label accent">NP</text>
+  <text x="112" y="527" class="small ink">certificato positivo verificabile</text>
+  <text x="112" y="549" class="small ink">in tempo polinomiale</text>
+
+  <rect x="122" y="576" width="170" height="82" rx="35" class="p" />
+  <text x="207" y="611" text-anchor="middle" class="label accent">P</text>
+  <text x="207" y="637" text-anchor="middle" class="small ink">decidibile in poly-time</text>
+
+  <path d="M430 505 C570 465, 734 510, 738 594 C742 678, 586 713, 430 673 C469 641, 473 591, 430 568 Z" class="hard" />
+  <text x="506" y="591" text-anchor="middle" class="h3 orange">NP-</text>
+  <text x="506" y="617" text-anchor="middle" class="h3 orange">completi</text>
+  <text x="506" y="646" text-anchor="middle" class="small ink">in NP e</text>
+  <text x="506" y="667" text-anchor="middle" class="small ink">NP-hard</text>
+
+  <text x="644" y="546" text-anchor="middle" class="h3 orange">NP-hard</text>
+  <text x="647" y="572" text-anchor="middle" class="small ink">può estendersi</text>
+  <text x="647" y="594" text-anchor="middle" class="small ink">fuori da NP</text>
+  <text x="92" y="721" class="small muted">Relazioni: P ⊆ NP;  NP-completi = NP ∩ NP-hard.</text>
+  <text x="92" y="744" class="small muted">Il disegno separa P e NP-completi secondo l’ipotesi usuale P ≠ NP.</text>
+
+  <!-- Applicabilità -->
+  <rect x="815" y="390" width="730" height="365" rx="24" class="panel" />
+  <text x="842" y="432" class="h2 ink">3. A quali tipi si applicano?</text>
+
+  <text x="852" y="484" class="h3 accent">P, NP, NP-completo</text>
+  <path d="M852 505 H1497" class="line" />
+  <circle cx="888" cy="544" r="14" class="accent" />
+  <text x="888" y="551" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">✓</text>
+  <text x="918" y="551" class="body ink">Decisione</text>
+  <circle cx="1116" cy="544" r="14" fill="#fff" stroke="#71837d" stroke-width="2.5" />
+  <text x="1145" y="551" class="body muted">Ricerca</text>
+  <circle cx="1324" cy="544" r="14" fill="#fff" stroke="#71837d" stroke-width="2.5" />
+  <text x="1353" y="551" class="body muted">Ottimizzazione</text>
+
+  <text x="852" y="607" class="h3 orange">NP-hard</text>
+  <path d="M852 628 H1497" class="line" />
+  <circle cx="888" cy="667" r="14" fill="#9a5510" />
+  <text x="888" y="674" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">✓</text>
+  <text x="918" y="674" class="body ink">Decisione</text>
+  <circle cx="1116" cy="667" r="14" fill="#9a5510" />
+  <text x="1116" y="674" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">✓</text>
+  <text x="1145" y="674" class="body ink">Ricerca</text>
+  <circle cx="1324" cy="667" r="14" fill="#9a5510" />
+  <text x="1324" y="674" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">✓</text>
+  <text x="1353" y="674" class="body ink">Ottimizzazione</text>
+
+  <text x="852" y="719" class="small muted">Per ricerca e ottimizzazione “NP-hard” è usato in senso esteso,</text>
+  <text x="852" y="742" class="small muted">tramite una riduzione polinomiale con oracolo.</text>
+
+  <!-- Riduzioni -->
+  <rect x="55" y="785" width="730" height="190" rx="24" class="panel" />
+  <text x="82" y="827" class="h2 accent">Riduzione di Karp</text>
+  <text x="82" y="858" class="small muted">Tra problemi decisionali · una sola trasformazione</text>
+  <rect x="90" y="884" width="100" height="54" rx="14" class="decision" />
+  <text x="140" y="918" text-anchor="middle" class="h3 accent">A</text>
+  <path d="M205 911 H358" class="arrow" />
+  <text x="282" y="897" text-anchor="middle" class="small ink">f(x), poly-time</text>
+  <rect x="375" y="884" width="100" height="54" rx="14" class="decision" />
+  <text x="425" y="918" text-anchor="middle" class="h3 accent">B</text>
+  <text x="505" y="904" class="small ink">x ∈ A ⇔ f(x) ∈ B</text>
+  <text x="505" y="930" class="small muted">notazione: A ≤ₚ B</text>
+
+  <rect x="815" y="785" width="730" height="190" rx="24" class="panel" />
+  <text x="842" y="827" class="h2 orange">Riduzione di Turing polinomiale</text>
+  <text x="842" y="858" class="small muted">Algoritmo con oracolo · più domande, anche adattive</text>
+  <rect x="850" y="884" width="215" height="54" rx="14" class="decision" />
+  <text x="958" y="918" text-anchor="middle" class="h3 accent">algoritmo per A</text>
+  <path d="M1080 901 H1257" class="arrow-orange" />
+  <path d="M1257 924 H1080" class="arrow-orange" />
+  <text x="1168" y="891" text-anchor="middle" class="small ink">query</text>
+  <text x="1168" y="948" text-anchor="middle" class="small ink">risposte</text>
+  <rect x="1275" y="884" width="230" height="54" rx="14" class="opt" />
+  <text x="1390" y="918" text-anchor="middle" class="h3 orange">oracolo per B</text>
+  <text x="850" y="964" class="small muted">B può essere decisionale, di ricerca o di ottimizzazione · A ≤ᵀₚ B</text>
+</svg>
