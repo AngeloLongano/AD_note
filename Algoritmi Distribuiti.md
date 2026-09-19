@@ -187,96 +187,178 @@ Il teorema non si applica direttamente a ricorrenze con sottoproblemi di dimensi
 
 ###### Da problemi generici a decisionali
 
-In questo capitolo consideriamo perlopiù problemi decisionali. Si possono tipicamente riformulare problemi generici come decisionali.
+La teoria della complessità formula le classi $P$, $NP$ e NP-complete in termini di **problemi decisionali**, cioè problemi la cui risposta è sì oppure no. Questa scelta rende più agevole la trattazione formale e permette comunque di ottenere conseguenze anche per problemi di ricerca e di ottimizzazione.
 
-![[assets/Screenshot 2024-09-24 143827.png|700]]
+Un problema di altro tipo può spesso essere associato a una versione decisionale. Per esempio:
+
+- ottimizzazione: «qual è la lunghezza del cammino minimo da $s$ a $v$?»;
+- decisione: «esiste un cammino da $s$ a $v$ di lunghezza al più $k$?».
 
 ###### Problemi P
 
-Problemi decisionali facili. Basta individuare un algoritmo risolutivo di costo polinomiale per ascrivere un problema a questa categoria.
+La classe $P$ contiene i problemi decisionali risolvibili da un algoritmo deterministico in tempo polinomiale nella dimensione dell'input. Per dimostrare che un problema appartiene a $P$ è sufficiente esibire un tale algoritmo.
 
-###### Verificare la soluzione di un problema
+###### Certificati, verificatori e classe NP
 
-Sia $I$ l'insieme delle possibili istanze di un problema. Siccome stiamo considerando solo problemi decisionali, possiamo partizionare questo insieme in due sottoinsiemi dall'intersezione nulla, i quali mappano verso sì e no (soluzioni positive e negative), rispettivamente.
+Per un problema decisionale distinguiamo le istanze positive, la cui risposta è sì, da quelle negative. Un **certificato** è un'informazione aggiuntiva che permette di dimostrare che un'istanza è positiva; la sua lunghezza deve essere al più polinomiale nella dimensione dell'istanza.
 
-![[assets/Screenshot 2024-09-24 150953.png|400]]
+Un **verificatore** è un algoritmo deterministico $V$ che riceve un'istanza $x$ e un possibile certificato $c$. Un problema decisionale $\Pi$ appartiene a $NP$ se esiste un verificatore polinomiale e un polinomio $p$ tali che
 
-Formalmente, ci serviamo di due particolari oggetti per verificare la correttezza di una soluzione:
+$$
+x\text{ è positiva per }\Pi
+\iff
+\exists c:\ |c|\leq p(|x|)\ \land\ V(x,c)=\text{sì}.
+$$
 
-- Certificato: sequenza di caratteri finita e di dimensione polinomiale che ci consente di verificare la correttezza della soluzione
+La doppia implicazione esprime due requisiti:
 
-- Algoritmo verificatore: algoritmo decisionale che prende in input un'istanza $i \in I$ di un problema decisionale $\Pi$ ed un certificato $C_i$ per l'istanza $i$ e restituisce sì se l'istanza $i$ è positiva per $\Pi$, no altrimenti
+- completezza: ogni istanza positiva possiede almeno un certificato accettato;
+- correttezza: nessun certificato può far accettare un'istanza negativa.
 
-La soluzione di un problema $\Pi$ si può dunque considerare verificata quando valgono queste due condizioni:
+La sigla $NP$ significa *nondeterministic polynomial time*: equivalentemente, sono i problemi decisionali risolvibili in tempo polinomiale da una macchina non deterministica. Non significa *non polinomiale*.
 
-- Per ogni istanza positiva $i$ del problema $\Pi$ esiste un certificato $C_i$ di dimensione polinomiale nella dimensione di $i$
+###### Esempio: ciclo hamiltoniano
 
-- Esiste un algoritmo verificatore $A$ che risponde sì per ogni coppia $(i, c_i)$ tale che $i$ è un'istanza positiva di $\Pi$ e $C_i$ un suo certificato
+Nel problema decisionale del **ciclo hamiltoniano** l'input è un grafo semplice non orientato $G=(V,E)$ e si chiede se esista un ciclo che visiti ogni vertice esattamente una volta e ritorni al vertice iniziale.
 
-###### Problemi NP
+![[assets/ciclo-hamiltoniano.png|900]]
 
-Problemi decisionali verificabili con un algoritmo verificatore di costo polinomiale.
+Un certificato per un'istanza positiva è la sequenza dei vertici nell'ordine in cui compaiono nel ciclo. Il verificatore controlla che:
 
-Un esempio è il problema del ciclo Hamiltoniano: non è noto un algoritmo polinomiale che lo risolva, mentre una soluzione candidata si verifica in tempo polinomiale controllando che la sequenza visiti ogni vertice una sola volta, che ogni coppia consecutiva sia collegata e che l'ultimo vertice sia collegato al primo. L'algoritmo esaustivo che prova tutte le permutazioni richiede tempo fattoriale, ma questo non dimostra che ogni possibile algoritmo debba avere quel costo.
+1. la sequenza contenga tutti e soli i vertici di $G$, senza ripetizioni;
+2. ogni coppia consecutiva sia collegata da un arco;
+3. anche l'ultimo vertice sia collegato al primo.
 
-![[assets/Screenshot 2024-09-24 143525.png|700]]
+Sono sufficienti un numero polinomiale di controlli, quindi il problema appartiene a $NP$. Non si conosce invece un algoritmo polinomiale che lo risolva. Provare tutte le permutazioni richiede tempo fattoriale, ma il costo di questo specifico algoritmo esaustivo non dimostra che ogni possibile algoritmo debba avere lo stesso costo.
 
-![[assets/Screenshot 2024-09-25 112302.png|800]]
+###### Relazione tra P e NP
 
-Dire che $P \subseteq NP$ equivale a dire che qualsiasi problema che può essere risolto in tempo polinomiale può anche essere verificato in tempo polinomiale. La dimostrazione essenzialmente usa uno stesso algoritmo $A$ per risoluzione e verifica, mostrando che i tempi ed i risultati sono gli stessi.
-Dimostrare la validità del viceversa ($NP \subseteq P$), che implicherebbe $P = NP$, rimane un problema aperto di grande importanza nell'informatica. Per questo motivo si considerano ancora plausibili entrambe le ipotesi.
+Vale $P\subseteq NP$: se un problema è risolvibile in tempo polinomiale, il suo algoritmo risolutore può essere usato come verificatore ignorando il certificato, oppure usando come certificato la stringa vuota.
 
-![[assets/Screenshot 2024-09-24 145516.png|800]]
+Non sappiamo invece se $NP\subseteq P$. Stabilire se $P=NP$ oppure $P\neq NP$ è uno dei principali problemi aperti dell'informatica teorica.
 
-In questo scenario hanno particolare rilievo certi problemi $NP$ che sembrano più difficili dei problemi in $P$. Questi si dicono NP-completi. Un esempio di problema NP-completo può essere quello già visto sui cicli Hamiltoniani.
+###### Perché servono le riduzioni
+
+Una **riduzione** mostra come risolvere un problema usando un algoritmo per un altro problema. Serve a:
+
+- trasferire algoritmi: se $A$ si riduce a $B$ e sappiamo risolvere efficientemente $B$, otteniamo un algoritmo efficiente anche per $A$;
+- trasferire difficoltà: se un problema già noto come difficile si riduce a $B$, allora $B$ è almeno altrettanto difficile.
+
+La direzione è quindi essenziale: per dimostrare che $B$ è difficile bisogna ridurre un problema difficile noto **a $B$**, non il contrario.
 
 ###### Riduzione di Karp
 
-Si dice che un problema $A$ è riducibile a un problema $B$ tramite riduzione di Karp se esiste una funzione computabile in tempo polinomiale che trasforma istanze di $A$ in istanze di $B$ tali che la risposta a queste istanze sia la stessa.
-Questa riduzione è fondamentale per confrontare la difficoltà dei problemi. Se un problema noto NP-completo si riduce tramite riduzione di Karp a un problema $B$, allora $B$ è NP-hard; per concludere che $B$ è NP-completo bisogna dimostrare anche che $B \in NP$.
+Siano $A$ e $B$ due problemi decisionali. Una **riduzione di Karp**, o riduzione many-one in tempo polinomiale, da $A$ a $B$ è una funzione $f$ calcolabile in tempo polinomiale tale che, per ogni istanza $x$,
 
-![[assets/Screenshot 2024-09-24 145852.png|800]]
+$$
+x\text{ è positiva per }A
+\iff
+f(x)\text{ è positiva per }B.
+$$
 
-Il problema $B$ non è più facile del problema $A$, come ci indica il segno $\leq$ nell'immagine. In base a questo possiamo fare diverse considerazioni.
+Si scrive $A\leq_p B$. La trasformazione preserva sia le risposte positive sia quelle negative e produce una sola istanza di $B$.
 
-![[assets/Screenshot 2024-09-24 150614.png|800]]
+![[assets/riduzione-karp.png|1000]]
 
-La riduzione di Karp è anche transitiva.
+**Intuizione.** $A\leq_p B$ significa che un algoritmo per $B$, preceduto dalla trasformazione $f$, consente di risolvere anche $A$. Pertanto $A$ è al più difficile quanto $B$.
 
-![[assets/Screenshot 2024-09-24 152809.png|900]]
+Da $A\leq_p B$ seguono queste conseguenze:
+
+- se $B\in P$, allora $A\in P$;
+- se $A\notin P$, allora $B\notin P$, per contrapposizione;
+- se $A\in P$, non possiamo dedurre che $B\in P$;
+- se $B\notin P$, non possiamo dedurre che $A\notin P$.
+
+Se valgono sia $A\leq_p B$ sia $B\leq_p A$, i problemi sono polinomialmente equivalenti. Inoltre la riduzione di Karp è transitiva:
+
+$$
+A\leq_p B\ \land\ B\leq_p C
+\implies
+A\leq_p C.
+$$
 
 ###### Problemi NP-completi
 
-Sono, come abbiamo detto, i problemi NP più difficili da risolvere. Infatti, sono almeno difficili quanto tutti gli altri problemi in NP. Formalmente, $A$ è NP-completo se:
+Un problema decisionale $A$ è **NP-completo** se:
 
-- $A \in NP$
+1. $A\in NP$;
+2. per ogni problema $B\in NP$, vale $B\leq_p A$.
 
-- $\forall B \in NP : B \leq_p A$
+Gli NP-completi sono dunque i problemi più difficili di $NP$ rispetto alle riduzioni polinomiali.
+Il problema del ciclo hamiltoniano introdotto sopra è un esempio di problema NP-completo.
 
-![[assets/Screenshot 2024-09-24 153044.png|900]]
+###### Conseguenza fondamentale
 
-La transitività ci garantisce che un qualunque sia il problema NP-completo $B$ che abbiamo scelto, vale che $\forall C \in NP, C \leq_p A$. Da dove ha origine, però, tutta questa catena? Cook e Levin negli anni '70, dimostrono che esiste un primo problema NP-completo detto SAT (satisfability).
+Per un qualunque problema NP-completo:
 
-![[assets/Screenshot 2024-09-25 114051.png|800]]
+- trovare un algoritmo polinomiale implica $P=NP$;
+- dimostrare che nessun algoritmo polinomiale può risolverlo implica $P\neq NP$.
 
-Se si dimostra che per un problema NP-completo esiste un algoritmo di costo polinomiale, allora $P = NP$. Viceversa, se si dimostra che per un problema NP-completo non esistono algoritmi di costo polinomiale, allora $P \neq NP$. Questo avviene per la proprietà di ogni NP-completo di essere "difficile" almeno come ogni altro NP (di cui fanno parte gli NP-completi).
+Per dimostrare che un nuovo problema $A$ è NP-completo si procede normalmente così:
 
-###### Problemi senza una facile verifica
+1. si dimostra che $A\in NP$;
+2. si sceglie un problema $B$ già noto come NP-completo;
+3. si costruisce una riduzione $B\leq_p A$.
 
-Si prenda ad esempio il problema del commesso viaggiatore (TSP). L'input è un grafo completo con archi pesati, mentre in output ci aspettiamo di trovare il ciclo Hamiltoniano di costo minimo. Mentre abbiamo visto che la verifica di un ciclo Hamiltoniano è relativamente semplice, in questo specifico caso l'ipotesi di ottimalità ci forza a confrontare il peso complessivo associato ad ogni ciclo Hamiltoniano (per cui ad individuarli tutti).
+La correttezza del metodo segue dalla transitività: per ogni $C\in NP$ sappiamo già che $C\leq_p B$; insieme a $B\leq_p A$ otteniamo $C\leq_p A$.
+
+###### SAT e l'inizio della catena
+
+Per avviare questo metodo serve almeno un problema già noto come NP-completo. I teoremi di Cook e Levin individuano questo punto di partenza nel problema **SAT** (*Boolean satisfiability problem*).
+
+Nel corso SAT è presentato su formule in **forma normale congiuntiva** (FNC):
+
+- un letterale è una variabile booleana oppure la sua negazione;
+- una clausola è una disgiunzione di letterali;
+- una formula in FNC è una congiunzione di clausole.
+
+Il problema chiede se esista un assegnamento di verità alle variabili che renda vera l'intera formula. Per esempio,
+
+$$
+(a\lor b\lor c)\land(\neg b\lor c)\land(\neg a\lor\neg b\lor c)
+$$
+
+è soddisfacibile: assegnando $c=\text{vero}$ tutte le clausole risultano vere. SAT appartiene a $NP$ perché un assegnamento costituisce un certificato verificabile valutando la formula in tempo polinomiale; il teorema di Cook–Levin dimostra inoltre che ogni problema in $NP$ si riduce a SAT.
 
 ###### Problemi NP-hard
 
-Un problema $A$ è NP-hard se $\forall B \in NP : B \leq_p A$.
-Notiamo che questa è esattamente la seconda proprietà che definisce i problemi NP-completi. Ciò che manca è l'ipotesi di appartenenza ad $NP$, per cui possiamo espandere le casistiche possibili già osservate, a seconda che $P = NP$ o meno.
+Nel contesto dei problemi decisionali, un problema $A$ è **NP-hard** se
 
-![[assets/Screenshot 2024-09-24 154654.png|800]]
+$$
+\forall B\in NP:\ B\leq_p A.
+$$
 
-Un'altra caratteristica di questi problemi, come intuibile, è la possibilità di non essere verificati né risolti in tempo polinomiale.
+Questa è la seconda condizione della definizione di NP-completezza, senza richiedere $A\in NP$. Un problema NP-completo è quindi sia NP-hard sia appartenente a $NP$; un problema NP-hard può invece non appartenere a $NP$.
 
-![[assets/Screenshot 2024-09-24 154618.png|900]]
+Per dimostrare che $A$ è NP-hard basta scegliere un problema NP-completo $B$ e mostrare $B\leq_p A$: la transitività estende la riduzione a ogni problema di $NP$.
 
-Molti problemi NP-hard hanno importanti applicazioni e non possono essere ignorati. Siccome nessuno ha ancora proposto soluzioni valide, si possono applicare alcuni accorgimenti per sopperire agli importanti costi computazionali, come l'applicazione per sole istanze di problemi di dimensioni ridotte, euristiche di vario tipo, parallelizzazione ed approssimazione.
+###### Riduzione di Turing e problemi di ottimizzazione
+
+La riduzione di Karp è formulata tra problemi decisionali perché $P$, $NP$ e NP-complete sono, nella teoria classica, classi di linguaggi o problemi con risposta sì/no. Per confrontare un problema decisionale con un problema di ricerca o di ottimizzazione si usa invece una riduzione con oracolo.
+
+Si scrive $A\leq_T^p B$ quando esiste un algoritmo polinomiale per $A$ che può interrogare un **oracolo per $B$**, cioè un sottoprogramma che restituisce correttamente la soluzione di $B$. Le interrogazioni possono essere più di una e quelle successive possono dipendere dalle risposte precedenti.
+
+Per dimostrare che un problema $A$, anche di ottimizzazione, è NP-hard si può scegliere un problema NP-completo $B$ e costruire $B\leq_T^p A$. Nel caso più semplice sono sufficienti una sola chiamata all'oracolo per $A$ e una trasformazione polinomiale del risultato:
+
+![[assets/riduzione-turing.png|1000]]
+
+Per esempio, distinguiamo:
+
+- TSP decisionale: «esiste un tour di costo al più $k$?», un problema NP-completo;
+- TSP di ottimizzazione: «trova un tour di costo minimo», un problema NP-hard.
+
+Un oracolo per la versione di ottimizzazione permette di risolvere quella decisionale confrontando il costo ottimo restituito con $k$. Non si dice che il TSP di ottimizzazione “non è in $NP$”: nella definizione classica l'affermazione non è ben posta, perché $NP$ contiene problemi decisionali. La riduzione dal ciclo hamiltoniano al TSP di ottimizzazione sarà costruita esplicitamente nella sezione successiva.
+
+I problemi NP-hard restano importanti nelle applicazioni. In base al contesto si usano algoritmi esatti su istanze piccole, euristiche, parallelizzazione oppure algoritmi di approssimazione; quest'ultimo approccio è l'oggetto della sezione successiva.
+
+###### Riepilogo
+
+| Classe | Caratterizzazione |
+|---|---|
+| $P$ | Problemi decisionali risolvibili in tempo polinomiale |
+| $NP$ | Problemi decisionali con certificati positivi verificabili in tempo polinomiale |
+| NP-completi | Problemi in $NP$ ai quali si riduce ogni problema di $NP$ |
+| NP-hard | Problemi almeno difficili quanto ogni problema di $NP$; possono non essere decisionali o non appartenere a $NP$ |
 
 ### 2.2 Approssimazioni di problemi NP-hard
 
