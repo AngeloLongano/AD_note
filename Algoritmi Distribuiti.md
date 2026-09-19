@@ -153,11 +153,33 @@ _DOMANDA: l’appartenenza dei problemi a queste classi di problemi, non potrebb
 
 ###### Tesi di Church-Turing estesa
 
-Modelli di calcolo diversi, ma ragionevoli, si possono simulare a vicenda con uno **slowdown polinomiale**. Sono quindi **polinomialmente equivalenti** alla macchina di Turing.
+La **tesi di Church–Turing estesa** afferma che ogni modello di calcolo ragionevole può essere simulato da una macchina di Turing con un rallentamento al più polinomiale. In altre parole, un modello ragionevole non dovrebbe permettere di risolvere un problema esponenzialmente più velocemente soltanto perché usa operazioni primitive diverse.
 
-Di conseguenza, le classi definite mediante costi polinomiali non cambiano passando da un modello ragionevole a un altro.
+Per esempio, supponiamo che un algoritmo richieda tempo $O(n^2)$ nel modello $A$ e che la sua simulazione nel modello $B$ richieda tempo $O(n^5)$. La simulazione è più lenta, ma il costo rimane polinomiale. Il passaggio da un modello all'altro non trasforma quindi un algoritmo polinomiale in uno esponenziale.
 
-La tesi di Church-Turing **ordinaria** riguarda invece quali funzioni siano effettivamente calcolabili.
+Dire che due modelli sono **polinomialmente equivalenti** significa precisamente che ciascuno può simulare l'altro introducendo al più un fattore polinomiale nel tempo di esecuzione. Di conseguenza, se un problema appartiene a $P$ su un normale modello di calcolo classico, continua ad appartenere a $P$ quando viene formalizzato mediante una macchina di Turing. Questa robustezza giustifica l'uso della definizione
+
+$$
+P=\{\text{problemi risolvibili in tempo polinomiale}\}
+$$
+
+senza dover specificare ogni volta il particolare computer o modello classico adottato. Lo stesso principio rende robuste anche le usuali definizioni di $NP$.
+
+> [!important] Tesi ordinaria e tesi estesa
+> La tesi di Church–Turing **ordinaria** riguarda la **calcolabilità**: tutto ciò che è intuitivamente calcolabile mediante un algoritmo può essere calcolato da una macchina di Turing.
+>
+> La tesi di Church–Turing **estesa** riguarda invece l'**efficienza**: i modelli di calcolo ragionevoli possono simularsi senza perdere più di un fattore polinomiale.
+
+In sintesi:
+
+$$
+\begin{aligned}
+\text{tesi ordinaria} &:\quad \text{che cosa posso calcolare?}\\
+\text{tesi estesa} &:\quad \text{quanto efficientemente posso calcolarlo?}
+\end{aligned}
+$$
+
+Si parla di **tesi**, non di teorema, perché l'espressione “modello di calcolo ragionevole” non è una nozione matematica fissata una volta per tutte. Inoltre, modelli come il calcolo quantistico rendono problematica la versione più forte della tesi estesa. Nel contesto classico usato per introdurre $P$ e $NP$, rimane però valida l'intuizione fondamentale: cambiare tra i comuni modelli di calcolo non altera ciò che è risolvibile in tempo polinomiale.
 
 ### 1.1 Ricorrenze e Master Theorem (facoltativo)
 
@@ -185,24 +207,57 @@ Il teorema non si applica direttamente a ricorrenze con sottoproblemi di dimensi
 
 ### 2.1 Classificazione dei problemi per complessità
 
-###### Da problemi generici a decisionali
+###### Perché si parte dai problemi decisionali
 
-La teoria della complessità formula le classi $P$, $NP$ e NP-complete in termini di **problemi decisionali**, cioè problemi la cui risposta è sì oppure no. Questa scelta rende più agevole la trattazione formale e permette comunque di ottenere conseguenze anche per problemi di ricerca e di ottimizzazione.
+Le classi $P$ e $NP$ sono definite su **problemi decisionali**, cioè problemi per i quali ogni istanza richiede una risposta sì oppure no. Questa forma permette di identificare un problema con l'insieme delle sue **istanze positive**, quelle per cui la risposta corretta è sì, e rende precise le nozioni di accettazione e rifiuto.
 
-Un problema di altro tipo può spesso essere associato a una versione decisionale. Per esempio:
+La restrizione non rende inutili queste classi per gli altri tipi di problema: a un problema di ricerca o di ottimizzazione si può spesso associare una versione decisionale. Per esempio:
 
 - ottimizzazione: «qual è la lunghezza del cammino minimo da $s$ a $v$?»;
 - decisione: «esiste un cammino da $s$ a $v$ di lunghezza al più $k$?».
+###### La classe P
 
-###### Problemi P
+La classe $P$ contiene i problemi decisionali che un algoritmo deterministico può decidere in **tempo polinomiale** nella dimensione dell'input. *Deterministico* significa che, in ogni stato della computazione, la prossima operazione è determinata univocamente: su uno stesso input l'algoritmo segue un solo percorso di esecuzione.
 
-La classe $P$ contiene i problemi decisionali risolvibili da un algoritmo deterministico in tempo polinomiale nella dimensione dell'input. Per dimostrare che un problema appartiene a $P$ è sufficiente esibire un tale algoritmo.
+In breve,
 
-###### Certificati, verificatori e classe NP
+$$
+P=\{\text{problemi decisionali decidibili in tempo polinomiale da una macchina deterministica}\}.
+$$
 
-Per un problema decisionale distinguiamo le istanze positive, la cui risposta è sì, da quelle negative. Un **certificato** è un'informazione aggiuntiva che permette di dimostrare che un'istanza è positiva; la sua lunghezza deve essere al più polinomiale nella dimensione dell'istanza.
+###### Macchine non deterministiche
 
-Un **verificatore** è un algoritmo deterministico $V$ che riceve un'istanza $x$ e un possibile certificato $c$. Un problema decisionale $\Pi$ appartiene a $NP$ se esiste un verificatore polinomiale e un polinomio $p$ tali che
+Per capire da dove nasce $NP$ bisogna introdurre la **macchina non deterministica**. È un modello teorico di calcolo, non un computer realmente esistente. Quando in un certo passo sono possibili più scelte, la macchina non ne seleziona una con una particolare strategia: la computazione viene descritta come un albero che contiene un ramo per ogni scelta possibile.
+
+Un'istanza è **accettata** se almeno un ramo della computazione termina in uno stato di accettazione. È invece rifiutata se nessun ramo accetta. Il tempo non si ottiene sommando il lavoro di tutti i rami: si misura la lunghezza di un singolo ramo, e per una computazione in tempo polinomiale tutti i rami devono terminare entro un numero polinomiale di passi rispetto alla dimensione dell'input.
+
+Consideriamo intuitivamente il **ciclo hamiltoniano**. Data una sequenza di $n$ vertici, controllare se descrive un ciclo che visita una volta tutti i vertici è semplice. Una macchina non deterministica può:
+
+1. scegliere, passo dopo passo, una possibile sequenza dei vertici;
+2. verificare che la sequenza rappresenti davvero un ciclo hamiltoniano;
+3. accettare se la verifica riesce.
+
+L'albero di computazione contiene i diversi ordinamenti che la macchina può scegliere. Se il grafo ha un ciclo hamiltoniano, almeno un ramo sceglie la sequenza corretta e accetta; se non lo ha, nessun ramo può superare la verifica. Ogni singolo ramo effettua soltanto una scelta e una verifica di lunghezza polinomiale: non si somma il costo di esplorare tutti gli ordinamenti.
+
+Possiamo ora dare la definizione originaria:
+
+> [!definition] Classe NP
+> $NP$ è la classe dei problemi decisionali risolvibili in tempo polinomiale da una macchina non deterministica.
+
+La sigla $NP$ significa infatti ***nondeterministic polynomial time***. **Non significa “non polinomiale”**: $NP$ non è, per definizione, la classe dei problemi che richiedono tempo non polinomiale.
+
+###### Dalla macchina non deterministica ai certificati
+
+La definizione precedente ha una caratterizzazione equivalente più comoda per descrivere gli algoritmi. Possiamo vedere la macchina non deterministica come una macchina che **indovina** una soluzione candidata e poi la verifica deterministicamente. “Indovinare” non indica un'operazione magica o casuale: rappresenta i diversi valori scelti sui diversi rami della computazione.
+
+La soluzione candidata è chiamata **certificato**. Su un computer ordinario non possiamo creare contemporaneamente tutti i rami: immaginiamo invece che il certificato ci venga fornito dall'esterno. Un **verificatore** è un algoritmo deterministico $V$ che riceve l'istanza $x$ e un certificato candidato $c$; non deve trovare $c$, ma soltanto controllare se prova che $x$ è un'istanza positiva.
+
+Ne segue la caratterizzazione equivalente:
+
+> [!important]
+> Un problema decisionale appartiene a $NP$ se, per ogni istanza con risposta sì, **esiste un certificato di dimensione polinomiale verificabile in tempo polinomiale**.
+
+Formalmente, un problema decisionale $\Pi$ appartiene a $NP$ se esistono un verificatore polinomiale $V$ e un polinomio $p$ tali che
 
 $$
 x\text{ è positiva per }\Pi
@@ -210,12 +265,12 @@ x\text{ è positiva per }\Pi
 \exists c:\ |c|\leq p(|x|)\ \land\ V(x,c)=\text{sì}.
 $$
 
-La doppia implicazione esprime due requisiti:
+In linguaggio naturale, la formula afferma che la risposta per $x$ è sì **se e solo se** esiste almeno un certificato $c$, di lunghezza al più polinomiale in $|x|$, che il verificatore accetta. Quindi:
 
-- completezza: ogni istanza positiva possiede almeno un certificato accettato;
-- correttezza: nessun certificato può far accettare un'istanza negativa.
+- se $x$ è positiva, almeno un certificato breve deve essere accettato;
+- se $x$ è negativa, ogni certificato candidato deve essere rifiutato.
 
-La sigla $NP$ significa *nondeterministic polynomial time*: equivalentemente, sono i problemi decisionali risolvibili in tempo polinomiale da una macchina non deterministica. Non significa *non polinomiale*.
+Il certificato non deve essere unico e quello ricevuto può essere errato. L'appartenenza a $NP$ garantisce l'esistenza di una prova breve per le istanze positive, non un algoritmo deterministico polinomiale capace di trovarla.
 
 ###### Esempio: ciclo hamiltoniano
 
@@ -223,19 +278,33 @@ Nel problema decisionale del **ciclo hamiltoniano** l'input è un grafo semplice
 
 ![[assets/ciclo-hamiltoniano.png|900]]
 
-Un certificato per un'istanza positiva è la sequenza dei vertici nell'ordine in cui compaiono nel ciclo. Il verificatore controlla che:
+Per esempio, se $V=\{a,b,c,d,e\}$ e il grafo contiene gli archi
+
+$$
+\{a,b\},\{b,c\},\{c,d\},\{d,e\},\{e,a\},
+$$
+
+allora la sequenza $C=(a,b,c,d,e)$ è un certificato valido: descrive il ciclo $a\to b\to c\to d\to e\to a$. La sequenza candidata $C'=(a,b,d,c,e)$, invece, viene rifiutata se, per esempio, manca l'arco $\{b,d\}$; non basta elencare una volta tutti i vertici.
+
+In generale, un certificato per un'istanza positiva è una sequenza $(v_1,\ldots,v_n)$ dei $n=|V|$ vertici nell'ordine in cui compaiono nel ciclo. Il verificatore controlla che:
 
 1. la sequenza contenga tutti e soli i vertici di $G$, senza ripetizioni;
-2. ogni coppia consecutiva sia collegata da un arco;
-3. anche l'ultimo vertice sia collegato al primo.
+2. ogni coppia consecutiva $\{v_i,v_{i+1}\}$, per $1\leq i<n$, sia un arco di $G$;
+3. anche $\{v_n,v_1\}$ sia un arco di $G$.
 
-Sono sufficienti un numero polinomiale di controlli, quindi il problema appartiene a $NP$. Non si conosce invece un algoritmo polinomiale che lo risolva. Provare tutte le permutazioni richiede tempo fattoriale, ma il costo di questo specifico algoritmo esaustivo non dimostra che ogni possibile algoritmo debba avere lo stesso costo.
+La sequenza è precisamente il **certificato**: contiene $n$ identificatori di vertice e ha quindi dimensione polinomiale. Con una tabella dei vertici visitati si controllano in tempo polinomiale sia la presenza di tutti e soli i vertici sia i $n$ archi del presunto ciclo. Questo prova che **Ciclo Hamiltoniano appartiene a $NP$**.
+
+Attenzione alla differenza tra **verificare** e **trovare**. Se qualcuno consegna la sequenza $(a,b,c,d,e)$, il controllore la convalida rapidamente. Dato soltanto il grafo, però, un algoritmo deve individuare una sequenza valida oppure stabilire che non esiste. L'algoritmo esaustivo più immediato prova i possibili ordinamenti dei vertici: sono circa $n!$ e il suo tempo è fattoriale. Ciò mostra soltanto che *questo* metodo di ricerca è lento; non dimostra che tutti gli algoritmi possibili lo siano. Sappiamo però che Ciclo Hamiltoniano è NP-completo: un algoritmo polinomiale per esso implicherebbe $P=NP$, questione tuttora aperta.
 
 ###### Relazione tra P e NP
 
-Vale $P\subseteq NP$: se un problema è risolvibile in tempo polinomiale, il suo algoritmo risolutore può essere usato come verificatore ignorando il certificato, oppure usando come certificato la stringa vuota.
+Vale $P\subseteq NP$: una macchina non deterministica può eseguire un algoritmo deterministico polinomiale senza compiere scelte. Equivalentemente, il risolutore può essere usato come verificatore ignorando il certificato, oppure usando come certificato la stringa vuota.
 
-Non sappiamo invece se $NP\subseteq P$. Stabilire se $P=NP$ oppure $P\neq NP$ è uno dei principali problemi aperti dell'informatica teorica.
+Non sappiamo invece se $NP\subseteq P$. Il problema $P$ contro $NP$ può essere riassunto dalla domanda:
+
+> **Se una soluzione può essere verificata velocemente, può anche essere trovata velocemente?**
+
+Stabilire se $P=NP$ oppure $P\neq NP$ è uno dei principali problemi aperti dell'informatica teorica.
 
 ###### Perché servono le riduzioni
 
@@ -317,7 +386,7 @@ Nel corso SAT è presentato su formule in **forma normale congiuntiva** (FNC):
 Il problema chiede se esista un assegnamento di verità alle variabili che renda vera l'intera formula. Per esempio,
 
 $$
-(a\lor b\lor c)\land(\neg b\lor c)\land(\neg a\lor\neg b\lor c)
+(a\lor b\lor c)\land(\neg b\lor c)\land(\neg a \lor\neg b\lor c)
 $$
 
 è soddisfacibile: assegnando $c=\text{vero}$ tutte le clausole risultano vere. SAT appartiene a $NP$ perché un assegnamento costituisce un certificato verificabile valutando la formula in tempo polinomiale; il teorema di Cook–Levin dimostra inoltre che ogni problema in $NP$ si riduce a SAT.
@@ -419,13 +488,18 @@ che è esattamente la definizione di $\rho$-approssimazione. Nei prossimi algori
 
 ###### TSP è un problema NP-hard
 
-Come da titolo, in questo paragrafo si dimostra che TSP è un problema NP-hard. Lo stesso TSP è un problema di enorme interesse nella nostra realtà di tutti i giorni, basti pensare ai servizi di consegna dei maggiori on-line sellers. Dunque introduciamo il presente teorema allo scopo di continuare a trattare TSP anche nei paragrafi successivi.
+Il **Travelling Salesman Problem di ottimizzazione** ($TSP_{opt}$) è definito come segue:
 
-![[assets/Screenshot 2024-09-25 115533.png|900]]
+- **input:** un grafo completo non diretto $G=(V,E)$ e una funzione di costo non negativa $c:E\to\mathbb{R}_{\geq 0}$;
+- **output:** un ciclo Hamiltoniano $H^*$ di costo minimo, dove $c(H^*)$ è la somma dei costi dei suoi archi.
 
-Il ciclo Hamiltoniano è un problema decisionale NP-completo che prende in input un grafo $G = (V, E)$ e restituisce in output sì se in $G$ esiste un ciclo Hamiltoniano, no altrimenti. In qualche modo questo problema assomiglia a TSP. Si noti che non è richiesto di avere un grafo $G$ completo, né archi pesati. Nel caso di grafo completo, peraltro, la risposta sarebbe sempre sì.
-Si prende dunque un'istanza qualsiasi di ciclo Hamiltoniano (il grafo $G$). L'istanza viene trasformata nell'input per un TSP (un grafo completo $G^\prime = (V, E^\prime)$), associando un costo agli archi. In particolare, agli archi nativi si assegna un peso nullo, mentre a quelli aggiunti un peso non nullo. Questo farà sì che la soluzione $H^*$ di TSP possa essere considerata accettabile per il ciclo Hamiltoniano solo qualora il costo complessivo risulti nullo (ovvero $H^*$ stesso sia composto da soli archi nativi). Una volta individuato $H^*$, si risponde alla domanda iniziale con un sì od un no.
-Formalizziamo il tutto in pseudo-codice:
+> **Teorema.** Il problema $TSP_{opt}$ è NP-hard.
+
+La dimostrazione usa il problema decisionale NP-completo del **ciclo Hamiltoniano** ($HC$). Una sua istanza è un grafo non diretto $G=(V,E)$, non necessariamente completo né pesato, e la domanda è se esista un ciclo che visiti ogni vertice esattamente una volta.
+
+L'idea della riduzione è trasformare la struttura del grafo in costi: completiamo $G$, assegniamo costo $0$ agli archi originali e costo $1$ agli archi aggiunti. Il costo del tour ottimo funziona così da rivelatore: vale $0$ esattamente quando il tour può usare soltanto archi presenti nel grafo originale.
+
+Formalizziamo la riduzione in pseudocodice:
 
 **Algorithm 1 Risoluzione Ciclo Hamiltoniano con TSP** ^algorithm-1
 
@@ -435,7 +509,7 @@ Formalizziamo il tutto in pseudo-codice:
 > 4.   **if** $(u, v) \in E$ **then**
 > 5.    $C(u, v) \gets 0$
 > 6.   **else**
-> 7.    $C(u, v) \gets k, k > 0$
+> 7.    $C(u, v) \gets 1$
 > 8.   **end if**
 > 9.  **end for**
 > 10.  $G^\prime = (V, E^\prime, C)$
@@ -447,8 +521,20 @@ Formalizziamo il tutto in pseudo-codice:
 > 16.  **end if**
 > 17. **end function**
 
-Abbiamo appena dimostrato che possiamo risolvere il ciclo Hamiltoniano usando un algoritmo per TSP. La trasformazione richiede tempo polinomiale: nel caso non diretto il grafo completo ha $\frac{n(n-1)}{2}$ archi, e la costruzione dei pesi richiede $O(n^2)$ operazioni.
-Poiché il ciclo Hamiltoniano è NP-completo e si riduce in tempo polinomiale a TSP, la riduzione dimostra direttamente che TSP è NP-hard. Non occorre assumere $P \neq NP$ per questa conclusione; tale ipotesi serve soltanto per dedurre che TSP non possa avere un algoritmo polinomiale.
+**Correttezza.** Indichiamo con $OPT(G')$ il costo del tour restituito dall'oracolo per $TSP_{opt}$. Dimostriamo che
+
+$$
+OPT(G')=0
+\iff
+G\text{ contiene un ciclo Hamiltoniano}.
+$$
+
+- Se $G$ contiene un ciclo Hamiltoniano, lo stesso ciclo esiste in $G'$ e usa soltanto archi originali, tutti di costo $0$. Poiché i costi sono non negativi, $OPT(G')=0$.
+- Se $OPT(G')=0$, ogni arco del tour ottimo deve avere costo $0$: i costi possibili sono infatti soltanto $0$ e $1$. Per costruzione tutti questi archi appartengono a $E$, quindi il tour trovato in $G'$ è un ciclo Hamiltoniano anche nel grafo originale $G$.
+
+**Complessità e conclusione.** Se $n=|V|$, il grafo completo non diretto contiene $\frac{n(n-1)}{2}$ archi; costruire $G'$ e assegnarne i pesi richiede dunque $O(n^2)$ operazioni. Dopo una sola chiamata all'oracolo per $TSP_{opt}$, basta controllare se il costo ottenuto sia nullo. Abbiamo quindi costruito $HC\leq_T^p TSP_{opt}$; poiché $HC$ è NP-completo, $TSP_{opt}$ è NP-hard.
+
+Questa conclusione non richiede l'ipotesi $P\neq NP$: tale ipotesi serve invece per dedurre che $TSP_{opt}$ non ammetta un algoritmo polinomiale esatto.
 
 ###### Inapprossimabilità del TSP generale
 
