@@ -563,166 +563,159 @@ La costruzione richiede $O(n^2)$ operazioni e il valore $M$ ha una rappresentazi
 
 Controllando se il costo restituito da $A$ è al più $\rho n$ potremmo pertanto decidere in tempo polinomiale se $G$ possiede un ciclo Hamiltoniano. Ne seguirebbe $P=NP$, contro l'ipotesi. Il risultato riguarda il **TSP generale**: i costi costruiti non soddisfano necessariamente la disuguaglianza triangolare e quindi non esclude approssimazioni costanti per il TSP metrico.
 
-###### Approssimazioni di TSP
+###### Approssimazioni per il TSP metrico
 
-In input abbiamo un grafo completo $G = (V, E)$, pesato sugli archi (ovvero affiancato da una funzione $C : E \to \mathbb{R}$). L'output che desideriamo è il ciclo Hamiltoniano (cioè che passa una ed una sola volta per ogni nodo del grafo) di costo minimo.
-Un approccio a forza bruta è fattoriale, anche se ciò non prova che il problema non possa essere approcciato in modo efficiente. L'approccio a forza bruta è tuttavia applicabile nel caso di grafi di dimensioni ridotte.
-Come abbiamo già visto, TSP è NP-hard. Il fattore di approssimazione di TSP su tutti i possibili input cresce con la dimensione delle istanze. Questo è un fatto molto scomodo, per cui in modo da individuare un fattore di approssimazione costante dobbiamo restringere i possibili input. Consideriamo ad esempio le istanze per cui i costi siano non-negativi e valga la disuguaglianza triangolare:
+L'inapprossimabilità appena dimostrata riguarda il TSP generale. Restringendo le istanze a costi che rispettano la **disuguaglianza triangolare** è invece possibile ottenere garanzie costanti.
 
-- $C : E \to \mathbb{R}^+$
+Il **TSP metrico**, chiamato anche TSP con disuguaglianza triangolare ($TSP_{dt}$), è definito come segue:
 
-- $\forall u, v, z \in V : C(u, z) \leq C(u, v) + C(v, z)$
+- **Input:** un grafo completo non diretto $G=(V,E)$ e una funzione di costo non negativa $c:E\to\mathbb{R}_{\geq 0}$ tale che
 
-In questo contesto, verificare la disuguaglianza triangolare significa, in modo molto pratico, che passare direttamente da un nodo $u$ ad un nodo adiacente $z$ è meno costoso che effettuare un passaggio intermedio tramite un terzo nodo $v$ adiacente ad entrambi. Questa è una condizione tutto sommato naturale, soddisfatta in diverse applicazioni.
-Ora vediamo nel dettaglio diversi algoritmi di approssimazione per TSP.
+  $$
+  \forall u,v,z\in V:\qquad c(u,z)\leq c(u,v)+c(v,z).
+  $$
 
-- **Algoritmo di 2-approssimazione**: si costruisce per prima cosa un minimum spanning tree $T^*$, poi se ne raddoppiano tutti gli archi. Nel multigrafo risultante ogni vertice ha grado pari, quindi si può calcolare un ciclo euleriano $E$, per esempio mediante una visita DFS che percorra anche i ritorni lungo gli archi duplicati. Il ciclo Hamiltoniano $H$ si ricava percorrendo $E$ e saltando ogni vertice già visitato.
+- **Output:** un ciclo Hamiltoniano $H^*$ di costo minimo.
 
-  > **AA 2025/26.** Questo algoritmo non è stato svolto a lezione. Le dispense ufficiali richiedono comunque di conoscerne l'analisi nella misura necessaria a comprendere l'analisi di Christofides.
+Per un sottografo o multigrafo $F$, indichiamo con $cost(F)$ la somma dei costi dei suoi archi, contati con la loro molteplicità. La disuguaglianza triangolare formalizza l'idea che andare direttamente da $u$ a $z$ non costi più che passare per un nodo intermedio $v$.
 
-  Nell'immagine sotto sono riportate in sequenza le azioni appena spiegate. Del grafo, che naturalmente è supposto essere completo, si mostrano per semplicità solo gli archi di $T^*, E, H$.
+**Cicli euleriani.** Un ciclo euleriano è un cammino chiuso che percorre ogni arco esattamente una volta. Un multigrafo connesso ammette un ciclo euleriano se e solo se tutti i suoi vertici hanno grado pari; quando esiste, il ciclo può essere calcolato in tempo polinomiale.
 
-  ![[assets/2-approx.jpg|1000]]
+> [!important] Lemma degli shortcut
+> Sia $v_0,v_1,\ldots,v_k$ un cammino in un grafo completo i cui costi rispettano la disuguaglianza triangolare. Allora
+> $$
+> c(v_0,v_k)\leq \sum_{i=0}^{k-1}c(v_i,v_{i+1}).
+> $$
+> La tesi si ottiene applicando ripetutamente la disuguaglianza triangolare: eliminare un vertice intermedio e sostituire i due tratti adiacenti con l'arco diretto non aumenta il costo. Di conseguenza, da un ciclo che visita alcuni vertici più volte si possono saltare le visite ripetute ottenendo un ciclo Hamiltoniano di costo non maggiore.
 
-  In pseudo-codice:
+**Algoritmo di 2-approssimazione.** L'idea è costruire un minimum spanning tree $T^*$, raddoppiarne gli archi per rendere pari ogni grado, calcolare un ciclo euleriano e applicare gli shortcut ai vertici già visitati.
 
-  **Algorithm 2 2-approssimazione di TSP** ^algorithm-2
+> [!info] Status per l'esame — AA 2025/26
+> Questo algoritmo non è stato svolto a lezione. Le dispense ufficiali richiedono comunque di conoscerne l'analisi nella misura necessaria a comprendere l'analisi di Christofides.
 
-  > 1. **function** 2-approx($G$)
-  > 2.  $T^* \gets MSTPrim(G)$
-  > 3.  $G^\prime \gets doubleEdges(T^*)$
-  > 4.  $E \gets EulerTour(G^\prime)$<br>
-  > 5.  $H \gets removeShortcuts(E)$
-  > 6.  **return** $H$
-  > 7. **end function**
+Nell'immagine si mostrano, in sequenza, $T^*$, il ciclo euleriano $E$ sul multigrafo con archi raddoppiati e il ciclo Hamiltoniano $H$ ottenuto mediante shortcut. Per chiarezza non sono disegnati gli altri archi del grafo completo.
 
-  Ora dobbiamo dimostrare che l'algoritmo appena definito ha $\alpha = 2$.
-  Iniziamo notando che:
+![[assets/2-approx.jpg|1000]]
 
-  - $cost(H) \leq cost(E)$, per via della disuguaglianza triangolare (i percorsi diretti hanno costi inferiori a quelli indiretti)
+**Algorithm 2 2-approssimazione di TSP** ^algorithm-2
 
-  - $cost(E) = 2 \cdot cost(T^*)$, perché abbiamo raddoppiato il numero di archi rispetto a $T^*$
+> 1. **function** 2-approx($G$)
+> 2.  $T^* \gets MSTPrim(G)$
+> 3.  $G^\prime \gets doubleEdges(T^*)$
+> 4.  $E \gets EulerTour(G^\prime)$<br>
+> 5.  $H \gets shortcutRepeatedVertices(E)$
+> 6.  **return** $H$
+> 7. **end function**
 
-  Mettiamo tutto insieme:
+**Realizzabilità e terminazione.** Il raddoppio degli archi conserva la connettività di $T^*$ e raddoppia il grado di ogni vertice; tutti i gradi di $G'$ sono quindi pari e il ciclo euleriano $E$ esiste. Poiché $G$ è completo, ogni shortcut usa un arco esistente; il lemma precedente garantisce che il costo non aumenti. MST, ciclo euleriano e scansione di $E$ sono tutti calcolabili in tempo polinomiale, quindi l'algoritmo termina in tempo polinomiale e restituisce un ciclo Hamiltoniano.
 
-  $$\begin{aligned}
-                          cost(H) \leq cost(E) = 2 \cdot cost(T^*)
-  \end{aligned}$$
+**Fattore di approssimazione.** Il ciclo $E$ usa due volte ogni arco di $T^*$ e gli shortcut non aumentano il costo, dunque
 
-  Se prendiamo $H^*$ (il ciclo Hamiltoniano di costo minimo) e ne rimuoviamo un arco, otteniamo uno spanning tree $T$ (non necessariamente minimo). Abbiamo quindi che:
+$$
+cost(H)\leq cost(E)=2\,cost(T^*).
+$$
 
-  $$\begin{aligned}
-                          cost(T^*) \leq cost(T) \leq cost(H^*)
-  \end{aligned}$$
+Rimuovendo un arco dal tour ottimo $H^*$ si ottiene uno spanning tree $T$. Poiché i costi sono non negativi e $T^*$ è un MST,
 
-  - La prima disuguaglianza vale perché $T^*$ è un minimum spanning tree, quindi non costa più di qualunque altro spanning tree $T$
+$$
+cost(T^*)\leq cost(T)\leq cost(H^*).
+$$
 
-  - La seconda disuguaglianza vale perché $T$ si ottiene rimuovendo un arco da $H^*$ e i pesi sono non-negativi, quindi $cost(T) \leq cost(H^*)$
+Combinando i due risultati segue
 
-  Collegando questa catena di disuguaglianze a quella impostata sopra, mettiamo in relazione $cost(H)$ e $cost(H^*)$, trovando infine che:
+$$
+cost(H)\leq 2\,cost(H^*),
+$$
 
-  $$\begin{aligned}
-                          \frac{cost(H)}{cost(H^*)} \leq 2
-  \end{aligned}$$
+quindi l'algoritmo è una **2-approssimazione**.
 
-  Ora andiamo a vedere che questo algoritmo ha istanze per le quali esattamente $\alpha = 2$. Per questo motivo possiamo dire che l'analisi fatta è "tight" (cioè stretta, esatta).
-  Lo dimostriamo considerando una particolare categoria di grafi.
+**Tightness dell'analisi.** Il fattore 2 è asintoticamente tight per questo algoritmo. Nella famiglia seguente gli archi disegnati hanno costo 1 e tutti gli altri costo 2. L'MST può essere la stella di costo $n-1$ e una scelta sfavorevole del ciclo euleriano produce, dopo gli shortcut, un tour con $n-2$ archi di costo 2 e due archi di costo 1.
 
-  ![[assets/2-approx-Pagina-2.jpg|1000]]
+![[assets/2-approx-Pagina-2.jpg|1000]]
 
-  Nell'immagine vengono rappresentati solo gli archi con costo 1, considerando implicitamente tutti gli altri come aventi costo 2. Supponiamo che il minimum spanning tree $T^*$ abbia una forma radiale e che il cammino euleriano $E$ visiti i nodi secondo l'ordine definito (in questo caso, alfabetico). Facendo la visita ed applicando gli shortcuts, il cammino Hamiltoniano $H$ ha costo $2 + 2 \cdot (n - 2) = 2 \cdot n - 2$. Per contro, $H^*$ ha costo $n$. Per questo motivo:
+Il tour restituito può quindi costare $2n-2$, mentre esiste un tour ottimo di costo $n$:
 
-  $$\begin{aligned}
-                          \frac{cost(approx)}{cost(opt)} = \frac{2 \cdot n - 2}{n} \xrightarrow{n \to \infty} 2
-  \end{aligned}$$
+$$
+\frac{cost(H)}{cost(H^*)}=\frac{2n-2}{n}=2-\frac{2}{n}\xrightarrow{n\to\infty}2.
+$$
 
-- **Algoritmo di Christofides**: questo algoritmo ha la grande importanza di garantire un fattore $\alpha = \frac{3}{2}$. Mentre la 2-approssimazione fa affidamento sullo sdoppiamento degli archi, che rende inevitabile un valore $\alpha = 2$, Christofides tentò di applicare il concetto di "matching".
-  Sia $G = (V, E)$ un grafo qualsiasi. Un matching è un sottoinsieme di $E$ composto da soli archi disgiunti; un caso particolare di matching è il "perfect" matching, che copre tutti i nodi. La condizione necessaria per avere perfect matching è che $|V|$ sia pari (altrimenti non potremmo chiudere tutti i nodi a coppie).
+**Algoritmo di Christofides.** La 2-approssimazione rende pari ogni grado raddoppiando l'intero MST. Christofides aggiunge invece archi soltanto ai vertici di grado dispari e garantisce un fattore di approssimazione $3/2$.
 
-  ![[assets/Screenshot 2024-10-01 111804.png|500]]
+Un **matching** è un insieme di archi a due a due privi di estremi comuni. Un **perfect matching** copre tutti i vertici: ciascun vertice è incidente a esattamente un arco del matching. Un numero pari di vertici è una condizione necessaria; in un grafo completo è anche sufficiente.
 
-  Nel nostro procedimento algoritmico, ancora una volta andiamo a costruire il MST $T^*$. Troviamo quindi tutti i nodi con grado dispari, perché costituiscono il principale ostacolo ad applicare il perfect matching. Questi nodi (e gli archi incidenti) individuano un sottografo completo indotto $G^\prime \subseteq G$. Andiamo ora a cercare un perfect matching $E^*$ di costo minimo su $G^\prime$ (quello nell'immagine è solo un esempio).
+![[assets/Screenshot 2024-10-01 111804.png|500]]
 
-  ![[assets/christof1.png|800]]
+Si calcola un MST $T^*$ e si considera l'insieme $U$ dei suoi vertici di grado dispari. Sul sottografo completo $G[U]$ si trova un **minimum-weight perfect matching** $M^*$.
 
-  Nell'esempio specifico c'è un perfect matching individuato da ogni possibile coppia di nodi, ma questo è comunque sempre possibile, a patto che $G^\prime$ abbia un numero pari di vertici e sia completo. Dimostreremo infatti che l'insieme $U$ dei vertici di grado dispari ha sempre cardinalità pari.
-  Infine, uniamo come multinsieme gli archi di $T^*$ ed $E^*$, poi calcoliamo un ciclo euleriano $E$. Analogamente alla 2-approssimazione percorriamo $E$ e saltiamo i vertici già visitati (shortcut), ottenendo il ciclo Hamiltoniano $H$.
+![[assets/christof1.png|800]]
 
-  ![[assets/christof2.png|700]]
+Unendo come multinsieme gli archi di $T^*$ e $M^*$ si ottiene un multigrafo euleriano $F$. Dal suo ciclo euleriano $E$ si ricava infine il ciclo Hamiltoniano $H$ mediante shortcut.
 
-  Riscriviamo tutto in pseudo-codice:
+![[assets/christof2.png|700]]
 
-  **Algorithm 3 Algoritmo di Christofides per TSP** ^algorithm-3
+**Algorithm 3 Algoritmo di Christofides per TSP** ^algorithm-3
 
-  > 1. **function** Christofides-approx($G$)
-  > 2.  $T^* \gets MSTPrim(G)$
-  > 3.  $U \gets getOddDegreeNodes(T^*)$
-  > 4.  $G^\prime \gets getInducedSubgraph(G, U)$
-  > 5.  $E^* \gets minimumWeightPerfectMatching(G^\prime)$<br>
-  > 6.  $F \gets multisetUnion(T^*, E^*)$<br>
-  > 7.  $E \gets EulerTour(F)$<br>
-  > 8.  $H \gets removeShortcuts(E)$
-  > 9.  **return** $H$
-  > 10. **end function**
+> 1. **function** Christofides-approx($G$)
+> 2.  $T^* \gets MSTPrim(G)$
+> 3.  $U \gets getOddDegreeNodes(T^*)$
+> 4.  $G^\prime \gets getInducedSubgraph(G, U)$
+> 5.  $M^* \gets minimumWeightPerfectMatching(G^\prime)$<br>
+> 6.  $F \gets multisetUnion(T^*, M^*)$<br>
+> 7.  $E \gets EulerTour(F)$<br>
+> 8.  $H \gets shortcutRepeatedVertices(E)$
+> 9.  **return** $H$
+> 10. **end function**
 
-  Facciamo un passo indietro. Ora dimostriamo che esistono sempre un numero pari di nodi di grado dispari nel nostro spanning tree. Nei grafi non diretti abbiamo che:
+**Perché l'algoritmo è sempre eseguibile.** Per il lemma della stretta di mano,
 
-  $$\begin{aligned}
-                          \sum_{v \in V} deg(v) = 2 \cdot |E|
-  \end{aligned}$$
+$$
+\sum_{v\in V}\deg(v)=2|E|,
+$$
 
-  Questo numero è per forza sempre pari, essendo $|E|$ moltiplicato per 2, che è pari. Proviamo ora a sommare tra loro i gradi dei nodi con grado pari e quelli con grado dispari. Abbiamo:
+quindi ogni grafo non diretto ha un numero pari di vertici di grado dispari. Ne segue che $|U|$ è pari e, poiché $G[U]$ è completo, esiste un perfect matching; quello di costo minimo può essere calcolato in tempo polinomiale.
 
-  $$\begin{aligned}
-                          \sum_{v \in V : deg(v) \% 2 = 0} deg(v) + \sum_{v \in V : deg(v) \% 2 = 1} deg(v)
-  \end{aligned}$$
+Ogni vertice di $U$ riceve esattamente un arco aggiuntivo da $M^*$ e passa da grado dispari a grado pari; i vertici fuori da $U$ conservano grado pari. Inoltre $F$ è connesso perché contiene lo spanning tree $T^*$. Esiste dunque un ciclo euleriano $E$. Completezza e disuguaglianza triangolare permettono infine di trasformarlo mediante shortcut in un ciclo Hamiltoniano $H$ senza aumentarne il costo. Tutti i passi sono polinomiali; il più oneroso è il calcolo del minimum-weight perfect matching.
 
-  La prima sommatoria riguarda i gradi pari, percui è sempre pari. La seconda sommatoria riguarda i gradi dispari, percui è pari quando $|v \in V : deg(v) \% 2 = 1|$ è pari. In ogni modo, essendo $\sum_{v \in V} deg(v)$ pari, la seconda sommatoria è sempre pari, perché lo è anche la prima, dovendo entrambe sommare ad un numero pari. Quando andiamo a prendere i nodi di grado dispari in $T^*$, quindi, ne prendiamo sempre un numero pari. L'algoritmo è dunque applicabile per ogni istanza di $T^*$, inoltre ha un tempo di esecuzione polinomiale.
-  Adesso cerchiamo di stimare l'upper bound dell'errore di approssimazione (cioè il valore di $\alpha$). Come per la 2-approssimazione, possiamo costruire una catena di disuguaglianze, che andremo poi a cercare di confrontare con l'ottimo.
+**Fattore di approssimazione.** Come nella 2-approssimazione, l'MST fornisce il lower bound
 
-  $$\begin{aligned}
-                          cost(H) \leq cost(E) = cost(T^*) + cost(E^*)
-  \end{aligned}$$
+$$
+cost(T^*)\leq cost(H^*).
+$$
 
-  Per quanto riguarda la prima disuguaglianza, è la stessa della 2-approssimazione. L'uguaglianza è banalmente vera per costruzione. Invece, riguardo all'ottimo, andiamo ancora una volta a rimuovere un arco da $H^*$, trovando l'albero di copertura $T$. Abbiamo:
+Consideriamo ora l'ordine in cui il tour ottimo $H^*$ visita i vertici di $U$. Applicando gli shortcut fra visite consecutive si ottiene un ciclo $\Gamma$ sui soli vertici di $U$ tale che
 
-  $$\begin{aligned}
-                          cost(T^*) \leq cost(T) \leq cost(H^*)
-  \end{aligned}$$
+$$
+cost(\Gamma)\leq cost(H^*).
+$$
 
-  proprio come per la 2-approssimazione.
-  Ora, consideriamo nuovamente $H^*$. Il cammino Hamiltoniano ottimo passa sicuramente per tutti i nodi di grado dispari che avevamo trovato su $T^*$. Prendiamo un ciclo Hamiltoniano $\Gamma$ che collega quei nodi, nell'ordine in cui compaiono in $H^*$. Siccome questi nodi sono in numero pari, si può vedere $\Gamma$ come la composizione di esattamente due perfect matching ($M_1$ e $M_2$). In particolare, basta considerare sequenzialmente un arco sì ed uno no per ricavare uno dei perfect matching. Anche qui l'immagine è solo indicativa.
+Poiché $|U|$ è pari, gli archi di $\Gamma$, contati con la loro molteplicità, si possono ripartire alternandoli in due perfect matching $M_1$ e $M_2$ di $G[U]$.
 
-  ![[assets/christof3.png|1000]]
+![[assets/christof3.png|1000]]
 
-  Siccome $M_1 + M_2 = \Gamma$, possiamo scrivere:
+Essendo $M^*$ un perfect matching di costo minimo,
 
-  $$\begin{aligned}
-                          cost(\Gamma) = cost(M_1) + cost(M_2)
-  \end{aligned}$$
+$$
+2\,cost(M^*)\leq cost(M_1)+cost(M_2)=cost(\Gamma)\leq cost(H^*),
+$$
 
-  Cerchiamo di mettere in relazione il costo di $H^*$ e quello di $\Gamma$:
+e pertanto
 
-  $$\begin{aligned}
-                          cost(\Gamma) \leq cost(H^*)
-  \end{aligned}$$
+$$
+cost(M^*)\leq \frac{cost(H^*)}{2}.
+$$
 
-  Questo è vero per la disuguaglianza triangolare: $\Gamma$ è come un cammino di scorciatoie su $H^*$.
-  Ora invece tentiamo di mettere in relazione il costo di $\Gamma$ e il costo di $E^*$. Siccome quest'ultimo è il perfect matching di costo minimo, mentre non abbiamo fatto alcuna ipotesi su $M_1$ e $M_2$, possiamo dire che:
+Il ciclo euleriano contiene esattamente gli archi di $T^*$ e di $M^*$, mentre gli shortcut non aumentano il costo. Di conseguenza,
 
-  $$\begin{aligned}
-                          2 \cdot cost(E^*) \leq cost(M_1) + cost(M_2) = cost(\Gamma) \leq cost(H^*) \Rightarrow cost(E^*) \leq \frac{cost(H^*)}{2}
-  \end{aligned}$$
+$$
+\begin{aligned}
+cost(H)&\leq cost(E)\\
+       &=cost(T^*)+cost(M^*)\\
+       &\leq cost(H^*)+\frac{cost(H^*)}{2}\\
+       &=\frac{3}{2}\,cost(H^*).
+\end{aligned}
+$$
 
-  Infine, colleghiamo le disuguaglianze sostituendo al membro a destra ciò che abbiamo appena trovato:
-
-  $$\begin{aligned}
-                          cost(H) \leq cost(H^*) + \frac{cost(H^*)}{2} = \frac{3}{2} \cdot cost(H^*)
-  \end{aligned}$$
-
-  Come per la 2-approssimazione, possiamo dimostrare che esistono classi di grafi per cui abbiamo esattamente $\alpha = \frac{3}{2}$.
-
-La 2-approssimazione e l'algoritmo di Christofides sono due algoritmi ad hoc (dunque specificamente ideati) per la risoluzione di TSP. Un altro possibile metodo è quello di applicare tecniche risolutive standard (es. programmazione lineare, approccio greedy, ecc\...).
+Christofides è quindi una **$3/2$-approssimazione** per il TSP metrico. Il passaggio decisivo rispetto alla 2-approssimazione è che, invece di aggiungere un'altra copia dell'intero MST, rende pari i gradi aggiungendo un matching che costa al più metà dell'ottimo.
 
 ###### Branch and bound
 
