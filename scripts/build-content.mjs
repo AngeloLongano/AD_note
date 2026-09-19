@@ -9,6 +9,10 @@ const widgets = {
   'master-theorem': {
     component: 'MasterTheoremWidget',
     importPath: '../../components/widgets/MasterTheoremWidget.astro'
+  },
+  'sat-fnc': {
+    component: 'SatFnCWidget',
+    importPath: '../../components/widgets/SatFnCWidget.astro'
   }
 };
 

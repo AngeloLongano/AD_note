@@ -1,0 +1,196 @@
+---
+interface Props {
+  standalone?: boolean;
+}
+
+const { standalone = false } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<section class:list={["sat-widget", { standalone }]} data-sat-widget>
+  <div class="widget-heading">
+    <div>
+      <p class="eyebrow">Laboratorio interattivo</p>
+      <h2>SAT · formula in FNC</h2>
+    </div>
+    {!standalone && <a href={`${base}/widgets/sat-fnc`}>Apri a pagina intera <span aria-hidden="true">↗</span></a>}
+  </div>
+
+  <p class="help">Usa <code>!</code> oppure <code>¬</code> per «non», <code>|</code> oppure <code>∨</code> per «oppure» e <code>&amp;</code> oppure <code>∧</code> per «e». Le variabili possono avere più caratteri, ad esempio <code>x1</code> o <code>piove</code>.</p>
+
+  <form data-form>
+    <label for="sat-formula">Formula</label>
+    <textarea id="sat-formula" data-input rows="3" spellcheck="false">(a | b | c) & (!b | c) & (!a | !b | c)</textarea>
+    <div class="actions">
+      <button type="submit">Verifica SAT</button>
+      <button type="button" class="secondary" data-example="sat">Esempio SAT</button>
+      <button type="button" class="secondary" data-example="unsat">Esempio UNSAT</button>
+    </div>
+  </form>
+
+  <div class="result" aria-live="polite" data-result>
+    <p class="status" data-status>Inserisci una formula in FNC e premi «Verifica SAT».</p>
+    <div class="analysis" data-analysis hidden>
+      <div>
+        <p class="label">Letterali</p>
+        <p data-literals></p>
+      </div>
+      <div>
+        <p class="label">Clausole</p>
+        <ol data-clauses></ol>
+      </div>
+      <div>
+        <p class="label">Assegnamento trovato</p>
+        <p data-assignment></p>
+      </div>
+    </div>
+  </div>
+
+  <p class="note">Il widget risolve la formula con ricerca e propagazione dei letterali unitari: è uno strumento per capire la definizione, non un solver SAT ottimizzato per istanze industriali.</p>
+</section>
+
+<script>
+  type Literal = { name: string; negated: boolean };
+  type Formula = Literal[][];
+
+  const examples = {
+    sat: '(a | b | c) & (!b | c) & (!a | !b | c)',
+    unsat: '(a | b) & (!a | b) & (a | !b) & (!a | !b)'
+  };
+
+  const parse = (source: string): Formula => {
+    const normalized = source.replace(/¬/g, '!').replace(/[∨]/g, '|').replace(/[∧]/g, '&').trim();
+    if (!normalized) throw new Error('La formula è vuota.');
+    const clauseTexts = normalized.split('&').map((part) => part.trim());
+    if (clauseTexts.some((part) => !part)) throw new Error('Manca una clausola prima o dopo «e».');
+
+    return clauseTexts.map((rawClause) => {
+      const clause = rawClause.replace(/^\(+\s*/, '').replace(/\s*\)+$/, '');
+      if (!clause) throw new Error('Una clausola non contiene letterali.');
+      const literalTexts = clause.split('|').map((part) => part.trim());
+      if (literalTexts.some((part) => !part)) throw new Error('Manca un letterale accanto a «oppure».');
+      return literalTexts.map((rawLiteral) => {
+        const match = rawLiteral.match(/^(!)?\s*([A-Za-z_][A-Za-z0-9_]*)$/);
+        if (!match) throw new Error(`«${rawLiteral}» non è un letterale valido.`);
+        return { negated: Boolean(match[1]), name: match[2] };
+      });
+    });
+  };
+
+  const solve = (formula: Formula): Record<string, boolean> | null => {
+    const simplify = (clauses: Formula, assignment: Record<string, boolean>): Formula | null => {
+      const next: Formula = [];
+      for (const clause of clauses) {
+        let satisfied = false;
+        const remaining: Literal[] = [];
+        for (const literal of clause) {
+          const value = assignment[literal.name];
+          if (value === undefined) remaining.push(literal);
+          else if (value !== literal.negated) satisfied = true;
+        }
+        if (satisfied) continue;
+        if (!remaining.length) return null;
+        next.push(remaining);
+      }
+      return next;
+    };
+
+    const search = (clauses: Formula, assignment: Record<string, boolean>): Record<string, boolean> | null => {
+      let current = simplify(clauses, assignment);
+      if (current === null) return null;
+      while (true) {
+        const unit = current.find((clause) => clause.length === 1)?.[0];
+        if (!unit) break;
+        const value = !unit.negated;
+        if (assignment[unit.name] !== undefined && assignment[unit.name] !== value) return null;
+        assignment = { ...assignment, [unit.name]: value };
+        current = simplify(current, assignment);
+        if (current === null) return null;
+      }
+      if (!current.length) return assignment;
+      const literal = current[0][0];
+      for (const value of [!literal.negated, literal.negated]) {
+        const answer = search(current, { ...assignment, [literal.name]: value });
+        if (answer) return answer;
+      }
+      return null;
+    };
+
+    return search(formula, {});
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-sat-widget]').forEach((widget) => {
+    const form = widget.querySelector<HTMLFormElement>('[data-form]')!;
+    const input = widget.querySelector<HTMLTextAreaElement>('[data-input]')!;
+    const status = widget.querySelector<HTMLElement>('[data-status]')!;
+    const analysis = widget.querySelector<HTMLElement>('[data-analysis]')!;
+    const literalsOutput = widget.querySelector<HTMLElement>('[data-literals]')!;
+    const clausesOutput = widget.querySelector<HTMLOListElement>('[data-clauses]')!;
+    const assignmentOutput = widget.querySelector<HTMLElement>('[data-assignment]')!;
+
+    const show = () => {
+      try {
+        const formula = parse(input.value);
+        const variables = [...new Set(formula.flat().map((literal) => literal.name))].sort();
+        const assignment = solve(formula);
+        const literalText = formula.flat().map((literal) => `${literal.negated ? '¬' : ''}${literal.name}`);
+        literalsOutput.textContent = [...new Set(literalText)].join(', ');
+        clausesOutput.replaceChildren(...formula.map((clause) => {
+          const item = document.createElement('li');
+          item.textContent = clause.map((literal) => `${literal.negated ? '¬' : ''}${literal.name}`).join(' ∨ ');
+          return item;
+        }));
+        analysis.hidden = false;
+        if (assignment) {
+          status.textContent = 'SAT — la formula è soddisfacibile.';
+          status.className = 'status sat';
+          assignmentOutput.textContent = variables.map((name) => `${name} = ${assignment[name] ?? false ? 'vero' : 'falso'}`).join(', ');
+        } else {
+          status.textContent = 'UNSAT — nessun assegnamento rende vere tutte le clausole.';
+          status.className = 'status unsat';
+          assignmentOutput.textContent = 'Nessun assegnamento soddisfacente.';
+        }
+      } catch (error) {
+        status.textContent = `Formula non valida: ${(error as Error).message}`;
+        status.className = 'status error';
+        analysis.hidden = true;
+      }
+    };
+
+    form.addEventListener('submit', (event) => { event.preventDefault(); show(); });
+    widget.querySelectorAll<HTMLButtonElement>('[data-example]').forEach((button) => {
+      button.addEventListener('click', () => { input.value = examples[button.dataset.example as keyof typeof examples]; show(); });
+    });
+    show();
+  });
+</script>
+
+<style>
+  .sat-widget { margin: 2.5rem 0; padding: clamp(1.2rem, 3vw, 2rem); color: #eaf7f3; background: #0d3b35; border: 1px solid #28625a; border-radius: 1.1rem; box-shadow: 0 1.2rem 3rem rgba(13, 59, 53, .16); }
+  .sat-widget.standalone { margin: 0; }
+  .widget-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+  .widget-heading h2 { margin: .15rem 0 0; color: #fff; font: 700 clamp(1.45rem, 3vw, 2rem)/1.1 var(--font-sans); }
+  .widget-heading a { color: #a9e7d9; font-size: .88rem; text-decoration: none; }
+  .eyebrow { margin: 0; color: #7ed7c3; font: 700 .72rem/1 var(--font-sans); letter-spacing: .12em; text-transform: uppercase; }
+  .help, .note { font: .9rem/1.55 var(--font-sans); }
+  .help { margin: 1.35rem 0; color: #d6eee9; }
+  code { padding: .08rem .28rem; border-radius: .25rem; background: #164a42; color: #fff; }
+  form { display: grid; gap: .55rem; }
+  label { color: #d6eee9; font: 700 .9rem var(--font-sans); }
+  textarea { box-sizing: border-box; width: 100%; resize: vertical; padding: .8rem; border: 1px solid #438178; border-radius: .7rem; background: #082a26; color: #fff; font: .95rem/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; }
+  textarea:focus { outline: 2px solid #efbb55; outline-offset: 2px; }
+  .actions { display: flex; flex-wrap: wrap; gap: .55rem; }
+  button { padding: .55rem .8rem; border: 1px solid #efbb55; border-radius: 999px; background: #efbb55; color: #153c36; font: 700 .8rem var(--font-sans); cursor: pointer; }
+  button.secondary { border-color: #438178; background: transparent; color: #eaf7f3; }
+  button:hover, button:focus-visible { filter: brightness(1.12); outline: 2px solid #fff; outline-offset: 2px; }
+  .result { margin-top: 1.2rem; padding: 1rem 1.1rem; border-radius: .8rem; background: #f5faf8; color: #153c36; }
+  .status { margin: 0; font: 800 1rem/1.35 var(--font-sans); }
+  .status.sat { color: #166b58; }
+  .status.unsat, .status.error { color: #9b3d2c; }
+  .analysis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #c9ded8; }
+  .analysis p:not(.label), .analysis ol { margin: .3rem 0 0; font: .86rem/1.5 var(--font-sans); }
+  .analysis ol { padding-left: 1.2rem; }
+  .label { margin: 0; color: #437068; font: 800 .68rem var(--font-sans); letter-spacing: .08em; text-transform: uppercase; }
+  .note { margin: 1rem 0 0; color: #a9e7d9; }
+  @media (max-width: 700px) { .widget-heading { display: block; } .widget-heading a { display: inline-block; margin-top: .6rem; } .analysis { grid-template-columns: 1fr; } }
+</style>

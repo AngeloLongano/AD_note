@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SatFnCWidget from '../../components/widgets/SatFnCWidget.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout title="SAT in FNC — Laboratorio interattivo">
+  <SiteHeader />
+  <main class="laboratory">
+    <a class="back-link" href={`${base}/#sat-e-linizio-della-catena`}>← Torna agli appunti</a>
+    <header class="lab-intro">
+      <p>Algoritmi Distribuiti · Laboratorio</p>
+      <h1>Esplora SAT in forma normale congiuntiva</h1>
+      <p>Scrivi una formula, osservane la struttura e verifica se esiste un assegnamento che la soddisfa.</p>
+    </header>
+    <SatFnCWidget standalone />
+  </main>
+</BaseLayout>

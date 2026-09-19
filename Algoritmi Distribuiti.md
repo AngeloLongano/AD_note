@@ -312,6 +312,8 @@ Nel corso SAT è presentato su formule in **forma normale congiuntiva** (FNC):
 - una clausola è una disgiunzione di letterali;
 - una formula in FNC è una congiunzione di clausole.
 
+[Prova una formula in FNC](./widgets/sat-fnc)
+
 Il problema chiede se esista un assegnamento di verità alle variabili che renda vera l'intera formula. Per esempio,
 
 $$
