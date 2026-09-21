@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="650" viewBox="0 0 1280 650" role="img" aria-labelledby="title desc">
+  <title id="title">Istanza del ciclo hamiltoniano e istanza TSP corrispondente</title>
+  <desc id="desc">A sinistra un grafo non pesato con cinque vertici e sei archi. A destra gli stessi vertici formano un grafo completo: gli archi originali hanno costo zero e i quattro archi aggiunti hanno costo uno.</desc>
+  <defs>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #182530; }
+      .background { fill: #f7fafb; }
+      .panel { fill: #ffffff; stroke: #c8d5dc; stroke-width: 2; }
+      .heading { font-size: 28px; font-weight: 700; }
+      .subheading { font-size: 20px; fill: #526471; }
+      .node { fill: #ffffff; stroke: #1f3544; stroke-width: 3; }
+      .node-label { font-size: 22px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+      .original { fill: none; stroke: #146b78; stroke-width: 5; stroke-linecap: round; }
+      .added { fill: none; stroke: #c46a26; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 10 9; }
+      .arrow { fill: none; stroke: #375365; stroke-width: 4; marker-end: url(#arrowhead); }
+      .arrow-label { font-size: 19px; font-weight: 700; text-anchor: middle; }
+      .legend { font-size: 20px; }
+    </style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1,1 L11,6 L1,11 Z" fill="#375365"/>
+    </marker>
+  </defs>
+
+  <rect class="background" width="1280" height="650" rx="24"/>
+  <rect class="panel" x="35" y="35" width="510" height="570" rx="20"/>
+  <rect class="panel" x="735" y="35" width="510" height="570" rx="20"/>
+
+  <text class="heading" x="65" y="88">Ciclo hamiltoniano: G = (V, E)</text>
+  <text class="subheading" x="65" y="122">Grafo non pesato, non necessariamente completo</text>
+  <text class="heading" x="765" y="88">TSP: G′ = (V, E′, c)</text>
+  <text class="subheading" x="765" y="122">Stessi vertici, tutti gli archi possibili</text>
+
+  <!-- Original graph: pentagon A-B-C-D-E-A and chord A-C. -->
+  <g class="original">
+    <path d="M290 195 L445 305 L385 485 L195 485 L135 305 Z"/>
+    <path d="M290 195 L385 485"/>
+  </g>
+
+  <!-- On the TSP graph, dashed edges are exactly the missing edges of G. -->
+  <g class="added">
+    <path d="M990 195 L895 485"/>
+    <path d="M1145 305 L895 485"/>
+    <path d="M1145 305 L835 305"/>
+    <path d="M1085 485 L835 305"/>
+  </g>
+  <g class="original">
+    <path d="M990 195 L1145 305 L1085 485 L895 485 L835 305 Z"/>
+    <path d="M990 195 L1085 485"/>
+  </g>
+
+  <!-- Vertices are drawn last so every edge stops visually at a vertex. -->
+  <g>
+    <circle class="node" cx="290" cy="195" r="21"/><text class="node-label" x="290" y="195">A</text>
+    <circle class="node" cx="445" cy="305" r="21"/><text class="node-label" x="445" y="305">B</text>
+    <circle class="node" cx="385" cy="485" r="21"/><text class="node-label" x="385" y="485">C</text>
+    <circle class="node" cx="195" cy="485" r="21"/><text class="node-label" x="195" y="485">D</text>
+    <circle class="node" cx="135" cy="305" r="21"/><text class="node-label" x="135" y="305">E</text>
+    <circle class="node" cx="990" cy="195" r="21"/><text class="node-label" x="990" y="195">A</text>
+    <circle class="node" cx="1145" cy="305" r="21"/><text class="node-label" x="1145" y="305">B</text>
+    <circle class="node" cx="1085" cy="485" r="21"/><text class="node-label" x="1085" y="485">C</text>
+    <circle class="node" cx="895" cy="485" r="21"/><text class="node-label" x="895" y="485">D</text>
+    <circle class="node" cx="835" cy="305" r="21"/><text class="node-label" x="835" y="305">E</text>
+  </g>
+
+  <path class="arrow" d="M570 312 H710"/>
+  <text class="arrow-label" x="640" y="278">completa</text>
+  <text class="arrow-label" x="640" y="370">e assegna i costi</text>
+
+  <path class="original" d="M780 560 H835"/>
+  <text class="legend" x="850" y="567">Arco di G: costo 0</text>
+  <path class="added" d="M780 594 H835"/>
+  <text class="legend" x="850" y="601">Arco aggiunto: costo 1</text>
+</svg>

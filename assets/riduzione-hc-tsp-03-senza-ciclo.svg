@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="710" viewBox="0 0 1280 710" role="img" aria-labelledby="title desc">
+  <title id="title">Se G non ha un ciclo hamiltoniano, ogni tour TSP usa un arco di costo uno</title>
+  <desc id="desc">A sinistra due triangoli condividono il solo vertice A: il grafo non ha un ciclo hamiltoniano. A destra la corrispondente istanza TSP completa. Il tour A-B-C-E-D-A usa l'arco aggiunto C-E di costo uno; qualunque tour deve usare almeno un arco aggiunto.</desc>
+  <defs>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #182530; }
+      .background { fill: #f7fafb; }
+      .panel { fill: #ffffff; stroke: #c8d5dc; stroke-width: 2; }
+      .heading { font-size: 27px; font-weight: 700; }
+      .subheading { font-size: 20px; fill: #526471; }
+      .node { fill: #ffffff; stroke: #1f3544; stroke-width: 3; }
+      .node-label { font-size: 22px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+      .original { fill: none; stroke: #146b78; stroke-width: 5; stroke-linecap: round; }
+      .unused-original { fill: none; stroke: #91aeb4; stroke-width: 3; stroke-linecap: round; }
+      .unused-added { fill: none; stroke: #d2a276; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 9 9; }
+      .tour-zero { fill: none; stroke: #6551a4; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+      .tour-one { fill: none; stroke: #bb5720; stroke-width: 8; stroke-linecap: round; stroke-dasharray: 16 11; }
+      .arrow { fill: none; stroke: #375365; stroke-width: 4; marker-end: url(#arrowhead); }
+      .arrow-label { font-size: 19px; font-weight: 700; text-anchor: middle; }
+      .note { font-size: 23px; font-weight: 700; text-anchor: middle; }
+      .conclusion { font-size: 25px; font-weight: 700; text-anchor: middle; fill: #3d3177; }
+      .cost-label { font-size: 24px; font-weight: 700; fill: #9b4315; text-anchor: middle; }
+    </style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1,1 L11,6 L1,11 Z" fill="#375365"/>
+    </marker>
+  </defs>
+
+  <rect class="background" width="1280" height="710" rx="24"/>
+  <rect class="panel" x="35" y="35" width="510" height="545" rx="20"/>
+  <rect class="panel" x="735" y="35" width="510" height="545" rx="20"/>
+
+  <text class="heading" x="65" y="88">G senza ciclo hamiltoniano</text>
+  <text class="subheading" x="65" y="122">I due triangoli condividono solo A</text>
+  <text class="heading" x="765" y="88">Istanza TSP G′</text>
+  <text class="subheading" x="765" y="122">Tour A → B → C → E → D → A</text>
+
+  <!-- Two triangles meet at the articulation vertex A. -->
+  <g class="original">
+    <path d="M290 190 L130 330 L130 485 Z"/>
+    <path d="M290 190 L450 330 L450 485 Z"/>
+  </g>
+
+  <!-- The four missing cross edges complete G'. -->
+  <g class="unused-added">
+    <path d="M830 330 L1150 330"/>
+    <path d="M830 330 L1150 485"/>
+    <path d="M830 485 L1150 330"/>
+  </g>
+  <g class="unused-original">
+    <path d="M990 190 L830 485"/>
+    <path d="M990 190 L1150 485"/>
+  </g>
+  <g class="tour-zero">
+    <path d="M990 190 L830 330 L830 485"/>
+    <path d="M1150 485 L1150 330 L990 190"/>
+  </g>
+  <path class="tour-one" d="M830 485 L1150 485"/>
+
+  <g>
+    <circle class="node" cx="290" cy="190" r="21"/><text class="node-label" x="290" y="190">A</text>
+    <circle class="node" cx="130" cy="330" r="21"/><text class="node-label" x="130" y="330">B</text>
+    <circle class="node" cx="130" cy="485" r="21"/><text class="node-label" x="130" y="485">C</text>
+    <circle class="node" cx="450" cy="330" r="21"/><text class="node-label" x="450" y="330">D</text>
+    <circle class="node" cx="450" cy="485" r="21"/><text class="node-label" x="450" y="485">E</text>
+    <circle class="node" cx="990" cy="190" r="21"/><text class="node-label" x="990" y="190">A</text>
+    <circle class="node" cx="830" cy="330" r="21"/><text class="node-label" x="830" y="330">B</text>
+    <circle class="node" cx="830" cy="485" r="21"/><text class="node-label" x="830" y="485">C</text>
+    <circle class="node" cx="1150" cy="330" r="21"/><text class="node-label" x="1150" y="330">D</text>
+    <circle class="node" cx="1150" cy="485" r="21"/><text class="node-label" x="1150" y="485">E</text>
+  </g>
+
+  <path class="arrow" d="M570 330 H710"/>
+  <text class="arrow-label" x="640" y="295">completa</text>
+  <text class="arrow-label" x="640" y="387">e pesa</text>
+  <text class="note" x="290" y="547">Per attraversarli, A andrebbe rivisitato</text>
+  <text class="cost-label" x="990" y="473">c(C,E) = 1</text>
+  <text class="note" x="990" y="547">Tour mostrato: costo 1</text>
+
+  <text class="conclusion" x="640" y="633">Se G non ha un ciclo hamiltoniano, ogni tour in G′</text>
+  <text class="conclusion" x="640" y="667">usa almeno un arco aggiunto: OPT(G′) ≥ 1</text>
+</svg>

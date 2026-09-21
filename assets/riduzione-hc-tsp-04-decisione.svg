@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="835" viewBox="0 0 1440 835" role="img" aria-labelledby="title desc">
+  <title id="title">Le due trasformazioni polinomiali nella riduzione da HC a TSP</title>
+  <desc id="desc">Lo schema segue la figura degli appunti: una prima trasformazione converte G in un grafo completo G primo con costo zero sugli archi originali e uno sugli archi aggiunti. Il TSP ottimo restituisce un tour H stella. La seconda trasformazione ne somma i costi e legge K: zero significa sì per HC, un costo positivo significa no. Sotto, quattro vertici mostrano concretamente i due passaggi.</desc>
+  <defs>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #1c2b35; }
+      .background { fill: #f8fafb; }
+      .boundary { fill: #ffffff; stroke: #8c9ca6; stroke-width: 2.5; stroke-dasharray: 12 9; }
+      .card { fill: #ffffff; stroke: #b9cbd4; stroke-width: 2; }
+      .transform { fill: #eaf4f5; stroke: #3a7882; }
+      .solver { fill: #f1eef9; stroke: #7866a9; }
+      .decode { fill: #fff4e9; stroke: #b77436; }
+      .mini { fill: #fcfdfd; stroke: #d0dce1; stroke-width: 2; }
+      .title { font-size: 33px; font-weight: 700; }
+      .boundary-title { font-size: 20px; font-weight: 700; fill: #435663; }
+      .card-title { font-size: 22px; font-weight: 700; }
+      .body { font-size: 19px; }
+      .small { font-size: 17px; fill: #546773; }
+      .mini-title { font-size: 19px; font-weight: 700; }
+      .math { font-size: 20px; font-weight: 700; }
+      .external { font-size: 21px; font-weight: 700; }
+      .conclusion { font-size: 26px; font-weight: 700; text-anchor: middle; fill: #3d3279; }
+      .arrow { fill: none; stroke: #3d5564; stroke-width: 3.5; marker-end: url(#arrowhead); }
+      .edge { fill: none; stroke: #19707c; stroke-width: 3.5; stroke-linecap: round; }
+      .edge-one { fill: none; stroke: #c06b2a; stroke-width: 3.5; stroke-dasharray: 8 7; stroke-linecap: round; }
+      .tour { fill: none; stroke: #6651a5; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+      .node { fill: #ffffff; stroke: #263f4c; stroke-width: 2; }
+      .node-label { font-size: 15px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+      .graph-label { font-size: 18px; font-weight: 700; text-anchor: middle; }
+      .cost { font-size: 17px; font-weight: 700; text-anchor: middle; fill: #58458f; }
+      .yes { fill: #e5f3ea; stroke: #438666; stroke-width: 2; }
+      .no { fill: #fff0e6; stroke: #c0783d; stroke-width: 2; }
+      .decision-text { font-size: 21px; font-weight: 700; }
+    </style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1,1 L11,6 L1,11 Z" fill="#3d5564"/>
+    </marker>
+  </defs>
+
+  <rect class="background" width="1440" height="835" rx="24"/>
+  <text class="title" x="38" y="58">Come si usa il TSP per decidere il ciclo hamiltoniano</text>
+
+  <rect class="boundary" x="143" y="105" width="1165" height="635" rx="28"/>
+  <text class="boundary-title" x="175" y="139">Procedura per HC che usa una chiamata al TSP ottimo</text>
+
+  <!-- Upper reduction pipeline: input, first polynomial transformation, oracle, second polynomial transformation, answer. -->
+  <text class="external" x="18" y="219">Istanza HC</text>
+  <text class="external" x="44" y="251">G</text>
+  <path class="arrow" d="M105 235 H174"/>
+
+  <rect class="card transform" x="185" y="177" width="360" height="145" rx="18"/>
+  <text class="card-title" x="208" y="218">1. Trasformazione polinomiale</text>
+  <text class="body" x="208" y="255">Completa G e assegna costi 0/1</text>
+  <text class="small" x="208" y="294">Tempo: O(n²), con n = |V|</text>
+
+  <path class="arrow" d="M545 249 H626"/>
+  <text class="math" x="578" y="227">G′</text>
+  <rect class="card solver" x="637" y="177" width="180" height="145" rx="18"/>
+  <text class="card-title" x="660" y="218">TSP ottimo</text>
+  <text class="body" x="660" y="255">Trova H*</text>
+  <text class="small" x="660" y="294">Tour minimo</text>
+
+  <path class="arrow" d="M817 249 H898"/>
+  <text class="math" x="838" y="227">H*</text>
+  <rect class="card decode" x="909" y="177" width="355" height="145" rx="18"/>
+  <text class="card-title" x="932" y="218">2. Trasformazione polinomiale</text>
+  <text class="body" x="932" y="255">Calcola K = c(H*) e confronta con 0</text>
+  <text class="small" x="932" y="294">Tempo: O(n) per sommare i costi</text>
+
+  <path class="arrow" d="M1264 249 H1327"/>
+  <text class="external" x="1335" y="235">SÌ</text>
+  <text class="external" x="1335" y="267">o NO</text>
+
+  <!-- First transformation: G is a four-vertex graph with five edges. G' adds the missing B-D edge. -->
+  <rect class="mini" x="185" y="357" width="360" height="340" rx="18"/>
+  <text class="mini-title" x="205" y="392">Da G all’istanza TSP pesata</text>
+  <g class="edge">
+    <path d="M270 442 L328 514 L270 586 L212 514 Z"/>
+    <path d="M270 442 L270 586"/>
+    <path d="M460 442 L518 514 L460 586 L402 514 Z"/>
+    <path d="M460 442 L460 586"/>
+  </g>
+  <path class="edge-one" d="M402 514 H518"/>
+  <path class="arrow" d="M347 514 H383"/>
+  <g>
+    <circle class="node" cx="270" cy="442" r="15"/><text class="node-label" x="270" y="442">A</text>
+    <circle class="node" cx="328" cy="514" r="15"/><text class="node-label" x="328" y="514">B</text>
+    <circle class="node" cx="270" cy="586" r="15"/><text class="node-label" x="270" y="586">C</text>
+    <circle class="node" cx="212" cy="514" r="15"/><text class="node-label" x="212" y="514">D</text>
+    <circle class="node" cx="460" cy="442" r="15"/><text class="node-label" x="460" y="442">A</text>
+    <circle class="node" cx="518" cy="514" r="15"/><text class="node-label" x="518" y="514">B</text>
+    <circle class="node" cx="460" cy="586" r="15"/><text class="node-label" x="460" y="586">C</text>
+    <circle class="node" cx="402" cy="514" r="15"/><text class="node-label" x="402" y="514">D</text>
+  </g>
+  <text class="graph-label" x="270" y="620">G</text>
+  <text class="graph-label" x="460" y="620">G′ completo</text>
+  <path class="edge" d="M205 661 H238"/>
+  <text class="small" x="246" y="667">arco di G: 0</text>
+  <path class="edge-one" d="M365 661 H398"/>
+  <text class="small" x="406" y="667">aggiunto: 1</text>
+
+  <!-- The oracle returns a tour, here the perimeter A-B-C-D-A, whose edges all cost zero. -->
+  <rect class="mini" x="608" y="357" width="238" height="340" rx="18"/>
+  <text class="mini-title" x="629" y="392">Tour minimo H*</text>
+  <path class="tour" d="M727 442 L794 514 L727 586 L660 514 Z"/>
+  <g>
+    <circle class="node" cx="727" cy="442" r="15"/><text class="node-label" x="727" y="442">A</text>
+    <circle class="node" cx="794" cy="514" r="15"/><text class="node-label" x="794" y="514">B</text>
+    <circle class="node" cx="727" cy="586" r="15"/><text class="node-label" x="727" y="586">C</text>
+    <circle class="node" cx="660" cy="514" r="15"/><text class="node-label" x="660" y="514">D</text>
+  </g>
+  <text class="graph-label" x="727" y="623">A → B → C → D → A</text>
+  <text class="cost" x="727" y="663">K = 0 nell’esempio</text>
+
+  <!-- Second transformation: compute the returned tour's cost and convert it into a yes/no answer. -->
+  <rect class="mini" x="909" y="357" width="355" height="340" rx="18"/>
+  <text class="mini-title" x="929" y="392">Dal costo alla risposta per HC</text>
+  <g class="tour">
+    <path d="M938 457 H983"/>
+    <path d="M1006 457 H1051"/>
+    <path d="M1074 457 H1119"/>
+    <path d="M1142 457 H1187"/>
+  </g>
+  <text class="cost" x="960" y="440">0</text>
+  <text class="cost" x="1028" y="440">0</text>
+  <text class="cost" x="1096" y="440">0</text>
+  <text class="cost" x="1164" y="440">0</text>
+  <text class="math" x="930" y="511">K = 0 + 0 + 0 + 0 = 0</text>
+  <rect class="yes" x="929" y="538" width="315" height="59" rx="12"/>
+  <text class="decision-text" x="947" y="576">K = 0  →  HC: SÌ</text>
+  <rect class="no" x="929" y="611" width="315" height="59" rx="12"/>
+  <text class="decision-text" x="947" y="649">K &gt; 0  →  HC: NO</text>
+
+  <text class="conclusion" x="720" y="799">HC è NP-completo ⇒ il TSP di ottimizzazione è NP-hard</text>
+</svg>

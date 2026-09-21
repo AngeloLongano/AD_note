@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="690" viewBox="0 0 1280 690" role="img" aria-labelledby="title desc">
+  <title id="title">Un ciclo hamiltoniano in G dà un tour TSP di costo zero</title>
+  <desc id="desc">Il ciclo A-B-C-D-E-A è evidenziato nel grafo originale G e nel grafo completo G primo. I suoi cinque archi appartengono tutti a G, perciò hanno costo zero nel TSP; l'ottimo vale zero perché tutti i costi sono non negativi.</desc>
+  <defs>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #182530; }
+      .background { fill: #f7fafb; }
+      .panel { fill: #ffffff; stroke: #c8d5dc; stroke-width: 2; }
+      .heading { font-size: 28px; font-weight: 700; }
+      .subheading { font-size: 21px; fill: #526471; }
+      .node { fill: #ffffff; stroke: #1f3544; stroke-width: 3; }
+      .node-label { font-size: 22px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+      .unused { fill: none; stroke: #91aeb4; stroke-width: 3; stroke-linecap: round; }
+      .added { fill: none; stroke: #d2a276; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 9 9; }
+      .tour { fill: none; stroke: #6551a4; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+      .arrow { fill: none; stroke: #375365; stroke-width: 4; marker-end: url(#arrowhead); }
+      .arrow-label { font-size: 19px; font-weight: 700; text-anchor: middle; }
+      .math { font-size: 26px; font-weight: 700; text-anchor: middle; }
+      .conclusion { font-size: 27px; font-weight: 700; text-anchor: middle; fill: #3d3177; }
+    </style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1,1 L11,6 L1,11 Z" fill="#375365"/>
+    </marker>
+  </defs>
+
+  <rect class="background" width="1280" height="690" rx="24"/>
+  <rect class="panel" x="35" y="35" width="510" height="535" rx="20"/>
+  <rect class="panel" x="735" y="35" width="510" height="535" rx="20"/>
+
+  <text class="heading" x="65" y="88">1. Ciclo hamiltoniano in G</text>
+  <text class="subheading" x="65" y="122">H = A → B → C → D → E → A</text>
+  <text class="heading" x="765" y="88">2. Stesso tour in G′</text>
+  <text class="subheading" x="765" y="122">Ogni arco del tour appartiene a G</text>
+
+  <!-- Edges that are not used by the selected tour. -->
+  <path class="unused" d="M290 195 L385 485"/>
+  <g class="added">
+    <path d="M990 195 L895 485"/>
+    <path d="M1145 305 L895 485"/>
+    <path d="M1145 305 L835 305"/>
+    <path d="M1085 485 L835 305"/>
+  </g>
+  <path class="unused" d="M990 195 L1085 485"/>
+
+  <!-- The same Hamiltonian cycle is drawn over both instances. -->
+  <path class="tour" d="M290 195 L445 305 L385 485 L195 485 L135 305 Z"/>
+  <path class="tour" d="M990 195 L1145 305 L1085 485 L895 485 L835 305 Z"/>
+
+  <g>
+    <circle class="node" cx="290" cy="195" r="21"/><text class="node-label" x="290" y="195">A</text>
+    <circle class="node" cx="445" cy="305" r="21"/><text class="node-label" x="445" y="305">B</text>
+    <circle class="node" cx="385" cy="485" r="21"/><text class="node-label" x="385" y="485">C</text>
+    <circle class="node" cx="195" cy="485" r="21"/><text class="node-label" x="195" y="485">D</text>
+    <circle class="node" cx="135" cy="305" r="21"/><text class="node-label" x="135" y="305">E</text>
+    <circle class="node" cx="990" cy="195" r="21"/><text class="node-label" x="990" y="195">A</text>
+    <circle class="node" cx="1145" cy="305" r="21"/><text class="node-label" x="1145" y="305">B</text>
+    <circle class="node" cx="1085" cy="485" r="21"/><text class="node-label" x="1085" y="485">C</text>
+    <circle class="node" cx="895" cy="485" r="21"/><text class="node-label" x="895" y="485">D</text>
+    <circle class="node" cx="835" cy="305" r="21"/><text class="node-label" x="835" y="305">E</text>
+  </g>
+
+  <path class="arrow" d="M570 312 H710"/>
+  <text class="arrow-label" x="640" y="278">stesso ciclo</text>
+  <text class="math" x="290" y="539">H usa 5 archi di G</text>
+  <text class="math" x="990" y="539">c(H) = 0 + 0 + 0 + 0 + 0 = 0</text>
+  <text class="conclusion" x="640" y="633">Costi non negativi ⇒ OPT(G′) = 0</text>
+</svg>

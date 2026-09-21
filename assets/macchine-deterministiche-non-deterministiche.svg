@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="700" viewBox="0 0 1320 700" role="img" aria-labelledby="title desc">
+  <title id="title">Macchina deterministica e macchina non deterministica</title>
+  <desc id="desc">A sinistra lo stesso input segue un unico percorso di computazione. A destra le scelte formano un albero: tre rami rifiutano e uno accetta. La macchina non deterministica accetta se esiste un ramo accettante; il tempo si misura lungo un ramo, non sommando tutti i rami.</desc>
+  <defs>
+    <style>
+      text { font-family: Arial, sans-serif; fill: #17231f; }
+      .background { fill: #f8faf9; }
+      .panel { fill: #fff; stroke: #b8c8c3; stroke-width: 2; }
+      .heading { font-size: 29px; font-weight: 700; fill: #0d3b35; }
+      .subtitle { font-size: 20px; fill: #52615c; }
+      .node { fill: #e8f4ef; stroke: #27705e; stroke-width: 2.5; }
+      .choice { fill: #eef2f7; stroke: #64748b; stroke-width: 2.5; }
+      .accept { fill: #dcefe8; stroke: #27705e; stroke-width: 3; }
+      .reject { fill: #f3f5f5; stroke: #71837d; stroke-width: 2.5; }
+      .edge { fill: none; stroke: #36534b; stroke-width: 3; marker-end: url(#arrow); }
+      .good-edge { fill: none; stroke: #27705e; stroke-width: 4; marker-end: url(#good-arrow); }
+      .node-text { font-size: 19px; font-weight: 650; text-anchor: middle; dominant-baseline: middle; }
+      .small { font-size: 18px; fill: #52615c; }
+      .strong { font-size: 20px; font-weight: 700; fill: #0d3b35; }
+      .note { fill: #e8f4ef; stroke: #b8c8c3; stroke-width: 1.5; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#36534b" />
+    </marker>
+    <marker id="good-arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#27705e" />
+    </marker>
+  </defs>
+
+  <rect class="background" width="1320" height="700" rx="24" />
+  <rect class="panel" x="35" y="32" width="600" height="554" rx="22" />
+  <rect class="panel" x="685" y="32" width="600" height="554" rx="22" />
+
+  <text class="heading" x="70" y="84">Macchina deterministica</text>
+  <text class="subtitle" x="70" y="119">Su un input, un solo percorso possibile</text>
+  <text class="heading" x="720" y="84">Macchina non deterministica</text>
+  <text class="subtitle" x="720" y="119">Su un input, un albero di scelte possibili</text>
+
+  <!-- Unica computazione deterministica. -->
+  <path class="edge" d="M335 213 L335 259" />
+  <path class="edge" d="M335 337 L335 383" />
+  <path class="edge" d="M335 461 L335 507" />
+  <rect class="node" x="266" y="163" width="138" height="50" rx="20" />
+  <text class="node-text" x="335" y="189">input x</text>
+  <rect class="node" x="248" y="267" width="174" height="70" rx="20" />
+  <text class="node-text" x="335" y="302">passo 1</text>
+  <rect class="node" x="248" y="391" width="174" height="70" rx="20" />
+  <text class="node-text" x="335" y="426">passo 2</text>
+  <rect class="accept" x="248" y="515" width="174" height="56" rx="20" />
+  <text class="node-text" x="335" y="543">accetta</text>
+
+  <!-- I rami descrivono alternative, non processori paralleli reali. -->
+  <path class="edge" d="M970 213 L811 282" />
+  <path class="good-edge" d="M974 213 L1088 282" />
+  <path class="edge" d="M810 352 L755 429" />
+  <path class="edge" d="M819 352 L867 429" />
+  <path class="good-edge" d="M1095 352 L1047 429" />
+  <path class="edge" d="M1104 352 L1159 429" />
+  <rect class="node" x="905" y="163" width="138" height="50" rx="20" />
+  <text class="node-text" x="974" y="189">input x</text>
+  <rect class="choice" x="743" y="282" width="138" height="70" rx="20" />
+  <text class="node-text" x="812" y="317">scelta A</text>
+  <rect class="choice" x="1025" y="282" width="138" height="70" rx="20" />
+  <text class="node-text" x="1094" y="317">scelta B</text>
+  <rect class="reject" x="698" y="437" width="113" height="56" rx="18" />
+  <text class="node-text" x="754" y="465">rifiuta</text>
+  <rect class="reject" x="815" y="437" width="113" height="56" rx="18" />
+  <text class="node-text" x="871" y="465">rifiuta</text>
+  <rect class="accept" x="991" y="437" width="113" height="56" rx="18" />
+  <text class="node-text" x="1047" y="465">accetta</text>
+  <rect class="reject" x="1108" y="437" width="113" height="56" rx="18" />
+  <text class="node-text" x="1164" y="465">rifiuta</text>
+  <text class="small" x="721" y="545">Basta almeno un ramo che accetta.</text>
+
+  <rect class="note" x="35" y="609" width="1250" height="62" rx="18" />
+  <text class="strong" x="65" y="648">Tempo non deterministico:</text>
+  <text x="346" y="648" font-size="20">lunghezza di un ramo (nel caso peggiore), non somma del lavoro di tutti i rami.</text>
+</svg>

@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="860" viewBox="0 0 1520 860" role="img" aria-labelledby="title desc">
+  <title id="title">Versione disegnata a mano della riduzione da ciclo hamiltoniano a TSP</title>
+  <desc id="desc">Schema in stile lavagna: il grafo G entra in una prima trasformazione polinomiale che lo completa e assegna costi zero agli archi originali e uno all'arco aggiunto; un algoritmo TSP ottimo restituisce un tour H stella; una seconda trasformazione polinomiale somma i costi e restituisce sì se il costo è zero, no altrimenti. Piccoli grafi sotto i blocchi mostrano l'esempio con quattro vertici.</desc>
+  <defs>
+    <style>
+      text { font-family: 'Bradley Hand', 'Marker Felt', 'Comic Sans MS', cursive; fill: #222; }
+      .paper { fill: #fffefa; }
+      .ink { fill: none; stroke: #252525; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+      .heavy { fill: none; stroke: #222; stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+      .faint { fill: none; stroke: #696969; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+      .dash { fill: none; stroke: #292929; stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 12 11; }
+      .new-edge { fill: none; stroke: #292929; stroke-width: 3.4; stroke-linecap: round; stroke-dasharray: 9 8; }
+      .arrow { fill: none; stroke: #252525; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrowhead); }
+      .headline { font-size: 45px; font-weight: 700; text-anchor: middle; }
+      .outer-label { font-size: 34px; font-weight: 700; }
+      .box-label { font-size: 32px; font-weight: 700; text-anchor: middle; }
+      .small-title { font-size: 27px; font-weight: 700; text-anchor: middle; }
+      .caption { font-size: 24px; font-weight: 700; text-anchor: middle; }
+      .note { font-size: 22px; }
+      .graph-letter { font-size: 21px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+      .node { fill: #fffefa; stroke: #252525; stroke-width: 2.8; }
+      .formula { font-size: 29px; font-weight: 700; }
+    </style>
+    <marker id="arrowhead" markerWidth="13" markerHeight="13" refX="11" refY="6" orient="auto">
+      <path d="M1 1 L12 6 L1 11" fill="none" stroke="#252525" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <rect class="paper" width="1520" height="860"/>
+  <text class="headline" x="760" y="76">Algoritmo del HC (decisionale)</text>
+
+  <!-- The deliberately uneven outline echoes the original sketch. -->
+  <path class="dash" d="M175 123 C415 119 1065 126 1349 122 Q1384 120 1388 156 C1392 324 1384 605 1387 752 Q1387 783 1351 787 C1037 784 475 789 177 784 Q147 784 146 748 C141 584 149 295 145 160 Q145 125 175 123 Z"/>
+
+  <text class="outer-label" x="22" y="244">Grafo G</text>
+  <text class="outer-label" x="25" y="281">del HC</text>
+  <path class="arrow" d="M15 307 C83 308 165 306 224 307"/>
+
+  <path class="ink" d="M258 185 C339 181 454 186 535 184 Q564 184 567 211 C571 248 570 318 563 343 Q558 364 531 365 C437 368 338 365 264 365 Q238 364 236 340 C234 292 235 241 238 211 Q240 189 258 185 Z"/>
+  <text class="box-label" x="402" y="248">Trasformazione</text>
+  <text class="box-label" x="402" y="289">polinomiale</text>
+  <text class="caption" x="402" y="332">completa e pesa</text>
+
+  <text class="small-title" x="625" y="178">G′ del TSP</text>
+  <path class="arrow" d="M575 306 C603 307 634 306 654 307"/>
+  <path class="ink" d="M685 187 C751 183 807 185 873 186 Q900 187 903 213 C905 248 906 316 901 342 Q897 363 875 364 C808 367 744 365 688 364 Q665 361 664 341 C659 291 662 241 665 213 Q666 191 685 187 Z"/>
+  <text class="box-label" x="783" y="265">Algoritmo</text>
+  <text class="box-label" x="783" y="306">TSP ottimo</text>
+
+  <text class="small-title" x="980" y="178">Tour H*</text>
+  <path class="arrow" d="M910 306 C931 307 959 306 978 307"/>
+  <path class="ink" d="M1019 185 C1104 184 1209 185 1308 187 Q1337 188 1339 213 C1342 250 1342 319 1338 342 Q1334 362 1310 364 C1219 366 1108 367 1020 364 Q995 363 992 339 C989 289 990 244 994 213 Q997 188 1019 185 Z"/>
+  <text class="box-label" x="1166" y="248">Trasformazione</text>
+  <text class="box-label" x="1166" y="289">polinomiale</text>
+  <text class="caption" x="1166" y="332">somma e confronta</text>
+
+  <path class="arrow" d="M1342 277 C1375 263 1410 244 1453 232"/>
+  <path class="arrow" d="M1342 286 C1375 302 1410 324 1453 339"/>
+  <text class="outer-label" x="1456" y="229">SÌ</text>
+  <text class="outer-label" x="1454" y="357">NO</text>
+
+  <!-- Sketches under the first reduction: a square with one diagonal becomes K4. -->
+  <text class="small-title" x="402" y="423">Da G a G′: pesi 0 e 1</text>
+  <g class="heavy">
+    <path d="M303 478 L361 554 L302 633 L244 552 Z"/>
+    <path d="M303 478 L302 633"/>
+    <path d="M493 478 L551 554 L492 633 L434 552 Z"/>
+    <path d="M493 478 L492 633"/>
+  </g>
+  <path class="new-edge" d="M434 552 C472 550 517 554 551 554"/>
+  <path class="arrow" d="M377 552 C389 552 405 552 415 552"/>
+  <g>
+    <circle class="node" cx="303" cy="478" r="17"/><text class="graph-letter" x="303" y="478">A</text>
+    <circle class="node" cx="361" cy="554" r="17"/><text class="graph-letter" x="361" y="554">B</text>
+    <circle class="node" cx="302" cy="633" r="17"/><text class="graph-letter" x="302" y="633">C</text>
+    <circle class="node" cx="244" cy="552" r="17"/><text class="graph-letter" x="244" y="552">D</text>
+    <circle class="node" cx="493" cy="478" r="17"/><text class="graph-letter" x="493" y="478">A</text>
+    <circle class="node" cx="551" cy="554" r="17"/><text class="graph-letter" x="551" y="554">B</text>
+    <circle class="node" cx="492" cy="633" r="17"/><text class="graph-letter" x="492" y="633">C</text>
+    <circle class="node" cx="434" cy="552" r="17"/><text class="graph-letter" x="434" y="552">D</text>
+  </g>
+  <text class="caption" x="303" y="682">G</text>
+  <text class="caption" x="493" y="682">G′ completo</text>
+  <text class="note" x="233" y="728">archi di G: costo 0</text>
+  <text class="note" x="426" y="728">arco aggiunto: costo 1</text>
+
+  <!-- The TSP box outputs the least-cost tour; the example uses only original edges. -->
+  <text class="small-title" x="783" y="423">Tour restituito</text>
+  <path class="heavy" d="M783 478 L856 553 L783 632 L710 553 Z"/>
+  <g>
+    <circle class="node" cx="783" cy="478" r="17"/><text class="graph-letter" x="783" y="478">A</text>
+    <circle class="node" cx="856" cy="553" r="17"/><text class="graph-letter" x="856" y="553">B</text>
+    <circle class="node" cx="783" cy="632" r="17"/><text class="graph-letter" x="783" y="632">C</text>
+    <circle class="node" cx="710" cy="553" r="17"/><text class="graph-letter" x="710" y="553">D</text>
+  </g>
+  <text class="caption" x="783" y="683">H* = A-B-C-D-A</text>
+  <text class="caption" x="783" y="723">tour di costo minimo</text>
+
+  <!-- The second polynomial transformation uses the returned tour as data. -->
+  <text class="small-title" x="1167" y="423">Dal tour alla risposta</text>
+  <path class="ink" d="M1045 476 C1107 474 1200 477 1276 476"/>
+  <text class="caption" x="1062" y="466">0</text>
+  <text class="caption" x="1124" y="466">0</text>
+  <text class="caption" x="1189" y="466">0</text>
+  <text class="caption" x="1254" y="466">0</text>
+  <text class="formula" x="1029" y="540">K = 0 + 0 + 0 + 0 = 0</text>
+  <path class="arrow" d="M1167 551 C1169 576 1168 588 1168 598"/>
+  <text class="formula" x="1048" y="650">K = 0  ⇒  SÌ</text>
+  <text class="formula" x="1048" y="697">K &gt; 0  ⇒  NO</text>
+  <text class="note" x="1045" y="740">Qui ogni arco ha costo 0.</text>
+
+  <text class="caption" x="760" y="834">Una chiamata al TSP ottimo; le due trasformazioni richiedono tempo polinomiale.</text>
+</svg>

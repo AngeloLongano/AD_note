@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="590" viewBox="0 0 1240 590" role="img" aria-labelledby="title desc">
+  <title id="title">Confronto tra i pesi zero uno e uno due nel TSP</title>
+  <desc id="desc">Lo stesso grafo con gli archi originali u-v e v-w e l'arco aggiunto u-w. A sinistra i costi zero, zero e uno violano la disuguaglianza triangolare: uno non è minore o uguale a zero più zero. A destra i costi uno, uno e due la rispettano: due è minore o uguale a uno più uno.</desc>
+  <defs>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #182530; }
+      .background { fill: #f7fafb; }
+      .panel { fill: #ffffff; stroke: #c8d5dc; stroke-width: 2; }
+      .heading { font-size: 29px; font-weight: 700; }
+      .subheading { font-size: 19px; fill: #526471; }
+      .original { fill: none; stroke: #146b78; stroke-width: 6; stroke-linecap: round; }
+      .added { fill: none; stroke: #c46a26; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 12 10; }
+      .node { fill: #ffffff; stroke: #1f3544; stroke-width: 3; }
+      .node-label { font-size: 24px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+      .cost { font-size: 25px; font-weight: 700; text-anchor: middle; }
+      .added-cost { fill: #a8521d; }
+      .original-cost { fill: #125d68; }
+      .formula { font-size: 27px; font-weight: 700; text-anchor: middle; }
+      .false { fill: #a13d37; }
+      .true { fill: #276b46; }
+      .legend { font-size: 18px; }
+    </style>
+  </defs>
+
+  <rect class="background" width="1240" height="590" rx="24"/>
+  <rect class="panel" x="35" y="35" width="560" height="520" rx="20"/>
+  <rect class="panel" x="645" y="35" width="560" height="520" rx="20"/>
+
+  <text class="heading" x="65" y="85">Pesi 0/1</text>
+  <text class="subheading" x="65" y="118">Archi originali: 0 · arco aggiunto: 1</text>
+  <text class="heading" x="675" y="85">Pesi 1/2</text>
+  <text class="subheading" x="675" y="118">Archi originali: 1 · arco aggiunto: 2</text>
+
+  <!-- In both panels, only u-v and v-w belong to the original graph. -->
+  <path class="added" d="M155 235 H475"/>
+  <path class="original" d="M155 235 L315 375 L475 235"/>
+  <path class="added" d="M765 235 H1085"/>
+  <path class="original" d="M765 235 L925 375 L1085 235"/>
+
+  <text class="cost added-cost" x="315" y="215">1</text>
+  <text class="cost original-cost" x="212" y="330">0</text>
+  <text class="cost original-cost" x="418" y="330">0</text>
+  <text class="cost added-cost" x="925" y="215">2</text>
+  <text class="cost original-cost" x="822" y="330">1</text>
+  <text class="cost original-cost" x="1028" y="330">1</text>
+
+  <g>
+    <circle class="node" cx="155" cy="235" r="23"/><text class="node-label" x="155" y="235">u</text>
+    <circle class="node" cx="315" cy="375" r="23"/><text class="node-label" x="315" y="375">v</text>
+    <circle class="node" cx="475" cy="235" r="23"/><text class="node-label" x="475" y="235">w</text>
+    <circle class="node" cx="765" cy="235" r="23"/><text class="node-label" x="765" y="235">u</text>
+    <circle class="node" cx="925" cy="375" r="23"/><text class="node-label" x="925" y="375">v</text>
+    <circle class="node" cx="1085" cy="235" r="23"/><text class="node-label" x="1085" y="235">w</text>
+  </g>
+
+  <text class="formula false" x="315" y="473">1 ≤ 0 + 0: FALSO</text>
+  <text class="formula true" x="925" y="473">2 ≤ 1 + 1: VERO</text>
+
+  <path class="original" d="M86 524 H135"/>
+  <text class="legend" x="148" y="531">Arco originale</text>
+  <path class="added" d="M369 524 H418"/>
+  <text class="legend" x="431" y="531">Arco aggiunto</text>
+</svg>
