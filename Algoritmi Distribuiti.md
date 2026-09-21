@@ -1088,61 +1088,56 @@ L'analisi è tight per questa regola di rounding. In un ciclo con un numero pari
 
 #### Ambienti distribuiti
 
-Un ambiente distribuito comprende più agenti (oppure nodi, entità, ecc\...), ognuno dei quali ha una capacità computazionale propria. Tutti questi agenti lavorano per assolvere a qualche tipo di compito, coordinandosi tra loro tramite uno scambio di messaggi ed eseguendo una computazione locale. Nel modello message-passing adottato dal corso non vi è memoria condivisa; non si tratta però di una proprietà universale di ogni possibile sistema distribuito.
-Per risolvere problemi in questo contesto, dobbiamo andare a definire un algoritmo che specifichi cosa ciascun agente debba fare, prevedendo in questo modo anche il loro comportamento collettivo. I principi di correttezza ed efficienza di un algoritmo valgono anche in questo caso.
-Mentre è facile trovare le differenze tra un sistema distribuito ed uno semplice, può risultare più complicato a prima vista trovarle con un sistema parallelo.
+Un **ambiente distribuito** è una collezione finita di entità computazionali che cooperano tramite scambio di messaggi per raggiungere un obiettivo comune. Le entità possono avere capacità diverse, ma ciascuna dispone di computazione, memoria privata e clock locale: sono **molteplici**, **autonome** e capaci di **interagire**. Ne sono esempi il Web, le reti di comunicazione, le reti di sensori e quelle robotiche. Condividere risorse, tollerare guasti e aumentare la scalabilità sono motivazioni frequenti per usarle.
 
-![[assets/Screenshot 2024-10-08 121302.png|400]]
+Un **algoritmo distribuito**, o *protocollo*, specifica le azioni locali delle entità in modo che il loro comportamento collettivo risolva il problema. Come per un algoritmo sequenziale, occorre dimostrarne la correttezza e valutarne l'efficienza.
+
+La distinzione rispetto al calcolo parallelo riguarda soprattutto il modello di comunicazione: in una macchina parallela i processori condividono *tipicamente* la memoria e sono vicini, perciò sincronizzazione e mutua esclusione sono problemi centrali; nel modello distribuito del corso le memorie sono separate e la cooperazione richiede messaggi tra entità anche distanti. Le operazioni possono svolgersi in parallelo in entrambi i casi. L'assenza di memoria condivisa è un'ipotesi del modello **message-passing** qui studiato, non una proprietà universale di ogni sistema distribuito.
 
 #### Il modello
 
-Per astrarre un sistema distribuito possiamo usare i grafi. I nodi rappresentano gli agenti e gli archi i canali di comunicazione tra di loro.
+La rete di comunicazione è rappresentata da un grafo $G=(V,A)$: i vertici sono le **entità** (dette anche *nodi*) e gli archi orientati sono i collegamenti lungo i quali si possono inviare messaggi. L'orientamento permette di descrivere anche canali unidirezionali; quando si assume la restrizione dei collegamenti bidirezionali, il grafo si può trattare come non orientato e scrivere $G=(V,E)$.
 
 #### Entità
 
-Ogni entità riceve in input una parte del problema e deve produrre un output compatibile a quello definito dall'algoritmo risolutivo, che in questo contesto si può dire anche "protocollo". Nel modello simmetrico del corso tutte le entità eseguono lo stesso codice; eventuali ruoli diversi dipendono dallo stato iniziale o dagli input locali.
-Ad ogni entità è associato uno stato. Per ogni protocollo sono definiti un numero finito di stati che possono venire associati alle entità che lo eseguono. Mentre un'entità si trova in uno stato, possono essere innescati degli eventi, come la ricezione di messaggi, il clock interno od impulsi spontanei (come ad esempio quando un utente interagisce con un ATM che si trova in uno stato "idle", e questo reagisce di conseguenza). Questi eventi fanno sì che, a seconda dello stato in cui si trova, l'entità reagisca facendo qualcosa e spostandosi eventualmente verso un altro stato.
-Un'azione è un insieme atomico di attività che seguono il protocollo, messo in atto dalle entità in relazione ad eventi. Queste attività possono essere ad esempio calcolo, invio di messaggi, cambio di stato, set/reset del clock, ecc\...
-Le azioni che un'entità compie dipendono solo dallo stato in cui si trova e dall'evento che la interessa. Occorre definire in modo deterministico ogni possibile interazione stato/azione, anche qualora non vi sia nulla da fare.
-Quando il protocollo è lo stesso per tutti gli agenti, diciamo che il sistema distribuito è simmetrico. Una differenza del comportamento di diverse entità come quella dell'esempio che segue può dipendere soltanto dal loro stato o input, pur eseguendo lo stesso codice.
+Ogni entità $x$ riceve un input locale, eventualmente vuoto, ed è chiamata a produrre un output conforme alla specifica del problema. I valori prodotti dai singoli nodi possono essere diversi: per esempio, dopo un'elezione uno risulta *leader* e gli altri *follower*.
 
-![[assets/Screenshot 2024-10-08 122127.png|500]]
+Il registro $status(x)$ indica lo **stato** corrente di $x$, scelto da un insieme finito $S$: in ogni momento vale $status(x)\in S$. Il comportamento è **reattivo**: un'azione è innescata da un evento, come l'arrivo di un messaggio, un battito del clock locale o un impulso spontaneo esterno (per esempio, una richiesta a uno sportello ATM inattivo). In assenza di eventi, l'entità non compie azioni.
+
+Un'**azione** può comprendere calcolo locale, lettura o scrittura della memoria privata, invio di messaggi, cambio di stato, impostazione o azzeramento del clock oppure nessuna operazione (*NIL*). È atomica rispetto agli altri eventi e termina in tempo finito. Il protocollo assegna un'azione a ogni coppia possibile $(\text{stato},\text{evento})$: la regola è **completa** se nessuna coppia resta indefinita e **deterministica** se a ciascuna coppia corrisponde una sola azione.
+
+Nel seguito consideriamo un sistema **simmetrico**: tutte le entità seguono la stessa descrizione del protocollo, pur potendo agire diversamente in base a stato, input e ruolo locale. Per esempio, lo stesso codice può scegliere un'azione per un nodo *iniziatore* (*initiator*) e un'altra per un nodo *dormiente* leggendo una variabile di ruolo; la simmetria del codice non richiede che i nodi si trovino nello stesso stato.
 
 #### Comunicazione
 
-Siccome i canali di comunicazione monodirezionali sono ormai poco usati (oggigiorno rimane utilizzata praticamente solo la radiotrasmissione), distinguiamo tra vicini in ingresso e vicini in uscita per la comunicazione dei nodi all'interno di un sistema distribuito.
+Un messaggio è una sequenza **finita di bit**. La comunicazione è *point-to-point*: un'entità $x$ può inviare direttamente solo ai suoi **vicini in uscita** $N_o(x)$ e ricevere solo dai **vicini in ingresso** $N_i(x)$. Indichiamo con $N(x)=N_o(x)\cup N_i(x)$ l'insieme dei suoi vicini; con collegamenti bidirezionali i due insiemi coincidono. L'ordine FIFO dei messaggi lungo un collegamento non è garantito dal modello generale: quando serve, va dichiarato come restrizione.
 
 #### Assiomi
 
-Nel seguito questi principi verranno sempre considerati come validi per assicurarci il corretto funzionamento degli algoritmi.
+Nel modello di base valgono due assiomi; le ulteriori ipotesi richieste da un protocollo sono **restrizioni**.
 
-- Il numero di bit che costituiscono un messaggio tra nodi è finito
-
-- Il tempo necessario alla comunicazione tra nodi è finito, cioè un messaggio prima o poi arriva a destinazione
-
-- Ogni nodo è in grado di distinguere tra i propri vicini in uscita ed in ingresso
+- **Ritardi di comunicazione finiti.** In assenza di guasti, un messaggio inviato a un vicino in uscita arriva integro ed è elaborato in tempo finito. L'assioma non fornisce un limite superiore noto o uniforme al ritardo.
+- **Orientamento locale.** Ogni entità distingue i propri vicini in uscita e quelli in ingresso: può scegliere a quale vicino inviare e riconoscere da quale porta locale proviene un messaggio ricevuto. Le etichette delle porte sono distinte per i vicini dello stesso nodo, ma restano locali e non costituiscono identificativi globali delle entità.
 
 #### Restrizioni
 
-Imporre restrizioni limita l'applicazione del protocollo. Possiamo trovare restrizioni a livello di:
+Una **restrizione** è una proprietà aggiuntiva sfruttata dal protocollo: ne può rendere possibile o più efficiente l'esecuzione, ma limita i sistemi a cui si applica. Le ipotesi vanno quindi dichiarate per ogni algoritmo. Fra quelle ricorrenti ci sono:
 
-- Comunicazione: possiamo ad esempio imporre un invio di tipo FIFO (cioè nello stesso ordine di invio) od una precisa direzionalità dei collegamenti all'interno del modello
-
-- Affidabilità: possiamo chiedere che il sistema sia in grado di accorgersi di eventuali fallimenti su collegamenti od entità (fault detection). Questa può sembrare una restrizione semplice, ma nella realtà non lo è per niente.
-  Si possono anche imporre restrizioni sui tipi di fallimenti che possono accadere: consegna garantita dei messaggi, affidabilità parziale/totale, ecc\... Nella terminologia delle slide, affidabilità parziale significa che da ora in poi non avverranno guasti, anche se possono essercene stati in precedenza; affidabilità totale significa che non sono avvenuti guasti e non ne avverranno
-
-- Connettività: possiamo richiedere che il grafo $G$ che rappresenta il modello sia fortemente connesso
-
-- Conoscenza: possiamo imporre un certo numero di nodi, archi, diametro del grafo $G$, ecc\...
-
-- Tempo: nel caso di "bounded communication delay" ad esempio si richiede che esista una costante $\Delta$ tale che, in assenza di guasti, il ritardo di comunicazione tra nodi sia al più $\Delta$. Richieste più forti sono "unitary communication delay" e "synchronized clocks"
+- **Comunicazione:** ordine FIFO dei messaggi sullo stesso canale; **collegamenti bidirezionali** ($N_i(x)=N_o(x)=N(x)$).
+- **Affidabilità:** rilevazione dei guasti di nodi o collegamenti, consegna garantita dei messaggi, limiti ai tipi di guasto. Nella terminologia delle slide, **affidabilità parziale** significa che non ci saranno guasti futuri, pur potendocene essere stati; **affidabilità totale** significa che non ce ne sono stati e non ce ne saranno.
+- **Topologia e conoscenza:** connettività forte per un grafo diretto, semplice connettività per uno bidirezionale; eventuale conoscenza iniziale del numero $n$ di nodi, del numero $m$ di collegamenti o del diametro $D(G)$.
+- **Tempo:** un *bounded communication delay* impone, in assenza di guasti, un limite $\Delta$ al ritardo di ogni messaggio; l'*unitary communication delay* lo fissa a un'unità, mentre i *synchronized clocks* fanno avanzare insieme i clock locali. Salvo indicazione contraria, il modello del corso è **asincrono**: i ritardi sono finiti in assenza di guasti, ma non hanno un bound noto.
 
 #### Misure di efficienza per gli algoritmi distribuiti
 
-Per gli algoritmi sequenziali andavamo a misurare complessità spaziale e temporale. Nel caso di algoritmi e sistemi distribuiti lo spazio perde la propria importanza, mentre emerge l'esigenza di conoscere la quantità di comunicazione prodotta dal protocollo. Questa è tendenzialmente molto più onerosa del calcolo locale fatto dai singoli nodi. Inoltre, spesso i nodi nei sistemi distribuiti risiedono in piccoli dispositivi, motivo per cui la comunicazione attiva costituisce una spesa non trascurabile di risorse. In generale non sappiamo quanto duri una comunicazione, perché i ritardi sono imprevedibili. Quello che si fa è costruire una misura temporale sulla base del numero massimo di messaggi che possono essere inviati in sequenza. All'invio di un messaggio facciamo corrispondere per convenzione un'unità di tempo.
-Per quanto riguarda lo spazio, un messaggio sufficientemente breve può essere inviato tutto in una sola volta, mentre quando si supera una certa soglia l'invio deve essere spezzato in più tranches.
-Il tempo è invece definito dal lasso che intercorre tra l'avvio della prima entità e la terminazione dell'ultima.
-Distinguiamo tra sincronia totale ed asincronia a seconda che i clocks di tutti i nodi siano o meno sincronizzati tra loro.
+Le misure principali sono la **quantità di comunicazione** e il **tempo**. Di norma la prima conta le trasmissioni di messaggi: un invio su un collegamento vale un messaggio, anche se un guasto ne impedisce la consegna. Se i messaggi hanno lunghezze molto diverse, si contano invece i **bit trasmessi** (*bit complexity*). Lo spazio locale resta una risorsa, ma qui l'analisi si concentra soprattutto sulla comunicazione; il costo del calcolo locale è considerato trascurabile rispetto alla trasmissione.
+
+Il **tempo fisico** va dall'avvio della prima entità alla terminazione dell'ultima. Nel modello asincrono generale non ha un bound uniforme ricavabile dalla sola topologia, perché il ritardo di ciascun messaggio può essere arbitrariamente grande. Per analizzare un protocollo distinguiamo quindi due misure astratte:
+
+- **Tempo ideale (*ideal time*):** durata in un'esecuzione sincrona con clock sincronizzati e un'unità di tempo per trasmettere ed elaborare un messaggio. Un messaggio può così avanzare di un collegamento per unità di tempo; catene indipendenti possono procedere in parallelo.
+- **Tempo causale (*causal time*):** lunghezza massima di una catena di trasmissioni causalmente dipendenti, considerando le possibili esecuzioni. Conta la profondità delle dipendenze tra messaggi, non i secondi trascorsi; in generale non coincide con il tempo ideale.
+
+Quando si indica una *time complexity* occorre specificare quale misura e quali restrizioni temporali si stanno usando. Il caso del broadcast mostrerà perché la distinzione conta.
 
 #### Esempio di costruzione e valutazione di un algoritmo distribuito
 
