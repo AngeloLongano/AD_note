@@ -630,15 +630,38 @@ Lo pseudocodice compatta la procedura già descritta:
 > 16.  **end if**
 > 17. **end function**
 
-##### Perché i pesi $0/1$ e $1/2$ sono diversi?
+##### Perché scegliere pesi $1/2$ invece di $0/1$?
 
-Con i pesi **$0/1$** il costo è il numero di archi aggiunti, perciò la soglia da controllare è $0$. Questa riduzione può violare la **disuguaglianza triangolare**: se $uv$ e $vw$ sono archi originali ma $uw$ manca, allora $c(u,w)=1>0+0=c(u,v)+c(v,w)$. Dimostra quindi la difficoltà del TSP generale, senza dare da sola lo stesso risultato per il TSP metrico. Inoltre, nel caso sì l'ottimo è $0$: il rapporto $ALG/OPT$ non è definito, quindi questa costruzione non è adatta a una prova basata su tale rapporto.
+La scelta dei pesi determina **quale variante del TSP** compare nella riduzione. Questo confronto serve a capire perché la prova appena fatta con $0/1$ riguarda il TSP generale e perché, più avanti, potremo comunque approssimare il TSP metrico.
 
-Se assegniamo invece **$1$** agli archi originali e **$2$** a quelli aggiunti, la stessa idea funziona per la soluzione esatta: ogni tour ha $n$ archi, dunque $G$ ha un ciclo Hamiltoniano se e solo se $OPT(G')=n$; altrimenti $OPT(G')\geq n+1$. Ora i costi sono **metrici**, perché per tre vertici distinti il lato più costoso vale al massimo $2\leq1+1$. Questo mostra che anche il TSP metrico è difficile da risolvere esattamente. Il piccolo divario $n$ contro $n+1$, però, non basta a escludere un fattore di approssimazione costante. La variante $1/2$ è un chiarimento matematico: nelle slide la riduzione per questo teorema usa $0/1$.
+**1. Test della disuguaglianza triangolare.** Un'istanza è metrica se, per ogni terna di vertici, andare direttamente non costa più che passare per un vertice intermedio:
 
-Nel disegno, $uv$ e $vw$ appartengono al grafo originale; $uw$ è l'arco aggiunto. Cambiano solo i pesi: a sinistra la disuguaglianza triangolare fallisce, a destra vale con uguaglianza.
+$$
+c(u,w)\leq c(u,v)+c(v,w).
+$$
+
+Usiamo lo stesso esempio in entrambi i casi: $uv$ e $vw$ sono archi del grafo originale; $uw$ è stato aggiunto per renderlo completo.
 
 ![[assets/tsp-pesi-01-12-triangolo.svg|1000]]
+
+**Caso A — pesi $0/1$ (riduzione appena vista)**
+
+- Archi originali: costo $0$; arco aggiunto: costo $1$.
+- **Test:** $1\leq0+0$ è falso.
+- **Conclusione:** la costruzione può produrre istanze non metriche. Questa prova mostra la NP-hardness del **TSP generale**.
+
+**Caso B — pesi $1/2$ (variante metrica)**
+
+- Archi originali: costo $1$; arco aggiunto: costo $2$.
+- **Test:** $2\leq1+1$ è vero. Vale per ogni triangolo: un lato costa al massimo $2$ e gli altri due insieme almeno $2$.
+- **Conclusione:** le istanze costruite sono metriche. Anche il **TSP metrico è NP-hard**: un tour costa esattamente $n=|V|$ se usa solo archi originali; se ne usa almeno uno aggiunto, costa almeno $n+1$.
+
+**2. Perché serve nel seguito.** Le due costruzioni mostrano la difficoltà di trovare l'**ottimo esatto**, ma questo non decide se si possa trovare un buon tour approssimato:
+
+- Per il **TSP generale**, la prossima sezione userà pesi $1/M$ per escludere ogni fattore di approssimazione costante, assumendo $P\neq NP$.
+- Per il **TSP metrico**, la disuguaglianza triangolare consente gli *shortcut*: su questa proprietà si basano la $2$-approssimazione e l'algoritmo di Christofides.
+
+*La variante $1/2$ serve qui a chiarire il passaggio al TSP metrico; le slide della docente usano $0/1$ per la prova precedente.*
 
 #### Inapprossimabilità del TSP generale
 
