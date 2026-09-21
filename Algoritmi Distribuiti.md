@@ -231,6 +231,10 @@ Per capire da dove nasce $NP$ bisogna introdurre la **macchina non deterministic
 
 Un'istanza è **accettata** se almeno un ramo della computazione termina in uno stato di accettazione. È invece rifiutata se nessun ramo accetta. Il tempo non si ottiene sommando il lavoro di tutti i rami: si misura la lunghezza di un singolo ramo, e per una computazione in tempo polinomiale tutti i rami devono terminare entro un numero polinomiale di passi rispetto alla dimensione dell'input.
 
+![[assets/macchine-deterministiche-non-deterministiche.svg|1000]]
+
+Nello schema, a sinistra l'input segue un unico percorso; a destra le scelte generano più rami. L'istanza a destra è accettata perché **almeno uno** di essi accetta: i rami non rappresentano computer reali che lavorano in parallelo.
+
 Consideriamo intuitivamente il **ciclo hamiltoniano**. Data una sequenza di $n$ vertici, controllare se descrive un ciclo che visita una volta tutti i vertici è semplice. Una macchina non deterministica può:
 
 1. scegliere, passo dopo passo, una possibile sequenza dei vertici;
@@ -546,33 +550,42 @@ Il **Travelling Salesman Problem di ottimizzazione** ($TSP_{opt}$) è definito c
 
 > **Teorema.** Il problema $TSP_{opt}$ è NP-hard.
 
-La dimostrazione usa il problema decisionale NP-completo del **ciclo Hamiltoniano** ($HC$). Una sua istanza è un grafo non diretto $G=(V,E)$, non necessariamente completo né pesato, e la domanda è se esista un ciclo che visiti ogni vertice esattamente una volta.
+**Obiettivo.** Vogliamo dimostrare $HC\leq_T^p TSP_{opt}$: se avessimo un risolutore esatto per il TSP, potremmo usarlo per rispondere alla domanda del **ciclo Hamiltoniano** ($HC$). In $HC$ l'input è un grafo non diretto $G=(V,E)$, non necessariamente completo né pesato, e chiediamo: «esiste un ciclo che visita ogni vertice esattamente una volta?». $HC$ è NP-completo. Se una sola chiamata al risolutore TSP, insieme a operazioni polinomiali, permette di decidere $HC$, allora $TSP_{opt}$ è NP-hard. Si tratta di una riduzione con oracolo, perché chiediamo al TSP una soluzione ottima e ricaviamo da essa una risposta sì/no.
 
-L'idea della riduzione è trasformare la struttura del grafo in costi: completiamo $G$, assegniamo costo $0$ agli archi originali e costo $1$ agli archi aggiunti. Il costo del tour ottimo funziona così da rivelatore: vale $0$ esattamente quando il tour può usare soltanto archi presenti nel grafo originale.
+##### Strategia della riduzione
 
-Formalizziamo la riduzione in pseudocodice:
+$HC$ chiede se un ciclo **esiste** nel grafo dato; il TSP chiede quale ciclo abbia **costo minimo** in un grafo completo. Per collegarli, trasformiamo la presenza o l'assenza degli archi di $G$ in costi. Completiamo il grafo e assegniamo:
 
-**Algorithm 1 Risoluzione Ciclo Hamiltoniano con TSP** ^algorithm-1
+- costo **$0$** agli archi già presenti in $G$;
+- costo **$1$** agli archi aggiunti per renderlo completo.
 
-> 1. **function** HCtoTSP($G$)
-> 2.  $E^\prime \gets \{\{u, v\} : u, v \in V, u \neq v\}$<br>
-> 3.  **for all** $(u, v)$ in $E^\prime$ **do**
-> 4.   **if** $(u, v) \in E$ **then**
-> 5.    $C(u, v) \gets 0$
-> 6.   **else**
-> 7.    $C(u, v) \gets 1$
-> 8.   **end if**
-> 9.  **end for**
-> 10.  $G^\prime = (V, E^\prime, C)$
-> 11.  $H^* \gets TSP(G^\prime)$
-> 12.  **if** $C(H^*) == 0$ **then**
-> 13.   **return** sì
-> 14.  **else**
-> 15.   **return** no
-> 16.  **end if**
-> 17. **end function**
+Il costo di un tour conta quindi quanti archi aggiunti usa. Se il tour ottimo costa $0$, non ne usa nessuno ed è un ciclo Hamiltoniano di $G$; se costa almeno $1$, ogni tour deve usare un arco che mancava in $G$. Il costo diventa così un *rivelatore* della risposta a $HC$.
 
-**Correttezza.** Indichiamo con $OPT(G')$ il costo del tour restituito dall'oracolo per $TSP_{opt}$. Dimostriamo che
+![[Pasted image 20260921114935.png]]
+
+##### Costruzione e uso della riduzione
+
+Partiamo da un'istanza $G=(V,E)$ di $HC$ e costruiamo l'istanza TSP $G'=(V,E',c)$:
+
+1. Manteniamo gli stessi vertici $V$.
+2. Inseriamo in $E'$ un arco per ogni coppia **distinta e non ordinata** di vertici: $E'=\{\{u,v\}:u,v\in V,\ u\neq v\}$. Così $G'$ è completo.
+3. Assegniamo a ogni arco il costo
+
+   $$
+   c(\{u,v\})=
+   \begin{cases}
+   0 & \text{se }\{u,v\}\in E,\\
+   1 & \text{se }\{u,v\}\notin E.
+   \end{cases}
+   $$
+
+Ora chiediamo al risolutore TSP un tour ottimo $H^*$ di $G'$ e ne calcoliamo il costo. Rispondiamo **sì** a $HC$ se $c(H^*)=0$, **no** se $c(H^*)\geq 1$. Questa è l'intera procedura: costruire il grafo pesato, risolvere il TSP e controllare il costo restituito.
+
+![[assets/riduzione-hc-tsp-01-istanze.svg|900]]
+
+##### Perché funziona
+
+Indichiamo con $OPT(G')=c(H^*)$ il costo ottimo. Dobbiamo mostrare entrambe le direzioni:
 
 $$
 OPT(G')=0
@@ -580,14 +593,56 @@ OPT(G')=0
 G\text{ contiene un ciclo Hamiltoniano}.
 $$
 
-- Se $G$ contiene un ciclo Hamiltoniano, lo stesso ciclo esiste in $G'$ e usa soltanto archi originali, tutti di costo $0$. Poiché i costi sono non negativi, $OPT(G')=0$.
-- Se $OPT(G')=0$, ogni arco del tour ottimo deve avere costo $0$: i costi possibili sono infatti soltanto $0$ e $1$. Per costruzione tutti questi archi appartengono a $E$, quindi il tour trovato in $G'$ è un ciclo Hamiltoniano anche nel grafo originale $G$.
+![[assets/riduzione-hc-tsp-02-ciclo-costo-zero.svg|900]]
 
-**Complessità e conclusione.** Se $n=|V|$, il grafo completo non diretto contiene $\frac{n(n-1)}{2}$ archi; costruire $G'$ e assegnarne i pesi richiede dunque $O(n^2)$ operazioni. Dopo una sola chiamata all'oracolo per $TSP_{opt}$, basta controllare se il costo ottenuto sia nullo. Abbiamo quindi costruito $HC\leq_T^p TSP_{opt}$; poiché $HC$ è NP-completo, $TSP_{opt}$ è NP-hard.
+- **Se $G$ ha un ciclo Hamiltoniano**, quel ciclo usa solo archi originali. Esiste anche in $G'$ e costa $0$. Nessun tour può costare meno di $0$, quindi $OPT(G')=0$.
+- **Se $OPT(G')=0$**, ogni arco del tour ottimo deve costare $0$, perché i costi sono solo $0$ e $1$. Tutti questi archi appartenevano già a $G$: il tour ottimo è quindi un ciclo Hamiltoniano anche in $G$.
 
-Questa conclusione non richiede l'ipotesi $P\neq NP$: tale ipotesi serve invece per dedurre che $TSP_{opt}$ non ammetta un algoritmo polinomiale esatto.
+Di conseguenza, se $G$ **non** ha un ciclo Hamiltoniano, ogni tour di $G'$ usa almeno un arco aggiunto e $OPT(G')\geq 1$. La figura seguente mostra questo caso su un'altra istanza.
+
+![[assets/riduzione-hc-tsp-03-senza-ciclo.svg|900]]
+
+**Complessità e conclusione.** Se $n=|V|$, $G'$ ha $n(n-1)/2$ archi: costruirlo e assegnare i costi richiede $O(n^2)$ operazioni. Facciamo una sola chiamata all'oracolo per $TSP_{opt}$ e controlliamo il costo del tour in tempo polinomiale. Abbiamo dunque $HC\leq_T^p TSP_{opt}$; poiché $HC$ è NP-completo, $TSP_{opt}$ è NP-hard. Per concludere questo **non** occorre assumere $P\neq NP$; quell'ipotesi serve per affermare che non esiste un algoritmo polinomiale esatto per il TSP.
+
+Lo schema riassume i due passaggi: trasformare $G$ nell'istanza TSP e convertire il tour ottimo nella risposta a $HC$.
+
+![[assets/riduzione-hc-tsp-04-decisione.svg|900]]
+
+Lo pseudocodice compatta la procedura già descritta:
+
+**Algorithm 1 Risoluzione Ciclo Hamiltoniano con TSP** ^algorithm-1
+
+> 1. **function** HCtoTSP($G$)
+> 2.  $E^\prime \gets \{\{u, v\} : u, v \in V, u \neq v\}$<br>
+> 3.  **for all** $\{u,v\}$ in $E^\prime$ **do**
+> 4.   **if** $\{u,v\} \in E$ **then**
+> 5.    $c(\{u,v\}) \gets 0$
+> 6.   **else**
+> 7.    $c(\{u,v\}) \gets 1$
+> 8.   **end if**
+> 9.  **end for**
+> 10.  $G^\prime \gets (V, E^\prime, c)$
+> 11.  $H^* \gets TSP(G^\prime)$
+> 12.  **if** $c(H^*) = 0$ **then**
+> 13.   **return** sì
+> 14.  **else**
+> 15.   **return** no
+> 16.  **end if**
+> 17. **end function**
+
+##### Perché i pesi $0/1$ e $1/2$ sono diversi?
+
+Con i pesi **$0/1$** il costo è il numero di archi aggiunti, perciò la soglia da controllare è $0$. Questa riduzione può violare la **disuguaglianza triangolare**: se $uv$ e $vw$ sono archi originali ma $uw$ manca, allora $c(u,w)=1>0+0=c(u,v)+c(v,w)$. Dimostra quindi la difficoltà del TSP generale, senza dare da sola lo stesso risultato per il TSP metrico. Inoltre, nel caso sì l'ottimo è $0$: il rapporto $ALG/OPT$ non è definito, quindi questa costruzione non è adatta a una prova basata su tale rapporto.
+
+Se assegniamo invece **$1$** agli archi originali e **$2$** a quelli aggiunti, la stessa idea funziona per la soluzione esatta: ogni tour ha $n$ archi, dunque $G$ ha un ciclo Hamiltoniano se e solo se $OPT(G')=n$; altrimenti $OPT(G')\geq n+1$. Ora i costi sono **metrici**, perché per tre vertici distinti il lato più costoso vale al massimo $2\leq1+1$. Questo mostra che anche il TSP metrico è difficile da risolvere esattamente. Il piccolo divario $n$ contro $n+1$, però, non basta a escludere un fattore di approssimazione costante. La variante $1/2$ è un chiarimento matematico: nelle slide la riduzione per questo teorema usa $0/1$.
+
+Nel disegno, $uv$ e $vw$ appartengono al grafo originale; $uw$ è l'arco aggiunto. Cambiano solo i pesi: a sinistra la disuguaglianza triangolare fallisce, a destra vale con uguaglianza.
+
+![[assets/tsp-pesi-01-12-triangolo.svg|1000]]
 
 #### Inapprossimabilità del TSP generale
+
+La riduzione precedente separava i casi *solo per un risolutore esatto*. Ora chiediamo di più: un algoritmo che può restituire un tour più costoso dell'ottimo, ma al massimo di un fattore costante $\rho$, potrebbe comunque aiutarci a decidere $HC$? Per forzare una risposta distinguibile, faremo pagare agli archi aggiunti una penalità abbastanza grande da superare anche il margine concesso dall'approssimazione.
 
 > **Teorema.** Se $P \neq NP$, per ogni costante $\rho \geq 1$ non esiste un algoritmo polinomiale di $\rho$-approssimazione per il TSP generale.
 
@@ -603,7 +658,7 @@ M=\lceil \rho n\rceil+1 & \text{se } e\notin E.
 
 $$
 
-La costruzione richiede $O(n^2)$ operazioni e il valore $M$ ha una rappresentazione di lunghezza polinomiale. Consideriamo i due casi:
+La costruzione richiede $O(n^2)$ operazioni e il valore $M$ ha una rappresentazione di lunghezza polinomiale. Qui i pesi sono **$1/M$**, non $0/1$ né $1/2$: il costo base $1$ rende positivo l'ottimo del caso sì, mentre $M>\rho n$ crea un divario abbastanza ampio da distinguere i due casi anche osservando un tour solo approssimato. Consideriamo i due casi:
 
 - Se $G$ contiene un ciclo Hamiltoniano, lo stesso ciclo esiste in $G'$ e ha costo $n$. Poiché tutti gli archi costano almeno 1, l'ottimo vale esattamente $OPT(G')=n$. La garanzia di approssimazione impone quindi $cost(A(G'))\leq \rho n$.
 - Se $G$ non contiene un ciclo Hamiltoniano, ogni tour di $G'$ usa almeno un arco non appartenente a $E$. Il suo costo è dunque almeno
@@ -616,7 +671,7 @@ Controllando se il costo restituito da $A$ è al più $\rho n$ potremmo pertanto
 
 #### Approssimazioni per il TSP metrico
 
-L'inapprossimabilità appena dimostrata riguarda il TSP generale. Restringendo le istanze a costi che rispettano la **disuguaglianza triangolare** è invece possibile ottenere garanzie costanti.
+Il risultato negativo appena dimostrato riguarda il **TSP generale**: la penalità $M$ può violare la disuguaglianza triangolare, per esempio quando due archi originali di costo $1$ collegano $u$ a $w$ passando per $v$, ma l'arco diretto $uw$ costa $M>2$. Perciò la prova non si applica al sottoinsieme di istanze in cui andare direttamente non costa più che passare per un terzo vertice. Restringiamo ora il problema a questi costi **metrici** per cercare garanzie di approssimazione costanti. La variante $1/2$ vista sopra mostra che questa restrizione può ancora contenere istanze difficili da risolvere *esattamente*; ciò che cambia è la possibilità di approssimarle.
 
 Il **TSP metrico**, chiamato anche TSP con disuguaglianza triangolare ($TSP_{dt}$), è definito come segue:
 
@@ -643,9 +698,6 @@ Per un sottografo o multigrafo $F$, indichiamo con $cost(F)$ la somma dei costi 
 > La tesi si ottiene applicando ripetutamente la disuguaglianza triangolare: eliminare un vertice intermedio e sostituire i due tratti adiacenti con l'arco diretto non aumenta il costo. Di conseguenza, da un ciclo che visita alcuni vertici più volte si possono saltare le visite ripetute ottenendo un ciclo Hamiltoniano di costo non maggiore.
 
 **Algoritmo di 2-approssimazione.** L'idea è costruire un minimum spanning tree $T^*$, raddoppiarne gli archi per rendere pari ogni grado, calcolare un ciclo euleriano e applicare gli shortcut ai vertici già visitati.
-
-> [!info] Status per l'esame — AA 2025/26
-> Questo algoritmo non è stato svolto a lezione. Le dispense ufficiali richiedono comunque di conoscerne l'analisi nella misura necessaria a comprendere l'analisi di Christofides.
 
 Nell'immagine si mostrano, in sequenza, $T^*$, il ciclo euleriano $E$ sul multigrafo con archi raddoppiati e il ciclo Hamiltoniano $H$ ottenuto mediante shortcut. Per chiarezza non sono disegnati gli altri archi del grafo completo.
 
@@ -1141,196 +1193,213 @@ Quando si indica una *time complexity* occorre specificare quale misura e quali 
 
 #### Esempio di costruzione e valutazione di un algoritmo distribuito
 
-In questo esempio ci troviamo a definire un algoritmo per il "flooding", ovvero un broadcasting che parte da un nodo sorgente e viene propagato dai propri vicini, e così via, fino a raggiungere l'intero sistema.
+**Problema di broadcast.** Un solo nodo $s$, l'**iniziatore** (*initiator*), conosce inizialmente un'informazione $I$ e deve farla apprendere a tutti gli altri nodi in tempo finito, qualunque sia la scelta di $s$. Assumiamo un grafo $G=(V,E)$ con $n=|V|$ nodi e $m=|E|$ collegamenti; le restrizioni standard $R=\{BL,CN,TR\}$ sono collegamenti bidirezionali (**BL**), connettività (**CN**) e affidabilità totale (**TR**, nessun guasto). L'iniziatore unico che possiede $I$ è parte della specifica del problema ($UI^+$). Il protocollo che costruiamo è **generico**: i nodi non devono conoscere in anticipo la topologia, $n$ o gli identificativi dei vicini.
 
 ![[assets/Screenshot 2024-10-09 090924.png|400]]
 
-La prima idea è quella di realizzare un broadcasting. Definiamo due stati per i ruoli di "initiator" e "sleeping". Un evento esterno attiva l'initiator, che manda il messaggio ai suoi vicini. Questi inoltrano il messaggio ai propri vicini.
-
-![[assets/Screenshot 2024-10-09 091305.png|600]]
-
-Il problema di questa specifica è che non abbiamo fissato una condizione di arresto per il protocollo.
+**Dalla prima idea a Flooding.** Se ogni nodo che riceve $I$ lo invia sempre a tutti i vicini, il protocollo può non terminare: nell'esempio, $y$ e $z$ continuano a rinviarsi il messaggio. Serve ricordare che l'invio è già stato effettuato. Introduciamo quindi lo stato $DONE$ e facciamo inoltrare $I$ una sola volta, alla prima ricezione. Poiché il nodo riconosce la porta da cui è arrivato il messaggio (orientamento locale), può inoltre escludere il mittente dall'inoltro.
 
 ![[assets/Screenshot 2024-10-09 091410.png|400]]
 
-Ha perfettamente senso, come nell'immagine, supporre che un nodo $z$ riceva il messaggio prima di un altro nodo $y$ adiacente a quello di partenza, per l'imprevedibilità dei ritardi.
-Aggiungiamo un nuovo stato per i nodi: $DONE$, che viene raggiunto una volta che essi hanno effettuato l'invio/reinvio, a seconda della loro natura.
+Il protocollo **Flooding** usa gli stati $INITIATOR$, $SLEEPING$ e $DONE$ e il messaggio $I$:
 
-![[assets/Screenshot 2024-10-09 091450.png|500]]
-
-Una nuova miglioria che possiamo introdurre è il controllo dei destinatari, così da non andare a creare un traffico eccessivo.
-
-![[assets/Screenshot 2024-10-09 091659.png|400]]
-
-Tutti i nodi che non sono l'initiator fanno ora il reinvio verso tutti i propri vicini, meno quello dal quale hanno ricevuto il messaggio.
-L'ultima specifica è quella nell'immagine:
+~~~text
+INITIATOR, impulso spontaneo:
+    invia I a tutti i vicini; passa a DONE
+INITIATOR, ricezione di I:
+    non fare nulla
+SLEEPING, ricezione di I dal vicino p:
+    invia I a tutti i vicini tranne p; passa a DONE
+SLEEPING, impulso spontaneo:
+    non fare nulla
+DONE, qualunque evento:
+    non fare nulla
+~~~
 
 ![[assets/Screenshot 2024-10-09 091924.png|600]]
 
-In un sistema sincrono la dinamica è prevedibile: l'invio dei messaggi si propaga "a macchia d'olio" nel sistema, viaggiando verso i vicini dell'initiator, poi ai vicini dei vicini, ecc\... Nel caso di sistema asincrono l'esecuzione del protocollo non è deterministica, per cui possono generarsi una moltitudine di dinamiche diverse a tempo di esecuzione.
-Dall'algoritmo che abbiamo definito notiamo che, in primo luogo, non esiste un meccanismo di terminazione della computazione a livello globale. Ciascuna entità non è in grado di dire se le altre abbiano terminato l'esecuzione. La concezione di terminazione è quindi solo locale.
-Per formalizzare correttamente un algoritmo distribuito è necessario dimostrare che esso prima o poi concluda globalmente, e che sia esatto (cioè assolva sempre al proprio scopo). Nel nostro esempio:
+**Correttezza.** Supponiamo che, dopo l'attivazione di $s$, qualche nodo non riceva mai $I$. Poiché $G$ è connesso, esisterebbe un arco tra un nodo che ha già appreso $I$ e uno che non lo apprende. Il primo, quando si è attivato, ha inviato $I$ su quell'arco: il secondo non può essere il mittente della sua prima copia. L'affidabilità e il ritardo finito di consegna danno una contraddizione. Quindi tutti i nodi apprendono $I$.
 
-- L'algoritmo è corretto, perché ogni entità viene raggiunta dal messaggio e, qualora non lo fosse, dovrebbe per forza essere dovuto ad un guasto di rete
+**Terminazione.** Ogni nodo invia al massimo una volta ai propri vicini e poi passa a $DONE$; il numero di messaggi è finito e tutti sono consegnati in tempo finito. Tutti i nodi raggiungono dunque $DONE$. Ciascuno conosce la propria **terminazione locale**, ma il protocollo non gli permette di rilevare quando *tutti* hanno terminato: questa è una questione distinta (*termination detection*). In una rete asincrona, i ritardi possono far arrivare una copia lungo un cammino più lungo prima di una copia inviata direttamente da $s$.
 
-- L'algoritmo conclude sempre perché ad ogni reinvio i nodi passano allo stato $DONE$
+**Messaggi.** L'iniziatore invia $|N(s)|$ messaggi; ognuno degli altri $n-1$ nodi ne invia $|N(x)|-1$, escludendo il mittente della prima copia. Per il lemma della stretta di mano, $\sum_x|N(x)|=2m$, perciò il conteggio è esatto e non dipende dall'ordine di consegna:
 
-Passiamo ora a misurare i costi:
+$$
+\begin{aligned}
+M(\text{Flooding}(G))
+&=|N(s)|+\sum_{x\ne s}(|N(x)|-1)\\
+&=\sum_x|N(x)|-(n-1)=2m-n+1\in\Theta(m).
+\end{aligned}
+$$
 
-- Messaggi inviati: possiamo dire in via generale che nel caso peggiore, in termini di topologia di $G$ e dinamica di esecuzione, passano 2 messaggi per ogni collegamento. Perciò il numero totale di messaggi è $2 \cdot m \in O(m)$. Più precisamente:
+**Tempo.** Nel modello ideale sincrono, dopo $t$ unità hanno appreso $I$ tutti i nodi a distanza al più $t$ da $s$. Il tempo fino all'ultima prima ricezione è l'**eccentricità** $r(s)=\max_y d(s,y)$; nel caso peggiore rispetto all'iniziatore è il diametro $D(G)=\max_s r(s)\le n-1$. Nel modello asincrono, invece, il **tempo fisico** non ha un bound uniforme senza un limite ai ritardi. La catena che porta alla *prima* ricezione di un nodo segue nodi distinti e contiene al più $n-1$ trasmissioni, ma può seguire un cammino non minimo. Il **tempo causale** conta anche le copie ridondanti: poiché ogni nodo invia una sola volta, una catena di inoltri può contenere fino a $n$ trasmissioni. In un triangolo si può avere $s\to a\to b\to s$, con l'ultima copia ricevuta da $s$ già in $DONE$. Questi conteggi causali non vanno identificati con $D(G)$.
 
-  $$\begin{aligned}
-                          |N(s)| + \sum_{x \neq s} N(x) - 1 = \sum_{x} |N(x)| - \sum_{x \neq s} 1 = 2 \cdot m - (n - 1)
-  \end{aligned}$$
+**Lower bound del problema.** In *ideal time*, per l'iniziatore $s$ ogni broadcast deve impiegare almeno $r(s)$ unità per raggiungere il nodo più lontano; se l'iniziatore è arbitrario, il caso peggiore è almeno $D(G)$. Flooding lo raggiunge ed è quindi ottimale per questa misura. Quanto ai messaggi, almeno $n-1$ nodi devono ricevere $I$. Per un protocollo generico corretto su **tutti** i grafi connessi, senza conoscenza globale della topologia o di $n$, vale il bound più forte $m$: se in un'esecuzione un arco non trasmettesse mai, potremmo sostituirlo con un cammino attraverso un nuovo nodo dormiente, lasciando invariata la vista locale degli estremi; il nuovo nodo non riceverebbe $I$. Questa contraddizione spiega perché Flooding, che usa meno di $2m$ messaggi, è ottimale **nell'ordine di grandezza** sotto quelle ipotesi.
 
-  In particolare, sommiamo tutti i vicini dell'initiator e, per ogni altro nodo, tutti i loro vicini meno quello dal quale ricevono il messaggio. Per il lemma della stretta di mano, $\sum_x |N(x)|=2m$: è la somma dei gradi, nella quale ogni arco non diretto viene contato due volte
-
-- Tempo di esecuzione: nel modello ideale sincrono, con una trasmissione per unità di tempo, un'esecuzione con iniziatore $s$ termina dopo la sua eccentricità $r(s)=\max_y d(s,y)$. Nel caso peggiore rispetto alla scelta dell'iniziatore, $\max_s r(s)=D(G)\leq n-1$.
-  Nel modello asincrono il tempo fisico non è limitato senza un bound sui ritardi. Se si usa invece il **causal time**, cioè la lunghezza della catena causale di messaggi, la prima ricezione può seguire un cammino semplice non minimo: il bound superiore generale è $n-1$, che può essere maggiore di $D(G)$.
-
-Possiamo ora stabilire se sia possibile ridurre il numero di messaggi inviati od il tempo ideale, ma per farlo è necessario trovare il lower bound del problema.
-
-- Tempo di esecuzione: nel modello ideale e nel caso peggiore rispetto alla scelta dell'iniziatore, qualunque algoritmo deve raggiungere una coppia di nodi a distanza $D(G)$. Flooding raggiunge quindi il lower bound $D(G)$ ed è ottimale in ideal time. Questa conclusione non identifica $D(G)$ con il causal time di ogni esecuzione asincrona
-
-- Messaggi inviati: il bound immediato è $n-1\in\Omega(n)$, perché ogni nodo diverso dall'iniziatore deve ricevere almeno un messaggio. Le slide dimostrano inoltre un lower bound worst-case $\Omega(m)$ per protocolli uniformi sulle topologie arbitrarie sotto le restrizioni standard, senza conoscenza globale sufficiente a evitare a priori determinati archi. Il bound non afferma che su ogni topologia nota servano $m$ messaggi: sul grafo completo conosciuto, per esempio, il simple broadcast ne usa soltanto $n-1$.
-  Asintoticamente il costo di flooding raggiunge il lower bound, però si può tentare di chiudere un gap di fattore 2:
-
-  - Nel caso in cui $G$ fosse un albero, avremmo che $m = n - 1$. Con questa specifica topologia possiamo toccare esattamente il lower bound. In questo modo abbiamo dimostrato che il lower bound non può essere alzato.
-
-  - Con un grafo completo abbiamo $m = \frac{n(n-1)}{2}$. Flooding invia esattamente $2m-n+1=(n-1)^2$ messaggi, cioè $\Theta(n^2)$. Se almeno l'iniziatore sa che tutti gli altri nodi sono suoi vicini, basta invece un simple broadcast: $n-1$ messaggi e ideal time 1, pari al diametro
-
-  - Per tutti quei grafi che non sono né alberi né grafi completi, tutto dipende dal valore di $m$: se il grafo è sparso ci si avvicina al lower bound, viceversa si inviano molti messaggi inutili
-
-  Siccome abbiamo visto che flooding lavora bene su alberi, possiamo pensare di creare uno spanning tree (qualsiasi costo implichi) e di usarlo nel seguito per applicarvi flooding
+**Topologie particolari.** Su un albero $m=n-1$, dunque Flooding usa esattamente $n-1$ messaggi anche se i nodi non sanno di trovarsi in un albero. Su un grafo completo, invece, usa $(n-1)^2=\Theta(n^2)$ messaggi; se almeno l'iniziatore sa che ogni altro nodo è suo vicino, il *simple broadcast* invia direttamente a tutti: $n-1$ messaggi e ideal time $1$. Questa conoscenza aggiuntiva spiega perché il bound $m$ dei protocolli generici non si applica a quel caso. Per riutilizzare broadcast economici su un grafo generico si può prima costruire uno **spanning tree** e poi trasmettere lungo i suoi $n-1$ archi, tenendo distinto il costo della costruzione.
 
 #### Il wake-up problem
 
-Il wake-up è un momento in cui la rete si mette in attività: uno o più agenti si svegliano spontaneamente e devono risvegliare anche gli altri, che si trovano in uno stato "idle". Il broadcast è quindi una sorta di wake-up con un solo initiator. Per risolvere wake-up si può cercare di usare la soluzione che abbiamo appena proposto per flooding.
+**Problema.** Una computazione deve coinvolgere tutti i nodi, ma inizialmente solo alcuni possono attivarsi autonomamente; gli altri restano dormienti finché non ricevono un messaggio. Il **wake-up** deve portare tutti allo stato $AWAKE$. Il broadcast con un solo iniziatore è un caso particolare di wake-up; qui gli iniziatori possono essere più di uno e non sanno quali altri nodi si siano già attivati. Manteniamo le restrizioni standard $R=\{BL,CN,TR\}$ e assumiamo che almeno un nodo si attivi spontaneamente.
+
+**WFlood** applica la strategia di Flooding al messaggio di risveglio $W$. Tutti partono in stato $ASLEEP$; $AWAKE$ è lo stato terminale:
+
+~~~text
+ASLEEP, impulso spontaneo:
+    invia W a tutti i vicini; passa a AWAKE
+ASLEEP, ricezione di W dal vicino p:
+    invia W a tutti i vicini tranne p; passa a AWAKE
+AWAKE, qualunque evento:
+    non fare nulla
+~~~
 
 ![[assets/Screenshot 2024-10-11 160525.png|450]]
 
-- Messaggi inviati:
+**Correttezza e terminazione.** Da almeno un iniziatore, l'invio attraversa ogni frontiera tra nodi svegli e dormienti in un grafo connesso; con affidabilità totale ogni nodo si sveglia in tempo finito. Ogni nodo esegue un solo invio ai vicini e poi ignora le altre copie, quindi il protocollo termina. Anche qui nessun nodo rileva da solo quando *tutti* sono svegli e la computazione globale è terminata.
 
-  - Nel caso in cui ci sia un solo initiator, il problema coincide con flooding, quindi vengono inviati $2m-n+1$ messaggi
+**Messaggi.** Sia $k\ge1$ il numero di nodi che si sono effettivamente svegliati per impulso spontaneo *prima* di ricevere $W$. Questi inviano a tutti i vicini; gli altri $n-k$ escludono ciascuno il mittente della prima copia. Pertanto
 
-  - Nel caso migliore, cioè quello in cui tutti siano initiator, viaggiano 2 messaggi su ogni arco, quindi $2 \cdot m$
+$$
+M(\text{WFlood}(G))=\sum_x|N(x)|-(n-k)=2m-(n-k),
+\qquad 2m-n+1\le M(\text{WFlood}(G))\le2m.
+$$
 
-  - Nel caso in cui ci siano $k$ initiators, applicando nuovamente la formula dei messaggi vista per flooding, troviamo: $2 \cdot m - (n - k)$
+Con un solo iniziatore il costo coincide con Flooding; se tutti sono iniziatori vale $2m$. Su un albero la formula diventa $n+k-2$. Nel caso peggiore, wake-up generico richiede $\Theta(m)$ messaggi: contiene il caso broadcast con un solo iniziatore e WFlood fornisce il corrispondente upper bound.
 
-- Per quanto riguarda il tempo, dobbiamo considerare ancora la condizione peggiore in termini di initiators e topologia. Troviamo $O(D(G))$ come per flooding
+**Tempo ideale.** Se un insieme $S$ di iniziatori si attiva simultaneamente all'istante iniziale e non intervengono altri impulsi, l'ultimo risveglio avviene dopo $\max_{v\in V}\min_{s\in S}d(s,v)$ unità: più iniziatori possono accelerare l'esecuzione. Nel caso peggiore ammesso, però, può attivarsi un solo iniziatore in un nodo di eccentricità $D(G)$, perciò la complessità ideale worst-case è $\Theta(D(G))$. Anche se altri impulsi spontanei arrivano più tardi, il primo iniziatore garantisce un upper bound ideale di $D(G)$; senza un bound sui ritardi il tempo fisico asincrono resta non limitato uniformemente.
 
 #### Spanning tree
 
-Nel seguito ci riferiamo ad un generico spanning tree $T$ costruito su $G = (V, E)$. $T$ è un sottografo aciclico di $G$ tale che $T = (V, E^\prime)$ tale che $E^\prime \subseteq E$.
-Le restrizioni che supponiamo sono:
+Uno **spanning tree** (albero di copertura) di un grafo connesso $G=(V,E)$ è un sottografo $T=(V,E')$, con $E'\subseteq E$, **connesso e aciclico**. Contiene tutti gli $n=|V|$ nodi e, come ogni albero, esattamente $n-1$ archi. Costruirlo permette poi, per esempio, di fare broadcast lungo i soli archi di $T$ con $n-1$ messaggi, oltre al costo iniziale della costruzione.
 
-- Iniziatiore singolo
+Nel problema distribuito **SPT** (*spanning tree construction*) ogni nodo $x$ deve conoscere, alla fine, l'insieme $TreeNeighbours(x)\subseteq N(x)$ dei propri vicini nell'albero; non è necessario che conosca tutto $T$. Gli insiemi locali devono essere coerenti: $y\in TreeNeighbours(x)$ se e solo se $x\in TreeNeighbours(y)$. La prima ricezione di un broadcast da un unico iniziatore individua già un *parent* per ogni altro nodo, ma servono risposte o ulteriori messaggi per far conoscere a ciascuno anche i figli e distinguere gli archi non appartenenti all'albero.
 
-- $G$ non diretto
-
-- Affidabilità completa nell'invio dei messaggi
-
-- $G$ connesso
+Per SHOUT e per la visita DFT assumiamo **un solo iniziatore**, grafo connesso, collegamenti bidirezionali e affidabilità totale; i nodi conoscono il proprio vicinato $N(x)$. Poniamo $m=|E|$. I protocolli non richiedono che i nodi conoscano l'intera topologia. Per lo pseudocodice di SHOUT con risposte $NO$ assumiamo anche consegna **FIFO su ogni link**: serve alla terminazione locale basata sul solo contatore.
 
 #### Protocollo Shout
 
-Dal punto di vista dei nodi, trovare lo spanning tree vuol dire arrivare ad un punto in cui si possa distinguere tra due tipi di vicini: quelli appartenenti e quelli non appartenenti allo spanning tree. Mettendo assieme tutte le singole conoscenze dei nodi, troviamo lo spanning tree $T$ su $G$.
-L'idea di questo protocollo non è molto diversa dal flooding. L'initiator chiede ai propri vicini se intendono far parte dello spanning tree e si mette in attesa di risposte. Una volta ricevuta la richiesta dell'initiator, i suoi vicini, se non l'hanno già ricevuta rispondono "sì", oppure "no" altrimenti, poi procedono all'inoltro. La stessa dinamica si ripete per i vicini dei vicini, ecc\... Una volta ricevute tutte le risposte, gli archi associati a una risposta $YES$ appartengono allo spanning tree; quelli associati a $NO$ non vi appartengono.
+**Idea.** SHOUT estende Flooding: l'iniziatore invia una richiesta $Q$ a ogni vicino. Un nodo ancora $IDLE$ accetta la prima richiesta con $YES$, sceglie il mittente come parent e invia $Q$ agli altri vicini. Se è già $ACTIVE$, risponde $NO$ alle richieste successive. Ogni nodo conta una risposta per ciascun vicino a cui ha inviato $Q$; per un nodo non iniziatore si conta anche il parent, già deciso con $YES$.
 
 ![[assets/Screenshot 2024-10-11 161549.png|600]]
 
 ![[assets/Screenshot 2024-10-11 161643.png|1100]]
 
-- Shout è corretto: il vicinato nello spanning tree è simmetrico ed implica una catena di collegamenti verso l'initiator. Siccome ogni nodo invia un solo sì a chi lo invita nel proprio vicinato, lo spanning tree definito dalle relazioni di vicinato contiene tutti i nodi
+Gli stati sono $\{INITIATOR,IDLE,ACTIVE,DONE\}$, con $INITIATOR$ e $IDLE$ iniziali e $DONE$ terminale. Ogni nodo mantiene $TreeNeighbours$, un contatore `counter` e, se non è la radice, `parent`. I messaggi sono $Q$, $YES$ e $NO$:
 
-- Nel momento in cui un nodo diventa $DONE$ non ci sono più regole, dunque la computazione è completa, almeno localmente. Non esiste peraltro alcun nodo che secondo questo protocollo possa sapere se la computazione globale sia completa o meno
+~~~text
+INITIATOR, impulso spontaneo:
+    TreeNeighbours ← ∅; counter ← 0
+    se |N(x)| = 0: passa a DONE
+    altrimenti: invia Q a tutti i vicini; passa ad ACTIVE
 
-Ora vediamo i costi di Shout. Se ci pensiamo, Shout è in buona parte una replica dell'algoritmo di flooding, con l'aggiunta di un messaggio di risposta. Ci aspettiamo di avere dei costi analoghi a quel caso.
+IDLE, ricezione di Q da p:
+    parent ← p; TreeNeighbours ← {p}; counter ← 1
+    invia YES a p
+    se counter = |N(x)|: passa a DONE
+    altrimenti: invia Q a N(x) \ {p}; passa ad ACTIVE
 
-- Messaggi inviati: su ogni collegamento possono viaggiare 3 diversi tipi di messaggi: $Q, YES, NO$. Però solo alcune combinazioni di questi sono possibili su di un singolo link.
+ACTIVE, ricezione di Q da p:
+    invia NO a p
+ACTIVE, ricezione di YES da p:
+    TreeNeighbours ← TreeNeighbours ∪ {p}
+    counter ← counter + 1
+    se counter = |N(x)|: passa a DONE
+ACTIVE, ricezione di NO da p:
+    counter ← counter + 1
+    se counter = |N(x)|: passa a DONE
+~~~
 
-  ![[assets/Screenshot 2024-10-15 091649.png|500]]
+**Correttezza e terminazione.** Ogni nodo diverso dall'iniziatore invia esattamente un $YES$, scegliendo un solo parent. La scelta avviene dopo che il parent è stato raggiunto: risalendo la catena dei parent si arriva all'iniziatore, quindi non si forma un ciclo. Poiché il grafo è connesso e le richieste sono consegnate, tutti i nodi vengono raggiunti. Su ogni arco scelto, i due estremi si registrano reciprocamente come vicini dell'albero; gli altri archi restano esclusi. Ogni richiesta riceve una risposta e il contatore arriva a $|N(x)|$, perciò ogni nodo raggiunge $DONE$. Questo segnala la **terminazione locale**: il protocollo non permette a un singolo nodo di rilevare che tutti abbiano terminato.
 
-  Le situazioni impossibili non sono proprio previste dal protocollo, mentre le altre sono ammesse in condizioni di comunicazione non ideale.
-  Contiamo ora quanti messaggi di ogni tipo attraversano $G$.
+Nel caso $n=1$, l'iniziatore non ha vicini e passa direttamente a $DONE$: l'albero ha zero archi e non occorrono messaggi.
 
-  ![[assets/Screenshot 2024-10-15 092404.png|500]]
+L'ipotesi FIFO evita che, su un arco dove si incrociano due $Q$, il $NO$ inviato dopo il $Q$ da un estremo arrivi all'altro **prima** di quel $Q$: in tal caso il contatore potrebbe farlo passare a $DONE$ e il $Q$ tardivo resterebbe senza risposta. La lista delle restrizioni nelle slide non menziona FIFO; il punto richiede una precisazione del modello per questa specifica con $NO$.
 
-  Vengono essenzialmente inviati $(n - 1)$ messggi di tipo $Q$ sui collegamenti tra i nodi dello spanning tree. I rimanenti messaggi $Q$ sono 2 per ogni altro collegamento su $G$. I messaggi $YES$ sono lo stesso numero dei messaggi $Q$ tra nodi dello spanning tree. I messaggi $NO$ sono 1 per ogni messaggio $Q$ inviato ad un nodo che non risponde con $YES$, dunque lo stesso numero dei messaggi $Q$ sui collegamenti che non definiscono lo spanning tree.
-  Se andiamo a sommare il numero di messaggi nel caso peggiore, troviamo:
+**Messaggi.** Su ciascuno dei $n-1$ archi dell'albero passano un $Q$ e un $YES$; su ciascuno dei $m-(n-1)$ altri archi passano due $Q$ e due $NO$. Le figure mostrano le due situazioni ammesse:
 
-  $$\begin{aligned}
-                          countMessages(Shout) &= 2 \cdot m - n + 1 + 2 \cdot [m - (n - 1)] + (n - 1)\\
-                          &= 4 \cdot m - 2 \cdot n + 2 = 2 \cdot (2 \cdot m - n + 1)\\
-                          &= 2 \cdot countMessages(Flooding)
-  \end{aligned}$$
+![[assets/Screenshot 2024-10-15 091649.png|500]]
 
-  Ora possiamo chiederci se sia possibile ridurre il numero di messaggi. Ovvero: esistono messaggi ridondanti per l'attuale specifica dell'algoritmo? In realtà i $NO$ lo sono. Quando transitano due $Q$ in un arco, finiranno per transitare due $NO$, dunque l'arco non comparirà nello spanning tree. Si può quindi definire una nuova specifica per Shout, che chiamiamo Shout+.
+![[assets/Screenshot 2024-10-15 092404.png|500]]
 
-  ![[assets/Screenshot 2024-10-15 114636.png|400]]
+$$
+\begin{aligned}
+M(\text{SHOUT})
+&=(n-1)+2[m-(n-1)]+(n-1)+2[m-(n-1)]\\
+&=4m-2n+2=2(2m-n+1)=2M(\text{Flooding}).
+\end{aligned}
+$$
 
-  In pratica, ricevere un messaggio $Q$ in stato $ACTIVE$ è considerato come ricevere un $NO$. Le due casistiche vengono accorpate.
-  Abbiamo ora solo due possibili coppie di messaggi ($Q-YES, Q-Q$) e perdipiù è stata rimossa quella con il costo maggiore. Il costo di Shout+ è: $countMessages(Shout+) = 2 \cdot m$.
+**Tempo ideale.** Con trasmissioni simultanee di un'unità, i $Q$ raggiungono ogni nodo alla sua distanza dall'iniziatore $s$. Per $n\ge2$, l'ultimo nodo non può terminare prima di $r(s)+1$ unità, dove $r(s)=\max_x d(s,x)$ è l'eccentricità di $s$. Un $Q$ fra due nodi all'ultimo livello può però richiedere un successivo $NO$: per la terminazione locale di tutti i nodi vale quindi $r(s)+1\le T_{ideal}(\text{SHOUT})\le r(s)+2\le D(G)+2$. In un triangolo con iniziatore in un vertice, gli altri due si scambiano $Q$ e poi $NO$, raggiungendo il limite superiore. Il libro consigliato riporta $r(s)+1$ anche per SHOUT (*Design and Analysis of Distributed Algorithms*, p. 56): il triangolo mostra che, contando il passaggio di **tutti** i nodi a $DONE$ nel pseudocodice con $NO$, può servire un'unità in più. Per $n=1$ il tempo è zero. Senza un limite ai ritardi, il tempo fisico asincrono non ha un bound uniforme.
 
-Cosa accade a Shout se introduciamo più iniziatori? Due nodi appartenenti ad altrettanti diversi spanning tree parziali non possono dare origine alla loro fusione, perché finiranno per rispondere $NO$ reciprocamente (appartenendo entrambi ad uno spanning tree, una volta ricevuta la domanda risponderanno per forza $NO$). L'esecuzione terminerà dunque con più spanning trees (uno per ogni iniziatore) parziali e tra loro disconnessi, ovvero una foresta. Shout non funziona nel caso di più iniziatori, occorre trovare un'alternativa.
+**SHOUT+** elimina i messaggi $NO$. Le azioni degli stati iniziali restano uguali; in $ACTIVE$, ricevere $Q$ da un vicino equivale a ricevere un rifiuto implicito: si incrementa `counter` senza rispondere. La gestione di $YES$ resta invariata. Quando due $Q$ si incrociano su un arco, ciascun estremo riceve il $Q$ dell'altro e conta la risposta implicita. Anche qui tutti i contatori arrivano a $|N(x)|$.
+
+![[assets/Screenshot 2024-10-15 114636.png|400]]
+
+Ogni arco trasporta esattamente due messaggi: $Q$–$YES$ se entra nell'albero, oppure $Q$–$Q$ se ne resta fuori. Quindi $M(\text{SHOUT+})=2m$; per $n\ge2$ il suo tempo ideale è ancora $r(s)+1$.
+
+**Più iniziatori.** SHOUT e SHOUT+ sono specificati per un solo iniziatore. Se ne partono più di uno, un nodo già attivo non accetta la richiesta proveniente da un altro albero parziale: gli alberi non si fondono e il risultato può essere una **foresta**. Le strategie per costruire un unico albero in questa situazione sono trattate separatamente più avanti.
 
 #### Costruzione dello spanning tree tramite traversal
 
-L'albero di copertura generato da Shout è, sotto condizioni ideali, esattamente lo stesso che viene costruito da una BFS. Un'idea diversa per la costruzione dello spanning tree è simulare una DFS, anche se questo implica una sequenzialità nell'esecuzione. Nei sistemi distribuiti, quando si vogliono indurre queste dinamiche, ci si serve di particolari messaggi detti "token". Le restrizioni imposte sono ancora una volta: initiator singolo, collegamenti non-diretti, grafo connesso ed affidabilità totale.
-Abbiamo 3 tipi di token diversi:
+Un'altra tecnica simula una visita in profondità (*depth-first traversal*, **DFT**) tramite un solo token di visita. Un nodo visita un vicino alla volta e attende il ritorno del token prima di provarne un altro. Gli archi con cui il token raggiunge per la prima volta un nodo formano l'albero; i tentativi verso nodi già visitati individuano le *back-edge*, che ne restano fuori. Valgono le stesse restrizioni dichiarate per SHOUT.
 
-- Forward: un nodo lo invia ad un vicino non ancora visitato e si mette in attesa del suo ritorno
-
-- Return: ritorna da un vicino al quale si è chiesto di proseguire la visita. Una volta raccolto, si può delegare un altro vicino non ancora visitato perché sia esso a proseguire la visita. Se non ci sono più vicini da visitare, si restituisce un return token a chi ci aveva chiesto a sua volta di proseguire la visita
-
-- Back-edge: quando arriva un forward token ad un nodo visitato, questo deve restituire un back-edge token per segnalare che non è possibile proseguire la visita di lì.
-  Quando un nodo invia un forward token ad un vicino che è già nello spanning tree, ma senza che il primo lo sappia, si ripete la stessa dinamica ma a parti inverse
+I tre messaggi sono `ForwardToken`, per tentare la visita, `ReturnToken`, per tornare dopo aver completato un sottoalbero, e `BackEdgeToken`, per respingere il token quando il nodo era già visitato.
 
 ![[assets/Screenshot 2024-10-15 120009.png|600]]
 
-Una volta completata la visita, la radice dello spanning tree è l'initiator e le rimanenti entità si discriminano in base ai token ricevuti.
+La radice è l'iniziatore. Ogni altro nodo memorizza in `entry` il mittente del **primo** `ForwardToken`: è il suo parent. I figli sono i vicini che ricevono da esso il token per la prima volta e restituiscono `ReturnToken`. I vicini che restituiscono `BackEdgeToken` non sono figli. `Unvisited` contiene i vicini ancora da provare; `pick` ne sceglie e rimuove uno.
 
-- Il nodo genitore di un nodo $x$ è quel nodo dal quale $x$ ha ricevuto per primo il forward token e restituito il return token una volta terminata la propria parte
+~~~text
+procedura VISIT:
+    se Unvisited non è vuoto:
+        p ← pick(Unvisited)
+        invia ForwardToken a p; passa a VISITED
+    altrimenti:
+        se non sei l'iniziatore: invia ReturnToken a entry
+        passa a DONE
 
-- I nodi figli di un nodo $x$ sono i vicini diversi dal parent che hanno ricevuto per la prima volta il forward token da $x$ e hanno poi restituito il return token. Equivalentemente, sono i vicini collegati a $x$ da archi dell'albero, escluso il parent
+INITIATOR, impulso spontaneo:
+    Unvisited ← N(x); esegui VISIT
+IDLE, ricezione di ForwardToken da p:
+    entry ← p; Unvisited ← N(x) \ {p}; esegui VISIT
+VISITED, ricezione di ForwardToken da p:
+    Unvisited ← Unvisited \ {p}
+    invia BackEdgeToken a p
+VISITED, ricezione di ReturnToken dal vicino atteso p:
+    registra p come figlio; esegui VISIT
+VISITED, ricezione di BackEdgeToken dal vicino atteso p:
+    esegui VISIT
+~~~
 
-Ora valutiamo i costi dell'algoritmo, che chiameremo $DFT$:
+**Correttezza e terminazione.** C'è un solo token di visita attivo: chi lo invia attende il suo ritorno. Ogni nodo non iniziatore viene scoperto una sola volta, registra un unico parent e viene collegato a una catena che risale alla radice. Ogni vicino viene rimosso da `Unvisited` quando è provato o quando si scopre che è già visitato; gli archi restanti vengono quindi classificati senza cicli. Su un grafo connesso, nessun nodo può restare non visitato quando l'iniziatore esaurisce i vicini e raggiunge $DONE$. Un nodo non iniziatore passa a $DONE$ dopo aver restituito il token al parent; la radice riconosce così la fine della visita quando è lei a passare a $DONE$.
 
-- Numero di messaggi: dobbiamo vedere, come per Shout, quali messaggi possono viaggiare sui vari collegamenti. Le uniche combinazioni possibili sono forward/return e forward/back-edge.
+**Messaggi e tempo.** Su ogni arco passa un `ForwardToken` seguito da un `ReturnToken` oppure da un `BackEdgeToken`:
 
-  ![[assets/Screenshot 2024-10-15 121028.png|450]]
+![[assets/Screenshot 2024-10-15 121028.png|450]]
 
-  Per ogni collegamento passano esattamente 2 messaggi, dunque il costo complessivo è: $countMessages(DFT) = 2 \cdot m = countMessages(Shout+)$.
-  Possiamo ora chiederci se anche in questo caso sia possibile ridurre il numero di messaggi. La risposta è no: tutti i messaggi inviati dall'algoritmo sono necessari ed eliminarne qualcuno altererebbe la sua esattezza. Il costo dell'algoritmo è asintoticamente ottimo
+Pertanto $M(\text{DFT})=2m$, come per SHOUT+. Il costo è $\Theta(m)$ e raggiunge nell'ordine di grandezza il lower bound per la visita generica nel modello considerato. Poiché il token segue una sola catena sequenziale, il **tempo causale**, misurato in trasmissioni di token, è $2m$; coincide col tempo ideale in unità di trasmissione di questa visita. Ogni nodo deve comunque essere raggiunto in sequenza, quindi per una traversal $T\ge n-1$. Senza un limite ai ritardi, il tempo fisico asincrono non ha un bound uniforme.
 
-- Tempo di esecuzione: siccome l'esplorazione è totalmente sequenziale, i $2 \cdot m$ messaggi della catena più lunga possibile (caso peggiore) sono anche il numero di istanti massimo che l'algoritmo impiega a terminare
-
-È possibile migliorare le prestazioni di $DFT$? Sì, però non lo si può fare senza introdurre un minimo di parallelismo. Idealmente si potrebbe pensare di parallelizzare la visita dei back edge; il problema è che il livello di conoscenza locale dei nodi ci impedisce di sapere quando effettivamente si tratti di back edge.
-Un nodo che inizia la visita potrebbe inviare un broadcast ai propri vicini per segnalarlo, in modo da non essere contattato in futuro e dover così restituire il back edge token.
+**Variante Visited/Ack.** La DFT base spende tempo sequenziale anche sui tentativi che diventano back-edge. Per evitarli, quando un nodo riceve il token per la prima volta (iniziatore compreso), invia `Visited` ai vicini tranne il parent e **attende i loro `Ack`** prima di chiamare `VISIT`. Chi riceve `Visited` risponde con `Ack` e rimuove il mittente da `Unvisited`; se è ancora $IDLE$, conserva questa informazione per inizializzare `Unvisited` quando arriverà il token. Così non invierà in seguito il token a un vicino già visitato. Gli scambi `Visited`/`Ack` con vicini diversi procedono in parallelo, mentre il token continua a muoversi in modo sequenziale.
 
 ![[assets/Screenshot 2024-10-15 121746.png|750]]
 
-Il messaggio di ack viene sempre atteso, perché non si hanno garanzie sui tempi di invio dei messaggi.
-
 ![[assets/Screenshot 2024-10-15 121941.png|600]]
 
-Ogni volta che viene scoperto un nuovo nodo, si manda il broadcast a tutti i vicini meno quello da cui si è ricevuto il token forward e si attende l'acknowledgement. Questo invio si frappone nella catena di messaggi $Forward$ e $Return$.
+**Tempo ideale della variante.** Il token percorre in andata e ritorno solo i $n-1$ archi dell'albero: la sua catena contiene $2(n-1)$ trasmissioni. Ogni nuova visita può aggiungere al cammino critico al più un handshake `Visited`/`Ack` lungo due trasmissioni, per al più $2n$ ulteriori unità. Ne segue il limite $T_{ideal}\le 2(n-1)+2n=4n-2\in O(n)$. Il termine $2n$ misura un **contributo temporale massimo**, non il numero totale dei messaggi `Visited`/`Ack`.
 
-- Tempo di esecuzione: tutti i messaggi della catena $Forward$/$Return$ passano per gli archi dello spanning tree, percui sono $2 \cdot (n - 1)$ in totale. I messaggi $Visited$/$Ack$ sono una catena di 2 per ogni invio, dunque $2 \cdot n$ in totale.
-  Considerando entrambe le catene, abbiamo un costo complessivo di $4 \cdot n - 2 \in O(n)$ istanti
+**Messaggi della variante.** Ogni arco dell'albero porta due token e al più un handshake `Visited`/`Ack`; su un arco non appartenente all'albero possono avvenire due handshake, uno per direzione. Quindi
 
-- Messaggi inviati: per ogni collegamento dello spanning tree ($n - 1$ in totale) vengono inviati 2 messaggi contenenti token forward e return, rispettivamente. I messaggi $Visited$/$Ack$ sono 2 per ogni collegamento dello spanning tree e 4 per ogni collegamento non nello spanning tree. Abbiamo:
+$$
+M(\text{DFT}_{Visited/Ack})
+\le 2(n-1)+2(n-1)+4[m-(n-1)]
+=4m\in O(m).
+$$
 
-  $$\begin{aligned}
-                          countMessages(DFT_{new}) &\leq 2 \cdot (n - 1) + 2 \cdot (n - 1) + 4 \cdot (m - (n - 1))\\
-                          &= 4 \cdot m = 2 \cdot countMessages(DFT)
-  \end{aligned}$$
+La variante riduce il limite sul tempo da $O(m)$ a $O(n)$ quando $m$ può crescere oltre $n$, pagando più messaggi ma restando in $O(m)$. Non va confuso il limite di $4m$ sui messaggi con quello di $4n-2$ sul tempo.
 
-  Non è possibile scendere sotto l'ordine di grandezza di $m$ per questo algoritmo.
+**Quale albero si ottiene?** L'ordine di arrivo delle richieste in SHOUT e la scelta del prossimo vicino in DFT possono cambiare l'albero prodotto. Con trasmissioni ideali uniformi e simultanee per livello, SHOUT sceglie parent a distanza minima dall'iniziatore e costruisce un albero BFS; questa proprietà non è garantita nell'esecuzione asincrona. La DFT può produrre un albero di diametro grande: se l'albero servirà per broadcast ripetuti, un diametro piccolo sarebbe preferibile. Una possibile strategia è trovare un centro del grafo e costruirvi un albero BFS, ma entrambe le operazioni hanno un costo.
 
-Shout e DFT sono due tecniche costruttive differenti. Usando Shout è impossibile predire la forma dell'albero costruito dall'algoritmo. D'altra parte DFT tende a costruire alberi con un diametro molto grande ed idealmente vorremmo che il diametro fosse più piccolo possibile. Si pensi come esempio alla possibilità di applicare un broadcasting sullo spanning tree in un secondo momento.
-Alla problematica del diametro di $G$ si può cercare di ovviare. Per esempio, si può cercare di determinare prima il centro di $G$ e poi applicare Shout usandolo come punto di partenza. Entrambi questi procedimento sono costosi.
-Anche $DFT$ non può generare spanning tree partendo da più initiators. Serve cambiare completamente approccio.
+Anche DFT, come SHOUT, richiede un unico iniziatore: lanciare più visite indipendenti non assicura un solo spanning tree.
 
 ![[assets/Screenshot 2024-10-16 092040.png|600]]
 
