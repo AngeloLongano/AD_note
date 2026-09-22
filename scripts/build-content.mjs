@@ -38,6 +38,15 @@ function convertObsidian(source) {
   const usedWidgets = new Set();
   let content = source.replace(/\r\n/g, '\n');
 
+  // I riferimenti al PDF della docente servono solo per la lettura in Obsidian.
+  content = content.replace(/^\[\[teacher_slides\/[^\]\n]+\.pdf#page=\d+\|[^\]\n]+\]\][ \t]*\n?/gm, '');
+
+  // I callout formali mantengono il loro tipo per lo stile del sito.
+  content = content.replace(/^([ \t]*>[ \t]*)\[!(definition|theorem|problem)\][+-]?(?:[ \t]+([^\n]*))?$/gm, (_match, prefix, kind, label) => {
+    const title = label || { definition: 'Definizione', theorem: 'Teorema', problem: 'Problema' }[kind];
+    return `${prefix}<strong class="formal-callout-label formal-callout-label--${kind}">${title}</strong>`;
+  });
+
   // remark-math richiede i delimitatori dei blocchi su righe dedicate.
   // Obsidian accetta anche `$$\begin{...}` e `\end{...}$$`.
   content = content.replace(/^(\s*)\$\$(\S.*)$/gm, (_match, indent, formula) => `${indent}$$\n${indent}${formula}`);

@@ -1,0 +1,53 @@
+/* Riquadri formali degli appunti. */
+.callout[data-callout="definition"] {
+  --callout-color: 23, 110, 96;
+  --callout-icon: lucide-book-open;
+  background-color: #eaf4f0;
+  border-left: 3px solid #176e60;
+}
+
+.callout[data-callout="theorem"] {
+  --callout-color: 157, 105, 22;
+  --callout-icon: lucide-badge-check;
+  background-color: #f9f1de;
+  border-left: 3px solid #b47a21;
+}
+
+.callout[data-callout="definition"] .callout-title,
+.callout[data-callout="theorem"] .callout-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.08em;
+  font-weight: 700;
+}
+
+.callout[data-callout="problem"] {
+  --callout-color: 35, 42, 40;
+  background: #fff;
+  border: 0;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0 1rem .45rem;
+}
+
+.callout[data-callout="problem"] .callout-title {
+  border-bottom: 1px solid #333;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.3em;
+  font-variant: small-caps;
+  font-weight: 500;
+}
+
+.callout[data-callout="problem"] .callout-icon { display: none; }
+.callout[data-callout="problem"] .callout-content { padding-top: .35rem; }
+.callout[data-callout="problem"] .callout-content p { margin: .2rem 0; padding-left: 6rem; }
+.callout[data-callout="problem"] .callout-content strong:first-child {
+  float: left;
+  width: 6rem;
+  margin-left: -6rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-variant: small-caps;
+  font-size: 1.12em;
+  font-weight: 500;
+}

@@ -7,8 +7,14 @@
 - [[#2 Teoria della Complessità|2 Teoria della Complessità]]
   - [[#2.1 Classificazione dei problemi per complessità|2.1 Classificazione dei problemi per complessità]]
   - [[#2.2 Approssimazioni di problemi NP-hard|2.2 Approssimazioni di problemi NP-hard]]
-    - [[#Self-reduction del Vertex Cover|Self-reduction del Vertex Cover]]
-    - [[#Inapprossimabilità del TSP generale|Inapprossimabilità del TSP generale]]
+  - [[#TSP è un problema NP-hard|TSP è un problema NP-hard]]
+  - [[#Inapprossimabilità del TSP generale|Inapprossimabilità del TSP generale]]
+  - [[#Approssimazioni per il TSP metrico|Approssimazioni per il TSP metrico]]
+  - [[#Branch and bound (facoltativo)|Branch and bound (facoltativo)]]
+  - [[#Vertex Cover Problem|Vertex Cover Problem]]
+  - [[#Self-reduction del Vertex Cover|Self-reduction del Vertex Cover]]
+  - [[#Approssimazione greedy del Vertex Cover|Approssimazione greedy del Vertex Cover]]
+  - [[#Relax & Round per Vertex Cover|Relax & Round per Vertex Cover]]
 - [[#3 Algoritmi distribuiti|3 Algoritmi distribuiti]]
   - [[#3.1 Teoria della computazione distribuita|3.1 Teoria della computazione distribuita]]
   - [[#3.2 Leader election in alberi|3.2 Leader election in alberi]]
@@ -165,7 +171,7 @@ $$
 
 senza dover specificare ogni volta il particolare computer o modello classico adottato. Lo stesso principio rende robuste anche le usuali definizioni di $NP$.
 
-> [!important] Tesi ordinaria e tesi estesa
+> **Tesi ordinaria e tesi estesa**
 > La tesi di Church–Turing **ordinaria** riguarda la **calcolabilità**: tutto ciò che è intuitivamente calcolabile mediante un algoritmo può essere calcolato da una macchina di Turing.
 >
 > La tesi di Church–Turing **estesa** riguarda invece l'**efficienza**: i modelli di calcolo ragionevoli possono simularsi senza perdere più di un fattore polinomiale.
@@ -221,13 +227,12 @@ La restrizione non rende inutili queste classi per gli altri tipi di problema: a
 - decisione: «esiste un cammino da $s$ a $v$ di lunghezza al più $k$?».
 #### La classe P
 
-La classe $P$ contiene i problemi decisionali che un algoritmo deterministico può decidere in **tempo polinomiale** nella dimensione dell'input. *Deterministico* significa che, in ogni stato della computazione, la prossima operazione è determinata univocamente: su uno stesso input l'algoritmo segue un solo percorso di esecuzione.
+> [!definition] Classe di problemi P
+> Insieme di problemi decisionali che possono essere risolti con un algoritmo di costo computazionale in tempo polinomiale nella dimensione dell'input.
 
-In breve,
+[[teacher_slides/1_complexity theory.pdf#page=3|Slide della docente, p. 3]]
 
-$$
-P=\{\text{problemi decisionali decidibili in tempo polinomiale da una macchina deterministica}\}.
-$$
+**Modello.** Qui *deterministico* significa che, in ogni stato della computazione, la prossima operazione è determinata univocamente: su uno stesso input l'algoritmo segue un solo percorso di esecuzione. Il tempo è misurato nella dimensione dell'input.
 
 #### Macchine non deterministiche
 
@@ -247,23 +252,37 @@ Consideriamo intuitivamente il **ciclo hamiltoniano**. Data una sequenza di $n$ 
 
 L'albero di computazione contiene i diversi ordinamenti che la macchina può scegliere. Se il grafo ha un ciclo hamiltoniano, almeno un ramo sceglie la sequenza corretta e accetta; se non lo ha, nessun ramo può superare la verifica. Ogni singolo ramo effettua soltanto una scelta e una verifica di lunghezza polinomiale: non si somma il costo di esplorare tutti gli ordinamenti.
 
-Possiamo ora dare la definizione originaria:
-
-> [!definition] Classe NP
-> $NP$ è la classe dei problemi decisionali risolvibili in tempo polinomiale da una macchina non deterministica.
-
-La sigla $NP$ significa infatti ***nondeterministic polynomial time***. **Non significa “non polinomiale”**: $NP$ non è, per definizione, la classe dei problemi che richiedono tempo non polinomiale.
+Questo modello conduce alla classe $NP$. Prima della definizione usata dalla docente, introduciamo certificato e verificatore: sono gli oggetti con cui le slide formulano la classe.
 
 #### Dalla macchina non deterministica ai certificati
 
-La definizione precedente ha una caratterizzazione equivalente più comoda per descrivere gli algoritmi. Possiamo vedere la macchina non deterministica come una macchina che **indovina** una soluzione candidata e poi la verifica deterministicamente. “Indovinare” non indica un'operazione magica o casuale: rappresenta i diversi valori scelti sui diversi rami della computazione.
+Possiamo vedere la macchina non deterministica come una macchina che **indovina** una soluzione candidata e poi la verifica deterministicamente. “Indovinare” non indica un'operazione magica o casuale: rappresenta i diversi valori scelti sui diversi rami della computazione.
 
 La soluzione candidata è chiamata **certificato**. Su un computer ordinario non possiamo creare contemporaneamente tutti i rami: immaginiamo invece che il certificato ci venga fornito dall'esterno. Un **verificatore** è un algoritmo deterministico $V$ che riceve l'istanza $x$ e un certificato candidato $c$; non deve trovare $c$, ma soltanto controllare se prova che $x$ è un'istanza positiva.
 
-Ne segue la caratterizzazione equivalente:
+> [!definition] Certificato per una istanza positiva $i\in I_Y$ del problema $\Pi$
+> Sequenza di caratteri (informazione aggiuntiva) di dimensione al massimo polinomiale nella dimensione dell'input che contiene l'evidenza del fatto che $i$ sia una istanza positiva per $\Pi$.
 
-> [!important]
-> Un problema decisionale appartiene a $NP$ se, per ogni istanza con risposta sì, **esiste un certificato di dimensione polinomiale verificabile in tempo polinomiale**.
+> [!definition] Algoritmo verificatore
+> Algoritmo decisionale che prende in input un'istanza di $i\in I$ di un problema decisionale $\Pi$ e una sequenza di caratteri $C_i$ e restituisce SI se l'istanza $i$ è una istanza positiva per $\Pi$, NO altrimenti.
+
+[[teacher_slides/1_complexity theory.pdf#page=7|Slide della docente, p. 7]]
+
+**Precisazione nostra.** Il NO del verificatore per una coppia $(i,C_i)$ non prova da solo che $i$ sia negativa: il certificato proposto può essere sbagliato. La caratterizzazione formale qui sotto richiede che ogni istanza positiva abbia *almeno un* certificato accettato e che nessun certificato faccia accettare un'istanza negativa.
+
+> [!definition] Verificare un problema
+> Il problema $\Pi$ può essere verificato se valgono le due seguenti condizioni:
+> 1. Per ogni istanza positiva $i$ del problema $\Pi$ esiste un certificato $C_i$ di dimensione polinomiale nella dimensione di $i$;
+> 2. Esiste un algoritmo verificatore $A$ che risponde SI per ogni coppia $(i,C_i)$ tale che $i$ è un'istanza positiva di $\Pi$ e $C_i$ un suo certificato (polinomiale).
+
+> [!definition] Classe di problemi NP (Non-deterministic Polynomial-time)
+> Insieme di problemi decisionali che possono essere verificati con un algoritmo verificatore di costo computazionale in tempo polinomiale nella dimensione dell'input.
+
+[[teacher_slides/1_complexity theory.pdf#page=8|Slide della docente, p. 8]]
+
+**Spiegazione.** La definizione tramite verificatore è equivalente a quella tramite macchina non deterministica introdotta sopra: un ramo può scegliere un certificato candidato e verificarlo in tempo polinomiale. La sigla $NP$ significa ***nondeterministic polynomial time***, non “non polinomiale”. La formulazione della slide sulle coppie positive è completata dalla condizione di correttezza per le istanze negative nella formalizzazione seguente.
+
+Un problema decisionale appartiene a $NP$ se, per ogni istanza con risposta sì, **esiste un certificato di dimensione polinomiale verificabile in tempo polinomiale**.
 
 Formalmente, un problema decisionale $\Pi$ appartiene a $NP$ se esistono un verificatore polinomiale $V$ e un polinomio $p$ tali che
 
@@ -306,7 +325,23 @@ Attenzione alla differenza tra **verificare** e **trovare**. Se qualcuno consegn
 
 #### Relazione tra P e NP
 
-Vale $P\subseteq NP$: una macchina non deterministica può eseguire un algoritmo deterministico polinomiale senza compiere scelte. Equivalentemente, il risolutore può essere usato come verificatore ignorando il certificato, oppure usando come certificato la stringa vuota.
+**Problema e modello.** Consideriamo un qualunque problema decisionale $\Pi\in P$: l'input è un'istanza $i$, l'output è SI o NO. Per definizione esiste un algoritmo deterministico $A$ che lo decide in tempo polinomiale nella dimensione di $i$. Vogliamo costruire un verificatore per $\Pi$ con lo stesso bound.
+
+**Algoritmo verificatore.** Riceve $(i,C_i)$, pone $C_i$ uguale alla stringa vuota, invoca $A(i)$ e restituisce la sua risposta. Il certificato ha lunghezza zero e il costo del verificatore è quello polinomiale di $A$, oltre a un overhead costante.
+
+> [!theorem] Teorema
+> $P\subseteq NP$
+
+[[teacher_slides/1_complexity theory.pdf#page=9|Slide della docente, p. 9]]
+
+##### Dimostrazione
+
+Dato un problema $\Pi\in P$, esiste un algoritmo $A$ di costo polinomiale per il problema che può essere utilizzato come verificatore con certificato la sequenza vuota:
+
+1. Per ogni istanza positiva di $\Pi$, $C_i$ è la stringa vuota (nessun carattere).
+2. L'algoritmo verificatore invoca l'algoritmo risolutore $A$ per $\Pi$ su un'istanza del problema e restituisce il risultato. Se l'istanza è positiva la risposta è SI, altrimenti è NO.
+
+**Spiegazione.** Il verificatore accetta precisamente le istanze positive; la stringa vuota soddisfa il vincolo di lunghezza polinomiale. In termini di macchina non deterministica, basta seguire la computazione deterministica senza effettuare scelte.
 
 Non sappiamo invece se $NP\subseteq P$. Il problema $P$ contro $NP$ può essere riassunto dalla domanda:
 
@@ -325,7 +360,15 @@ La direzione è quindi essenziale: per dimostrare che $B$ è difficile bisogna r
 
 #### Riduzione di Karp
 
-Siano $A$ e $B$ due problemi decisionali. Una **riduzione di Karp**, o riduzione many-one in tempo polinomiale, da $A$ a $B$ è una funzione $f$ calcolabile in tempo polinomiale tale che, per ogni istanza $x$,
+> [!definition] Riduzione di Karp ($A\leq_p B$)
+> Un problema decisionale $A$ è riducibile in tempo polinomiale al problema decisionale $B$ se:
+> - ogni istanza di $A$ può essere trasformata in tempo polinomiale in un'istanza di $B$;
+> - ogni istanza positiva di $A$ viene trasformata in un'istanza positiva di $B$;
+> - ogni istanza negativa di $A$ viene trasformata in un'istanza negativa di $B$.
+
+[[teacher_slides/1_complexity theory.pdf#page=11|Slide della docente, p. 11]]
+
+**Formalizzazione.** La trasformazione è una funzione $f$ calcolabile in tempo polinomiale tale che, per ogni istanza $x$,
 
 $$
 x\text{ è positiva per }A
@@ -333,7 +376,7 @@ x\text{ è positiva per }A
 f(x)\text{ è positiva per }B.
 $$
 
-Si scrive $A\leq_p B$. La trasformazione preserva sia le risposte positive sia quelle negative e produce una sola istanza di $B$.
+La trasformazione preserva sia le risposte positive sia quelle negative e produce una sola istanza di $B$.
 
 ![[assets/riduzione-karp.png|1000]]
 
@@ -356,10 +399,12 @@ $$
 
 #### Problemi NP-completi
 
-Un problema decisionale $A$ è **NP-completo** se:
+> [!definition] Classe di problemi NP-completi
+> Un problema decisionale $A$ è NP-completo se:
+> 1. $A\in NP$;
+> 2. $\forall B\in NP : B\leq_p A$.
 
-1. $A\in NP$;
-2. per ogni problema $B\in NP$, vale $B\leq_p A$.
+[[teacher_slides/1_complexity theory.pdf#page=17|Slide della docente, p. 17]]
 
 Gli NP-completi sono dunque i problemi più difficili di $NP$ rispetto alle riduzioni polinomiali.
 Il problema del ciclo hamiltoniano introdotto sopra è un esempio di problema NP-completo.
@@ -401,11 +446,12 @@ $$
 
 #### Problemi NP-hard
 
-Nel contesto dei problemi decisionali, un problema $A$ è **NP-hard** se
+> [!definition] Classe di problemi NP-hard
+> Un problema $A$ è NP-hard se: $\forall B\in NP : B\leq_p A$.
 
-$$
-\forall B\in NP:\ B\leq_p A.
-$$
+[[teacher_slides/1_complexity theory.pdf#page=21|Slide della docente, p. 21]]
+
+**Precisazione nostra.** Nella slide $A$ può essere anche un problema di ottimizzazione, mentre la riduzione di Karp appena definita ha due estremi decisionali. Per leggere coerentemente la formula in questo caso, occorre specificare una versione decisionale di $A$ oppure intendere una trasformazione polinomiale dell'istanza seguita da un risolutore per $A$ e da una trasformazione polinomiale della risposta, come nel diagramma della stessa p. 21. La riduzione con oracolo è esplicitata qui sotto.
 
 Questa è la seconda condizione della definizione di NP-completezza, senza richiedere $A\in NP$. Un problema NP-completo è quindi sia NP-hard sia appartenente a $NP$; un problema NP-hard può invece non appartenere a $NP$.
 
@@ -480,7 +526,7 @@ Il **fattore di approssimazione** $\rho(n) \geq 1$ (spesso indicato anche con $\
 
 In entrambi i casi il rapporto è scelto in modo da essere almeno $1$: $\rho(n)=1$ corrisponde a un algoritmo esatto e, a parità di problema, un fattore più vicino a $1$ è migliore. Se $\rho$ è una costante, la qualità non peggiora al crescere dell'istanza; il fattore può però anche dipendere da $n$.
 
-> [!example] Esempio — come si legge il fattore
+> **Esempio — come si legge il fattore**
 > - **Minimizzazione:** se su un'istanza $OPT(I)=10$ e l'algoritmo restituisce una soluzione di costo $ALG(I)=12$, il rapporto ottenuto è $12/10=1{,}2$. Una garanzia di fattore $2$ permetterebbe, su questa istanza, qualsiasi costo al più $20$: non significa quindi che l'algoritmo debba costare esattamente il doppio dell'ottimo.
 > - **Massimizzazione:** se $OPT(I)=100$ e $ALG(I)=80$, il rapporto è $100/80=1{,}25$. Una $2$-approssimazione garantirebbe soltanto $ALG(I)\geq 100/2=50$, quindi il valore $80$ rispetta ampiamente la garanzia.
 >
@@ -529,12 +575,12 @@ ALG(I) \leq \rho(n)\cdot LB(I)
 \leq \rho(n)\cdot OPT(I).
 $$
 
-> [!important] Significato della garanzia
+> **Significato della garanzia**
 > Il lower bound **non determina necessariamente il vero fattore** ottenuto dall'algoritmo: permette di certificarne un limite nel caso peggiore senza conoscere $OPT(I)$. Un lower bound vicino all'ottimo può dare una garanzia stretta; un lower bound molto più piccolo resta corretto, ma può produrre una garanzia pessimistica. Per dimostrare che l'intero algoritmo è una $\rho$-approssimazione, queste disuguaglianze devono valere per **ogni** istanza.
 
 Nei prossimi algoritmi il lower bound nascerà, per esempio, da un matching o da un rilassamento lineare; per la massimizzazione il ragionamento duale usa invece un upper bound su $OPT(I)$.
 
-> [!example] Esempio — confrontarsi con un limite noto
+> **Esempio — confrontarsi con un limite noto**
 > Supponiamo di avere, per una certa istanza di minimizzazione, una soluzione di costo $ALG(I)=18$ e un lower bound $LB(I)=12$. Anche senza calcolare l'ottimo sappiamo che
 > $$
 > 12=LB(I)\leq OPT(I)\leq ALG(I)=18.
@@ -545,18 +591,38 @@ Nei prossimi algoritmi il lower bound nascerà, per esempio, da un matching o da
 > $$
 > Il rapporto reale potrebbe essere migliore: se, per esempio, $OPT(I)=15$, allora vale soltanto $18/15=1{,}2$. Il valore $1{,}5$ è quindi una **garanzia**, non necessariamente il rapporto effettivo.
 
-#### TSP è un problema NP-hard
+### TSP è un problema NP-hard
 
-Il **Travelling Salesman Problem di ottimizzazione** ($TSP_{opt}$) è definito come segue:
+> [!problem] Problema del commesso viaggiatore (TSP)
+>
+> **Input:** un grafo non diretto completo $G=(V,E)$ e una funzione di costo positiva sugli archi $c:E\to\mathbb{R}^{+}$.
+>
+> **Output:** un ciclo hamiltoniano in $G$ di costo minimo.
 
-- **input:** un grafo completo non diretto $G=(V,E)$ e una funzione di costo non negativa $c:E\to\mathbb{R}_{\geq 0}$;
-- **output:** un ciclo Hamiltoniano $H^*$ di costo minimo, dove $c(H^*)$ è la somma dei costi dei suoi archi.
+Qui consideriamo la versione di ottimizzazione $TSP_{opt}$: il costo di un ciclo è la somma dei costi dei suoi archi. Nella riduzione seguente usiamo costi $0/1$ come nelle slide. Per ottenere costi strettamente positivi basta sostituirli con $1/2$: ogni tour ha esattamente $|V|$ archi, quindi il confronto «costo ottimo $0$ oppure almeno $1$» diventa «costo ottimo $|V|$ oppure almeno $|V|+1$».
 
-> **Teorema.** Il problema $TSP_{opt}$ è NP-hard.
+> [!theorem] Teorema
+> Il problema del commesso viaggiatore è NP-hard
 
-**Obiettivo.** Vogliamo dimostrare $HC\leq_T^p TSP_{opt}$: se avessimo un risolutore esatto per il TSP, potremmo usarlo per rispondere alla domanda del **ciclo Hamiltoniano** ($HC$). In $HC$ l'input è un grafo non diretto $G=(V,E)$, non necessariamente completo né pesato, e chiediamo: «esiste un ciclo che visita ogni vertice esattamente una volta?». $HC$ è NP-completo. Se una sola chiamata al risolutore TSP, insieme a operazioni polinomiali, permette di decidere $HC$, allora $TSP_{opt}$ è NP-hard. Si tratta di una riduzione con oracolo, perché chiediamo al TSP una soluzione ottima e ricaviamo da essa una risposta sì/no.
+[[teacher_slides/1_complexity theory.pdf#page=24|Slide della docente, p. 24]]
+[[teacher_slides/1_complexity theory.pdf#page=25|Slide della docente, p. 25]]
+[[teacher_slides/1_complexity theory.pdf#page=26|Slide della docente, p. 26]]
 
-##### Strategia della riduzione
+**Come lo dimostriamo.** Usiamo il problema NP-completo del **Ciclo hamiltoniano** ($HC$). Costruiamo una riduzione di Turing: trasformiamo un'istanza di $HC$ in un'istanza TSP, interroghiamo una volta un risolutore esatto per TSP e dalla risposta decidiamo SI o NO per $HC$.
+
+> [!problem] Problema del ciclo hamiltoniano (HC)
+>
+> **Input:** un grafo non diretto $G=(V,E)$.
+>
+> **Output:** esiste un ciclo hamiltoniano in $G$?
+
+![[assets/riduzione-hc-tsp-04-decisione.svg|900]]
+
+**Modello della riduzione.** Consideriamo un'istanza di $HC$ con grafo semplice e almeno tre vertici. L'istanza destinazione è un grafo completo non diretto con costi interi non negativi. Un risolutore esatto per $TSP_{opt}$ restituisce un tour minimo, non soltanto il suo costo; possiamo calcolarne il costo sommando i pesi degli archi.
+
+**In simboli.** Vogliamo dimostrare $HC\leq_T^p TSP_{opt}$: la costruzione trasforma l'input, la chiamata all'oracolo trova il tour ottimo e il controllo finale lo converte nella risposta SI/NO. Le operazioni esterne all'oracolo devono essere polinomiali.
+
+#### Strategia della riduzione
 
 $HC$ chiede se un ciclo **esiste** nel grafo dato; il TSP chiede quale ciclo abbia **costo minimo** in un grafo completo. Per collegarli, trasformiamo la presenza o l'assenza degli archi di $G$ in costi. Completiamo il grafo e assegniamo:
 
@@ -567,7 +633,7 @@ Il costo di un tour conta quindi quanti archi aggiunti usa. Se il tour ottimo co
 
 ![[Pasted image 20260921114935.png]]
 
-##### Costruzione e uso della riduzione
+#### Costruzione e uso della riduzione
 
 Partiamo da un'istanza $G=(V,E)$ di $HC$ e costruiamo l'istanza TSP $G'=(V,E',c)$:
 
@@ -583,34 +649,44 @@ Partiamo da un'istanza $G=(V,E)$ di $HC$ e costruiamo l'istanza TSP $G'=(V,E',c)
    \end{cases}
    $$
 
-Ora chiediamo al risolutore TSP un tour ottimo $H^*$ di $G'$ e ne calcoliamo il costo. Rispondiamo **sì** a $HC$ se $c(H^*)=0$, **no** se $c(H^*)\geq 1$. Questa è l'intera procedura: costruire il grafo pesato, risolvere il TSP e controllare il costo restituito.
+Ora chiediamo al risolutore TSP un tour ottimo $H^*$ di $G'$ e poniamo $K=c(H^*)$.
+Rispondiamo
+- **SI** a $HC$ se $K=0$,
+- **NO** altrimenti.
+Questa è l'intera procedura: costruire il grafo pesato, risolvere il TSP e controllare il costo restituito.
 
 ![[assets/riduzione-hc-tsp-01-istanze.svg|900]]
 
-##### Perché funziona
+#### Studio della complessità
 
-Indichiamo con $OPT(G')=c(H^*)$ il costo ottimo. Dobbiamo mostrare entrambe le direzioni:
+Con $n=|V|$, $G'$ ha $n(n-1)/2$ archi. Misuriamo qui il lavoro **esterno** al risolutore TSP:
 
+- **Tempo:** con una matrice di adiacenza per $G$, costruire e pesare $G'$ richiede $O(n^2)$; calcolare $K$ dal tour richiede $O(n)$. Se $G$ è dato con liste di adiacenza, la matrice si prepara in $O(n^2+|E|)$.
+- **Spazio:** matrice e grafo completo richiedono $O(n^2)$; ogni peso $0/1$ occupa un bit.
+- **Oracolo:** una sola chiamata al risolutore esatto. Il suo tempo non è incluso nel costo della riduzione con oracolo.
+
+#### Dimostrazione
+
+1. **Da $HC$ a costo zero.** Se $G$ ha un ciclo hamiltoniano, lo stesso ciclo esiste in $G'$ e usa solo archi di costo $0$. Poiché tutti i costi sono non negativi, l'ottimo è $K=0$.
+2. **Da costo zero a $HC$.** Se $K=0$, il tour ottimo contiene solo archi di costo $0$, dunque solo archi di $E$. È un ciclo hamiltoniano anche in $G$.
+3. **Conclusione.** Abbiamo $K=0\iff G$ ha un ciclo hamiltoniano. La costruzione, il controllo e la singola chiamata all'oracolo costituiscono una riduzione polinomiale $HC\leq_T^p TSP_{opt}$. Poiché $HC$ è NP-completo, $TSP_{opt}$ è NP-hard.
+
+**Spiegazione.** La direzione inversa dice anche che, se $G$ non ha un ciclo hamiltoniano, ogni tour di $G'$ usa almeno un arco aggiunto e quindi $K\geq1$.
+
+La relazione chiave è:
 $$
-OPT(G')=0
+K=0
 \iff
 G\text{ contiene un ciclo Hamiltoniano}.
 $$
 
 ![[assets/riduzione-hc-tsp-02-ciclo-costo-zero.svg|900]]
 
-- **Se $G$ ha un ciclo Hamiltoniano**, quel ciclo usa solo archi originali. Esiste anche in $G'$ e costa $0$. Nessun tour può costare meno di $0$, quindi $OPT(G')=0$.
-- **Se $OPT(G')=0$**, ogni arco del tour ottimo deve costare $0$, perché i costi sono solo $0$ e $1$. Tutti questi archi appartenevano già a $G$: il tour ottimo è quindi un ciclo Hamiltoniano anche in $G$.
-
-Di conseguenza, se $G$ **non** ha un ciclo Hamiltoniano, ogni tour di $G'$ usa almeno un arco aggiunto e $OPT(G')\geq 1$. La figura seguente mostra questo caso su un'altra istanza.
+La figura seguente mostra il caso negativo su un'altra istanza.
 
 ![[assets/riduzione-hc-tsp-03-senza-ciclo.svg|900]]
 
-**Complessità e conclusione.** Se $n=|V|$, $G'$ ha $n(n-1)/2$ archi: costruirlo e assegnare i costi richiede $O(n^2)$ operazioni. Facciamo una sola chiamata all'oracolo per $TSP_{opt}$ e controlliamo il costo del tour in tempo polinomiale. Abbiamo dunque $HC\leq_T^p TSP_{opt}$; poiché $HC$ è NP-completo, $TSP_{opt}$ è NP-hard. Per concludere questo **non** occorre assumere $P\neq NP$; quell'ipotesi serve per affermare che non esiste un algoritmo polinomiale esatto per il TSP.
-
-Lo schema riassume i due passaggi: trasformare $G$ nell'istanza TSP e convertire il tour ottimo nella risposta a $HC$.
-
-![[assets/riduzione-hc-tsp-04-decisione.svg|900]]
+**Precisazione nostra sulle slide.** Nel riquadro del caso NO a p. 26 compare «un arco del grafo originale $G$»; qui deve essere **un arco aggiunto**, cioè di $E'\setminus E$, altrimenti il costo non sarebbe positivo. La frase di p. 24 che parla di «assurdo sotto l'ipotesi $P\ne NP$» spiega la conseguenza condizionale dell'esistenza di un risolutore polinomiale: l'enunciato NP-hard e la riduzione appena dimostrata non richiedono tale ipotesi.
 
 Lo pseudocodice compatta la procedura già descritta:
 
@@ -634,71 +710,78 @@ Lo pseudocodice compatta la procedura già descritta:
 > 16.  **end if**
 > 17. **end function**
 
-##### Perché scegliere pesi $1/2$ invece di $0/1$?
+#### Perché scegliere pesi $1/2$ invece di $0/1$?
 
-La scelta dei pesi determina **quale variante del TSP** compare nella riduzione. Questo confronto serve a capire perché la prova appena fatta con $0/1$ riguarda il TSP generale e perché, più avanti, potremo comunque approssimare il TSP metrico.
+La scelta dei pesi nella riduzione non è casuale, ma determina **quale variante** del TSP stiamo dimostrando essere NP-Hard.
 
-**1. Test della disuguaglianza triangolare.** Un'istanza è metrica se, per ogni terna di vertici, andare direttamente non costa più che passare per un vertice intermedio:
+La **disuguaglianza triangolare** esprime l'idea che andare direttamente da un vertice a un altro non debba costare più che passare per un vertice intermedio. Deve valere per ogni terna di vertici; non richiede che i costi siano distanze euclidee:
 
 $$
-c(u,w)\leq c(u,v)+c(v,w).
+c(u,w) \leq c(u,v)+c(v,w).
 $$
 
-Usiamo lo stesso esempio in entrambi i casi: $uv$ e $vw$ sono archi del grafo originale; $uw$ è stato aggiunto per renderlo completo.
+Prendiamo per esempio tre vertici $u,v,w$: gli archi $uv$ e $vw$ appartengono al grafo originale, mentre aggiungiamo $uw$ per renderlo completo.
+Possiamo farlo in due modi:
 
 ![[assets/tsp-pesi-01-12-triangolo.svg|1000]]
 
-**Caso A — pesi $0/1$ (riduzione appena vista)**
+**Caso A — pesi $0/1$ (riduzione TSP generale)**
 
 - Archi originali: costo $0$; arco aggiunto: costo $1$.
 - **Test:** $1\leq0+0$ è falso.
-- **Conclusione:** la costruzione può produrre istanze non metriche. Questa prova mostra la NP-hardness del **TSP generale**.
+- **Conclusione:** in un caso come questo la costruzione viola la disuguaglianza triangolare. Le istanze prodotte **possono non essere metriche**: la riduzione appena vista dimostra la NP-hardness del **TSP generale**.
 
-**Caso B — pesi $1/2$ (variante metrica)**
+**Caso B — pesi $1/2$ (riduzione TSP metrica)**
 
 - Archi originali: costo $1$; arco aggiunto: costo $2$.
 - **Test:** $2\leq1+1$ è vero. Vale per ogni triangolo: un lato costa al massimo $2$ e gli altri due insieme almeno $2$.
-- **Conclusione:** le istanze costruite sono metriche. Anche il **TSP metrico è NP-hard**: un tour costa esattamente $n=|V|$ se usa solo archi originali; se ne usa almeno uno aggiunto, costa almeno $n+1$.
+- **Conclusione:** la disuguaglianza triangolare vale per ogni terna, quindi le istanze prodotte sono **metriche**. La stessa riduzione dimostra la NP-hardness del **TSP metrico**: un tour ha $|V|$ archi e costa almeno $|V|$; costa esattamente $|V|$ se e solo se usa solo archi originali, cioè se il grafo originale ha un ciclo Hamiltoniano.
 
-**2. Perché serve nel seguito.** Le due costruzioni mostrano la difficoltà di trovare l'**ottimo esatto**, ma questo non decide se si possa trovare un buon tour approssimato:
+**Perché questa distinzione è cruciale?** Le due riduzioni mostrano che trovare l'**ottimo esatto** è NP-hard in entrambe le varianti. Da questo, però, non possiamo ancora concludere quanto bene si riesca ad approssimare l'ottimo:
 
-- Per il **TSP generale**, la prossima sezione userà pesi $1/M$ per escludere ogni fattore di approssimazione costante, assumendo $P\neq NP$.
+- Per il **TSP generale**, la prossima sezione userà archi di costo $1$ e archi di costo $K$ per dimostrare che, a meno che $P=NP$, non esiste un algoritmo polinomiale con fattore di approssimazione costante.
 - Per il **TSP metrico**, la disuguaglianza triangolare consente gli *shortcut*: su questa proprietà si basano la $2$-approssimazione e l'algoritmo di Christofides.
 
-*La variante $1/2$ serve qui a chiarire il passaggio al TSP metrico; le slide della docente usano $0/1$ per la prova precedente.*
+*La variante $1/2$ mostra che anche il TSP metrico è difficile da risolvere esattamente; è la disuguaglianza triangolare a permettere le garanzie di approssimazione che vedremo più avanti.*
 
-#### Inapprossimabilità del TSP generale
+### Inapprossimabilità del TSP generale
 
-La riduzione precedente separava i casi *solo per un risolutore esatto*. Ora chiediamo di più: un algoritmo che può restituire un tour più costoso dell'ottimo, ma al massimo di un fattore costante $\rho$, potrebbe comunque aiutarci a decidere $HC$? Per forzare una risposta distinguibile, faremo pagare agli archi aggiunti una penalità abbastanza grande da superare anche il margine concesso dall'approssimazione.
+La riduzione precedente separava i casi *solo per un risolutore esatto*. Ora chiediamo di più: un algoritmo che può restituire un tour più costoso dell'ottimo, ma al massimo di un fattore costante, potrebbe comunque aiutarci a decidere $HC$? Per distinguere i due casi, assegneremo agli archi aggiunti un costo abbastanza grande da superare anche il margine concesso dall'approssimazione.
 
-> **Teorema.** Se $P \neq NP$, per ogni costante $\rho \geq 1$ non esiste un algoritmo polinomiale di $\rho$-approssimazione per il TSP generale.
+> **Teorema.** Non esiste un algoritmo di approssimazione polinomiale per il TSP generale che abbia fattore di approssimazione costante, a meno che $P=NP$.
 
-La dimostrazione è per assurdo. Supponiamo che esista un algoritmo polinomiale $A$ con fattore costante $\rho$ e usiamolo per decidere il problema NP-completo del ciclo Hamiltoniano. Data un'istanza $G=(V,E)$ di quest'ultimo problema, poniamo $n=|V|$ e costruiamo il grafo completo $G'=(V,E')$ con costi
+La dimostrazione è per assurdo. Supponiamo che esista un algoritmo polinomiale $A$ con fattore di approssimazione costante $r\geq1$. Usiamolo per decidere il problema NP-completo del ciclo Hamiltoniano. Data un'istanza $G=(V,E)$ di quest'ultimo problema, costruiamo il grafo completo $G'=(V,E')$: gli archi già presenti in $G$ costano $1$, quelli aggiunti costano $K$, scelto in modo che $K>r|V|$:
 
 $$
-
 c(e)=
 \begin{cases}
 1 & \text{se } e\in E,\\
-M=\lceil \rho n\rceil+1 & \text{se } e\notin E.
+K & \text{se } e\notin E.
 \end{cases}
-
 $$
 
-La costruzione richiede $O(n^2)$ operazioni e il valore $M$ ha una rappresentazione di lunghezza polinomiale. Qui i pesi sono **$1/M$**, non $0/1$ né $1/2$: il costo base $1$ rende positivo l'ottimo del caso sì, mentre $M>\rho n$ crea un divario abbastanza ampio da distinguere i due casi anche osservando un tour solo approssimato. Consideriamo i due casi:
+Una scelta concreta, usata nelle slide, è $K=r|V|+1$. Il costo $1$ rende positivo l'ottimo quando $G$ ha un ciclo Hamiltoniano; il costo $K$ separa i due casi anche se $A$ restituisce un tour soltanto approssimato.
 
-- Se $G$ contiene un ciclo Hamiltoniano, lo stesso ciclo esiste in $G'$ e ha costo $n$. Poiché tutti gli archi costano almeno 1, l'ottimo vale esattamente $OPT(G')=n$. La garanzia di approssimazione impone quindi $cost(A(G'))\leq \rho n$.
-- Se $G$ non contiene un ciclo Hamiltoniano, ogni tour di $G'$ usa almeno un arco non appartenente a $E$. Il suo costo è dunque almeno
+- **Se $G$ contiene un ciclo Hamiltoniano**, in $G'$ possiamo usare soltanto archi originali: il tour costa $|V|$. Poiché ogni tour ha $|V|$ archi e ciascuno costa almeno $1$, questo è l'ottimo. Per la garanzia di $A$, il tour restituito costa **al massimo $r|V|$**.
+- **Se $G$ non contiene un ciclo Hamiltoniano**, ogni tour di $G'$ usa almeno un arco aggiunto. Gli altri $|V|-1$ archi costano almeno $1$ ciascuno, quindi ogni tour costa almeno
 
-  $$M+(n-1)>\rho n.$$
+  $$K+(|V|-1)>r|V|.$$
 
-  Una soluzione ammissibile non può costare meno dell'ottimo, quindi anche $cost(A(G'))>\rho n$.
+  Anche il tour restituito da $A$ costa dunque **più di $r|V|$**.
 
-Controllando se il costo restituito da $A$ è al più $\rho n$ potremmo pertanto decidere in tempo polinomiale se $G$ possiede un ciclo Hamiltoniano. Ne seguirebbe $P=NP$, contro l'ipotesi. Il risultato riguarda il **TSP generale**: i costi costruiti non soddisfano necessariamente la disuguaglianza triangolare e quindi non esclude approssimazioni costanti per il TSP metrico.
+La figura istanzia i due casi con $|V|=4$, $r=2$ e $K=9$; gli archi tratteggiati sono altri archi aggiunti al grafo completo, non usati nei tour evidenziati.
 
-#### Approssimazioni per il TSP metrico
+![[assets/tsp-inapprossimabilita-due-casi.png|1000]]
 
-Il risultato negativo appena dimostrato riguarda il **TSP generale**: la penalità $M$ può violare la disuguaglianza triangolare, per esempio quando due archi originali di costo $1$ collegano $u$ a $w$ passando per $v$, ma l'arco diretto $uw$ costa $M>2$. Perciò la prova non si applica al sottoinsieme di istanze in cui andare direttamente non costa più che passare per un terzo vertice. Restringiamo ora il problema a questi costi **metrici** per cercare garanzie di approssimazione costanti. La variante $1/2$ vista sopra mostra che questa restrizione può ancora contenere istanze difficili da risolvere *esattamente*; ciò che cambia è la possibilità di approssimarle.
+La soglia è $r|V|$: confrontando con essa il costo del tour prodotto da $A$, potremmo decidere in tempo polinomiale se $G$ ha un ciclo Hamiltoniano. Ne seguirebbe $P=NP$; dunque, se $P\neq NP$, l'algoritmo $A$ non può esistere.
+
+**Costo della costruzione.** Il grafo completo ha $|V|(|V|-1)/2$ archi: assegnare i costi richiede $O(|V|^2)$ operazioni nel modello a costo uniforme. Per $r$ costante possiamo scegliere un $K$ intero appena maggiore di $r|V|$; bastano $O(\log |V|)$ bit per rappresentarlo. Anche considerando la scrittura dei pesi, la trasformazione resta quindi polinomiale.
+
+Il risultato riguarda il **TSP generale**: i costi costruiti non soddisfano necessariamente la disuguaglianza triangolare e quindi non esclude approssimazioni costanti per il TSP metrico.
+
+### Approssimazioni per il TSP metrico
+
+Il risultato negativo appena dimostrato riguarda il **TSP generale**: la penalità $K$ può violare la disuguaglianza triangolare, per esempio quando due archi originali di costo $1$ collegano $u$ a $w$ passando per $v$, ma l'arco diretto $uw$ costa $K>2$. Perciò la prova non si applica al sottoinsieme di istanze in cui andare direttamente non costa più che passare per un terzo vertice. Restringiamo ora il problema a questi costi **metrici** per cercare garanzie di approssimazione costanti. La variante $1/2$ vista sopra mostra che questa restrizione può ancora contenere istanze difficili da risolvere *esattamente*; ciò che cambia è la possibilità di approssimarle.
 
 Il **TSP metrico**, chiamato anche TSP con disuguaglianza triangolare ($TSP_{dt}$), è definito come segue:
 
@@ -712,12 +795,12 @@ Il **TSP metrico**, chiamato anche TSP con disuguaglianza triangolare ($TSP_{dt}
 
 Per un sottografo o multigrafo $F$, indichiamo con $cost(F)$ la somma dei costi dei suoi archi, contati con la loro molteplicità. La disuguaglianza triangolare formalizza l'idea che andare direttamente da $u$ a $z$ non costi più che passare per un nodo intermedio $v$.
 
-> [!example] Esempio — uno shortcut
+> **Esempio — uno shortcut**
 > Se $c(A,B)=3$, $c(B,C)=4$ e $c(A,C)=6$, percorrere $A\to B\to C$ costa $3+4=7$, mentre lo shortcut diretto $A\to C$ costa $6$. Saltare $B$ non aumenta quindi il costo. Se invece fosse $c(A,C)=9$, lo shortcut sarebbe più costoso: proprio questo caso è escluso dalla disuguaglianza triangolare.
 
 **Cicli euleriani.** Un ciclo euleriano è un cammino chiuso che percorre ogni arco esattamente una volta. Un multigrafo connesso ammette un ciclo euleriano se e solo se tutti i suoi vertici hanno grado pari; quando esiste, il ciclo può essere calcolato in tempo polinomiale.
 
-> [!important] Lemma degli shortcut
+> **Lemma degli shortcut**
 > Sia $v_0,v_1,\ldots,v_k$ un cammino in un grafo completo i cui costi rispettano la disuguaglianza triangolare. Allora
 > $$
 > c(v_0,v_k)\leq \sum_{i=0}^{k-1}c(v_i,v_{i+1}).
@@ -850,7 +933,7 @@ $$
 
 Christofides è quindi una **$3/2$-approssimazione** per il TSP metrico. Il passaggio decisivo rispetto alla 2-approssimazione è che, invece di aggiungere un'altra copia dell'intero MST, rende pari i gradi aggiungendo un matching che costa al più metà dell'ottimo.
 
-#### Branch and bound (facoltativo)
+### Branch and bound (facoltativo)
 
 > **Status per l'esame — approfondimento facoltativo (indicazione dell'utente).** Anche l'applicazione al TSP e il lower bound basato sull'1-tree qui sotto fanno parte di questo approfondimento. L'1-tree è trattato nella dispensa della docente dedicata a Branch and Bound per TSP (`teacher_slides/1_complexity theory.pdf`, pp. 101–104), ma non risulta come argomento autonomo nelle altre parti delle slide disponibili.
 
@@ -931,7 +1014,7 @@ Per il **branching**, se l'1-tree calcolato non è un ciclo hamiltoniano, scegli
 
 Ogni figlio si costruisce in tempo polinomiale. Questo non rende polinomiale l'intera esplorazione dell'albero di ricerca.
 
-#### Vertex Cover Problem
+### Vertex Cover Problem
 
 Dato un grafo non orientato $G=(V,E)$, un **vertex cover** è un insieme $C\subseteq V$ che contiene almeno un estremo di ogni arco:
 
@@ -956,7 +1039,7 @@ $$
 
 Nella figura l'istanza della riduzione è la coppia $(G,k)$: il grafo $G$ viene passato all'algoritmo di ottimizzazione, mentre $k$ è usato nel confronto finale. Non si tratta di una riduzione di Karp tra problemi decisionali, ma di una riduzione di Turing con una chiamata all'oracolo di ottimizzazione.
 
-#### Self-reduction del Vertex Cover
+### Self-reduction del Vertex Cover
 
 > **AA 2025/26 — facoltativo.** Le dispense correnti presentano questa self-reduction come approfondimento facoltativo.
 
@@ -985,11 +1068,11 @@ Se la risposta alla riga 7 è `YES`, esiste una copertura del grafo corrente che
 
 L'invariante è che il grafo corrente possiede un vertex cover di cardinalità al più pari al budget residuo $k$. Quando non restano archi, $C$ copre tutti gli archi eliminati dalle scelte effettuate. La ricostruzione usa al più $|V|$ chiamate all'oracolo; insieme alla ricerca binaria, il totale è $O(|V|+\log |V|)$, quindi polinomiale.
 
-#### Approssimazione greedy del Vertex Cover
+### Approssimazione greedy del Vertex Cover
 
 Un algoritmo greedy costruisce la soluzione incrementalmente. Per Vertex Cover, tuttavia, la scelta locale è determinante: due idee naturali producono sempre una copertura, ma non garantiscono un fattore costante; scegliere opportunamente degli archi porta invece a una 2-approssimazione.
 
-##### Prima scelta: un vertice arbitrario
+#### Prima scelta: un vertice arbitrario
 
 La prima euristica seleziona un vertice arbitrario di grado positivo, lo aggiunge alla copertura ed elimina gli archi incidenti, ripetendo finché non rimangono archi. Con liste di adiacenza e opportune marcature, il costo è $O(|V|+|E|)$ e la soluzione è ammissibile, ma il rapporto di approssimazione non è limitato da una costante.
 
@@ -1003,7 +1086,7 @@ che cresce linearmente con il numero dei vertici.
 
 ![[assets/vertex-cover-stella-greedy.png|700]]
 
-##### Seconda scelta: un vertice di grado massimo
+#### Seconda scelta: un vertice di grado massimo
 
 Per evitare il comportamento sulla stella, si può scegliere a ogni iterazione un vertice con il massimo grado corrente, cioè quello che copre il maggior numero di archi ancora scoperti. La soluzione resta ammissibile e l'algoritmo è polinomiale, ma neppure questa euristica garantisce un fattore di approssimazione costante.
 
@@ -1011,7 +1094,7 @@ La figura seguente mostra un piccolo esempio. Inizialmente i quattro vertici di 
 
 ![[assets/vertex-cover-grado-massimo-esempio.png|500]]
 
-> [!example]- Approfondimento — famiglia con rapporto logaritmico
+> **Approfondimento — famiglia con rapporto logaritmico**
 > Il piccolo esempio spiega il meccanismo, ma non dimostra che il rapporto possa crescere senza limite. Per farlo si usa una famiglia di grafi bipartiti $B=(L,R,E)$: $L$ contiene $r$ vertici e $R$ è suddiviso in gruppi $R_1,\ldots,R_r$. Il gruppo $R_i$ contiene $\lfloor r/i\rfloor$ vertici, ciascuno adiacente a $i$ vertici di $L$, e due vertici dello stesso gruppo non condividono vicini.
 >
 > ![[assets/vertex-cover-grado-massimo-famiglia-logaritmica.png|700]]
@@ -1026,7 +1109,7 @@ La figura seguente mostra un piccolo esempio. Inizialmente i quattro vertici di 
 >
 > L'euristica coincide con il greedy standard per Set Cover applicato agli archi e ha anche garanzia $O(\log n)$; il suo comportamento worst-case è dunque $\Theta(\log n)$, non costante. Questa costruzione è un approfondimento esterno al materiale ufficiale del corso.[^vc-max-degree]
 
-##### Terza scelta: un arco arbitrario
+#### Terza scelta: un arco arbitrario
 
 La scelta efficace consiste nel selezionare un arco ancora scoperto e inserire nella copertura **entrambi** i suoi estremi. La scelta dell'arco è arbitraria: non richiede casualità.
 
@@ -1046,7 +1129,7 @@ L'algoritmo termina perché a ogni iterazione elimina almeno l'arco scelto. Inol
 
 Sia $M\subseteq E$ l'insieme degli archi scelti. Questi archi non condividono estremi, perché dopo aver scelto $(u,v)$ vengono eliminati tutti gli archi incidenti a $u$ o $v$: $M$ è dunque un **matching**. È anche **massimale**, perché al termine non esiste un altro arco disgiunto da tutti quelli in $M$ che possa esservi aggiunto.
 
-> [!warning] Massimale non significa massimo
+> **Massimale non significa massimo**
 > Un matching **massimale** non può essere esteso aggiungendo un arco; un matching **massimo** ha invece la cardinalità più grande possibile. L'algoritmo richiede soltanto la prima proprietà.
 
 Per ogni arco selezionato vengono inseriti due vertici, perciò
@@ -1073,7 +1156,7 @@ L'analisi è **tight**. Nel grafo bipartito completo $K_{m,m}$, tutti i vertici 
 
 ![[assets/Screenshot 2024-10-08 111957.png|800]]
 
-#### Relax & Round per Vertex Cover
+### Relax & Round per Vertex Cover
 
 La tecnica **Relax & Round** costruisce un'altra 2-approssimazione in tre passi: formula il problema come programma lineare intero, rilassa il vincolo di interezza e arrotonda la soluzione frazionaria ottenuta.
 

@@ -1,1 +1,5 @@
-{}
+{
+  "enabledCssSnippets": [
+    "formal-callouts"
+  ]
+}

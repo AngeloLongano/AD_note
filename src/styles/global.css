@@ -44,7 +44,18 @@ a { color: #176e60; text-underline-offset: .16em; }
 .prose strong { color: #102f29; }
 .prose ul, .prose ol { padding-left: 1.35rem; }
 .prose li { margin: .35rem 0; padding-left: .25rem; }
-.prose blockquote { margin: 1.5rem 0; padding: .25rem 1.15rem; border-left: 3px solid #d4a33e; background: #f7f4e9; color: #42534e; }
+.prose blockquote { margin: 1.5rem 0; padding: .15rem 1.15rem; border-left: 3px solid var(--line); color: #42534e; }
+.prose blockquote:has(.formal-callout-label) { padding: .25rem 1.15rem; }
+.prose blockquote:has(.formal-callout-label--definition) { border-left-color: #176e60; background: #eaf4f0; }
+.prose blockquote:has(.formal-callout-label--theorem) { border-left-color: #b47a21; background: #f9f1de; }
+.prose blockquote:has(.formal-callout-label--problem) { padding: 0 1rem .45rem; border: 0; border-top: 1px solid #333; border-bottom: 1px solid #333; border-radius: 0; background: #fff; color: var(--ink); }
+.prose blockquote:has(.formal-callout-label--problem) > .formal-callout-label--problem { display: block; border-bottom: 1px solid #333; }
+.prose blockquote:has(.formal-callout-label--problem) > p { margin: .2rem 0; padding-left: 6rem; }
+.prose blockquote:has(.formal-callout-label--problem) > p > strong:first-child { float: left; width: 6rem; margin-left: -6rem; font-family: Georgia, "Times New Roman", serif; font-variant: small-caps; font-size: 1.12em; font-weight: 500; }
+.prose .formal-callout-label { font-family: Georgia, "Times New Roman", serif; font-size: 1.08em; }
+.prose .formal-callout-label--definition { color: #176e60; }
+.prose .formal-callout-label--theorem { color: #9d6916; }
+.prose .formal-callout-label--problem { color: var(--ink); font-size: 1.3em; font-variant: small-caps; font-weight: 500; }
 .prose img { display: block; max-width: 100%; height: auto; margin: 1.8rem auto; border: 1px solid var(--line); border-radius: .65rem; background: #fff; box-shadow: 0 .6rem 2rem rgba(18, 52, 44, .07); }
 .prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font: .87rem/1.5 var(--font-sans); }
 .prose th, .prose td { padding: .65rem .75rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
