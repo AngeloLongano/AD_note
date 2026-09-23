@@ -42,7 +42,7 @@
 
 ### Protocolli distribuiti
 
-1. [[#Esempio di costruzione e valutazione di un algoritmo distribuito|Flooding / Broadcast]]
+1. [[#Broadcast|Flooding / Broadcast]]
 2. [[#Il wake-up problem|WFlood / Wake-up]]
 3. [[#Protocollo Shout|SHOUT e SHOUT+]]
 4. [[#Costruzione dello spanning tree tramite traversal|DFT e variante Visited/Ack]]
@@ -78,8 +78,6 @@ Un **problema computazionale** $\Pi$ è una questione di carattere generale che 
 
 Un'**istanza** del problema si ottiene assegnando valori specifici ai parametri.
 *Esempio: «ordinare una sequenza di numeri» è un problema; ordinare $\{5,2,9,1\}$ è una sua istanza.*
-
-_La notazione funzionale descrive direttamente il caso in cui il risultato è determinato univocamente. Quando sono ammesse più soluzioni, la stessa notazione va intesa in senso più generale: un algoritmo corretto può restituire una qualunque soluzione ammissibile; in un problema di ottimizzazione deve restituirne una ottima._
 
 ### Classificazione per tipo di soluzione
 
@@ -501,6 +499,9 @@ La figura va letta in due passaggi:
 
 #### Algoritmi di approssimazione
 
+[[teacher_slides/1_complexity theory.pdf#page=57|Slide della docente, p. 57]]
+[[teacher_slides/1_complexity theory.pdf#page=60|Slide della docente, p. 60]]
+
 Per un problema di ottimizzazione NP-hard, un **algoritmo di approssimazione** restituisce in tempo polinomiale una soluzione **ammissibile**, ma non necessariamente ottima. La sua qualità non si esprime dicendo quanto sbaglia su una certa istanza, bensì con una garanzia valida per ogni istanza di input.
 
 Sia $\Pi$ un problema di ottimizzazione, sia $I$ una sua istanza di dimensione $n$, e indichiamo con:
@@ -748,7 +749,13 @@ Possiamo farlo in due modi:
 
 La riduzione precedente separava i casi *solo per un risolutore esatto*. Ora chiediamo di più: un algoritmo che può restituire un tour più costoso dell'ottimo, ma al massimo di un fattore costante, potrebbe comunque aiutarci a decidere $HC$? Per distinguere i due casi, assegneremo agli archi aggiunti un costo abbastanza grande da superare anche il margine concesso dall'approssimazione.
 
-> **Teorema.** Non esiste un algoritmo di approssimazione polinomiale per il TSP generale che abbia fattore di approssimazione costante, a meno che $P=NP$.
+> [!theorem] Teorema
+> Non esiste un algoritmo di approssimazione polinomiale per il problema del commesso viaggiatore che abbia fattore di approssimazione costante, a meno che $P=NP$.
+
+[[teacher_slides/1_complexity theory.pdf#page=68|Slide della docente, p. 68]]
+[[teacher_slides/1_complexity theory.pdf#page=69|Slide della docente, p. 69]]
+
+#### Dimostrazione
 
 La dimostrazione è per assurdo. Supponiamo che esista un algoritmo polinomiale $A$ con fattore di approssimazione costante $r\geq1$. Usiamolo per decidere il problema NP-completo del ciclo Hamiltoniano. Data un'istanza $G=(V,E)$ di quest'ultimo problema, costruiamo il grafo completo $G'=(V,E')$: gli archi già presenti in $G$ costano $1$, quelli aggiunti costano $K$, scelto in modo che $K>r|V|$:
 
@@ -762,8 +769,8 @@ $$
 
 Una scelta concreta, usata nelle slide, è $K=r|V|+1$. Il costo $1$ rende positivo l'ottimo quando $G$ ha un ciclo Hamiltoniano; il costo $K$ separa i due casi anche se $A$ restituisce un tour soltanto approssimato.
 
-- **Se $G$ contiene un ciclo Hamiltoniano**, in $G'$ possiamo usare soltanto archi originali: il tour costa $|V|$. Poiché ogni tour ha $|V|$ archi e ciascuno costa almeno $1$, questo è l'ottimo. Per la garanzia di $A$, il tour restituito costa **al massimo $r|V|$**.
-- **Se $G$ non contiene un ciclo Hamiltoniano**, ogni tour di $G'$ usa almeno un arco aggiunto. Gli altri $|V|-1$ archi costano almeno $1$ ciascuno, quindi ogni tour costa almeno
+1. **Caso SI.** Se $G$ contiene un ciclo Hamiltoniano, in $G'$ possiamo usare soltanto archi originali: il tour costa $|V|$. Poiché ogni tour ha $|V|$ archi e ciascuno costa almeno $1$, questo è l'ottimo. Per la garanzia di $A$, il tour restituito costa **al massimo $r|V|$**.
+2. **Caso NO.** Se $G$ non contiene un ciclo Hamiltoniano, ogni tour di $G'$ usa almeno un arco aggiunto. Gli altri $|V|-1$ archi costano almeno $1$ ciascuno, quindi ogni tour costa almeno
 
   $$K+(|V|-1)>r|V|.$$
 
@@ -773,9 +780,11 @@ La figura istanzia i due casi con $|V|=4$, $r=2$ e $K=9$; gli archi tratteggiati
 
 ![[assets/tsp-inapprossimabilita-due-casi.png|1000]]
 
-La soglia è $r|V|$: confrontando con essa il costo del tour prodotto da $A$, potremmo decidere in tempo polinomiale se $G$ ha un ciclo Hamiltoniano. Ne seguirebbe $P=NP$; dunque, se $P\neq NP$, l'algoritmo $A$ non può esistere.
+3. **Conclusione.** La soglia è $r|V|$: confrontando con essa il costo del tour prodotto da $A$, potremmo decidere in tempo polinomiale se $G$ ha un ciclo Hamiltoniano. Ne seguirebbe $P=NP$; dunque, se $P\neq NP$, l'algoritmo $A$ non può esistere.
 
-**Costo della costruzione.** Il grafo completo ha $|V|(|V|-1)/2$ archi: assegnare i costi richiede $O(|V|^2)$ operazioni nel modello a costo uniforme. Per $r$ costante possiamo scegliere un $K$ intero appena maggiore di $r|V|$; bastano $O(\log |V|)$ bit per rappresentarlo. Anche considerando la scrittura dei pesi, la trasformazione resta quindi polinomiale.
+#### Complessità della riduzione
+
+Il grafo completo ha $|V|(|V|-1)/2$ archi: assegnare i costi richiede $O(|V|^2)$ operazioni nel modello a costo uniforme. Per $r$ costante possiamo scegliere un $K$ intero appena maggiore di $r|V|$; bastano $O(\log |V|)$ bit per rappresentarlo. Anche considerando la scrittura dei pesi, la trasformazione resta quindi polinomiale.
 
 Il risultato riguarda il **TSP generale**: i costi costruiti non soddisfano necessariamente la disuguaglianza triangolare e quindi non esclude approssimazioni costanti per il TSP metrico.
 
@@ -783,31 +792,61 @@ Il risultato riguarda il **TSP generale**: i costi costruiti non soddisfano nece
 
 Il risultato negativo appena dimostrato riguarda il **TSP generale**: la penalità $K$ può violare la disuguaglianza triangolare, per esempio quando due archi originali di costo $1$ collegano $u$ a $w$ passando per $v$, ma l'arco diretto $uw$ costa $K>2$. Perciò la prova non si applica al sottoinsieme di istanze in cui andare direttamente non costa più che passare per un terzo vertice. Restringiamo ora il problema a questi costi **metrici** per cercare garanzie di approssimazione costanti. La variante $1/2$ vista sopra mostra che questa restrizione può ancora contenere istanze difficili da risolvere *esattamente*; ciò che cambia è la possibilità di approssimarle.
 
-Il **TSP metrico**, chiamato anche TSP con disuguaglianza triangolare ($TSP_{dt}$), è definito come segue:
+#### Problema e modello
 
-- **Input:** un grafo completo non diretto $G=(V,E)$ e una funzione di costo non negativa $c:E\to\mathbb{R}_{\geq 0}$ tale che
+> [!problem] Problema del Commesso Viaggiatore con disuguaglianza triangolare ($TSP_{dt}$)
+>
+> **Input:** Un grafo non diretto completo $G=(V,E)$; una funzione costo positiva sugli archi del grafo $c:E\to\mathbb{R}^{+}$ che rispetta la disuguaglianza triangolare.
+>
+> **Output:** Un ciclo hamiltoniano su $G$ di costo minimo.
 
-  $$
-  \forall u,v,z\in V:\qquad c(u,z)\leq c(u,v)+c(v,z).
-  $$
+[[teacher_slides/1_complexity theory.pdf#page=69|Slide della docente, p. 69]]
 
-- **Output:** un ciclo Hamiltoniano $H^*$ di costo minimo.
+Per un sottografo o multigrafo $F$, indichiamo con $cost(F)$ la somma dei costi dei suoi archi, contati con la loro molteplicità. La condizione sui costi è
 
-Per un sottografo o multigrafo $F$, indichiamo con $cost(F)$ la somma dei costi dei suoi archi, contati con la loro molteplicità. La disuguaglianza triangolare formalizza l'idea che andare direttamente da $u$ a $z$ non costi più che passare per un nodo intermedio $v$.
+$$
+\forall u,v,z\in V:\qquad c(u,z)\leq c(u,v)+c(v,z).
+$$
+
+Essa formalizza l'idea che andare direttamente da $u$ a $z$ non costi più che passare per un nodo intermedio $v$. In alcune dimostrazioni useremo l'osservazione, più generale, che i costi possono essere non negativi: le istanze della docente hanno comunque costi positivi.
+
 
 > **Esempio — uno shortcut**
 > Se $c(A,B)=3$, $c(B,C)=4$ e $c(A,C)=6$, percorrere $A\to B\to C$ costa $3+4=7$, mentre lo shortcut diretto $A\to C$ costa $6$. Saltare $B$ non aumenta quindi il costo. Se invece fosse $c(A,C)=9$, lo shortcut sarebbe più costoso: proprio questo caso è escluso dalla disuguaglianza triangolare.
 
-**Cicli euleriani.** Un ciclo euleriano è un cammino chiuso che percorre ogni arco esattamente una volta. Un multigrafo connesso ammette un ciclo euleriano se e solo se tutti i suoi vertici hanno grado pari; quando esiste, il ciclo può essere calcolato in tempo polinomiale.
+#### Strumenti usati dagli algoritmi
 
-> **Lemma degli shortcut**
-> Sia $v_0,v_1,\ldots,v_k$ un cammino in un grafo completo i cui costi rispettano la disuguaglianza triangolare. Allora
-> $$
-> c(v_0,v_k)\leq \sum_{i=0}^{k-1}c(v_i,v_{i+1}).
-> $$
-> La tesi si ottiene applicando ripetutamente la disuguaglianza triangolare: eliminare un vertice intermedio e sostituire i due tratti adiacenti con l'arco diretto non aumenta il costo. Di conseguenza, da un ciclo che visita alcuni vertici più volte si possono saltare le visite ripetute ottenendo un ciclo Hamiltoniano di costo non maggiore.
+> [!definition] Definizione
+> Dato un grafo $G=(V,E)$, un ciclo euleriano è un cammino chiuso che passa esattamente una volta per tutti gli archi del grafo.
 
-**Algoritmo di 2-approssimazione.** L'idea è costruire un minimum spanning tree $T^*$, raddoppiarne gli archi per rendere pari ogni grado, calcolare un ciclo euleriano e applicare gli shortcut ai vertici già visitati.
+> [!theorem] Teorema
+> Dato un grafo $G$, esiste un cammino euleriano in $G$ se e solo se tutti i nodi del grafo hanno grado pari. Se esiste, il ciclo può essere trovato in tempo polinomiale.
+
+[[teacher_slides/1_complexity theory.pdf#page=69|Slide della docente, p. 69]]
+
+**Precisazione nostra.** Nell'enunciato della docente la connettività è implicita. Nella formulazione generale, un multigrafo non diretto ammette un ciclo euleriano se e solo se tutti i vertici di grado non nullo appartengono alla stessa componente connessa e hanno grado pari. Nei due algoritmi seguenti questa ipotesi è soddisfatta perché il multigrafo contiene un MST.
+
+> [!theorem] Teorema
+> Sia $G$ un grafo con archi pesati tale che la funzione costo sugli archi soddisfi la proprietà triangolare. Dato un cammino semplice $C=\langle v_1,\ldots,v_{k+1}\rangle$ di $k+1$ nodi e $k$ archi in $G$, abbiamo che
+> $$
+> c((v_1,v_{k+1}))\leq \sum_{i=1}^{k}c((v_i,v_{i+1})),
+> $$
+
+[[teacher_slides/1_complexity theory.pdf#page=70|Slide della docente, p. 70]]
+
+##### Dimostrazione
+
+La prova è per induzione sul numero $k$ di archi del cammino.
+
+1. Per $k=2$, la tesi è esattamente la disuguaglianza triangolare.
+2. Per $k>2$, l'ipotesi induttiva riduce il prefisso da $v_1$ a $v_{k-1}$ a un solo arco; la disuguaglianza triangolare sostituisce poi gli ultimi due tratti con l'arco da $v_{k-1}$ a $v_{k+1}$ e infine combina i due archi ottenuti.
+3. Si ottiene quindi il bound dell'enunciato. In particolare, eliminare un vertice intermedio e sostituire i due tratti adiacenti con l'arco diretto non aumenta il costo. Da un ciclo che visita alcuni vertici più volte si possono perciò saltare le visite ripetute ottenendo un ciclo Hamiltoniano di costo non maggiore.
+
+#### Algoritmo di 2-approssimazione
+
+> **Status per l'esame — non svolto nell'AA 2025/26.** L'analisi resta utile come preparazione della prova di Christofides.
+
+L'idea è costruire un minimum spanning tree $T^*$, raddoppiarne gli archi per rendere pari ogni grado, calcolare un ciclo euleriano e applicare gli shortcut ai vertici già visitati.
 
 Nell'immagine si mostrano, in sequenza, $T^*$, il ciclo euleriano $E$ sul multigrafo con archi raddoppiati e il ciclo Hamiltoniano $H$ ottenuto mediante shortcut. Per chiarezza non sono disegnati gli altri archi del grafo completo.
 
@@ -825,7 +864,14 @@ Nell'immagine si mostrano, in sequenza, $T^*$, il ciclo euleriano $E$ sul multig
 
 **Realizzabilità e terminazione.** Il raddoppio degli archi conserva la connettività di $T^*$ e raddoppia il grado di ogni vertice; tutti i gradi di $G'$ sono quindi pari e il ciclo euleriano $E$ esiste. Poiché $G$ è completo, ogni shortcut usa un arco esistente; il lemma precedente garantisce che il costo non aumenti. MST, ciclo euleriano e scansione di $E$ sono tutti calcolabili in tempo polinomiale, quindi l'algoritmo termina in tempo polinomiale e restituisce un ciclo Hamiltoniano.
 
-**Fattore di approssimazione.** Il ciclo $E$ usa due volte ogni arco di $T^*$ e gli shortcut non aumentano il costo, dunque
+> [!theorem] Teorema
+> L'algoritmo è una due approssimazione.
+
+[[teacher_slides/1_complexity theory.pdf#page=71|Slide della docente, p. 71]]
+
+##### Dimostrazione
+
+Il ciclo $E$ usa due volte ogni arco di $T^*$ e gli shortcut non aumentano il costo, dunque
 
 $$
 cost(H)\leq cost(E)=2\,cost(T^*).
@@ -855,7 +901,9 @@ $$
 \frac{cost(H)}{cost(H^*)}=\frac{2n-2}{n}=2-\frac{2}{n}\xrightarrow{n\to\infty}2.
 $$
 
-**Algoritmo di Christofides.** La 2-approssimazione rende pari ogni grado raddoppiando l'intero MST. Christofides aggiunge invece archi soltanto ai vertici di grado dispari e garantisce un fattore di approssimazione $3/2$.
+#### Algoritmo di Christofides
+
+La 2-approssimazione rende pari ogni grado raddoppiando l'intero MST. Christofides aggiunge invece archi soltanto ai vertici di grado dispari e garantisce un fattore di approssimazione $3/2$.
 
 Un **matching** è un insieme di archi a due a due privi di estremi comuni. Un **perfect matching** copre tutti i vertici: ciascun vertice è incidente a esattamente un arco del matching. Un numero pari di vertici è una condizione necessaria; in un grafo completo è anche sufficiente.
 
@@ -892,7 +940,15 @@ quindi ogni grafo non diretto ha un numero pari di vertici di grado dispari. Ne 
 
 Ogni vertice di $U$ riceve esattamente un arco aggiuntivo da $M^*$ e passa da grado dispari a grado pari; i vertici fuori da $U$ conservano grado pari. Inoltre $F$ è connesso perché contiene lo spanning tree $T^*$. Esiste dunque un ciclo euleriano $E$. Completezza e disuguaglianza triangolare permettono infine di trasformarlo mediante shortcut in un ciclo Hamiltoniano $H$ senza aumentarne il costo. Tutti i passi sono polinomiali; il più oneroso è il calcolo del minimum-weight perfect matching.
 
-**Fattore di approssimazione.** Come nella 2-approssimazione, l'MST fornisce il lower bound
+> [!theorem] Teorema
+> L'algoritmo di Christofides ha un fattore di approssimazione uguale a $3/2$.
+
+[[teacher_slides/1_complexity theory.pdf#page=73|Slide della docente, p. 73]]
+[[teacher_slides/1_complexity theory.pdf#page=74|Slide della docente, p. 74]]
+
+##### Dimostrazione
+
+Come nella 2-approssimazione, l'MST fornisce il lower bound
 
 $$
 cost(T^*)\leq cost(H^*).
@@ -1016,7 +1072,23 @@ Ogni figlio si costruisce in tempo polinomiale. Questo non rende polinomiale l'i
 
 ### Vertex Cover Problem
 
-Dato un grafo non orientato $G=(V,E)$, un **vertex cover** è un insieme $C\subseteq V$ che contiene almeno un estremo di ogni arco:
+#### Problema e modelli
+
+> [!definition] Definizione
+> Dato un grafo $G=(V,E)$, un Vertex Cover $V'\subseteq V$ è un insieme di vertici in $V$ che copre tutti gli archi di $E$; ovvero, tale che
+> $$
+> \forall (u,v)\in E:\quad u\in V'\ \mathrm{OR}\ v\in V'.
+> $$
+
+> [!problem] Problema del Vertex Cover (VC)
+>
+> **Input:** Grafo $G=(V,E)$.
+>
+> **Output:** Vertex Cover di cardinalità minima.
+
+[[teacher_slides/1_complexity theory.pdf#page=55|Slide della docente, p. 55]]
+
+Nel seguito $G$ è non orientato e chiamiamo $C$ il vertex cover, invece di $V'$, per non confonderlo con l'insieme dei vertici. La condizione di copertura equivale a
 
 $$
 \forall (u,v)\in E:\quad u\in C\ \vee\ v\in C.
@@ -1028,6 +1100,13 @@ La condizione di copertura, da sola, è facile da soddisfare: per esempio, l'int
 - **versione decisionale** $VCD$: dati $G$ e un intero $k\leq |V|$, stabilire se esista un vertex cover di cardinalità al più $k$.
 
 ![[assets/vertex_covers.png|500]]
+
+> [!theorem] Teorema
+> Il problema del Vertex Cover è NP-Hard.
+
+[[teacher_slides/1_complexity theory.pdf#page=55|Slide della docente, p. 55]]
+
+#### Dimostrazione
 
 Il problema $VCD$ è NP-completo: una copertura proposta si verifica in tempo polinomiale controllandone la cardinalità e accertando che ogni arco abbia almeno un estremo selezionato; la NP-hardness è un risultato noto. Ne segue che la versione di ottimizzazione è NP-hard. Infatti, se avessimo un algoritmo per $VC_{opt}$, potremmo invocarlo una sola volta su $G$ e rispondere `YES` a $VCD$ se e solo se la soluzione restituita ha cardinalità al più $k$:
 
@@ -1043,11 +1122,23 @@ Nella figura l'istanza della riduzione è la coppia $(G,k)$: il grafo $G$ viene 
 
 > **AA 2025/26 — facoltativo.** Le dispense correnti presentano questa self-reduction come approfondimento facoltativo.
 
+> [!theorem] Teorema
+> $VC\leq_P VCD$.
+
+[[teacher_slides/1_complexity theory.pdf#page=56|Slide della docente, p. 56]]
+[[teacher_slides/1_complexity theory.pdf#page=57|Slide della docente, p. 57]]
+
+#### Dimostrazione
+
 Vale anche la riduzione nella direzione opposta: usando un oracolo decisionale $A(G,k)$ possiamo determinare sia la cardinalità ottima sia i vertici di una soluzione che la realizza. Questa trasformazione è una riduzione di Turing in tempo polinomiale, perché effettua più chiamate adattive all'oracolo.
 
-**Fase 1 — cardinalità ottima.** La proprietà interrogata è monotona: se $G$ ha un vertex cover di cardinalità al più $k$, allora ne ha uno di cardinalità al più $k'$ per ogni $k'\geq k$. Una ricerca binaria nell'intervallo $[0,|V|]$ trova quindi il minimo $k^*$ tale che $A(G,k^*)=\mathrm{YES}$ usando $O(\log |V|)$ chiamate.
+##### Fase 1 — cardinalità ottima
 
-**Fase 2 — ricostruzione.** Manteniamo un grafo corrente $G_c$, il budget residuo $k$ e un insieme $U$ di vertici non ancora esaminati. Per ogni vertice $v$ proviamo temporaneamente a rimuoverlo:
+La proprietà interrogata è monotona: se $G$ ha un vertex cover di cardinalità al più $k$, allora ne ha uno di cardinalità al più $k'$ per ogni $k'\geq k$. Una ricerca binaria nell'intervallo $[0,|V|]$ trova quindi il minimo $k^*$ tale che $A(G,k^*)=\mathrm{YES}$ usando $O(\log |V|)$ chiamate.
+
+##### Fase 2 — ricostruzione
+
+Manteniamo un grafo corrente $G_c$, il budget residuo $k$ e un insieme $U$ di vertici non ancora esaminati. Per ogni vertice $v$ proviamo temporaneamente a rimuoverlo:
 
 **Algorithm 5 Self-reduction del Vertex Cover** ^algorithm-5
 
@@ -1069,6 +1160,10 @@ Se la risposta alla riga 7 è `YES`, esiste una copertura del grafo corrente che
 L'invariante è che il grafo corrente possiede un vertex cover di cardinalità al più pari al budget residuo $k$. Quando non restano archi, $C$ copre tutti gli archi eliminati dalle scelte effettuate. La ricostruzione usa al più $|V|$ chiamate all'oracolo; insieme alla ricerca binaria, il totale è $O(|V|+\log |V|)$, quindi polinomiale.
 
 ### Approssimazione greedy del Vertex Cover
+
+[[teacher_slides/1_complexity theory.pdf#page=58|Slide della docente, p. 58]]
+[[teacher_slides/1_complexity theory.pdf#page=59|Slide della docente, p. 59]]
+[[teacher_slides/1_complexity theory.pdf#page=60|Slide della docente, p. 60]]
 
 Un algoritmo greedy costruisce la soluzione incrementalmente. Per Vertex Cover, tuttavia, la scelta locale è determinante: due idee naturali producono sempre una copertura, ma non garantiscono un fattore costante; scegliere opportunamente degli archi porta invece a una 2-approssimazione.
 
@@ -1127,6 +1222,11 @@ La scelta efficace consiste nel selezionare un arco ancora scoperto e inserire n
 
 L'algoritmo termina perché a ogni iterazione elimina almeno l'arco scelto. Inoltre restituisce un vertex cover: un arco viene eliminato solo quando almeno uno dei suoi estremi è stato inserito in $C$, e alla fine tutti gli archi sono stati eliminati. Con liste di adiacenza e marcature, ogni vertice e ogni arco viene esaminato un numero costante di volte, quindi il costo è $O(|V|+|E|)$.
 
+> [!definition] Definizione
+> Dato un grafo $G=(V,E)$, un sottoinsieme di archi $E'\subseteq E$ si dice un Matching se non esistono in $E'$ due archi che condividono un estremo. Se $E'$ è massimale, ovvero non è possibile aggiungere altri archi senza violare la proprietà del matching, si dice che $E'$ è un Maximal Matching. Infine, se il matching copre tutti i vertici del grafo, ovvero per ogni $v\in V$ esiste un $u\in V$ tale che $(v,u)\in E'$, si dice che $E'$ è un Perfect Matching.
+
+[[teacher_slides/1_complexity theory.pdf#page=59|Slide della docente, p. 59]]
+
 Sia $M\subseteq E$ l'insieme degli archi scelti. Questi archi non condividono estremi, perché dopo aver scelto $(u,v)$ vengono eliminati tutti gli archi incidenti a $u$ o $v$: $M$ è dunque un **matching**. È anche **massimale**, perché al termine non esiste un altro arco disgiunto da tutti quelli in $M$ che possa esservi aggiunto.
 
 > **Massimale non significa massimo**
@@ -1144,6 +1244,13 @@ $$
 |C^*|\geq |M|.
 $$
 
+> [!theorem] Teorema
+> Il fattore di approssimazione dell'algoritmo è 2.
+
+[[teacher_slides/1_complexity theory.pdf#page=60|Slide della docente, p. 60]]
+
+##### Dimostrazione
+
 Combinando le due relazioni si ottiene
 
 $$
@@ -1152,15 +1259,24 @@ $$
 \frac{|C|}{|C^*|}\leq 2.
 $$
 
+**Precisazione nostra.** Nella prova a p. 60 il lower bound necessario è $|C^*|\geq |M|$, non $|C^*|\geq |C|$: ogni arco del matching impone un vertice distinto nell'ottimo, ma questo non contiene necessariamente entrambi gli estremi scelti dall'algoritmo.
+
 L'analisi è **tight**. Nel grafo bipartito completo $K_{m,m}$, tutti i vertici di una delle due partizioni formano un vertex cover ottimo di cardinalità $m$. L'algoritmo può scegliere un matching perfetto di $m$ archi e inserire entrambi gli estremi di ciascuno, restituendo tutti i $2m$ vertici. Il rapporto è esattamente $2$.
 
 ![[assets/Screenshot 2024-10-08 111957.png|800]]
 
 ### Relax & Round per Vertex Cover
 
+[[teacher_slides/1_complexity theory.pdf#page=64|Slide della docente, p. 64]]
+[[teacher_slides/1_complexity theory.pdf#page=65|Slide della docente, p. 65]]
+[[teacher_slides/1_complexity theory.pdf#page=66|Slide della docente, p. 66]]
+[[teacher_slides/1_complexity theory.pdf#page=67|Slide della docente, p. 67]]
+
 La tecnica **Relax & Round** costruisce un'altra 2-approssimazione in tre passi: formula il problema come programma lineare intero, rilassa il vincolo di interezza e arrotonda la soluzione frazionaria ottenuta.
 
-**1. Formulazione ILP.** Per ogni vertice $v\in V$ introduciamo una variabile binaria $x_v$:
+#### Formulazione ILP
+
+Per ogni vertice $v\in V$ introduciamo una variabile binaria $x_v$:
 
 $$
 x_v=
@@ -1182,7 +1298,9 @@ $$
 
 Questa formulazione è equivalente al Vertex Cover di ottimizzazione e risolverla esattamente è NP-hard.
 
-**2. Rilassamento.** Sostituiamo il vincolo binario con $0\leq x_v\leq 1$:
+#### Rilassamento
+
+Sostituiamo il vincolo binario con $0\leq x_v\leq 1$:
 
 $$
 \begin{aligned}
@@ -1194,7 +1312,9 @@ $$
 
 Il rilassamento è un problema di programmazione lineare risolvibile in tempo polinomiale. Indichiamo con $x^*$ una sua soluzione ottima e con $OPT_{LP}=\sum_{v\in V}x_v^*$ il relativo costo.
 
-**3. Arrotondamento.** Trasformiamo $x^*$ in una soluzione binaria $\hat{x}$ usando la soglia $1/2$:
+#### Arrotondamento
+
+Trasformiamo $x^*$ in una soluzione binaria $\hat{x}$ usando la soglia $1/2$:
 
 $$
 \hat{x}_v=
@@ -1212,9 +1332,11 @@ $$
 > 4.  **return** $C$<br>
 > 5. **end function**
 
-**Ammissibilità.** Per ogni arco $(u,v)$, la soluzione frazionaria soddisfa $x_u^*+x_v^*\geq 1$. I due valori non possono quindi essere entrambi strettamente minori di $1/2$: almeno uno dei due estremi viene inserito in $C$ e l'arco risulta coperto. Il segno di uguaglianza nella regola di rounding è essenziale proprio nel caso $x_u^*=x_v^*=1/2$.
+#### Ammissibilità e fattore di approssimazione
 
-**Fattore di approssimazione.** Ogni soluzione intera ammissibile è anche ammissibile per il rilassamento LP; dunque il dominio intero è contenuto in quello frazionario e
+Per ogni arco $(u,v)$, la soluzione frazionaria soddisfa $x_u^*+x_v^*\geq 1$. I due valori non possono quindi essere entrambi strettamente minori di $1/2$: almeno uno dei due estremi viene inserito in $C$ e l'arco risulta coperto. Il segno di uguaglianza nella regola di rounding è essenziale proprio nel caso $x_u^*=x_v^*=1/2$.
+
+Ogni soluzione intera ammissibile è anche ammissibile per il rilassamento LP; dunque il dominio intero è contenuto in quello frazionario e
 
 $$
 OPT_{LP}\leq OPT,
@@ -1249,6 +1371,9 @@ L'analisi è tight per questa regola di rounding. In un ciclo con un numero pari
 
 #### Ambienti distribuiti
 
+[[teacher_slides/2_distributed algorithms.pdf#page=3|Slide della docente, p. 3]]
+[[teacher_slides/2_distributed algorithms.pdf#page=7|Slide della docente, p. 7]]
+
 Un **ambiente distribuito** è una collezione finita di entità computazionali che cooperano tramite scambio di messaggi per raggiungere un obiettivo comune. Le entità possono avere capacità diverse, ma ciascuna dispone di computazione, memoria privata e clock locale: sono **molteplici**, **autonome** e capaci di **interagire**. Ne sono esempi il Web, le reti di comunicazione, le reti di sensori e quelle robotiche. Condividere risorse, tollerare guasti e aumentare la scalabilità sono motivazioni frequenti per usarle.
 
 Un **algoritmo distribuito**, o *protocollo*, specifica le azioni locali delle entità in modo che il loro comportamento collettivo risolva il problema. Come per un algoritmo sequenziale, occorre dimostrarne la correttezza e valutarne l'efficienza.
@@ -1257,9 +1382,16 @@ La distinzione rispetto al calcolo parallelo riguarda soprattutto il modello di 
 
 #### Il modello
 
+[[teacher_slides/2_distributed algorithms.pdf#page=23|Slide della docente, p. 23]]
+
 La rete di comunicazione è rappresentata da un grafo $G=(V,A)$: i vertici sono le **entità** (dette anche *nodi*) e gli archi orientati sono i collegamenti lungo i quali si possono inviare messaggi. L'orientamento permette di descrivere anche canali unidirezionali; quando si assume la restrizione dei collegamenti bidirezionali, il grafo si può trattare come non orientato e scrivere $G=(V,E)$.
 
 #### Entità
+
+[[teacher_slides/2_distributed algorithms.pdf#page=10|Slide della docente, p. 10]]
+[[teacher_slides/2_distributed algorithms.pdf#page=11|Slide della docente, p. 11]]
+[[teacher_slides/2_distributed algorithms.pdf#page=18|Slide della docente, p. 18]]
+[[teacher_slides/2_distributed algorithms.pdf#page=19|Slide della docente, p. 19]]
 
 Ogni entità $x$ riceve un input locale, eventualmente vuoto, ed è chiamata a produrre un output conforme alla specifica del problema. I valori prodotti dai singoli nodi possono essere diversi: per esempio, dopo un'elezione uno risulta *leader* e gli altri *follower*.
 
@@ -1271,9 +1403,15 @@ Nel seguito consideriamo un sistema **simmetrico**: tutte le entità seguono la 
 
 #### Comunicazione
 
+[[teacher_slides/2_distributed algorithms.pdf#page=22|Slide della docente, p. 22]]
+[[teacher_slides/2_distributed algorithms.pdf#page=23|Slide della docente, p. 23]]
+
 Un messaggio è una sequenza **finita di bit**. La comunicazione è *point-to-point*: un'entità $x$ può inviare direttamente solo ai suoi **vicini in uscita** $N_o(x)$ e ricevere solo dai **vicini in ingresso** $N_i(x)$. Indichiamo con $N(x)=N_o(x)\cup N_i(x)$ l'insieme dei suoi vicini; con collegamenti bidirezionali i due insiemi coincidono. L'ordine FIFO dei messaggi lungo un collegamento non è garantito dal modello generale: quando serve, va dichiarato come restrizione.
 
 #### Assiomi
+
+[[teacher_slides/2_distributed algorithms.pdf#page=25|Slide della docente, p. 25]]
+[[teacher_slides/2_distributed algorithms.pdf#page=26|Slide della docente, p. 26]]
 
 Nel modello di base valgono due assiomi; le ulteriori ipotesi richieste da un protocollo sono **restrizioni**.
 
@@ -1281,6 +1419,14 @@ Nel modello di base valgono due assiomi; le ulteriori ipotesi richieste da un pr
 - **Orientamento locale.** Ogni entità distingue i propri vicini in uscita e quelli in ingresso: può scegliere a quale vicino inviare e riconoscere da quale porta locale proviene un messaggio ricevuto. Le etichette delle porte sono distinte per i vicini dello stesso nodo, ma restano locali e non costituiscono identificativi globali delle entità.
 
 #### Restrizioni
+
+[[teacher_slides/2_distributed algorithms.pdf#page=27|Slide della docente, p. 27]]
+[[teacher_slides/2_distributed algorithms.pdf#page=28|Slide della docente, p. 28]]
+[[teacher_slides/2_distributed algorithms.pdf#page=29|Slide della docente, p. 29]]
+[[teacher_slides/2_distributed algorithms.pdf#page=30|Slide della docente, p. 30]]
+[[teacher_slides/2_distributed algorithms.pdf#page=31|Slide della docente, p. 31]]
+[[teacher_slides/2_distributed algorithms.pdf#page=32|Slide della docente, p. 32]]
+[[teacher_slides/2_distributed algorithms.pdf#page=33|Slide della docente, p. 33]]
 
 Una **restrizione** è una proprietà aggiuntiva sfruttata dal protocollo: ne può rendere possibile o più efficiente l'esecuzione, ma limita i sistemi a cui si applica. Le ipotesi vanno quindi dichiarate per ogni algoritmo. Fra quelle ricorrenti ci sono:
 
@@ -1291,6 +1437,9 @@ Una **restrizione** è una proprietà aggiuntiva sfruttata dal protocollo: ne pu
 
 #### Misure di efficienza per gli algoritmi distribuiti
 
+[[teacher_slides/2_distributed algorithms.pdf#page=35|Slide della docente, p. 35]]
+[[teacher_slides/2_distributed algorithms.pdf#page=36|Slide della docente, p. 36]]
+
 Le misure principali sono la **quantità di comunicazione** e il **tempo**. Di norma la prima conta le trasmissioni di messaggi: un invio su un collegamento vale un messaggio, anche se un guasto ne impedisce la consegna. Se i messaggi hanno lunghezze molto diverse, si contano invece i **bit trasmessi** (*bit complexity*). Lo spazio locale resta una risorsa, ma qui l'analisi si concentra soprattutto sulla comunicazione; il costo del calcolo locale è considerato trascurabile rispetto alla trasmissione.
 
 Il **tempo fisico** va dall'avvio della prima entità alla terminazione dell'ultima. Nel modello asincrono generale non ha un bound uniforme ricavabile dalla sola topologia, perché il ritardo di ciascun messaggio può essere arbitrariamente grande. Per analizzare un protocollo distinguiamo quindi due misure astratte:
@@ -1300,13 +1449,29 @@ Il **tempo fisico** va dall'avvio della prima entità alla terminazione dell'ult
 
 Quando si indica una *time complexity* occorre specificare quale misura e quali restrizioni temporali si stanno usando. Il caso del broadcast mostrerà perché la distinzione conta.
 
-#### Esempio di costruzione e valutazione di un algoritmo distribuito
+#### Broadcast
 
-**Problema di broadcast.** Un solo nodo $s$, l'**iniziatore** (*initiator*), conosce inizialmente un'informazione $I$ e deve farla apprendere a tutti gli altri nodi in tempo finito, qualunque sia la scelta di $s$. Assumiamo un grafo $G=(V,E)$ con $n=|V|$ nodi e $m=|E|$ collegamenti; le restrizioni standard $R=\{BL,CN,TR\}$ sono collegamenti bidirezionali (**BL**), connettività (**CN**) e affidabilità totale (**TR**, nessun guasto). L'iniziatore unico che possiede $I$ è parte della specifica del problema ($UI^+$). Il protocollo che costruiamo è **generico**: i nodi non devono conoscere in anticipo la topologia, $n$ o gli identificativi dei vicini.
+##### Problema e modello
+
+> [!problem] Broadcast
+>
+> **Input:** un solo nodo $s$, l'**iniziatore** (*initiator*), conosce inizialmente un'informazione $I$.
+>
+> **Output:** tutti gli altri nodi apprendono $I$ in tempo finito, qualunque sia la scelta di $s$.
+
+[[teacher_slides/2_distributed algorithms.pdf#page=37|Slide della docente, p. 37]]
+[[teacher_slides/2_distributed algorithms.pdf#page=38|Slide della docente, p. 38]]
+
+Assumiamo un grafo $G=(V,E)$ con $n=|V|$ nodi e $m=|E|$ collegamenti; le restrizioni standard $R=\{BL,CN,TR\}$ sono collegamenti bidirezionali (**BL**), connettività (**CN**) e affidabilità totale (**TR**, nessun guasto). L'iniziatore unico che possiede $I$ è parte della specifica del problema ($UI^+$). Il protocollo che costruiamo è **generico**: i nodi non devono conoscere in anticipo la topologia, $n$ o gli identificativi dei vicini.
 
 ![[assets/Screenshot 2024-10-09 090924.png|400]]
 
-**Dalla prima idea a Flooding.** Se ogni nodo che riceve $I$ lo invia sempre a tutti i vicini, il protocollo può non terminare: nell'esempio, $y$ e $z$ continuano a rinviarsi il messaggio. Serve ricordare che l'invio è già stato effettuato. Introduciamo quindi lo stato $DONE$ e facciamo inoltrare $I$ una sola volta, alla prima ricezione. Poiché il nodo riconosce la porta da cui è arrivato il messaggio (orientamento locale), può inoltre escludere il mittente dall'inoltro.
+##### Strategia e algoritmo Flooding
+
+[[teacher_slides/2_distributed algorithms.pdf#page=40|Slide della docente, p. 40]]
+[[teacher_slides/2_distributed algorithms.pdf#page=46|Slide della docente, p. 46]]
+
+Se ogni nodo che riceve $I$ lo invia sempre a tutti i vicini, il protocollo può non terminare: nell'esempio, $y$ e $z$ continuano a rinviarsi il messaggio. Serve ricordare che l'invio è già stato effettuato. Introduciamo quindi lo stato $DONE$ e facciamo inoltrare $I$ una sola volta, alla prima ricezione. Poiché il nodo riconosce la porta da cui è arrivato il messaggio (orientamento locale), può inoltre escludere il mittente dall'inoltro.
 
 ![[assets/Screenshot 2024-10-09 091410.png|400]]
 
@@ -1327,11 +1492,28 @@ DONE, qualunque evento:
 
 ![[assets/Screenshot 2024-10-09 091924.png|600]]
 
-**Correttezza.** Supponiamo che, dopo l'attivazione di $s$, qualche nodo non riceva mai $I$. Poiché $G$ è connesso, esisterebbe un arco tra un nodo che ha già appreso $I$ e uno che non lo apprende. Il primo, quando si è attivato, ha inviato $I$ su quell'arco: il secondo non può essere il mittente della sua prima copia. L'affidabilità e il ritardo finito di consegna danno una contraddizione. Quindi tutti i nodi apprendono $I$.
+##### Correttezza
 
-**Terminazione.** Ogni nodo invia al massimo una volta ai propri vicini e poi passa a $DONE$; il numero di messaggi è finito e tutti sono consegnati in tempo finito. Tutti i nodi raggiungono dunque $DONE$. Ciascuno conosce la propria **terminazione locale**, ma il protocollo non gli permette di rilevare quando *tutti* hanno terminato: questa è una questione distinta (*termination detection*). In una rete asincrona, i ritardi possono far arrivare una copia lungo un cammino più lungo prima di una copia inviata direttamente da $s$.
+[[teacher_slides/2_distributed algorithms.pdf#page=52|Slide della docente, p. 52]]
 
-**Messaggi.** L'iniziatore invia $|N(s)|$ messaggi; ognuno degli altri $n-1$ nodi ne invia $|N(x)|-1$, escludendo il mittente della prima copia. Per il lemma della stretta di mano, $\sum_x|N(x)|=2m$, perciò il conteggio è esatto e non dipende dall'ordine di consegna:
+###### Dimostrazione
+
+Supponiamo che, dopo l'attivazione di $s$, qualche nodo non riceva mai $I$. Poiché $G$ è connesso, esisterebbe un arco tra un nodo che ha già appreso $I$ e uno che non lo apprende. Il primo, quando si è attivato, ha inviato $I$ su quell'arco: il secondo non può essere il mittente della sua prima copia. L'affidabilità e il ritardo finito di consegna danno una contraddizione. Quindi tutti i nodi apprendono $I$.
+
+##### Terminazione
+
+[[teacher_slides/2_distributed algorithms.pdf#page=49|Slide della docente, p. 49]]
+[[teacher_slides/2_distributed algorithms.pdf#page=50|Slide della docente, p. 50]]
+
+Ogni nodo invia al massimo una volta ai propri vicini e poi passa a $DONE$; il numero di messaggi è finito e tutti sono consegnati in tempo finito. Tutti i nodi raggiungono dunque $DONE$. Ciascuno conosce la propria **terminazione locale**, ma il protocollo non gli permette di rilevare quando *tutti* hanno terminato: questa è una questione distinta (*termination detection*). In una rete asincrona, i ritardi possono far arrivare una copia lungo un cammino più lungo prima di una copia inviata direttamente da $s$.
+
+##### Complessità
+
+###### Messaggi
+
+[[teacher_slides/2_distributed algorithms.pdf#page=53|Slide della docente, p. 53]]
+
+L'iniziatore invia $|N(s)|$ messaggi; ognuno degli altri $n-1$ nodi ne invia $|N(x)|-1$, escludendo il mittente della prima copia. Per il lemma della stretta di mano, $\sum_x|N(x)|=2m$, perciò il conteggio è esatto e non dipende dall'ordine di consegna:
 
 $$
 \begin{aligned}
@@ -1341,17 +1523,44 @@ M(\text{Flooding}(G))
 \end{aligned}
 $$
 
-**Tempo.** Nel modello ideale sincrono, dopo $t$ unità hanno appreso $I$ tutti i nodi a distanza al più $t$ da $s$. Il tempo fino all'ultima prima ricezione è l'**eccentricità** $r(s)=\max_y d(s,y)$; nel caso peggiore rispetto all'iniziatore è il diametro $D(G)=\max_s r(s)\le n-1$. Nel modello asincrono, invece, il **tempo fisico** non ha un bound uniforme senza un limite ai ritardi. La catena che porta alla *prima* ricezione di un nodo segue nodi distinti e contiene al più $n-1$ trasmissioni, ma può seguire un cammino non minimo. Il **tempo causale** conta anche le copie ridondanti: poiché ogni nodo invia una sola volta, una catena di inoltri può contenere fino a $n$ trasmissioni. In un triangolo si può avere $s\to a\to b\to s$, con l'ultima copia ricevuta da $s$ già in $DONE$. Questi conteggi causali non vanno identificati con $D(G)$.
+###### Tempo
 
-**Lower bound del problema.** In *ideal time*, per l'iniziatore $s$ ogni broadcast deve impiegare almeno $r(s)$ unità per raggiungere il nodo più lontano; se l'iniziatore è arbitrario, il caso peggiore è almeno $D(G)$. Flooding lo raggiunge ed è quindi ottimale per questa misura. Quanto ai messaggi, almeno $n-1$ nodi devono ricevere $I$. Per un protocollo generico corretto su **tutti** i grafi connessi, senza conoscenza globale della topologia o di $n$, vale il bound più forte $m$: se in un'esecuzione un arco non trasmettesse mai, potremmo sostituirlo con un cammino attraverso un nuovo nodo dormiente, lasciando invariata la vista locale degli estremi; il nuovo nodo non riceverebbe $I$. Questa contraddizione spiega perché Flooding, che usa meno di $2m$ messaggi, è ottimale **nell'ordine di grandezza** sotto quelle ipotesi.
+[[teacher_slides/2_distributed algorithms.pdf#page=54|Slide della docente, p. 54]]
 
-**Topologie particolari.** Su un albero $m=n-1$, dunque Flooding usa esattamente $n-1$ messaggi anche se i nodi non sanno di trovarsi in un albero. Su un grafo completo, invece, usa $(n-1)^2=\Theta(n^2)$ messaggi; se almeno l'iniziatore sa che ogni altro nodo è suo vicino, il *simple broadcast* invia direttamente a tutti: $n-1$ messaggi e ideal time $1$. Questa conoscenza aggiuntiva spiega perché il bound $m$ dei protocolli generici non si applica a quel caso. Per riutilizzare broadcast economici su un grafo generico si può prima costruire uno **spanning tree** e poi trasmettere lungo i suoi $n-1$ archi, tenendo distinto il costo della costruzione.
+Nel modello ideale sincrono, dopo $t$ unità hanno appreso $I$ tutti i nodi a distanza al più $t$ da $s$. Il tempo fino all'ultima prima ricezione è l'**eccentricità** $r(s)=\max_y d(s,y)$; nel caso peggiore rispetto all'iniziatore è il diametro $D(G)=\max_s r(s)\le n-1$. Nel modello asincrono, invece, il **tempo fisico** non ha un bound uniforme senza un limite ai ritardi. La catena che porta alla *prima* ricezione di un nodo segue nodi distinti e contiene al più $n-1$ trasmissioni, ma può seguire un cammino non minimo. Il **tempo causale** conta anche le copie ridondanti: poiché ogni nodo invia una sola volta, una catena di inoltri può contenere fino a $n$ trasmissioni. In un triangolo si può avere $s\to a\to b\to s$, con l'ultima copia ricevuta da $s$ già in $DONE$. Questi conteggi causali non vanno identificati con $D(G)$.
+
+##### Lower bound
+
+[[teacher_slides/2_distributed algorithms.pdf#page=57|Slide della docente, p. 57]]
+
+In *ideal time*, per l'iniziatore $s$ ogni broadcast deve impiegare almeno $r(s)$ unità per raggiungere il nodo più lontano; se l'iniziatore è arbitrario, il caso peggiore è almeno $D(G)$. Flooding lo raggiunge ed è quindi ottimale per questa misura. Quanto ai messaggi, almeno $n-1$ nodi devono ricevere $I$. Per un protocollo generico corretto su **tutti** i grafi connessi, senza conoscenza globale della topologia o di $n$, vale il bound più forte $m$: se in un'esecuzione un arco non trasmettesse mai, potremmo sostituirlo con un cammino attraverso un nuovo nodo dormiente, lasciando invariata la vista locale degli estremi; il nuovo nodo non riceverebbe $I$. Questa contraddizione spiega perché Flooding, che usa meno di $2m$ messaggi, è ottimale **nell'ordine di grandezza** sotto quelle ipotesi.
+
+##### Topologie particolari e raccordo
+
+[[teacher_slides/2_distributed algorithms.pdf#page=60|Slide della docente, p. 60]]
+[[teacher_slides/2_distributed algorithms.pdf#page=62|Slide della docente, p. 62]]
+[[teacher_slides/2_distributed algorithms.pdf#page=63|Slide della docente, p. 63]]
+
+Su un albero $m=n-1$, dunque Flooding usa esattamente $n-1$ messaggi anche se i nodi non sanno di trovarsi in un albero. Su un grafo completo, invece, usa $(n-1)^2=\Theta(n^2)$ messaggi; se almeno l'iniziatore sa che ogni altro nodo è suo vicino, il *simple broadcast* invia direttamente a tutti: $n-1$ messaggi e ideal time $1$. Questa conoscenza aggiuntiva spiega perché il bound $m$ dei protocolli generici non si applica a quel caso. Per riutilizzare broadcast economici su un grafo generico si può prima costruire uno **spanning tree** e poi trasmettere lungo i suoi $n-1$ archi, tenendo distinto il costo della costruzione.
 
 #### Il wake-up problem
 
-**Problema.** Una computazione deve coinvolgere tutti i nodi, ma inizialmente solo alcuni possono attivarsi autonomamente; gli altri restano dormienti finché non ricevono un messaggio. Il **wake-up** deve portare tutti allo stato $AWAKE$. Il broadcast con un solo iniziatore è un caso particolare di wake-up; qui gli iniziatori possono essere più di uno e non sanno quali altri nodi si siano già attivati. Manteniamo le restrizioni standard $R=\{BL,CN,TR\}$ e assumiamo che almeno un nodo si attivi spontaneamente.
+##### Problema e modello
 
-**WFlood** applica la strategia di Flooding al messaggio di risveglio $W$. Tutti partono in stato $ASLEEP$; $AWAKE$ è lo stato terminale:
+> [!problem] Wake-up
+>
+> **Input:** alcuni nodi possono attivarsi autonomamente; gli altri restano dormienti finché non ricevono un messaggio.
+>
+> **Output:** tutti i nodi raggiungono lo stato $AWAKE$.
+
+[[teacher_slides/2_distributed algorithms.pdf#page=65|Slide della docente, p. 65]]
+[[teacher_slides/2_distributed algorithms.pdf#page=68|Slide della docente, p. 68]]
+
+Il broadcast con un solo iniziatore è un caso particolare di wake-up; qui gli iniziatori possono essere più di uno e non sanno quali altri nodi si siano già attivati. Manteniamo le restrizioni standard $R=\{BL,CN,TR\}$ e assumiamo che almeno un nodo si attivi spontaneamente.
+
+##### Algoritmo WFlood
+
+WFlood applica la strategia di Flooding al messaggio di risveglio $W$. Tutti partono in stato $ASLEEP$; $AWAKE$ è lo stato terminale:
 
 ~~~text
 ASLEEP, impulso spontaneo:
@@ -1364,9 +1573,15 @@ AWAKE, qualunque evento:
 
 ![[assets/Screenshot 2024-10-11 160525.png|450]]
 
-**Correttezza e terminazione.** Da almeno un iniziatore, l'invio attraversa ogni frontiera tra nodi svegli e dormienti in un grafo connesso; con affidabilità totale ogni nodo si sveglia in tempo finito. Ogni nodo esegue un solo invio ai vicini e poi ignora le altre copie, quindi il protocollo termina. Anche qui nessun nodo rileva da solo quando *tutti* sono svegli e la computazione globale è terminata.
+##### Correttezza e terminazione
 
-**Messaggi.** Sia $k\ge1$ il numero di nodi che si sono effettivamente svegliati per impulso spontaneo *prima* di ricevere $W$. Questi inviano a tutti i vicini; gli altri $n-k$ escludono ciascuno il mittente della prima copia. Pertanto
+Da almeno un iniziatore, l'invio attraversa ogni frontiera tra nodi svegli e dormienti in un grafo connesso; con affidabilità totale ogni nodo si sveglia in tempo finito. Ogni nodo esegue un solo invio ai vicini e poi ignora le altre copie, quindi il protocollo termina. Anche qui nessun nodo rileva da solo quando *tutti* sono svegli e la computazione globale è terminata.
+
+##### Complessità
+
+###### Messaggi
+
+Sia $k\ge1$ il numero di nodi che si sono effettivamente svegliati per impulso spontaneo *prima* di ricevere $W$. Questi inviano a tutti i vicini; gli altri $n-k$ escludono ciascuno il mittente della prima copia. Pertanto
 
 $$
 M(\text{WFlood}(G))=\sum_x|N(x)|-(n-k)=2m-(n-k),
@@ -1375,7 +1590,9 @@ $$
 
 Con un solo iniziatore il costo coincide con Flooding; se tutti sono iniziatori vale $2m$. Su un albero la formula diventa $n+k-2$. Nel caso peggiore, wake-up generico richiede $\Theta(m)$ messaggi: contiene il caso broadcast con un solo iniziatore e WFlood fornisce il corrispondente upper bound.
 
-**Tempo ideale.** Se un insieme $S$ di iniziatori si attiva simultaneamente all'istante iniziale e non intervengono altri impulsi, l'ultimo risveglio avviene dopo $\max_{v\in V}\min_{s\in S}d(s,v)$ unità: più iniziatori possono accelerare l'esecuzione. Nel caso peggiore ammesso, però, può attivarsi un solo iniziatore in un nodo di eccentricità $D(G)$, perciò la complessità ideale worst-case è $\Theta(D(G))$. Anche se altri impulsi spontanei arrivano più tardi, il primo iniziatore garantisce un upper bound ideale di $D(G)$; senza un bound sui ritardi il tempo fisico asincrono resta non limitato uniformemente.
+###### Tempo ideale
+
+Se un insieme $S$ di iniziatori si attiva simultaneamente all'istante iniziale e non intervengono altri impulsi, l'ultimo risveglio avviene dopo $\max_{v\in V}\min_{s\in S}d(s,v)$ unità: più iniziatori possono accelerare l'esecuzione. Nel caso peggiore ammesso, però, può attivarsi un solo iniziatore in un nodo di eccentricità $D(G)$, perciò la complessità ideale worst-case è $\Theta(D(G))$. Anche se altri impulsi spontanei arrivano più tardi, il primo iniziatore garantisce un upper bound ideale di $D(G)$; senza un bound sui ritardi il tempo fisico asincrono resta non limitato uniformemente.
 
 #### Spanning tree
 
