@@ -199,6 +199,12 @@ Per la seconda domanda, le [[teacher_slides/0_intro_algorithm.pdf#page=20|slide 
 
 Questa è la ragione per cui possiamo definire $P$ usando un modello preciso, come la macchina di Turing, e usare poi la nozione di tempo polinomiale anche per i comuni modelli di calcolo classici.
 
+**Macchine deterministiche e non deterministiche.** In una macchina di Turing *deterministica*, lo stato e il simbolo letto fissano un'unica prossima mossa: ogni input segue un solo percorso di calcolo. In una macchina *non deterministica* possono esserci più mosse possibili; i percorsi formano un albero. L'input è accettato se **almeno un ramo** termina accettando. Nel tempo non deterministico si considera la lunghezza di un ramo nel caso peggiore, non la somma del lavoro di tutti i rami: per un costo polinomiale, ogni ramo deve terminare entro un numero polinomiale di passi.
+
+![[assets/macchine-deterministiche-non-deterministiche.svg|1000]]
+
+I rami rappresentano scelte alternative del modello teorico, non processori che lavorano contemporaneamente. Questa distinzione servirà per capire le classi $P$ e $NP$.
+
 **Fin dove arriva il confronto?** CPU e GPU organizzano il lavoro in modo diverso; il parallelismo da solo non implica che un problema diventi risolvibile in tempo polinomiale. Il calcolo quantistico usa invece un modello diverso da quelli classici e non coincide con la macchina di Turing non deterministica: la versione più forte della tesi estesa non va applicata automaticamente a quel caso.
 
 ## 2 Teoria della Complessità
@@ -213,6 +219,7 @@ La restrizione non rende inutili queste classi per gli altri tipi di problema: a
 
 - ottimizzazione: «qual è la lunghezza del cammino minimo da $s$ a $v$?»;
 - decisione: «esiste un cammino da $s$ a $v$ di lunghezza al più $k$?».
+
 #### La classe P
 
 > [!definition] Classe di problemi P
@@ -220,33 +227,21 @@ La restrizione non rende inutili queste classi per gli altri tipi di problema: a
 
 [[teacher_slides/1_complexity theory.pdf#page=3|Slide della docente, p. 3]]
 
-**Modello.** Qui *deterministico* significa che, in ogni stato della computazione, la prossima operazione è determinata univocamente: su uno stesso input l'algoritmo segue un solo percorso di esecuzione. Il tempo è misurato nella dimensione dell'input.
+Per mostrare che un problema è in $P$ basta esibire un algoritmo deterministico che lo risolve in tempo polinomiale. In una [[#Tesi di Church–Turing estesa|macchina deterministica]], ogni input segue un solo percorso di calcolo.
 
-#### Macchine non deterministiche
+#### La classe NP
 
-Per capire da dove nasce $NP$ bisogna introdurre la **macchina non deterministica**. È un modello teorico di calcolo, non un computer realmente esistente. Quando in un certo passo sono possibili più scelte, la macchina non ne seleziona una con una particolare strategia: la computazione viene descritta come un albero che contiene un ramo per ogni scelta possibile.
+> [!definition] Classe di problemi NP (Non-deterministic Polynomial-time)
+> Insieme di problemi decisionali che possono essere verificati con un algoritmo verificatore di costo computazionale in tempo polinomiale nella dimensione dell'input.
 
-Un'istanza è **accettata** se almeno un ramo della computazione termina in uno stato di accettazione. È invece rifiutata se nessun ramo accetta. Il tempo non si ottiene sommando il lavoro di tutti i rami: si misura la lunghezza di un singolo ramo, e per una computazione in tempo polinomiale tutti i rami devono terminare entro un numero polinomiale di passi rispetto alla dimensione dell'input.
+[[teacher_slides/1_complexity theory.pdf#page=8|Slide della docente, p. 8]]
 
-![[assets/macchine-deterministiche-non-deterministiche.svg|1000]]
+Le sigle indicano il modello di calcolo e il tempo: $P$ sta per *Polynomial-time* e riguarda la **risoluzione** in tempo polinomiale con una macchina deterministica; $NP$ sta per *Non-deterministic Polynomial-time* e riguarda il tempo polinomiale di una [[#Tesi di Church–Turing estesa|macchina non deterministica]]. La $N$ significa *non deterministico*, non “non polinomiale”. 
+La definizione della docente descrive $NP$ tramite la **verifica** di una risposta positiva: vediamo cosa ricevono e controllano i verificatori.
 
-Nello schema, a sinistra l'input segue un unico percorso; a destra le scelte generano più rami. L'istanza a destra è accettata perché **almeno uno** di essi accetta: i rami non rappresentano computer reali che lavorano in parallelo.
+#### Certificati e algoritmo verificatore
 
-Consideriamo intuitivamente il **ciclo hamiltoniano**. Data una sequenza di $n$ vertici, controllare se descrive un ciclo che visita una volta tutti i vertici è semplice. Una macchina non deterministica può:
-
-1. scegliere, passo dopo passo, una possibile sequenza dei vertici;
-2. verificare che la sequenza rappresenti davvero un ciclo hamiltoniano;
-3. accettare se la verifica riesce.
-
-L'albero di computazione contiene i diversi ordinamenti che la macchina può scegliere. Se il grafo ha un ciclo hamiltoniano, almeno un ramo sceglie la sequenza corretta e accetta; se non lo ha, nessun ramo può superare la verifica. Ogni singolo ramo effettua soltanto una scelta e una verifica di lunghezza polinomiale: non si somma il costo di esplorare tutti gli ordinamenti.
-
-Questo modello conduce alla classe $NP$. Prima della definizione usata dalla docente, introduciamo certificato e verificatore: sono gli oggetti con cui le slide formulano la classe.
-
-#### Dalla macchina non deterministica ai certificati
-
-Possiamo vedere la macchina non deterministica come una macchina che **indovina** una soluzione candidata e poi la verifica deterministicamente. “Indovinare” non indica un'operazione magica o casuale: rappresenta i diversi valori scelti sui diversi rami della computazione.
-
-La soluzione candidata è chiamata **certificato**. Su un computer ordinario non possiamo creare contemporaneamente tutti i rami: immaginiamo invece che il certificato ci venga fornito dall'esterno. Un **verificatore** è un algoritmo deterministico $V$ che riceve l'istanza $x$ e un certificato candidato $c$; non deve trovare $c$, ma soltanto controllare se prova che $x$ è un'istanza positiva.
+Un **certificato** è l'informazione che sostiene una risposta positiva. Un **algoritmo verificatore** riceve l'istanza e una sequenza candidata come certificato: controlla se quella sequenza prova la risposta positiva, senza doverla trovare.
 
 > [!definition] Certificato per una istanza positiva $i\in I_Y$ del problema $\Pi$
 > Sequenza di caratteri (informazione aggiuntiva) di dimensione al massimo polinomiale nella dimensione dell'input che contiene l'evidenza del fatto che $i$ sia una istanza positiva per $\Pi$.
@@ -256,23 +251,14 @@ La soluzione candidata è chiamata **certificato**. Su un computer ordinario non
 
 [[teacher_slides/1_complexity theory.pdf#page=7|Slide della docente, p. 7]]
 
-**Precisazione nostra.** Il NO del verificatore per una coppia $(i,C_i)$ non prova da solo che $i$ sia negativa: il certificato proposto può essere sbagliato. La caratterizzazione formale qui sotto richiede che ogni istanza positiva abbia *almeno un* certificato accettato e che nessun certificato faccia accettare un'istanza negativa.
-
 > [!definition] Verificare un problema
 > Il problema $\Pi$ può essere verificato se valgono le due seguenti condizioni:
 > 1. Per ogni istanza positiva $i$ del problema $\Pi$ esiste un certificato $C_i$ di dimensione polinomiale nella dimensione di $i$;
 > 2. Esiste un algoritmo verificatore $A$ che risponde SI per ogni coppia $(i,C_i)$ tale che $i$ è un'istanza positiva di $\Pi$ e $C_i$ un suo certificato (polinomiale).
 
-> [!definition] Classe di problemi NP (Non-deterministic Polynomial-time)
-> Insieme di problemi decisionali che possono essere verificati con un algoritmo verificatore di costo computazionale in tempo polinomiale nella dimensione dell'input.
-
 [[teacher_slides/1_complexity theory.pdf#page=8|Slide della docente, p. 8]]
 
-**Spiegazione.** La definizione tramite verificatore è equivalente a quella tramite macchina non deterministica introdotta sopra: un ramo può scegliere un certificato candidato e verificarlo in tempo polinomiale. La sigla $NP$ significa ***nondeterministic polynomial time***, non “non polinomiale”. La formulazione della slide sulle coppie positive è completata dalla condizione di correttezza per le istanze negative nella formalizzazione seguente.
-
-Un problema decisionale appartiene a $NP$ se, per ogni istanza con risposta sì, **esiste un certificato di dimensione polinomiale verificabile in tempo polinomiale**.
-
-Formalmente, un problema decisionale $\Pi$ appartiene a $NP$ se esistono un verificatore polinomiale $V$ e un polinomio $p$ tali che
+**Come si applica la definizione di $NP$.** Un problema decisionale $\Pi$ appartiene a $NP$ se esistono un verificatore polinomiale $V$ e un polinomio $p$ tali che
 
 $$
 x\text{ è positiva per }\Pi
@@ -280,12 +266,10 @@ x\text{ è positiva per }\Pi
 \exists c:\ |c|\leq p(|x|)\ \land\ V(x,c)=\text{sì}.
 $$
 
-In linguaggio naturale, la formula afferma che la risposta per $x$ è sì **se e solo se** esiste almeno un certificato $c$, di lunghezza al più polinomiale in $|x|$, che il verificatore accetta. Quindi:
+La formula richiede che **ogni istanza positiva abbia almeno un certificato breve accettato** e che **nessun certificato faccia accettare un'istanza negativa**. 
+La seconda condizione, necessaria per la correttezza, resta implicita nella formulazione della [[teacher_slides/1_complexity theory.pdf#page=8|slide della docente, p. 8]]. Un NO per una singola coppia $(i,C_i)$ non dimostra invece che $i$ sia negativa: il certificato proposto può essere sbagliato, come osserva la [[teacher_slides/1_complexity theory.pdf#page=7|slide, p. 7]].
 
-- se $x$ è positiva, almeno un certificato breve deve essere accettato;
-- se $x$ è negativa, ogni certificato candidato deve essere rifiutato.
-
-Il certificato non deve essere unico e quello ricevuto può essere errato. L'appartenenza a $NP$ garantisce l'esistenza di una prova breve per le istanze positive, non un algoritmo deterministico polinomiale capace di trovarla.
+Il certificato non deve essere unico. La definizione tramite verificatore equivale a quella tramite macchina non deterministica: un ramo sceglie un certificato candidato e lo controlla; l'istanza è accettata se almeno un ramo sceglie un certificato valido. L'appartenenza a $NP$ garantisce che una prova breve si possa *verificare*, non che un algoritmo deterministico polinomiale sappia *trovarla*.
 
 #### Esempio: ciclo hamiltoniano
 
