@@ -31,7 +31,7 @@ function headingSlug(value) {
     .trim()
     .toLowerCase()
     .replace(/[^\p{L}\p{N}\s-]/gu, '')
-    .replace(/\s+/g, '-');
+    .replace(/\s/g, '-');
 }
 
 function convertObsidian(source) {
@@ -58,9 +58,9 @@ function convertObsidian(source) {
     return `${prefix}<img src="./${safePath}" alt=""${size} loading="lazy" decoding="async" />`;
   });
 
-  content = content.replace(/\[\[#([^\]|]+)\|([^\]]+)\]\]/g, (_match, target, label) => {
+  content = content.replace(/\[\[#([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_match, target, label) => {
     const id = target.startsWith('^') ? target.slice(1) : headingSlug(target);
-    return `[${label}](#${id})`;
+    return `[${label ?? target.replace(/^\^/, '')}](#${id})`;
   });
 
   content = content.replace(/\s+\^([a-zA-Z0-9_-]+)$/gm, '\n<span id="$1"></span>');

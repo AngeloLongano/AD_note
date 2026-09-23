@@ -95,8 +95,7 @@
               "title": "Algoritmi Distribuiti"
             }
           }
-        ],
-        "currentTab": 5
+        ]
       }
     ],
     "direction": "vertical"
@@ -265,31 +264,32 @@
       "bases:Crea nuova Base": false
     }
   },
-  "active": "67e6a19b0b0aefe0",
+  "active": "17ba5ddf354c7035",
   "lastOpenFiles": [
+    "my_notes.md",
+    "teacher_slides/1_complexity theory.pdf",
+    "Algoritmi Distribuiti.md",
     "dist/index.html",
-    "dist/_astro/SiteHeader.Dl2MV0nT.css",
-    "dist/_astro/KaTeX_Size3-Regular.CTq5MqoE.woff",
-    "dist/_astro/KaTeX_Size1-Regular.C195tn64.woff",
-    "dist/_astro/KaTeX_SansSerif-Italic.DN2j7dab.woff",
-    "dist/_astro/KaTeX_Fraktur-Regular.Dxdc4cR9.woff",
-    "dist/Screenshot 2024-11-26 120047.png",
-    "dist/Screenshot 2024-11-20 101658.png",
-    "dist/Screenshot 2024-11-20 101146.png",
-    "dist/Screenshot 2024-11-20 092309.png",
-    "dist/Screenshot 2024-11-15 185935.png",
-    "dist/Screenshot 2024-11-15 183550.png",
-    "dist/Screenshot 2024-11-15 181853.png",
-    "dist/Screenshot 2024-11-15 180402.png",
-    "dist/Screenshot 2024-11-15 180257.png",
-    "dist/Screenshot 2024-11-15 174808.png",
     "dist/widgets/sat-fnc/index.html",
     "dist/widgets/master-theorem/index.html",
     "dist/widgets/sat-fnc",
     "dist/widgets/master-theorem",
     "dist/widgets",
-    "my_notes.md",
-    "Algoritmi Distribuiti.md",
+    "dist/_astro/SiteHeader.DSwWl1st.css",
+    "dist/_astro/KaTeX_Typewriter-Regular.D3Ib7_Hf.ttf",
+    "dist/_astro/KaTeX_Typewriter-Regular.CO6r4hn1.woff2",
+    "dist/vertexcoverILP.png",
+    "dist/vertex_covers.png",
+    "dist/vertex-cover-stella-greedy.png",
+    "dist/vertex-cover-riduzione-vcd-vc.png",
+    "dist/vertex-cover-grado-massimo-famiglia-logaritmica.png",
+    "dist/vertex-cover-grado-massimo-esempio.png",
+    "dist/tsp-pesi-01-12-triangolo.svg",
+    "dist/tsp-inapprossimabilita-due-casi.png",
+    "dist/riduzione-turing.png",
+    "dist/riduzione-karp.png",
+    "STRUCTURAL-AUDIT.md",
+    "EDITORIAL-GUIDE.md",
     "style.md",
     "ROADMAP.md",
     "Feedback.md",
@@ -310,8 +310,6 @@
     "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-593.md",
     "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-592.md",
     "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-591.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-590.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-589.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-588.md"
+    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-590.md"
   ]
 }
