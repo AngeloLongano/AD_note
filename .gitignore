@@ -3,9 +3,12 @@ dist/
 .astro/
 src/content/generated/
 teacher_slides/
+Algoritmi_Distribuiti_originale/
+.revision-semantica/
 AGENTS.md
 assets_my_notes/
 my_notes.md
 Feedback.md
 ROADMAP.md
 style.md
+archived/

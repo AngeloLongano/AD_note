@@ -1,5 +1,6 @@
 {
   "enabledCssSnippets": [
     "formal-callouts"
-  ]
+  ],
+  "theme": "moonstone"
 }

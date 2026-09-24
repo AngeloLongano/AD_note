@@ -94,6 +94,42 @@
               "icon": "lucide-file",
               "title": "Algoritmi Distribuiti"
             }
+          },
+          {
+            "id": "97d0644bc5c2f84b",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "teacher_slides/1_complexity theory.pdf"
+              },
+              "icon": "lucide-file-text",
+              "title": "1_complexity theory"
+            }
+          },
+          {
+            "id": "9d4b7b6b38e20d73",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "teacher_slides/1_complexity theory.pdf"
+              },
+              "icon": "lucide-file-text",
+              "title": "1_complexity theory"
+            }
+          },
+          {
+            "id": "e1367b436fc502d2",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "teacher_slides/1_complexity theory.pdf"
+              },
+              "icon": "lucide-file-text",
+              "title": "1_complexity theory"
+            }
           }
         ]
       }
@@ -157,8 +193,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "c405121c53e41715",
@@ -266,50 +301,51 @@
   },
   "active": "17ba5ddf354c7035",
   "lastOpenFiles": [
-    "my_notes.md",
+    "archived/REVISIONE-SEMANTICA-ESITO.md",
+    "archived/ROADMAP.md",
+    "archived/PIANO-REVISIONE-SEMANTICA.md",
+    "archived",
     "teacher_slides/1_complexity theory.pdf",
+    "widgets",
     "Algoritmi Distribuiti.md",
-    "dist/index.html",
-    "dist/widgets/sat-fnc/index.html",
-    "dist/widgets/master-theorem/index.html",
-    "dist/widgets/sat-fnc",
-    "dist/widgets/master-theorem",
-    "dist/widgets",
-    "dist/_astro/SiteHeader.DSwWl1st.css",
-    "dist/_astro/KaTeX_Typewriter-Regular.D3Ib7_Hf.ttf",
-    "dist/_astro/KaTeX_Typewriter-Regular.CO6r4hn1.woff2",
-    "dist/vertexcoverILP.png",
-    "dist/vertex_covers.png",
-    "dist/vertex-cover-stella-greedy.png",
-    "dist/vertex-cover-riduzione-vcd-vc.png",
-    "dist/vertex-cover-grado-massimo-famiglia-logaritmica.png",
-    "dist/vertex-cover-grado-massimo-esempio.png",
-    "dist/tsp-pesi-01-12-triangolo.svg",
-    "dist/tsp-inapprossimabilita-due-casi.png",
-    "dist/riduzione-turing.png",
-    "dist/riduzione-karp.png",
-    "STRUCTURAL-AUDIT.md",
-    "EDITORIAL-GUIDE.md",
-    "style.md",
-    "ROADMAP.md",
-    "Feedback.md",
-    "Teoria della complessità - merge.md",
-    "ROADMAP-fonte-di-verita.md",
-    "README.md",
-    "AGENTS.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-603.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-602.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-601.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-600.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-599.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-598.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-597.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-596.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-595.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-594.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-593.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-592.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-591.md",
-    "teacher_slides/knowledge_parsed/based_by/DESIGN AND ANALYSIS/pages/page-590.md"
+    "REVISIONE-SEMANTICA-ESITO.md",
+    "Algoritmi_Distribuiti_originale/pages/page-098.md",
+    "Algoritmi_Distribuiti_originale/pages/page-097.md",
+    "Algoritmi_Distribuiti_originale/pages/page-096.md",
+    "Algoritmi_Distribuiti_originale/pages/page-095.md",
+    "Algoritmi_Distribuiti_originale/pages/page-094.md",
+    "Algoritmi_Distribuiti_originale/pages/page-093.md",
+    "Algoritmi_Distribuiti_originale/pages/page-092.md",
+    "Algoritmi_Distribuiti_originale/pages/page-091.md",
+    "Algoritmi_Distribuiti_originale/pages/page-090.md",
+    "Algoritmi_Distribuiti_originale/pages/page-089.md",
+    "Algoritmi_Distribuiti_originale/pages/page-088.md",
+    "Algoritmi_Distribuiti_originale/pages/page-087.md",
+    "Algoritmi_Distribuiti_originale/pages/page-086.md",
+    "Algoritmi_Distribuiti_originale/pages/page-085.md",
+    "Algoritmi_Distribuiti_originale/pages/page-084.md",
+    "Algoritmi_Distribuiti_originale/pages/page-083.md",
+    "Algoritmi_Distribuiti_originale/pages/page-082.md",
+    "Algoritmi_Distribuiti_originale/pages/page-081.md",
+    "Algoritmi_Distribuiti_originale/pages/page-080.md",
+    "Algoritmi_Distribuiti_originale/pages/page-079.md",
+    "Algoritmi_Distribuiti_originale/pages/page-078.md",
+    "Algoritmi_Distribuiti_originale/images/page-098.png",
+    "Algoritmi_Distribuiti_originale/images/page-097.png",
+    "Algoritmi_Distribuiti_originale/images/page-096.png",
+    "Algoritmi_Distribuiti_originale/images/page-095.png",
+    "Algoritmi_Distribuiti_originale/images/page-094.png",
+    "Algoritmi_Distribuiti_originale/images/page-093.png",
+    "Algoritmi_Distribuiti_originale/images/page-092.png",
+    "Algoritmi_Distribuiti_originale/images/page-091.png",
+    "Algoritmi_Distribuiti_originale/images/page-090.png",
+    "Algoritmi_Distribuiti_originale/images/page-089.png",
+    "Algoritmi_Distribuiti_originale/pages",
+    "Algoritmi_Distribuiti_originale/manifest.json",
+    "Algoritmi_Distribuiti_originale/images",
+    "Algoritmi_Distribuiti_originale",
+    "Algoritmi_Distribuiti_originale.pdf",
+    "Algoritmi_Distribuiti_teoria copia.pdf",
+    "Algoritmi_Distribuiti_teoria.textClipping"
   ]
 }

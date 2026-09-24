@@ -105,7 +105,7 @@ I problemi si classificano in base al tipo di soluzione cercata:
 
 Un **algoritmo** è una procedura generale per risolvere un problema definita tramite una **sequenza di passi finita**, **ben ordinata**, **non ambigua**, effettivamente **realizzabile** e che **termina** in tempo finito.
 
-Un algoritmo per il problema $\Pi$ è **corretto** se, per ogni istanza $i \in I$, termina e produce il risultato richiesto; nella notazione funzionale, $\Pi(i) \in S$.
+Un algoritmo per il problema $\Pi$ è **corretto** se, per ogni istanza $i \in I$, termina e produce in output $\Pi(i)$.
 
 Fra gli algoritmi corretti interessa poi l'**efficienza**, cioè il costo in termini di risorse di calcolo, misurato rispetto a un modello e non a una particolare macchina:
 
@@ -132,23 +132,25 @@ L'upper bound di un algoritmo corretto è anche un **upper bound del problema**.
 
 ![[assets/Ordini di crescita - O-grande.png|900]]
 
-La figura ordina i costi per crescita ([[teacher_slides/0_intro_algorithm.pdf#page=11|slide della docente, p. 11]]). Il colore accanto a ciascun tipo riprende quello della figura. 
+La figura ordina i costi per crescita. Il colore accanto a ciascun tipo riprende quello della figura.
+
+[[teacher_slides/0_intro_algorithm.pdf#page=11|Slide della docente, p. 11]]
 Nella tabella, $f(n)$ è l'espressione mostrata nella figura come $O(f(n))$; la classificazione si riferisce a un costo che cresce effettivamente come $T(n)=\Theta(f(n))$. 
 Infatti, il solo limite superiore $O(2^n)$ non basta a dire che un costo è esponenziale: anche $n^2$ appartiene a $O(2^n)$.
 
-| Tipo di costo $f(n)$ | Nome nella figura | Classificazione del costo $\Theta(f(n))$ |
-| --- | --- | --- |
-| <span style="color:#6fae63">■</span> $1$ | costante <small>(sublineare)</small> | polinomiale |
-| <span style="color:#6fae63">■</span> $\log\log n$ | log log <small>(sublineare)</small> | polinomiale <small>(anche se non è un polinomio)</small> |
-| <span style="color:#6fae63">■</span> $\log n$ | logaritmico <small>(sublineare)</small> | polinomiale <small>(anche se non è un polinomio)</small> |
-| <span style="color:#c89b32">■</span> $\sqrt[c]{n}=n^{1/c}$, $c>1$ | sublineare | polinomiale <small>(anche se non è un polinomio)</small> |
-| <span style="color:#c89b32">■</span> $n$ | lineare | polinomiale |
-| <span style="color:#c89b32">■</span> $n\log n$ | $n\log n$ | polinomiale <small>(anche se non è un polinomio)</small> |
-| <span style="color:#d9838f">■</span> $n^2$ | quadratico | polinomiale |
-| <span style="color:#d9838f">■</span> $n^3$ | cubico | polinomiale |
-| <span style="color:#d9838f">■</span> $n^k$, $k\geq 1$ costante | polinomiale | polinomiale |
-| <span style="color:#a56790">■</span> $a^n$, $a>1$ costante | esponenziale | superpolinomiale |
-| <span style="color:#a56790">■</span> $n!$ | fattoriale | superpolinomiale |
+| Tipo di costo $f(n)$ | Nome nella figura | Valutazione della docente | Classificazione del costo $\Theta(f(n))$ |
+| --- | --- | --- | --- |
+| <span style="color:#6fae63">■</span> $1$ | costante <small>(sublineare)</small> | perfetto | polinomiale |
+| <span style="color:#6fae63">■</span> $\log\log n$ | log log <small>(sublineare)</small> | perfetto | polinomiale <small>(anche se non è un polinomio)</small> |
+| <span style="color:#6fae63">■</span> $\log n$ | logaritmico <small>(sublineare)</small> | perfetto | polinomiale <small>(anche se non è un polinomio)</small> |
+| <span style="color:#c89b32">■</span> $\sqrt[c]{n}=n^{1/c}$, $c>1$ | sublineare | buono | polinomiale <small>(anche se non è un polinomio)</small> |
+| <span style="color:#c89b32">■</span> $n$ | lineare | buono | polinomiale |
+| <span style="color:#c89b32">■</span> $n\log n$ | $n\log n$ | buono | polinomiale <small>(anche se non è un polinomio)</small> |
+| <span style="color:#d9838f">■</span> $n^2$ | quadratico | accettabile | polinomiale |
+| <span style="color:#d9838f">■</span> $n^3$ | cubico | accettabile | polinomiale |
+| <span style="color:#d9838f">■</span> $n^k$, $k\geq 1$ costante | polinomiale | accettabile | polinomiale |
+| <span style="color:#a56790">■</span> $a^n$, $a>1$ costante | esponenziale | inaccettabile | superpolinomiale |
+| <span style="color:#a56790">■</span> $n!$ | fattoriale | inaccettabile | superpolinomiale |
 
 Qui **polinomiale** significa *limitato superiormente da $n^k$ per qualche esponente costante $k$*, non necessariamente *espresso da un polinomio*. Per esempio, $n\log n$ non è un polinomio, ma $n\log n\in O(n^2)$. Un costo è **superpolinomiale** se cresce più di $n^k$ per ogni $k$ costante: $a^n$, $n!$ e anche $n^n$ lo sono. Non tutti i costi superpolinomiali sono esponenziali: per esempio, $n^{\log n}$ supera ogni $n^k$, ma cresce meno di $a^n$ per ogni $a>1$ costante.
 
@@ -195,7 +197,9 @@ A questo punto possiamo porre due domande:
 - **Calcolabilità:** un algoritmo può risolvere il problema? La tesi di Church–Turing ordinaria collega ciò che intendiamo intuitivamente per algoritmo a ciò che una macchina di Turing può calcolare.
 - **Efficienza:** quanti passi richiede la soluzione al crescere dell'input? È la domanda rilevante quando distinguiamo il tempo polinomiale da quello superpolinomiale.
 
-Per la seconda domanda, le [[teacher_slides/0_intro_algorithm.pdf#page=20|slide della docente, p. 20]] formulano la **tesi di Church–Turing estesa** così: modelli di calcolo diversi, ma ragionevoli, possono simularsi a vicenda con uno *slowdown* polinomiale. Questo significa che cambiare modello può aumentare il tempo di esecuzione, ma conserva la proprietà di essere risolvibile in tempo polinomiale. Per esempio, una simulazione che passa da un costo $O(n^2)$ a $O(n^5)$ è più lenta, ma resta polinomiale.
+Per la seconda domanda, le slide della docente formulano la **tesi di Church–Turing estesa** così: modelli di calcolo diversi, ma ragionevoli, possono simularsi a vicenda con uno *slowdown* polinomiale. Questo significa che cambiare modello può aumentare il tempo di esecuzione, ma conserva la proprietà di essere risolvibile in tempo polinomiale. Per esempio, una simulazione che passa da un costo $O(n^2)$ a $O(n^5)$ è più lenta, ma resta polinomiale.
+
+[[teacher_slides/0_intro_algorithm.pdf#page=20|Slide della docente, p. 20]]
 
 Questa è la ragione per cui possiamo definire $P$ usando un modello preciso, come la macchina di Turing, e usare poi la nozione di tempo polinomiale anche per i comuni modelli di calcolo classici.
 
@@ -211,14 +215,14 @@ I rami rappresentano scelte alternative del modello teorico, non processori che 
 
 ### 2.1 Classificazione dei problemi per complessità
 
-#### Perché si parte dai problemi decisionali
+#### Perché si considerano problemi decisionali
 
-Le classi $P$ e $NP$ sono definite su **problemi decisionali**, cioè problemi per i quali ogni istanza richiede una risposta sì oppure no. Questa forma permette di identificare un problema con l'insieme delle sue **istanze positive**, quelle per cui la risposta corretta è sì, e rende precise le nozioni di accettazione e rifiuto.
+In questo capitolo consideriamo soprattutto **problemi decisionali**, nei quali ogni istanza richiede una risposta sì oppure no. La trattazione formale di questi problemi è più agevole e consente di trarre conclusioni utili anche per problemi di ricerca e di ottimizzazione.
 
-La restrizione non rende inutili queste classi per gli altri tipi di problema: a un problema di ricerca o di ottimizzazione si può spesso associare una versione decisionale. Per esempio:
+Per esempio, dato un grafo $G=(V,E)$ e due vertici $s,v\in V$, il problema *Shortest Path* si può formulare in due modi:
 
-- ottimizzazione: «qual è la lunghezza del cammino minimo da $s$ a $v$?»;
-- decisione: «esiste un cammino da $s$ a $v$ di lunghezza al più $k$?».
+- la versione di **ottimizzazione** chiede qual è la lunghezza del cammino minimo tra $s$ e $v$;
+- la versione **decisionale**, dato anche un valore $k$, chiede se esiste un cammino tra $s$ e $v$ di lunghezza al più $k$.
 
 #### La classe P
 
@@ -227,7 +231,7 @@ La restrizione non rende inutili queste classi per gli altri tipi di problema: a
 
 [[teacher_slides/1_complexity theory.pdf#page=3|Slide della docente, p. 3]]
 
-Per mostrare che un problema è in $P$ basta esibire un algoritmo deterministico che lo risolve in tempo polinomiale. In una [[#Tesi di Church–Turing estesa|macchina deterministica]], ogni input segue un solo percorso di calcolo.
+Per mostrare che un problema appartiene a $P$ basta esibire un algoritmo deterministico che lo risolve in tempo polinomiale.
 
 #### La classe NP
 
@@ -236,18 +240,17 @@ Per mostrare che un problema è in $P$ basta esibire un algoritmo deterministico
 
 [[teacher_slides/1_complexity theory.pdf#page=8|Slide della docente, p. 8]]
 
-Le sigle indicano il modello di calcolo e il tempo: $P$ sta per *Polynomial-time* e riguarda la **risoluzione** in tempo polinomiale con una macchina deterministica; $NP$ sta per *Non-deterministic Polynomial-time* e riguarda il tempo polinomiale di una [[#Tesi di Church–Turing estesa|macchina non deterministica]]. La $N$ significa *non deterministico*, non “non polinomiale”. 
-La definizione della docente descrive $NP$ tramite la **verifica** di una risposta positiva: vediamo cosa ricevono e controllano i verificatori.
+$P$ sta per *Polynomial-time*: riguarda la risoluzione in tempo polinomiale. $NP$ sta per *Non-deterministic Polynomial-time*: la $N$ significa *non-deterministico*, non “non polinomiale”. Nel seguito descriviamo la verifica attraverso certificati e verificatori; è equivalente alla formulazione con una macchina non deterministica.
 
 #### Certificati e algoritmo verificatore
 
-Un **certificato** è l'informazione che sostiene una risposta positiva. Un **algoritmo verificatore** riceve l'istanza e una sequenza candidata come certificato: controlla se quella sequenza prova la risposta positiva, senza doverla trovare.
+Un **certificato** è un'informazione aggiuntiva che può attestare che un'istanza ha risposta sì. Un **algoritmo verificatore** riceve l'istanza e una sequenza candidata come certificato e restituisce sì se l'istanza è positiva e la sequenza ne è una prova; altrimenti restituisce no.
 
-> [!definition] Certificato per una istanza positiva $i\in I_Y$ del problema $\Pi$
-> Sequenza di caratteri (informazione aggiuntiva) di dimensione al massimo polinomiale nella dimensione dell'input che contiene l'evidenza del fatto che $i$ sia una istanza positiva per $\Pi$.
+> [!definition] Certificato per un'istanza positiva $i\in I_Y$ del problema $\Pi$
+> Sequenza di caratteri (informazione aggiuntiva) di dimensione al massimo polinomiale nella dimensione dell'input che contiene l'evidenza del fatto che $i$ sia un'istanza positiva per $\Pi$.
 
 > [!definition] Algoritmo verificatore
-> Algoritmo decisionale che prende in input un'istanza di $i\in I$ di un problema decisionale $\Pi$ e una sequenza di caratteri $C_i$ e restituisce SI se l'istanza $i$ è una istanza positiva per $\Pi$, NO altrimenti.
+> Algoritmo decisionale che prende in input un'istanza $i\in I$ di un problema decisionale $\Pi$ e una sequenza di caratteri $C_i$ e restituisce SI se l'istanza $i$ è un'istanza positiva per $\Pi$, NO altrimenti.
 
 [[teacher_slides/1_complexity theory.pdf#page=7|Slide della docente, p. 7]]
 
@@ -258,48 +261,41 @@ Un **certificato** è l'informazione che sostiene una risposta positiva. Un **al
 
 [[teacher_slides/1_complexity theory.pdf#page=8|Slide della docente, p. 8]]
 
-**Come si applica la definizione di $NP$.** Un problema decisionale $\Pi$ appartiene a $NP$ se esistono un verificatore polinomiale $V$ e un polinomio $p$ tali che
+Sia $p$ un polinomio che limita la lunghezza del certificato e sia $V$ un verificatore polinomiale. La condizione per l'appartenenza a $NP$ si può scrivere:
 
 $$
 x\text{ è positiva per }\Pi
 \iff
-\exists c:\ |c|\leq p(|x|)\ \land\ V(x,c)=\text{sì}.
+\exists c:\ |c|\leq p(|x|)\ \land\ V(x,c)=\text{sì},
 $$
 
-La formula richiede che **ogni istanza positiva abbia almeno un certificato breve accettato** e che **nessun certificato faccia accettare un'istanza negativa**. 
-La seconda condizione, necessaria per la correttezza, resta implicita nella formulazione della [[teacher_slides/1_complexity theory.pdf#page=8|slide della docente, p. 8]]. Un NO per una singola coppia $(i,C_i)$ non dimostra invece che $i$ sia negativa: il certificato proposto può essere sbagliato, come osserva la [[teacher_slides/1_complexity theory.pdf#page=7|slide, p. 7]].
+La quantificazione esistenziale esprime che basta un certificato accettato per ogni istanza positiva. Per essere corretto, il verificatore deve inoltre rifiutare ogni certificato candidato per un'istanza negativa. Un NO su una singola coppia $(i,C_i)$ non dimostra che $i$ sia negativa: può essere sbagliato il certificato proposto. La definizione della docente a p. 8 esplicita la condizione sulle istanze positive; quella sulle istanze negative è necessaria per la correttezza della nozione.
 
-Il certificato non deve essere unico. La definizione tramite verificatore equivale a quella tramite macchina non deterministica: un ramo sceglie un certificato candidato e lo controlla; l'istanza è accettata se almeno un ramo sceglie un certificato valido. L'appartenenza a $NP$ garantisce che una prova breve si possa *verificare*, non che un algoritmo deterministico polinomiale sappia *trovarla*.
+Il certificato non deve essere unico. Nella formulazione non deterministica, la macchina sceglie un certificato candidato e lo verifica; accetta se almeno una scelta produce un certificato valido. Quindi l'appartenenza a $NP$ garantisce che i certificati positivi si possano verificare in tempo polinomiale, non che un algoritmo deterministico sappia trovarli in quel tempo.
 
 #### Esempio: ciclo hamiltoniano
 
-Nel problema decisionale del **ciclo hamiltoniano** l'input è un grafo semplice non orientato $G=(V,E)$ e si chiede se esista un ciclo che visiti ogni vertice esattamente una volta e ritorni al vertice iniziale.
+> [!problem] Ciclo hamiltoniano
+> **Input:** un grafo semplice non orientato $G=(V,E)$.  
+> **Output:** esiste in $G$ un ciclo che passa per tutti i vertici esattamente una volta?
+
+[[teacher_slides/1_complexity theory.pdf#page=4|Slide della docente, p. 4]]
 
 ![[assets/ciclo-hamiltoniano.png|900]]
 
-Per esempio, se $V=\{a,b,c,d,e\}$ e il grafo contiene gli archi
+Se $V=\{a,b,c,d,e\}$ e il grafo contiene gli archi $\{a,b\},\{b,c\},\{c,d\},\{d,e\},\{e,a\}$, la sequenza $C=(a,b,c,d,e)$ certifica un ciclo hamiltoniano. In generale, il certificato è una sequenza $(v_1,\ldots,v_n)$ dei $n=|V|$ vertici. Il verificatore controlla che:
 
-$$
-\{a,b\},\{b,c\},\{c,d\},\{d,e\},\{e,a\},
-$$
+1. la sequenza contenga ogni vertice di $G$ esattamente una volta;
+2. ogni coppia consecutiva $\{v_i,v_{i+1}\}$, per $1\leq i<n$, sia un arco;
+3. anche l'arco di chiusura $\{v_n,v_1\}$ sia presente in $G$.
 
-allora la sequenza $C=(a,b,c,d,e)$ è un certificato valido: descrive il ciclo $a\to b\to c\to d\to e\to a$. La sequenza candidata $C'=(a,b,d,c,e)$, invece, viene rifiutata se, per esempio, manca l'arco $\{b,d\}$; non basta elencare una volta tutti i vertici.
+Per esempio, il verificatore rifiuta $C'=(a,b,d,c,e)$ se manca $\{b,d\}$. La sequenza contiene $n$ vertici, quindi ha dimensione polinomiale nell'input; i tre controlli si eseguono in tempo polinomiale. Questo prova che Ciclo Hamiltoniano appartiene a $NP$.
 
-In generale, un certificato per un'istanza positiva è una sequenza $(v_1,\ldots,v_n)$ dei $n=|V|$ vertici nell'ordine in cui compaiono nel ciclo. Il verificatore controlla che:
-
-1. la sequenza contenga tutti e soli i vertici di $G$, senza ripetizioni;
-2. ogni coppia consecutiva $\{v_i,v_{i+1}\}$, per $1\leq i<n$, sia un arco di $G$;
-3. anche $\{v_n,v_1\}$ sia un arco di $G$.
-
-La sequenza è precisamente il **certificato**: contiene $n$ identificatori di vertice e ha quindi dimensione polinomiale. Con una tabella dei vertici visitati si controllano in tempo polinomiale sia la presenza di tutti e soli i vertici sia i $n$ archi del presunto ciclo. Questo prova che **Ciclo Hamiltoniano appartiene a $NP$**.
-
-Attenzione alla differenza tra **verificare** e **trovare**. Se qualcuno consegna la sequenza $(a,b,c,d,e)$, il controllore la convalida rapidamente. Dato soltanto il grafo, però, un algoritmo deve individuare una sequenza valida oppure stabilire che non esiste. L'algoritmo esaustivo più immediato prova i possibili ordinamenti dei vertici: sono circa $n!$ e il suo tempo è fattoriale. Ciò mostra soltanto che *questo* metodo di ricerca è lento; non dimostra che tutti gli algoritmi possibili lo siano. Sappiamo però che Ciclo Hamiltoniano è NP-completo: un algoritmo polinomiale per esso implicherebbe $P=NP$, questione tuttora aperta.
+La verifica della sequenza proposta è rapida, mentre un algoritmo che riceve soltanto il grafo deve trovare una sequenza valida oppure stabilire che non esiste. Provare tutti gli ordinamenti richiede tempo fattoriale, ma questo dice soltanto che la ricerca esaustiva è lenta; non dimostra che ogni algoritmo lo sia. Ciclo Hamiltoniano è NP-completo, quindi un algoritmo polinomiale per risolverlo implicherebbe $P=NP$.
 
 #### Relazione tra P e NP
 
-**Problema e modello.** Consideriamo un qualunque problema decisionale $\Pi\in P$: l'input è un'istanza $i$, l'output è SI o NO. Per definizione esiste un algoritmo deterministico $A$ che lo decide in tempo polinomiale nella dimensione di $i$. Vogliamo costruire un verificatore per $\Pi$ con lo stesso bound.
-
-**Algoritmo verificatore.** Riceve $(i,C_i)$, pone $C_i$ uguale alla stringa vuota, invoca $A(i)$ e restituisce la sua risposta. Il certificato ha lunghezza zero e il costo del verificatore è quello polinomiale di $A$, oltre a un overhead costante.
+Ogni problema in $P$ appartiene anche a $NP$: il verificatore può ignorare il certificato (per esempio la stringa vuota), eseguire l'algoritmo deterministico polinomiale che risolve il problema e restituirne la risposta.
 
 > [!theorem] Teorema
 > $P\subseteq NP$
@@ -308,27 +304,13 @@ Attenzione alla differenza tra **verificare** e **trovare**. Se qualcuno consegn
 
 ##### Dimostrazione
 
-Dato un problema $\Pi\in P$, esiste un algoritmo $A$ di costo polinomiale per il problema che può essere utilizzato come verificatore con certificato la sequenza vuota:
+Sia $\Pi\in P$ e sia $A$ un algoritmo deterministico polinomiale che decide $\Pi$. Usiamo come verificatore l'algoritmo che, ricevuti l'istanza $i$ e il certificato vuoto, esegue $A(i)$ e restituisce la risposta di $A$. Il verificatore accetta tutte e sole le istanze positive, il certificato ha lunghezza zero e il tempo di esecuzione è polinomiale. Dunque $\Pi\in NP$.
 
-1. Per ogni istanza positiva di $\Pi$, $C_i$ è la stringa vuota (nessun carattere).
-2. L'algoritmo verificatore invoca l'algoritmo risolutore $A$ per $\Pi$ su un'istanza del problema e restituisce il risultato. Se l'istanza è positiva la risposta è SI, altrimenti è NO.
-
-**Spiegazione.** Il verificatore accetta precisamente le istanze positive; la stringa vuota soddisfa il vincolo di lunghezza polinomiale. In termini di macchina non deterministica, basta seguire la computazione deterministica senza effettuare scelte.
-
-Non sappiamo invece se $NP\subseteq P$. Il problema $P$ contro $NP$ può essere riassunto dalla domanda:
-
-> **Se una soluzione può essere verificata velocemente, può anche essere trovata velocemente?**
-
-Stabilire se $P=NP$ oppure $P\neq NP$ è uno dei principali problemi aperti dell'informatica teorica.
+Non sappiamo se $NP\subseteq P$. La domanda $P$ contro $NP$ è se ogni problema la cui risposta positiva si può verificare velocemente si possa anche risolvere velocemente. Stabilire se $P=NP$ oppure $P\ne NP$ rimane un problema aperto.
 
 #### Perché servono le riduzioni
 
-Una **riduzione** mostra come risolvere un problema usando un algoritmo per un altro problema. Serve a:
-
-- trasferire algoritmi: se $A$ si riduce a $B$ e sappiamo risolvere efficientemente $B$, otteniamo un algoritmo efficiente anche per $A$;
-- trasferire difficoltà: se un problema già noto come difficile si riduce a $B$, allora $B$ è almeno altrettanto difficile.
-
-La direzione è quindi essenziale: per dimostrare che $B$ è difficile bisogna ridurre un problema difficile noto **a $B$**, non il contrario.
+Una **riduzione** mostra come risolvere un problema usando un algoritmo per un altro. La direzione indica quale problema è almeno altrettanto difficile: se $A$ si riduce a $B$, un algoritmo efficiente per $B$ darebbe un algoritmo efficiente anche per $A$. Per dimostrare che $B$ è difficile, quindi, si riduce a $B$ un problema già noto come difficile.
 
 #### Riduzione di Karp
 
@@ -340,7 +322,7 @@ La direzione è quindi essenziale: per dimostrare che $B$ è difficile bisogna r
 
 [[teacher_slides/1_complexity theory.pdf#page=11|Slide della docente, p. 11]]
 
-**Formalizzazione.** La trasformazione è una funzione $f$ calcolabile in tempo polinomiale tale che, per ogni istanza $x$,
+In altre parole, una trasformazione polinomiale $f$ deve preservare la risposta per ogni istanza $x$:
 
 $$
 x\text{ è positiva per }A
@@ -348,26 +330,13 @@ x\text{ è positiva per }A
 f(x)\text{ è positiva per }B.
 $$
 
-La trasformazione preserva sia le risposte positive sia quelle negative e produce una sola istanza di $B$.
+La riduzione produce una sola istanza di $B$. Se $B\in P$, trasformiamo l'istanza di $A$ e poi usiamo l'algoritmo per $B$: così $A\in P$. Perciò, se $A\notin P$, allora $B\notin P$. Le implicazioni inverse non seguono: da $A\in P$ o da $B\notin P$ non si può concludere nulla, in generale, sul tempo necessario per l'altro problema. Se valgono entrambe le riduzioni $A\leq_p B$ e $B\leq_p A$, i problemi sono equivalenti rispetto alle riduzioni polinomiali. La riduzione è transitiva:
+
+$$
+A\leq_p B\ \land\ B\leq_p C\ \implies\ A\leq_p C.
+$$
 
 ![[assets/riduzione-karp.png|1000]]
-
-**Intuizione.** $A\leq_p B$ significa che un algoritmo per $B$, preceduto dalla trasformazione $f$, consente di risolvere anche $A$. Pertanto $A$ è al più difficile quanto $B$.
-
-Da $A\leq_p B$ seguono queste conseguenze:
-
-- se $B\in P$, allora $A\in P$;
-- se $A\notin P$, allora $B\notin P$, per contrapposizione;
-- se $A\in P$, non possiamo dedurre che $B\in P$;
-- se $B\notin P$, non possiamo dedurre che $A\notin P$.
-
-Se valgono sia $A\leq_p B$ sia $B\leq_p A$, i problemi sono polinomialmente equivalenti. Inoltre la riduzione di Karp è transitiva:
-
-$$
-A\leq_p B\ \land\ B\leq_p C
-\implies
-A\leq_p C.
-$$
 
 #### Problemi NP-completi
 
@@ -378,43 +347,33 @@ $$
 
 [[teacher_slides/1_complexity theory.pdf#page=17|Slide della docente, p. 17]]
 
-Gli NP-completi sono dunque i problemi più difficili di $NP$ rispetto alle riduzioni polinomiali.
-Il problema del ciclo hamiltoniano introdotto sopra è un esempio di problema NP-completo.
-
-#### Conseguenza fondamentale
-
-Per un qualunque problema NP-completo:
-
-- trovare un algoritmo polinomiale implica $P=NP$;
-- dimostrare che nessun algoritmo polinomiale può risolverlo implica $P\neq NP$.
-
-Per dimostrare che un nuovo problema $A$ è NP-completo si procede normalmente così:
+Un problema NP-completo appartiene a $NP$ ed è almeno altrettanto difficile di ogni problema in $NP$. Per dimostrare che un problema $A$ è NP-completo:
 
 1. si dimostra che $A\in NP$;
-2. si sceglie un problema $B$ già noto come NP-completo;
-3. si costruisce una riduzione $B\leq_p A$.
+2. si sceglie un problema NP-completo noto $B$;
+3. si dimostra $B\leq_p A$.
 
-La correttezza del metodo segue dalla transitività: per ogni $C\in NP$ sappiamo già che $C\leq_p B$; insieme a $B\leq_p A$ otteniamo $C\leq_p A$.
+Infatti, per ogni $C\in NP$ vale $C\leq_p B$; per transitività, $C\leq_p A$. Il ciclo hamiltoniano è un esempio di problema NP-completo. Se un solo problema NP-completo ammettesse un algoritmo polinomiale, le riduzioni darebbero algoritmi polinomiali per tutti i problemi in $NP$, e quindi $P=NP$. Se invece si dimostrasse che un problema NP-completo non ha algoritmi polinomiali, seguirebbe $P\ne NP$.
 
-#### SAT e l'inizio della catena
+#### SAT, il primo problema NP-completo
 
-Per avviare questo metodo serve almeno un problema già noto come NP-completo. I teoremi di Cook e Levin individuano questo punto di partenza nel problema **SAT** (*Boolean satisfiability problem*).
+Cook e Levin dimostrarono che il problema SAT è NP-completo e fornisce il punto di partenza per le riduzioni.
 
-Nel corso SAT è presentato su formule in **forma normale congiuntiva** (FNC):
+> [!problem] SAT in forma normale congiuntiva
+> **Input:** una formula in forma normale congiuntiva (FNC), cioè una congiunzione di clausole, ciascuna delle quali è una disgiunzione di letterali. Un letterale è una variabile booleana o la sua negazione.  
+> **Output:** esiste un assegnamento di verità alle variabili che rende vera la formula?
 
-- un letterale è una variabile booleana oppure la sua negazione;
-- una clausola è una disgiunzione di letterali;
-- una formula in FNC è una congiunzione di clausole.
+[[teacher_slides/1_complexity theory.pdf#page=18|Slide della docente, p. 18]]
 
 [Prova una formula in FNC](./widgets/sat-fnc)
 
-Il problema chiede se esista un assegnamento di verità alle variabili che renda vera l'intera formula. Per esempio,
+Per esempio,
 
 $$
-(a\lor b\lor c)\land(\neg b\lor c)\land(\neg a \lor\neg b\lor c)
+(a\lor b\lor c)\land(\neg b\lor c)\land(\neg a\lor\neg b\lor c)
 $$
 
-è soddisfacibile: assegnando $c=\text{vero}$ tutte le clausole risultano vere. SAT appartiene a $NP$ perché un assegnamento costituisce un certificato verificabile valutando la formula in tempo polinomiale; il teorema di Cook–Levin dimostra inoltre che ogni problema in $NP$ si riduce a SAT.
+è soddisfacibile: ponendo $c=\text{vero}$, tutte le clausole sono vere. Un assegnamento costituisce un certificato, verificabile valutando la formula in tempo polinomiale.
 
 #### Problemi NP-hard
 
@@ -423,85 +382,75 @@ $$
 
 [[teacher_slides/1_complexity theory.pdf#page=21|Slide della docente, p. 21]]
 
-**Precisazione nostra.** Nella slide $A$ può essere anche un problema di ottimizzazione, mentre la riduzione di Karp appena definita ha due estremi decisionali. Per leggere coerentemente la formula in questo caso, occorre specificare una versione decisionale di $A$ oppure intendere una trasformazione polinomiale dell'istanza seguita da un risolutore per $A$ e da una trasformazione polinomiale della risposta, come nel diagramma della stessa p. 21. La riduzione con oracolo è esplicitata qui sotto.
-
-Questa è la seconda condizione della definizione di NP-completezza, senza richiedere $A\in NP$. Un problema NP-completo è quindi sia NP-hard sia appartenente a $NP$; un problema NP-hard può invece non appartenere a $NP$.
-
-Per dimostrare che $A$ è NP-hard basta scegliere un problema NP-completo $B$ e mostrare $B\leq_p A$: la transitività estende la riduzione a ogni problema di $NP$.
+La condizione è la seconda della definizione di NP-completezza; per NP-hard non si richiede però che $A$ appartenga a $NP$. Un problema NP-hard può essere decisionale, di ricerca o di ottimizzazione. Le classi $P$, $NP$ e NP-completo classificano qui problemi decisionali; quando si estende NP-hard a problemi non decisionali, va specificata una nozione di riduzione coerente.
 
 #### Riduzione di Turing e problemi di ottimizzazione
 
-La riduzione di Karp è formulata tra problemi decisionali perché $P$, $NP$ e NP-complete sono, nella teoria classica, classi di linguaggi o problemi con risposta sì/no. Per confrontare un problema decisionale con un problema di ricerca o di ottimizzazione si usa invece una riduzione con oracolo.
+La riduzione di Karp trasforma un'istanza decisionale in una sola istanza decisionale e ne preserva sì/no. Per collegare problemi decisionali a problemi di ricerca o di ottimizzazione si usa una riduzione con **oracolo**. Un oracolo per $B$ è un sottoprogramma che restituisce correttamente una soluzione di $B$. Si scrive $A\leq_T^p B$ se un algoritmo polinomiale per $A$ può interrogare un oracolo per $B$; può effettuare più interrogazioni e scegliere le successive in base alle risposte ricevute.
 
-Si scrive $A\leq_T^p B$ quando esiste un algoritmo polinomiale per $A$ che può interrogare un **oracolo per $B$**, cioè un sottoprogramma che restituisce correttamente la soluzione di $B$. Le interrogazioni possono essere più di una e quelle successive possono dipendere dalle risposte precedenti.
-
-Per dimostrare che un problema $A$, anche di ottimizzazione, è NP-hard si può scegliere un problema NP-completo $B$ e costruire $B\leq_T^p A$. Nel caso più semplice sono sufficienti una sola chiamata all'oracolo per $A$ e una trasformazione polinomiale del risultato:
+Per mostrare che un problema di ottimizzazione $A$ è NP-hard, si può ridurre a esso un problema NP-completo decisionale $B$, costruendo $B\leq_T^p A$. Nel caso più semplice l'algoritmo trasforma l'istanza, interroga una volta l'oracolo per $A$ e converte la soluzione restituita nella risposta sì/no per $B$.
 
 ![[assets/riduzione-turing.png|1000]]
 
-Per esempio, distinguiamo:
+Per esempio, il TSP decisionale chiede se esiste un tour di costo al più $k$ ed è NP-completo; la versione di ottimizzazione chiede invece un tour di costo minimo ed è NP-hard. Un oracolo per la seconda versione consente di risolvere la prima confrontando con $k$ il costo minimo restituito. L'appartenenza a $NP$ della versione di ottimizzazione non è definita nella classificazione classica, perché $NP$ contiene problemi decisionali.
 
-- TSP decisionale: «esiste un tour di costo al più $k$?», un problema NP-completo;
-- TSP di ottimizzazione: «trova un tour di costo minimo», un problema NP-hard.
-
-Un oracolo per la versione di ottimizzazione permette di risolvere quella decisionale confrontando il costo ottimo restituito con $k$. Non si dice che il TSP di ottimizzazione “non è in $NP$”: nella definizione classica l'affermazione non è ben posta, perché $NP$ contiene problemi decisionali. La riduzione dal ciclo hamiltoniano al TSP di ottimizzazione sarà costruita esplicitamente nella sezione successiva.
-
-I problemi NP-hard restano importanti nelle applicazioni. In base al contesto si usano algoritmi esatti su istanze piccole, euristiche, parallelizzazione oppure algoritmi di approssimazione; quest'ultimo approccio è l'oggetto della sezione successiva.
+I problemi NP-hard hanno applicazioni importanti. A seconda dell'istanza si possono usare algoritmi esatti per casi piccoli, euristiche, algoritmi paralleli o distribuiti e algoritmi di approssimazione, che cercano in tempo polinomiale una soluzione ammissibile con garanzie sullo scarto rispetto all'ottimo.
 
 #### Mappa per il ripasso
 
 ![[assets/mappa-classi-riduzioni.svg|1200]]
 
-La figura va letta in due passaggi:
-
-1. si identifica il **tipo di output** richiesto: sì/no, una soluzione ammissibile oppure una soluzione ottima;
-2. si sceglie la nozione corretta: le classi $P$, $NP$ e NP-completo classificano formalmente problemi decisionali, mentre NP-hard può essere usato anche per problemi di ricerca e ottimizzazione, specificando la riduzione adottata.
+Per scegliere la nozione da applicare, identifica prima il tipo di output: risposta sì/no, soluzione ammissibile oppure soluzione ottima. $P$, $NP$ e NP-completo classificano problemi decisionali. NP-hard si applica anche a ricerca e ottimizzazione, purché si specifichi la riduzione usata.
 
 | Classe | Ambito | Idea chiave |
 |---|---|---|
 | $P$ | Decisione | Risolvibile in tempo polinomiale |
-| $NP$ | Decisione | Certificato positivo verificabile in tempo polinomiale |
+| $NP$ | Decisione | Certificati positivi verificabili in tempo polinomiale, senza accettare certificati per istanze negative |
 | NP-completo | Decisione | Appartiene a $NP$ ed è NP-hard |
-| NP-hard | Anche ricerca e ottimizzazione | Almeno difficile quanto ogni problema di $NP$ |
+| NP-hard | Anche ricerca e ottimizzazione | Ogni problema in $NP$ si riduce al problema considerato, secondo una riduzione specificata |
 
 | Riduzione | Ambito | Meccanismo |
 |---|---|---|
-| **Karp** $A\leq_p B$ | Decisione $\to$ decisione | Una trasformazione $f(x)$ che preserva sì/no |
+| **Karp** $A\leq_p B$ | Decisione $\to$ decisione | Una trasformazione polinomiale che preserva entrambe le risposte |
 | **Turing** $A\leq_T^p B$ | Anche ricerca e ottimizzazione | Una o più interrogazioni, anche adattive, a un oracolo per $B$ |
-
 ### 2.2 Approssimazioni di problemi NP-hard
 
-Qui consideriamo problemi di **ottimizzazione** per cui trovare sempre l'ottimo è difficile. La nozione di NP-hardness e la distinzione dalle classi decisionali sono in [[#Problemi NP-hard]]; per valutare una soluzione approssimata bastano il valore ottenuto e un limite sull'ottimo, definiti qui sotto.
+Qui consideriamo problemi di **ottimizzazione** per cui trovare sempre l'ottimo è difficile. La nozione di NP-hardness e la distinzione dalle classi decisionali sono in [[#Problemi NP-hard]]. Un algoritmo di approssimazione restituisce in tempo polinomiale nella dimensione dell'input una soluzione **ammissibile**, cioè che rispetta i vincoli del problema, ma non necessariamente ottima; ne garantisce la qualità rispetto all'ottimo.
 
 #### Algoritmi di approssimazione
 
-[[teacher_slides/1_complexity theory.pdf#page=57|Slide della docente, p. 57]]
-[[teacher_slides/1_complexity theory.pdf#page=60|Slide della docente, p. 60]]
-
-Per un problema di ottimizzazione NP-hard, un **algoritmo di approssimazione** restituisce in tempo polinomiale una soluzione **ammissibile**, ma non necessariamente ottima. La sua qualità non si esprime dicendo quanto sbaglia su una certa istanza, bensì con una garanzia valida per ogni istanza di input.
+[[teacher_slides/1_complexity theory.pdf#page=23|Slide della docente, p. 23: motivazione e definizione generale]]
+[[teacher_slides/1_complexity theory.pdf#page=57|Slide della docente, pp. 57–60: esempio specifico di Vertex Cover]]
+[[teacher_slides/based_by/Cormen Introduction to Algorithms.pdf#page=1127|Cormen, cap. 35, pp. 1106–1107: rapporto generale minimo/massimo]]
 
 Sia $\Pi$ un problema di ottimizzazione, sia $I$ una sua istanza di dimensione $n$, e indichiamo con:
 
 - $OPT(I)$ il valore della soluzione ottima;
 - $ALG(I)$ il valore della soluzione restituita dall'algoritmo $ALG$.
 
-Il **fattore di approssimazione** $\rho(n) \geq 1$ (spesso indicato anche con $\alpha$) misura la qualità garantita nel caso peggiore. Assumendo valori di costo non negativi e $OPT(I)>0$, diciamo che $ALG$ è una **$\rho$-approssimazione** se, per ogni istanza $I$:
+Assumiamo che i costi delle soluzioni ammissibili siano **non negativi**. Le disuguaglianze seguenti sono la definizione della garanzia e valgono anche quando $OPT(I)=0$:
+
+Il **fattore di approssimazione** $\rho(n) \geq 1$ (spesso indicato anche con $\alpha$) misura la qualità garantita nel caso peggiore. Diciamo che $ALG$ è una **$\rho$-approssimazione** se, per ogni istanza $I$ di dimensione $n$:
 
 - per un problema di **minimizzazione**,
   $$
-  ALG(I) \leq \rho(n) \cdot OPT(I),
-  \qquad\text{equivalentemente}\qquad
-  \frac{ALG(I)}{OPT(I)} \leq \rho(n);
+  ALG(I) \leq \rho(n) \cdot OPT(I);
   $$
 
 - per un problema di **massimizzazione**,
   $$
-  ALG(I) \geq \frac{OPT(I)}{\rho(n)},
-  \qquad\text{equivalentemente}\qquad
-  \frac{OPT(I)}{ALG(I)} \leq \rho(n).
+  ALG(I) \geq \frac{OPT(I)}{\rho(n)}.
   $$
 
-In entrambi i casi il rapporto è scelto in modo da essere almeno $1$: $\rho(n)=1$ corrisponde a un algoritmo esatto e, a parità di problema, un fattore più vicino a $1$ è migliore. Se $\rho$ è una costante, la qualità non peggiora al crescere dell'istanza; il fattore può però anche dipendere da $n$.
+Quando i valori nei rapporti sono positivi, queste disuguaglianze equivalgono rispettivamente a
+
+$$
+\frac{ALG(I)}{OPT(I)}\leq\rho(n)
+\qquad\text{e}\qquad
+\frac{OPT(I)}{ALG(I)}\leq\rho(n).
+$$
+
+Quando è definito, il rapporto effettivo sulla singola istanza è almeno $1$. Il fattore $\rho(n)$ è una garanzia uniforme: deve valere per ogni istanza di dimensione $n$. Se $\rho=1$, l'algoritmo è esatto; a parità di problema, un fattore più vicino a $1$ dà una garanzia migliore. Il fattore può essere costante oppure dipendere da $n$.
 
 > **Esempio — come si legge il fattore**
 > - **Minimizzazione:** se su un'istanza $OPT(I)=10$ e l'algoritmo restituisce una soluzione di costo $ALG(I)=12$, il rapporto ottenuto è $12/10=1{,}2$. Una garanzia di fattore $2$ permetterebbe, su questa istanza, qualsiasi costo al più $20$: non significa quindi che l'algoritmo debba costare esattamente il doppio dell'ottimo.
@@ -509,7 +458,7 @@ In entrambi i casi il rapporto è scelto in modo da essere almeno $1$: $\rho(n)=
 >
 > Questi calcoli misurano la qualità su una singola istanza. Per dimostrare che l'algoritmo ha davvero fattore $\rho$, la disuguaglianza deve valere per **tutte** le istanze.
 
-La garanzia è di **worst-case**: non afferma che l'algoritmo ottenga sempre un rapporto uguale a $\rho$, ma che nessuna istanza può produrre un rapporto peggiore. Le istanze con ottimo nullo richiedono una convenzione separata, perché il rapporto non è definito; nei problemi studiati qui i costi sono positivi, oppure il caso $OPT(I)=0$ è banale da riconoscere e risolvere esattamente.
+La garanzia è di **worst-case**: sulle istanze con rapporto definito, il rapporto effettivo può essere migliore di $\rho$, ma non deve mai superarlo. Se $OPT(I)=0$ in un problema di minimizzazione, la disuguaglianza richiede $ALG(I)=0$. In massimizzazione, se $OPT(I)=0$, la non negatività dei costi implica che anche ogni soluzione ammissibile ha valore zero; la disuguaglianza resta valida. In questi casi non si usa il rapporto, che avrebbe denominatore nullo. Per i casi con valori positivi, la definizione del rapporto segue l'ipotesi usata da Cormen, che assume costi positivi per tutte le soluzioni.
 
 #### Dimostrare un fattore mediante un lower bound
 
@@ -519,13 +468,13 @@ $$
 \frac{ALG(I)}{OPT(I)}.
 $$
 
-Il problema è che $OPT(I)$ è proprio il valore difficile da calcolare. Un **lower bound** positivo sostituisce l'ottimo con un valore più facile da ottenere e sicuramente non superiore a esso:
+Il problema è che $OPT(I)$ è proprio il valore difficile da calcolare. Per un'istanza con $OPT(I)>0$, se riusciamo a calcolare un **lower bound** positivo, cioè un valore più facile da ottenere e sicuramente non superiore all'ottimo, possiamo usarlo al suo posto nel denominatore:
 
 $$
 0<LB(I) \leq OPT(I)
 $$
 
-Poiché $LB(I)$ è al denominatore ed è minore o uguale a $OPT(I)$, si ottiene
+Poiché la soluzione restituita è ammissibile in un problema di minimizzazione, $OPT(I)\leq ALG(I)$. Inoltre $LB(I)>0$ e $LB(I)\leq OPT(I)$, quindi
 
 $$
 \frac{ALG(I)}{OPT(I)}
@@ -533,7 +482,7 @@ $$
 \frac{ALG(I)}{LB(I)}.
 $$
 
-Il rapporto con il lower bound è quindi una valutazione **prudente**: può essere maggiore del rapporto reale, ma non può sottostimarlo. Se riusciamo a dimostrare che, per ogni istanza,
+Il rapporto con il lower bound è quindi una valutazione **prudente**: può essere maggiore del rapporto reale, ma non può sottostimarlo. Se riusciamo a dimostrare che, per ogni istanza con $LB(I)>0$,
 
 $$
 \frac{ALG(I)}{LB(I)}\leq \rho(n),
@@ -545,17 +494,14 @@ $$
 \frac{ALG(I)}{OPT(I)}\leq \rho(n).
 $$
 
-Equivalentemente, basta provare la catena
+Equivalentemente, per queste istanze basta provare la catena
 
 $$
 ALG(I) \leq \rho(n)\cdot LB(I)
 \leq \rho(n)\cdot OPT(I).
 $$
 
-> **Significato della garanzia**
-> Il lower bound **non determina necessariamente il vero fattore** ottenuto dall'algoritmo: permette di certificarne un limite nel caso peggiore senza conoscere $OPT(I)$. Un lower bound vicino all'ottimo può dare una garanzia stretta; un lower bound molto più piccolo resta corretto, ma può produrre una garanzia pessimistica. Per dimostrare che l'intero algoritmo è una $\rho$-approssimazione, queste disuguaglianze devono valere per **ogni** istanza.
-
-Nei prossimi algoritmi il lower bound nascerà, per esempio, da un matching o da un rilassamento lineare; per la massimizzazione il ragionamento duale usa invece un upper bound su $OPT(I)$.
+Per stabilire un fattore valido su tutte le istanze, quelle con $OPT(I)=0$ vanno controllate separatamente usando la disuguaglianza di garanzia senza divisione. Il rapporto con il lower bound dà una garanzia che può essere peggiore del rapporto effettivo. Nei prossimi algoritmi il lower bound sarà ottenuto, per esempio, da un matching o da un rilassamento lineare; per la massimizzazione si usa invece un upper bound su $OPT(I)$.
 
 > **Esempio — confrontarsi con un limite noto**
 > Supponiamo di avere, per una certa istanza di minimizzazione, una soluzione di costo $ALG(I)=18$ e un lower bound $LB(I)=12$. Anche senza calcolare l'ottimo sappiamo che
@@ -572,11 +518,11 @@ Nei prossimi algoritmi il lower bound nascerà, per esempio, da un matching o da
 
 > [!problem] Problema del commesso viaggiatore (TSP)
 >
-> **Input:** un grafo non diretto completo $G=(V,E)$ e una funzione di costo positiva sugli archi $c:E\to\mathbb{R}^{+}$.
+> **Input:** un grafo completo con archi pesati.
 >
-> **Output:** un ciclo hamiltoniano in $G$ di costo minimo.
+> **Output:** un ciclo hamiltoniano di costo minimo (costo = somma dei pesi sugli archi).
 
-Qui consideriamo la versione di ottimizzazione $TSP_{opt}$: il costo di un ciclo è la somma dei costi dei suoi archi. Nella riduzione seguente usiamo costi $0/1$ come nelle slide. Per ottenere costi strettamente positivi basta sostituirli con $1/2$: ogni tour ha esattamente $|V|$ archi, quindi il confronto «costo ottimo $0$ oppure almeno $1$» diventa «costo ottimo $|V|$ oppure almeno $|V|+1$».
+Qui consideriamo la versione di ottimizzazione $TSP_{opt}$ su un grafo completo non diretto: il costo di un ciclo è la somma dei pesi dei suoi archi. Nella dimostrazione della docente sono ammessi archi di costo $0$; la riduzione usa direttamente i pesi $0/1$.
 
 > [!theorem] Teorema
 > Il problema del commesso viaggiatore è NP-hard
@@ -595,7 +541,7 @@ Qui consideriamo la versione di ottimizzazione $TSP_{opt}$: il costo di un ciclo
 
 ![[assets/riduzione-hc-tsp-04-decisione.svg|900]]
 
-**Modello della riduzione.** Consideriamo un'istanza di $HC$ con grafo semplice e almeno tre vertici. L'istanza destinazione è un grafo completo non diretto con costi interi non negativi. Un risolutore esatto per $TSP_{opt}$ restituisce un tour minimo, non soltanto il suo costo; possiamo calcolarne il costo sommando i pesi degli archi.
+**Modello della riduzione.** Consideriamo un'istanza di $HC$ con grafo semplice e almeno tre vertici. Costruiamo un grafo completo con pesi $0/1$ e lo passiamo al risolutore TSP esatto.
 
 **In simboli.** Vogliamo dimostrare $HC\leq_T^p TSP_{opt}$: la costruzione trasforma l'input, la chiamata all'oracolo trova il tour ottimo e il controllo finale lo converte nella risposta SI/NO. Le operazioni esterne all'oracolo devono essere polinomiali.
 
@@ -606,7 +552,7 @@ $HC$ chiede se un ciclo **esiste** nel grafo dato; il TSP chiede quale ciclo abb
 - costo **$0$** agli archi già presenti in $G$;
 - costo **$1$** agli archi aggiunti per renderlo completo.
 
-Il costo di un tour conta quindi quanti archi aggiunti usa. Se il tour ottimo costa $0$, non ne usa nessuno ed è un ciclo Hamiltoniano di $G$; se costa almeno $1$, ogni tour deve usare un arco che mancava in $G$. Il costo diventa così un *rivelatore* della risposta a $HC$.
+Il costo di un tour conta quanti archi aggiunti usa. Se il costo minimo è $0$, il tour non usa archi aggiunti ed è un ciclo Hamiltoniano di $G$; se è almeno $1$, ogni tour usa un arco che mancava in $G$. Il costo ottimo rivela così la risposta a $HC$.
 
 ![[assets/Pasted image 20260921114935.png]]
 
@@ -626,11 +572,7 @@ Partiamo da un'istanza $G=(V,E)$ di $HC$ e costruiamo l'istanza TSP $G'=(V,E',c)
    \end{cases}
    $$
 
-Ora chiediamo al risolutore TSP un tour ottimo $H^*$ di $G'$ e poniamo $K=c(H^*)$.
-Rispondiamo
-- **SI** a $HC$ se $K=0$,
-- **NO** altrimenti.
-Questa è l'intera procedura: costruire il grafo pesato, risolvere il TSP e controllare il costo restituito.
+Passiamo $G'$ al risolutore esatto e riceviamo un tour ottimo $H^*$ di costo $K=\sum_{e\in H^*}c(e)$. Rispondiamo **SI** se $K=0$ e **NO** altrimenti. La procedura costruisce il grafo pesato, effettua una chiamata al TSP esatto e controlla il costo restituito.
 
 ![[assets/riduzione-hc-tsp-01-istanze.svg|900]]
 
@@ -639,20 +581,20 @@ Questa è l'intera procedura: costruire il grafo pesato, risolvere il TSP e cont
 Con $n=|V|$, $G'$ ha $n(n-1)/2$ archi. Misuriamo qui il lavoro **esterno** al risolutore TSP:
 
 - **Tempo:** con una matrice di adiacenza per $G$, costruire e pesare $G'$ richiede $O(n^2)$; calcolare $K$ dal tour richiede $O(n)$. Se $G$ è dato con liste di adiacenza, la matrice si prepara in $O(n^2+|E|)$.
-- **Spazio:** matrice e grafo completo richiedono $O(n^2)$; ogni peso $0/1$ occupa un bit.
+- **Spazio:** matrice e grafo completo richiedono $O(n^2)$; i pesi $0/1$ occupano un numero costante di bit.
 - **Oracolo:** una sola chiamata al risolutore esatto. Il suo tempo non è incluso nel costo della riduzione con oracolo.
 
 #### Dimostrazione
 
-1. **Da $HC$ a costo zero.** Se $G$ ha un ciclo hamiltoniano, lo stesso ciclo esiste in $G'$ e usa solo archi di costo $0$. Poiché tutti i costi sono non negativi, l'ottimo è $K=0$.
-2. **Da costo zero a $HC$.** Se $K=0$, il tour ottimo contiene solo archi di costo $0$, dunque solo archi di $E$. È un ciclo hamiltoniano anche in $G$.
+1. **Da $HC$ a costo zero.** Se $G$ ha un ciclo hamiltoniano, lo stesso ciclo in $G'$ usa solo archi di costo $0$. Tutti i costi sono non negativi, quindi l'ottimo è $K=0$.
+2. **Da costo zero a $HC$.** Se l'ottimo TSP è $K=0$, il tour ottimo usa solo archi di costo $0$, cioè archi di $E$, ed è hamiltoniano anche in $G$.
 3. **Conclusione.** Abbiamo $K=0\iff G$ ha un ciclo hamiltoniano. La costruzione, il controllo e la singola chiamata all'oracolo costituiscono una riduzione polinomiale $HC\leq_T^p TSP_{opt}$. Poiché $HC$ è NP-completo, $TSP_{opt}$ è NP-hard.
 
-**Spiegazione.** La direzione inversa dice anche che, se $G$ non ha un ciclo hamiltoniano, ogni tour di $G'$ usa almeno un arco aggiunto e quindi $K\geq1$.
+**Spiegazione.** Se $G$ non ha un ciclo hamiltoniano, ogni tour nel grafo completo $G'$ usa almeno un arco aggiunto: il suo costo, e quindi l'ottimo $K$, è almeno $1$.
 
 La relazione chiave è:
 $$
-K=0
+\operatorname{OPT}_{TSP}(G')=0
 \iff
 G\text{ contiene un ciclo Hamiltoniano}.
 $$
@@ -678,48 +620,14 @@ Lo pseudocodice compatta la procedura già descritta:
 > 7.    $c(\{u,v\}) \gets 1$
 > 8.   **end if**
 > 9.  **end for**
-> 10.  $G^\prime \gets (V, E^\prime, c)$
-> 11.  $H^* \gets TSP(G^\prime)$
-> 12.  **if** $c(H^*) = 0$ **then**
+> 10.  $G^\prime \gets (V, E^\prime, c)$; $H^* \gets TSP(G^\prime)$
+> 11.  $K \gets \sum_{e\in H^*}c(e)$
+> 12.  **if** $K = 0$ **then**
 > 13.   **return** sì
 > 14.  **else**
 > 15.   **return** no
 > 16.  **end if**
 > 17. **end function**
-
-#### Perché scegliere pesi $1/2$ invece di $0/1$?
-
-La scelta dei pesi nella riduzione non è casuale, ma determina **quale variante** del TSP stiamo dimostrando essere NP-Hard. ^tsp-pesi
-
-La **disuguaglianza triangolare** esprime l'idea che andare direttamente da un vertice a un altro non debba costare più che passare per un vertice intermedio. Deve valere per ogni terna di vertici; non richiede che i costi siano distanze euclidee:
-
-$$
-c(u,w) \leq c(u,v)+c(v,w).
-$$
-
-Prendiamo per esempio tre vertici $u,v,w$: gli archi $uv$ e $vw$ appartengono al grafo originale, mentre aggiungiamo $uw$ per renderlo completo.
-Possiamo farlo in due modi:
-
-![[assets/tsp-pesi-01-12-triangolo.svg|1000]]
-
-**Caso A — pesi $0/1$ (riduzione TSP generale)**
-
-- Archi originali: costo $0$; arco aggiunto: costo $1$.
-- **Test:** $1\leq0+0$ è falso.
-- **Conclusione:** in un caso come questo la costruzione viola la disuguaglianza triangolare. Le istanze prodotte **possono non essere metriche**: la riduzione appena vista dimostra la NP-hardness del **TSP generale**.
-
-**Caso B — pesi $1/2$ (riduzione TSP metrica)**
-
-- Archi originali: costo $1$; arco aggiunto: costo $2$.
-- **Test:** $2\leq1+1$ è vero. Vale per ogni triangolo: un lato costa al massimo $2$ e gli altri due insieme almeno $2$.
-- **Conclusione:** la disuguaglianza triangolare vale per ogni terna, quindi le istanze prodotte sono **metriche**. La stessa riduzione dimostra la NP-hardness del **TSP metrico**: un tour ha $|V|$ archi e costa almeno $|V|$; costa esattamente $|V|$ se e solo se usa solo archi originali, cioè se il grafo originale ha un ciclo Hamiltoniano.
-
-**Perché questa distinzione è cruciale?** Le due riduzioni mostrano che trovare l'**ottimo esatto** è NP-hard in entrambe le varianti. Da questo, però, non possiamo ancora concludere quanto bene si riesca ad approssimare l'ottimo:
-
-- Per il **TSP generale**, la prossima sezione userà archi di costo $1$ e archi di costo $K$ per dimostrare che, a meno che $P=NP$, non esiste un algoritmo polinomiale con fattore di approssimazione costante.
-- Per il **TSP metrico**, la disuguaglianza triangolare consente gli *shortcut*: su questa proprietà si basano la $2$-approssimazione e l'algoritmo di Christofides.
-
-*La variante $1/2$ mostra che anche il TSP metrico è difficile da risolvere esattamente; è la disuguaglianza triangolare a permettere le garanzie di approssimazione che vedremo più avanti.*
 
 ### Inapprossimabilità del TSP generale
 
@@ -743,7 +651,7 @@ K & \text{se } e\notin E.
 \end{cases}
 $$
 
-Una scelta concreta, usata nelle slide, è $K=r|V|+1$. Il costo $1$ rende positivo l'ottimo quando $G$ ha un ciclo Hamiltoniano; il costo $K$ separa i due casi anche se $A$ restituisce un tour soltanto approssimato.
+Nelle slide si sceglie $K=r|V|+1$. Per garantire che il peso sia un intero codificabile anche quando $r$ è una costante reale, fissiamo un intero costante $R\geq r$ e usiamo $K=R|V|+1$; resta $K>r|V|$. Per $r=2$ possiamo scegliere $R=2$, come nella figura sotto. Il costo $1$ rende positivo l'ottimo quando $G$ ha un ciclo Hamiltoniano; il costo $K$ separa i due casi anche se $A$ restituisce un tour soltanto approssimato.
 
 1. **Caso SI.** Se $G$ contiene un ciclo Hamiltoniano, in $G'$ possiamo usare soltanto archi originali: il tour costa $|V|$. Poiché ogni tour ha $|V|$ archi e ciascuno costa almeno $1$, questo è l'ottimo. Per la garanzia di $A$, il tour restituito costa **al massimo $r|V|$**.
 2. **Caso NO.** Se $G$ non contiene un ciclo Hamiltoniano, ogni tour di $G'$ usa almeno un arco aggiunto. Gli altri $|V|-1$ archi costano almeno $1$ ciascuno, quindi ogni tour costa almeno
@@ -752,7 +660,7 @@ Una scelta concreta, usata nelle slide, è $K=r|V|+1$. Il costo $1$ rende positi
 
   Anche il tour restituito da $A$ costa dunque **più di $r|V|$**.
 
-La figura istanzia i due casi con $|V|=4$, $r=2$ e $K=9$; gli archi tratteggiati sono altri archi aggiunti al grafo completo, non usati nei tour evidenziati.
+La figura istanzia i due casi con gli stessi quattro vertici, $r=2$, $K=9$ e soglia comune $r|V|=8$: nel caso SI il tour di costo $4$ è accettato, nel caso NO ogni tour costa almeno $12$. Gli archi tratteggiati sono altri archi aggiunti al grafo completo, non usati nei tour evidenziati.
 
 ![[assets/tsp-inapprossimabilita-due-casi.png|1000]]
 
@@ -760,13 +668,13 @@ La figura istanzia i due casi con $|V|=4$, $r=2$ e $K=9$; gli archi tratteggiati
 
 #### Complessità della riduzione
 
-Il grafo completo ha $|V|(|V|-1)/2$ archi: assegnare i costi richiede $O(|V|^2)$ operazioni nel modello a costo uniforme. Per $r$ costante possiamo scegliere un $K$ intero appena maggiore di $r|V|$; bastano $O(\log |V|)$ bit per rappresentarlo. Anche considerando la scrittura dei pesi, la trasformazione resta quindi polinomiale.
+Il grafo completo ha $|V|(|V|-1)/2$ archi: assegnare i costi richiede $O(|V|^2)$ operazioni nel modello a costo uniforme. Poiché $R$ è costante, bastano $O(\log |V|)$ bit per rappresentare $K=R|V|+1$. Anche considerando la scrittura dei pesi, la trasformazione resta quindi polinomiale.
 
 Il risultato riguarda il **TSP generale**: i costi costruiti non soddisfano necessariamente la disuguaglianza triangolare e quindi non esclude approssimazioni costanti per il TSP metrico.
 
 ### Approssimazioni per il TSP metrico
 
-Il **TSP metrico** richiede costi che rispettino la disuguaglianza triangolare: andare direttamente da $u$ a $w$ non costa più che passare per un terzo vertice $v$. La prova in [[#Inapprossimabilità del TSP generale]] usa archi originali di costo $1$ e archi aggiunti di costo $K>2$, che possono violare questa proprietà; il suo risultato negativo riguarda perciò il TSP generale. La [[#^tsp-pesi|costruzione con pesi $1/2$]] mostra invece che il TSP metrico può restare difficile da risolvere *esattamente*. Qui cerchiamo garanzie di approssimazione costanti sfruttando la proprietà triangolare.
+Qui sfruttiamo la disuguaglianza triangolare per ottenere garanzie di approssimazione costanti per una restrizione del TSP generale: il **TSP metrico** su grafi completi non diretti con costi positivi. La prova di inapprossimabilità in [[#Inapprossimabilità del TSP generale]] usa archi di costo $1$ e archi di costo $K$, e può violare questa proprietà, quindi riguarda il TSP generale.
 
 #### Problema e modello
 
@@ -784,8 +692,20 @@ $$
 \forall u,v,z\in V:\qquad c(u,z)\leq c(u,v)+c(v,z).
 $$
 
-Essa formalizza l'idea che andare direttamente da $u$ a $z$ non costi più che passare per un nodo intermedio $v$. In alcune dimostrazioni useremo l'osservazione, più generale, che i costi possono essere non negativi: le istanze della docente hanno comunque costi positivi.
+Per i costi positivi della specifica, la triangolare implica anche la disuguaglianza per cammini con più archi dimostrata sotto. Nelle prove di lower bound useremo solo che questi costi sono non negativi.
 
+#### Dalla riduzione $0/1$ ai pesi metrici $1/2$
+
+La prova di [[#TSP è un problema NP-hard|NP-hardness del TSP]] usa i pesi $0/1$ delle slide della docente. Qui facciamo un'**osservazione aggiuntiva**: la stessa idea può produrre istanze metriche, mantenendo difficile la ricerca dell'ottimo esatto. ^tsp-pesi
+
+Prendiamo tre vertici $u,v,w$: gli archi $uv$ e $vw$ appartengono al grafo originale, mentre $uw$ è stato aggiunto per completarlo.
+
+![[assets/tsp-pesi-01-12-triangolo.svg|1000]]
+
+- **Pesi $0/1$ della prova nelle slide:** $c(uv)=c(vw)=0$ e $c(uw)=1$. La triangolare richiederebbe $1\leq0+0$, che è falso. Quella costruzione non garantisce istanze metriche.
+- **Pesi $1/2$ dell'osservazione aggiuntiva:** assegniamo $1$ agli archi originali e $2$ a quelli aggiunti. Per ogni terna, il lato diretto costa al massimo $2$ e gli altri due insieme almeno $2$: la disuguaglianza triangolare vale. I costi sono anche positivi, come richiesto dalla specifica del TSP metrico.
+
+Ogni tour ha $|V|$ archi: passando da $0/1$ a $1/2$ il costo di ciascun tour aumenta di $|V|$. Nell'istanza metrica l'ottimo è quindi $|V|$ se e solo se il grafo originale ha un ciclo hamiltoniano. Questa è una deduzione dalla riduzione precedente, **non una variante presentata nelle slide**: mostra la NP-hardness della soluzione esatta del TSP metrico. La disuguaglianza triangolare permette invece gli *shortcut* usati nelle approssimazioni che seguono.
 
 > **Esempio — uno shortcut**
 > Se $c(A,B)=3$, $c(B,C)=4$ e $c(A,C)=6$, percorrere $A\to B\to C$ costa $3+4=7$, mentre lo shortcut diretto $A\to C$ costa $6$. Saltare $B$ non aumenta quindi il costo. Se invece fosse $c(A,C)=9$, lo shortcut sarebbe più costoso: proprio questo caso è escluso dalla disuguaglianza triangolare.
@@ -810,13 +730,20 @@ Essa formalizza l'idea che andare direttamente da $u$ a $z$ non costi più che p
 
 [[teacher_slides/1_complexity theory.pdf#page=70|Slide della docente, p. 70]]
 
+Nel TSP metrico $G$ è completo, quindi per ogni coppia di vertici esiste l'arco diretto usato nello shortcut.
+
 ##### Dimostrazione
 
 La prova è per induzione sul numero $k$ di archi del cammino.
 
-1. Per $k=2$, la tesi è esattamente la disuguaglianza triangolare.
-2. Per $k>2$, l'ipotesi induttiva riduce il prefisso da $v_1$ a $v_{k-1}$ a un solo arco; la disuguaglianza triangolare sostituisce poi gli ultimi due tratti con l'arco da $v_{k-1}$ a $v_{k+1}$ e infine combina i due archi ottenuti.
-3. Si ottiene quindi il bound dell'enunciato. In particolare, eliminare un vertice intermedio e sostituire i due tratti adiacenti con l'arco diretto non aumenta il costo. Da un ciclo che visita alcuni vertici più volte si possono perciò saltare le visite ripetute ottenendo un ciclo Hamiltoniano di costo non maggiore.
+1. Per $k=1$ la tesi è un'uguaglianza; per $k=2$ è la disuguaglianza triangolare.
+2. Sia $k\geq3$ e supponiamo vera la tesi per cammini di $k-1$ archi. Applicandola al prefisso $\langle v_1,\ldots,v_k\rangle$ e poi usando la triangolare sugli archi $(v_1,v_k)$ e $(v_k,v_{k+1})$, otteniamo
+   $$
+   c((v_1,v_{k+1}))\leq c((v_1,v_k))+c((v_k,v_{k+1}))\leq \sum_{i=1}^{k}c((v_i,v_{i+1})).
+   $$
+   Questo prova il passo induttivo.
+
+Il lemma garantisce che sostituire un cammino con l'arco diretto tra i suoi estremi non aumenta il costo. La completezza garantisce che quell'arco esista; applicando l'operazione per saltare le visite ripetute si ottiene un ciclo Hamiltoniano di costo non maggiore.
 
 #### Algoritmo di 2-approssimazione
 
@@ -824,7 +751,7 @@ La prova è per induzione sul numero $k$ di archi del cammino.
 
 L'idea è costruire un minimum spanning tree $T^*$, raddoppiarne gli archi per rendere pari ogni grado, calcolare un ciclo euleriano e applicare gli shortcut ai vertici già visitati.
 
-Nell'immagine si mostrano, in sequenza, $T^*$, il ciclo euleriano $E$ sul multigrafo con archi raddoppiati e il ciclo Hamiltoniano $H$ ottenuto mediante shortcut. Per chiarezza non sono disegnati gli altri archi del grafo completo.
+La figura mostra in sequenza l'MST $T^*$, il ciclo euleriano $E$ sul multigrafo con archi raddoppiati e il ciclo Hamiltoniano $H$ ottenuto mediante shortcut; per chiarezza non disegna gli altri archi del grafo completo.
 
 ![[assets/2-approx.jpg|1000]]
 
@@ -853,25 +780,25 @@ $$
 cost(H)\leq cost(E)=2\,cost(T^*).
 $$
 
-Rimuovendo un arco dal tour ottimo $H^*$ si ottiene uno spanning tree $T$. Poiché i costi sono non negativi e $T^*$ è un MST,
+Rimuovendo un arco da $H^*$ si ottiene uno spanning tree $T$. I costi non negativi danno $cost(T)\leq cost(H^*)$; poiché $T^*$ è un MST, $cost(T^*)\leq cost(T)$. Quindi
 
 $$
 cost(T^*)\leq cost(T)\leq cost(H^*).
 $$
 
-Combinando i due risultati segue
+Combinando i due bound otteniamo la catena
 
 $$
-cost(H)\leq 2\,cost(H^*),
+cost(H)\leq cost(E)=2\,cost(T^*)\leq 2\,cost(T)\leq 2\,cost(H^*).
 $$
 
 quindi l'algoritmo è una **2-approssimazione**.
 
-**Tightness dell'analisi.** Il fattore 2 è asintoticamente tight per questo algoritmo. Nella famiglia seguente gli archi disegnati hanno costo 1 e tutti gli altri costo 2. L'MST può essere la stella di costo $n-1$ e una scelta sfavorevole del ciclo euleriano produce, dopo gli shortcut, un tour con $n-2$ archi di costo 2 e due archi di costo 1.
+**Tightness dell'analisi.** Il fattore 2 è asintoticamente tight per questo algoritmo. Per $n\geq5$, considera il grafo completo in cui gli archi della stella centrata in 1 e quelli del ciclo $(1,2,\ldots,n,1)$ costano 1; tutti gli altri costano 2. L'MST può essere la stella di costo $n-1$. Un ordine euleriano sfavorevole può dare, dopo gli shortcut, un tour con $n-2$ archi di costo 2 e due archi di costo 1; la figura mostra un'istanza di questa famiglia.
 
 ![[assets/2-approx-Pagina-2.jpg|1000]]
 
-Il tour restituito può quindi costare $2n-2$, mentre esiste un tour ottimo di costo $n$:
+Il tour restituito può quindi costare $2n-2$. Poiché ogni arco costa almeno 1 e il ciclo $(1,2,\ldots,n,1)$ costa $n$, quest'ultimo è ottimo:
 
 $$
 \frac{cost(H)}{cost(H^*)}=\frac{2n-2}{n}=2-\frac{2}{n}\xrightarrow{n\to\infty}2.
@@ -936,7 +863,7 @@ $$
 cost(\Gamma)\leq cost(H^*).
 $$
 
-Poiché $|U|$ è pari, gli archi di $\Gamma$, contati con la loro molteplicità, si possono ripartire alternandoli in due perfect matching $M_1$ e $M_2$ di $G[U]$.
+Poiché $|U|$ è pari, gli archi di $\Gamma$, contati con la loro molteplicità, si possono ripartire alternandoli in due perfect matching $M_1$ e $M_2$ di $G[U]$. Se $|U|=2$, $\Gamma$ è formato da due occorrenze dello stesso arco: ciascun matching contiene una occorrenza, quindi $M_1$ e $M_2$ coincidono come insieme di archi ma i loro costi sommano correttamente il costo di $\Gamma$.
 
 ![[assets/christof3.png|1000]]
 
@@ -967,84 +894,100 @@ Christofides è quindi una **$3/2$-approssimazione** per il TSP metrico. Il pass
 
 ### Branch and bound (facoltativo)
 
-> **Status per l'esame — approfondimento facoltativo (indicazione dell'utente).** Anche l'applicazione al TSP e il lower bound basato sull'1-tree qui sotto fanno parte di questo approfondimento. L'1-tree è trattato nella dispensa della docente dedicata a Branch and Bound per TSP (`teacher_slides/1_complexity theory.pdf`, pp. 101–104), ma non risulta come argomento autonomo nelle altre parti delle slide disponibili.
+> **Status per l'esame — approfondimento facoltativo (indicazione dell'utente).** Anche l'applicazione al TSP e il lower bound basato sull'1-tree fanno parte di questo approfondimento. L'1-tree è trattato nella dispensa della docente dedicata a Branch and Bound per TSP, pp. 101–104, ma non risulta come argomento autonomo nelle altre parti delle slide disponibili.
 
-Il **Branch and Bound** cerca una soluzione ottima esplorando sottoinsiemi $S_i$ dello spazio delle soluzioni. Nel caso di minimizzazione, conserva il costo $UB$ della migliore soluzione ammissibile trovata finora (*current best solution*) e calcola per ogni $S_i$ un **lower bound** $LB(S_i)$ valido per tutte le sue soluzioni. Se $LB(S_i)\geq UB$, il sottoinsieme non può migliorare la soluzione corrente e viene scartato (*pruning*); altrimenti viene suddiviso mediante *branching*. I figli devono coprire le soluzioni del padre, ma possono sovrapporsi.
+Il **Branch and Bound** cerca una soluzione di costo minimo esplorando gruppi di soluzioni possibili. Il *branching* suddivide un gruppo in gruppi più piccoli; il *bounding* calcola un limite inferiore al costo di tutte le soluzioni del gruppo. L'algoritmo conserva il costo $UB$ della migliore soluzione ammissibile trovata finora (*current best solution*) e, per ogni sottoinsieme $S$, calcola un lower bound $LB(S)$. Se $LB(S)\geq UB$, nessuna soluzione in $S$ può migliorare quella corrente, quindi il ramo viene scartato (*pruning*). I sottoinsiemi generati dal branching devono coprire tutte le soluzioni ammissibili del padre, ma possono sovrapporsi.
+
+[[teacher_slides/1_complexity theory.pdf#page=97|Slide della docente, pp. 97–100]]
 
 ![[assets/Screenshot 2024-10-02 110633.png|900]]
 
-L'esplorazione forma un albero: quando un sottoinsieme contiene una sola soluzione ammissibile, se ne valuta il costo e si aggiorna eventualmente $UB$. La visita può essere in profondità, in ampiezza o guidata da una stima. Lo pseudocodice seguente usa una visita ricorsiva in profondità per un problema di minimo; $BCS$ e $UB$ sono condivisi fra le chiamate e inizialmente valgono rispettivamente $null$ e $\infty$.
+Quando non è ancora stata trovata una soluzione ammissibile, poniamo $UB=\infty$: nessun lower bound finito può allora eliminare il ramo. Se $S$ contiene una sola soluzione ammissibile, l'algoritmo ne valuta il costo e aggiorna $UB$ e la soluzione corrente $BCS$ quando il costo è minore. Se $S$ è vuoto, il ramo termina senza aggiornamenti. Negli altri casi, il branching genera figli che contengono complessivamente tutte le soluzioni ammissibili di $S$; i figli possono sovrapporsi. La rappresentazione di ciascun figlio deve progredire verso un caso terminale, secondo una misura finita della rappresentazione (nell'esempio TSP, il numero di archi diminuisce a ogni passo). Questa condizione esclude cicli nella ricerca e assicura la terminazione.
+
+La visita può essere in profondità, in ampiezza o guidata da una stima. Il seguente pseudocodice mostra una visita ricorsiva in profondità per un problema di minimo. $BCS$ e $UB$ sono condivisi tra le chiamate; all'inizio $BCS=null$ e $UB=\infty$. La condizione sul lower bound presuppone che $LB(S)$ sia valido per tutte le soluzioni ammissibili di $S$.
 
 **Algorithm 4 Algoritmo ricorsivo generico per B&B** ^algorithm-4
 
 > 1. $BCS \gets null$
 > 2. $UB \gets \infty$<br>
-> 3. **function** B&B(S)
-> 4.  **if** $lowerBound(S) \geq UB$ **then**<br>
+> 3. **function** B&B($S$)
+> 4.  **if** $S$ è vuoto **then**<br>
 > 5.   **return**
 > 6.  **end if**
-> 7.  **if** $S$ represents a single feasible solution **then**<br>
-> 8.   **if** $cost(S) < UB$ **then**<br>
-> 9.    $BCS \gets S$
-> 10.    $UB \gets cost(S)$<br>
-> 11.   **end if**
-> 12.  **else**
-> 13.   **for all** $S_i$ in $branch(S)$ **do**
-> 14.    $B\&B(S_i)$
-> 15.   **end for**
-> 16.  **end if**
-> 17.  **return**
-> 18. **end function**
-> 19. **call** B&B($S_{\mathrm{iniziale}}$); **return** $BCS$
+> 7.  **if** $lowerBound(S) \geq UB$ **then**<br>
+> 8.   **return**
+> 9.  **end if**
+> 10.  **if** $S$ rappresenta una sola soluzione ammissibile **then**<br>
+> 11.   **if** $cost(S) < UB$ **then**<br>
+> 12.    $BCS \gets S$
+> 13.    $UB \gets cost(S)$<br>
+> 14.   **end if**
+> 15.  **else**
+> 16.   **for all** $S_i$ in $branch(S)$ **do**
+> 17.    B&B($S_i$)
+> 18.   **end for**
+> 19.  **end if**
+> 20.  **return**
+> 21. **end function**
+> 22. **call** B&B($S_{\mathrm{iniziale}}$); **return** $BCS$
 
-Se un sottoinsieme non contiene soluzioni ammissibili, lo si scarta. La funzione $branch(S)$ genera sottoinsiemi strettamente più piccoli che, insieme, coprono tutte le soluzioni ammissibili di $S$; questo garantisce la terminazione quando lo spazio di ricerca è finito. Un'immagine aiuta a visualizzare la dinamica.
+L'albero di ricerca mostra come i sottoinsiemi vengono suddivisi e scartati. In una foglia che rappresenta una singola soluzione si valuta il costo effettivo; una foglia vuota non contiene soluzioni da valutare.
 
 ![[assets/Screenshot 2024-10-02 110148.png|600]]
 
-Il pruning può ridurre molto il lavoro, ma **nel caso peggiore** potrebbe essere necessario esplorare quasi tutte le soluzioni: non c'è una garanzia generale di tempo polinomiale. Se si interrompe la ricerca con una soluzione corrente di costo $UB$ e restano sottoinsiemi inesplorati, sia $LB$ il minimo dei loro lower bound. Allora $LB\leq OPT\leq UB$ e l'errore additivo della soluzione corrente è al più $UB-LB$. Si può quindi fermare la ricerca dopo un tempo fissato oppure quando questo divario scende sotto una soglia scelta.
+Il calcolo di un singolo lower bound o branching può richiedere tempo polinomiale, ma ciò non rende polinomiale l'intera ricerca: nel caso peggiore può essere necessario visitare un numero esponenziale di sottoinsiemi o valutare quasi tutte le soluzioni. Se la ricerca si interrompe dopo aver trovato una soluzione di costo $UB$, si consideri il lower bound globale $LB$, definito come il minimo tra $UB$ e i lower bound dei rami ancora rilevanti (quelli non scartati e non ancora risolti). Se esiste una soluzione corrente, vale
+
+$$LB\leq OPT\leq UB,$$
+
+dove $OPT$ è il costo ottimo; se non restano rami rilevanti, i rami sono stati scartati o risolti e la soluzione corrente è già ottima. La soluzione corrente ha quindi errore additivo $UB-OPT\leq UB-LB$. Si può fermare l'esecuzione dopo un tempo fissato e usare il divario per stimare l'errore, oppure arrestarla quando il divario è al più una soglia scelta.
 
 #### TSP in chiave branch and bound (facoltativo)
 
-Per il TSP consideriamo un grafo completo non orientato $G=(V,E)$ con costi degli archi non negativi. Ogni nodo della ricerca rappresenta i cicli hamiltoniani contenuti in un sottografo $G'=(V,E')$, dove $E'\subseteq E$; alla radice si ha $G'=G$. Se $G'$ è disconnesso o ha un vertice di grado minore di $2$, non contiene cicli hamiltoniani e il ramo si scarta.
+Consideriamo il TSP su un grafo completo non diretto iniziale $G=(V,E)$, con costi degli archi non negativi. Un nodo dell'albero di ricerca è associato a un sottografo $G'=(V,E')$, con $E'\subseteq E$, e rappresenta l'insieme dei cicli hamiltoniani contenuti in $G'$. La radice corrisponde a $G$. I sottografi dei nodi successivi possono non essere completi. Se $G'$ è disconnesso oppure contiene un vertice di grado minore di $2$, non contiene cicli hamiltoniani e il ramo è vuoto.
 
-Per calcolare un lower bound in $G'$, scegliamo un vertice $v$, troviamo un minimum spanning tree $T^*$ sul sottografo indotto da $V\setminus\{v\}$ e prendiamo i due **distinti** archi meno costosi $e_1,e_2$ di $G'$ incidenti a $v$. Se l'MST non esiste o mancano due archi incidenti a $v$, il ramo è privo di soluzioni. L'unione di $T^*$ con $e_1,e_2$ è un **1-tree** rispetto a $v$: un albero sui vertici diversi da $v$ più due archi che collegano $v$ all'albero.
+[[teacher_slides/1_complexity theory.pdf#page=101|Slide della docente, pp. 101–104]]
+
+Per calcolare un lower bound in un ramo non vuoto, scegliamo un vertice $v$. Consideriamo il sottografo indotto da $V\setminus\{v\}$ e troviamo un minimum spanning tree $T^*$ al suo interno. Poi scegliamo in $G'$ i due archi distinti meno costosi incidenti a $v$, indicati con $e_1$ ed $e_2$. Se il sottografo indotto non ammette uno spanning tree, oppure se in $G'$ non ci sono due archi distinti incidenti a $v$, il ramo non contiene cicli hamiltoniani. Altrimenti, l'unione di $T^*$ con $e_1,e_2$ è un **1-tree rispetto a $v$**.
+
+> [!definition] 1-Tree
+> Given a graph $G=(V,E)$ and a vertex $v\in V$, a 1-Tree for vertex $v$ is given by a spanning tree for vertices in $V\setminus\{v\}$ plus two distinct edges of $G$ having $v$ as an endpoint.
+
+In altre parole, un 1-tree rispetto a $v$ è uno spanning tree sui vertici diversi da $v$, più due archi distinti incidenti a $v$.
 
 ![[assets/Screenshot 2024-10-01 150520.png|700]]
 
-Il lower bound (**bounding**) è:
+Il costo di questo 1-tree fornisce il lower bound
+
+$$LB=cost(T^*)+cost(e_1)+cost(e_2).$$
+
+Infatti, ogni ciclo hamiltoniano $H$ contenuto in $G'$ passa per $v$. Eliminando $v$ e i due archi del ciclo incidenti a $v$, resta un cammino $P$ che attraversa tutti i vertici di $V\setminus\{v\}$ e quindi è uno spanning tree sui vertici di quel sottografo. Poiché $T^*$ è un minimum spanning tree,
+
+$$cost(P)\geq cost(T^*).$$
+
+Inoltre, i due archi $e',e''$ di $H$ incidenti a $v$ sono distinti; dato che $e_1,e_2$ sono i due archi distinti meno costosi incidenti a $v$ in $G'$, vale
+
+$$cost(e')+cost(e'')\geq cost(e_1)+cost(e_2).$$
+
+Sommando le due disuguaglianze si ottiene
 
 $$\begin{aligned}
-                    LB = cost(T^*) + cost(e_1) + cost(e_2)
+cost(H)&=cost(P)+cost(e')+cost(e'')\\
+&\geq cost(T^*)+cost(e_1)+cost(e_2)=LB.
 \end{aligned}$$
 
-Ogni ciclo hamiltoniano $H$ di $G'$ passa per $v$. Rimuovendo $v$ e i suoi due archi incidenti dal ciclo, rimane un cammino $P$ che è anche uno spanning tree sui vertici $V\setminus\{v\}$. Per la minimalità di $T^*$:
-
-$$\begin{aligned}
-                    cost(P) \geq cost(T^*)
-\end{aligned}$$
-
-I due archi $e',e''$ di $H$ incidenti a $v$ costano insieme almeno quanto i due archi meno costosi $e_1,e_2$:
-
-$$\begin{aligned}
-                    cost(e^\prime) + cost(e^{\prime\prime}) \geq cost(e_1) + cost(e_2)
-\end{aligned}$$
-
-Unendo il tutto, troviamo che:
-
-$$\begin{aligned}
-                    cost(H) &= cost(P) + cost(e^\prime) + cost(e^{\prime\prime})\\
-                    &\geq cost(T^*) + cost(e_1) + cost(e_2) = LB = cost(1-Tree)
-\end{aligned}$$
-
-Se l'1-tree ottenuto è esso stesso un ciclo hamiltoniano, il suo costo coincide con $LB$: è dunque una soluzione **ottima nel sottografo $G'$** e può aggiornare la migliore soluzione corrente. In caso contrario, l'1-tree serve soltanto come lower bound.
+Il bound vale dunque per tutti i cicli hamiltoniani rappresentati dal nodo. Se il 1-tree calcolato è un ciclo hamiltoniano, il suo costo è proprio $LB$; poiché ogni ciclo nel sottografo costa almeno $LB$, quel ciclo è ottimo **nel sottografo $G'$** e può aggiornare la soluzione corrente. Non si conclude necessariamente che sia ottimo nell'istanza iniziale $G$.
 
 ![[assets/Screenshot 2024-10-02 152221.png|700]]
 
-Per il **branching**, se l'1-tree calcolato non è un ciclo hamiltoniano, scegliamo un suo vertice $w$ di grado almeno $3$. Siano $e_1,\ldots,e_k$ **tutti** gli archi di $G'$ incidenti a $w$; per ogni $i$ si genera un figlio $G_i=(V,E'\setminus\{e_i\})$. Ogni ciclo hamiltoniano nel padre usa esattamente due archi incidenti a $w$ e, poiché $k\geq3$, ne omette almeno uno: compare quindi in almeno un figlio. I figli possono contenere alcuni cicli in comune.
+Se il 1-tree non è un ciclo hamiltoniano, scegliamo nel 1-tree un vertice $w$ di grado almeno $3$. Sia $F$ l'insieme di **tutti gli archi di $G'$** incidenti a $w$, non soltanto quelli presenti nel 1-tree. Per ogni $e_i\in F$ creiamo un figlio eliminando quell'arco:
+
+$$G_i=(V,E'\setminus\{e_i\}).$$
+
+Ogni ciclo hamiltoniano rappresentato dal padre usa esattamente due archi incidenti a $w$. Siccome $w$ ha almeno tre archi incidenti nel padre, ogni ciclo ne omette almeno uno e resta quindi rappresentato in almeno un figlio. I figli possono sovrapporsi: un ciclo può omettere più di uno degli archi di $F$ e appartenere perciò a più figli.
 
 ![[assets/Screenshot 2024-10-02 152514.png|700]]
 
-Ogni figlio si costruisce in tempo polinomiale. Questo non rende polinomiale l'intera esplorazione dell'albero di ricerca.
+Il calcolo del bound e la costruzione dei figli richiedono tempo polinomiale per ogni nodo; il numero complessivo di nodi visitati può però essere esponenziale.
 
 ### Vertex Cover Problem
 
@@ -1070,7 +1013,7 @@ $$
 \forall (u,v)\in E:\quad u\in C\ \vee\ v\in C.
 $$
 
-La condizione di copertura, da sola, è facile da soddisfare: per esempio, l'intero insieme $V$ è sempre un vertex cover. La difficoltà nasce quando si richiede una soluzione di cardinalità minima. Si distinguono quindi:
+L'insieme $V$ è sempre un vertex cover; il problema consiste nel trovarne uno di cardinalità minima. Si distinguono quindi:
 
 - **versione di ottimizzazione** $VC_{opt}$: trovare un vertex cover $C^*$ tale che $|C^*|=\min\{|C|:C\text{ è un vertex cover di }G\}$;
 - **versione decisionale** $VCD$: dati $G$ e un intero $k\leq |V|$, stabilire se esista un vertex cover di cardinalità al più $k$.
@@ -1084,15 +1027,15 @@ La condizione di copertura, da sola, è facile da soddisfare: per esempio, l'int
 
 #### Dimostrazione
 
-Il problema $VCD$ è NP-completo: una copertura proposta si verifica in tempo polinomiale controllandone la cardinalità e accertando che ogni arco abbia almeno un estremo selezionato; la NP-hardness è un risultato noto. Ne segue che la versione di ottimizzazione è NP-hard. Infatti, se avessimo un algoritmo per $VC_{opt}$, potremmo invocarlo una sola volta su $G$ e rispondere `YES` a $VCD$ se e solo se la soluzione restituita ha cardinalità al più $k$:
+Il problema $VCD$ è NP-completo: una soluzione proposta si verifica in tempo polinomiale controllando la cardinalità e verificando che ogni arco abbia almeno un estremo selezionato; la NP-hardness è un risultato noto. Per dimostrare la NP-hardness di $VC_{opt}$, riduciamo $VCD$ a $VC_{opt}$.
 
-$$
-VCD\leq_T^p VC_{opt}.
-$$
+**Schema della riduzione.** L'istanza è la coppia $(G,k)$. Passiamo il grafo $G$ a un oracolo per $VC_{opt}$ e confrontiamo con $k$ la cardinalità della copertura restituita.
 
 ![[assets/vertex-cover-riduzione-vcd-vc.png|850]]
 
-Nella figura l'istanza della riduzione è la coppia $(G,k)$: il grafo $G$ viene passato all'algoritmo di ottimizzazione, mentre $k$ è usato nel confronto finale. Non si tratta di una riduzione di Karp tra problemi decisionali, ma di una riduzione di Turing con una chiamata all'oracolo di ottimizzazione.
+È una riduzione di Turing con una chiamata a un oracolo di ottimizzazione, non una riduzione di Karp tra problemi decisionali.
+
+L'oracolo restituisce una copertura minima $C^*$ di $G$. Rispondiamo `YES` se e solo se $|C^*|\leq k$: questa condizione equivale alla risposta positiva di $VCD$. La riduzione effettua una sola chiamata all'oracolo e un confronto polinomiale, dunque $VCD\leq_T^p VC_{opt}$. Ne segue che $VC_{opt}$ è NP-hard.
 
 ### Self-reduction del Vertex Cover
 
@@ -1163,18 +1106,18 @@ che cresce linearmente con il numero dei vertici.
 
 #### Seconda scelta: un vertice di grado massimo
 
-Per evitare il comportamento sulla stella, si può scegliere a ogni iterazione un vertice con il massimo grado corrente, cioè quello che copre il maggior numero di archi ancora scoperti. La soluzione resta ammissibile e l'algoritmo è polinomiale, ma neppure questa euristica garantisce un fattore di approssimazione costante.
+Sulla stella, scegliere il vertice di grado massimo evita quel comportamento: il centro viene selezionato subito. In generale, l'euristica sceglie a ogni iterazione un vertice di grado massimo corrente, cioè quello che copre il maggior numero di archi ancora scoperti. La soluzione resta ammissibile e l'algoritmo è polinomiale, ma neppure questa euristica garantisce un fattore di approssimazione costante.
 
 La figura seguente mostra un piccolo esempio. Inizialmente i quattro vertici di $A$ hanno grado $3$, mentre in $B$ vi sono due vertici di grado $4$ e quattro di grado $1$. L'algoritmo può scegliere prima i due vertici di grado $4$; sugli archi rimasti tutti i vertici hanno grado $1$ e un tie-breaking sfavorevole può fargli scegliere anche gli altri quattro vertici di $B$. Restituisce così una copertura di cardinalità $6$, mentre $A$ è una copertura ottima di cardinalità $4$: il rapporto è $3/2$.
 
 ![[assets/vertex-cover-grado-massimo-esempio.png|500]]
 
 > **Approfondimento — famiglia con rapporto logaritmico**
-> Il piccolo esempio spiega il meccanismo, ma non dimostra che il rapporto possa crescere senza limite. Per farlo si usa una famiglia di grafi bipartiti $B=(L,R,E)$: $L$ contiene $r$ vertici e $R$ è suddiviso in gruppi $R_1,\ldots,R_r$. Il gruppo $R_i$ contiene $\lfloor r/i\rfloor$ vertici, ciascuno adiacente a $i$ vertici di $L$, e due vertici dello stesso gruppo non condividono vicini.
+> Il piccolo esempio spiega il meccanismo, ma non dimostra che il rapporto possa crescere senza limite. Per farlo si usa una famiglia di grafi bipartiti $B=(L,R,E)$: $L$ contiene $r$ vertici e $R$ è suddiviso in gruppi $R_1,\ldots,R_r$. Il gruppo $R_i$ contiene $\lfloor r/i\rfloor$ vertici, ciascuno adiacente a $i$ vertici di $L$; i vertici dello stesso gruppo non condividono vicini.
 >
 > ![[assets/vertex-cover-grado-massimo-famiglia-logaritmica.png|700]]
 >
-> Con un tie-breaking sfavorevole, l'euristica può scegliere progressivamente tutti i vertici di $R_r,R_{r-1},\ldots,R_1$. L'insieme $L$ è invece un vertex cover di cardinalità $r$, perciò, indicando con $C$ la soluzione greedy e con $C^*$ l'ottimo,
+> Con un tie-breaking sfavorevole, l'euristica può scegliere progressivamente tutti i vertici di $R_r,R_{r-1},\ldots,R_1$. L'insieme $L$ è un vertex cover di cardinalità $r$. Poniamo $n=|L|+|R|=\Theta(r\log r)$; indicando con $C$ la soluzione greedy e con $C^*$ l'ottimo,
 >
 > $$
 > \frac{|C|}{|C^*|}\geq \frac{|R|}{|L|}
@@ -1339,11 +1282,13 @@ $$
 \leq 2OPT.
 $$
 
-L'analisi è tight per questa regola di rounding. In un ciclo con un numero pari $n$ di vertici, un vertex cover ottimo contiene un vertice sì e uno no e ha costo $n/2$. Il rilassamento ammette anche la soluzione ottima $x_v^*=1/2$ per ogni $v$; se viene restituita questa soluzione, il rounding seleziona tutti gli $n$ vertici e il rapporto è $2$. L'LP ammette anche soluzioni ottime intere su questi cicli: l'esempio mostra quindi il caso peggiore rispetto alla soluzione ottima frazionaria prodotta dal risolutore.
+L'analisi è tight per questa regola di rounding. In un ciclo con un numero pari $n$ di vertici, un vertex cover ottimo contiene un vertice sì e uno no e ha costo $n/2$. La soluzione $x_v^*=1/2$ per ogni $v$ è ottima: sommando i vincoli dei $n$ archi si ottiene $2\sum_v x_v\geq n$, e questa assegnazione raggiunge il limite. Se il risolutore restituisce questa soluzione, il rounding seleziona tutti gli $n$ vertici e il rapporto è $2$. L'LP ammette anche soluzioni ottime intere su questi cicli: l'esempio mostra quindi il caso peggiore rispetto alla soluzione ottima frazionaria prodotta dal risolutore.
 
 ![[assets/vertexcoverILP.png|500]]
 
 > **Programma AA 2025/26.** La variante pesata del Vertex Cover è indicata dalle dispense ufficiali come non materiale d'esame. L'estensione pesata di Relax & Round è quindi un approfondimento e non viene inclusa in questa trattazione principale.
+
+[[teacher_slides/1_complexity theory.pdf#page=63|Slide della docente, p. 63]]
 
 [^vc-max-degree]: Costruzione tratta da M. Zito, [*Vertex Cover*, lecture notes COMP309 (2005), pp. 5–8](https://cgi.csc.liv.ac.uk/~michele/TEACHING/COMP309/2005/Lec10.4.4.pdf).
 
@@ -1351,56 +1296,57 @@ L'analisi è tight per questa regola di rounding. In un ciclo con un numero pari
 
 ### 3.1 Teoria della computazione distribuita
 
-Questo capitolo studia protocolli in cui nodi con memoria privata cooperano scambiando messaggi. Le proprietà della rete e del tempo non sono implicite: il modello di base è presentato qui, mentre ogni problema dichiara le restrizioni aggiuntive che usa.
+Questo capitolo studia protocolli in cui entità con memoria privata cooperano tramite messaggi. Per valutarne correttezza ed efficienza, dichiariamo il modello della rete e del tempo e le restrizioni richieste dai singoli protocolli.
 
 #### Ambienti distribuiti
 
 [[teacher_slides/2_distributed algorithms.pdf#page=3|Slide della docente, p. 3]]
 [[teacher_slides/2_distributed algorithms.pdf#page=7|Slide della docente, p. 7]]
 
-Un **ambiente distribuito** è una collezione finita di entità computazionali che cooperano tramite scambio di messaggi per raggiungere un obiettivo comune. Le entità possono avere capacità diverse, ma ciascuna dispone di computazione, memoria privata e clock locale: sono **molteplici**, **autonome** e capaci di **interagire**. Ne sono esempi il Web, le reti di comunicazione, le reti di sensori e quelle robotiche. Condividere risorse, tollerare guasti e aumentare la scalabilità sono motivazioni frequenti per usarle.
+Un **ambiente distribuito** è una collezione finita di entità computazionali che comunicano tramite messaggi per raggiungere un obiettivo comune. Le entità sono molteplici e autonome e possono avere capacità diverse: ciascuna ha capacità di calcolo, memoria privata e un clock locale. Esempi sono il Web, le reti di comunicazione, di sensori e robotiche. La condivisione di risorse, la tolleranza ai guasti e la scalabilità sono motivi per cui si usano sistemi distribuiti.
 
-Un **algoritmo distribuito**, o *protocollo*, specifica le azioni locali delle entità in modo che il loro comportamento collettivo risolva il problema. Come per un algoritmo sequenziale, occorre dimostrarne la correttezza e valutarne l'efficienza.
+Un **algoritmo distribuito**, o *protocollo*, specifica le azioni locali delle entità affinché il loro comportamento collettivo risolva il problema. Come per un algoritmo sequenziale, se ne devono verificare correttezza ed efficienza.
 
-La distinzione rispetto al calcolo parallelo riguarda soprattutto il modello di comunicazione: in una macchina parallela i processori condividono *tipicamente* la memoria e sono vicini, perciò sincronizzazione e mutua esclusione sono problemi centrali; nel modello distribuito del corso le memorie sono separate e la cooperazione richiede messaggi tra entità anche distanti. Le operazioni possono svolgersi in parallelo in entrambi i casi. L'assenza di memoria condivisa è un'ipotesi del modello **message-passing** qui studiato, non una proprietà universale di ogni sistema distribuito.
+La distinzione dal calcolo parallelo riguarda il modello: una macchina parallela ha tipicamente processori vicini che condividono la memoria; nel modello **message-passing** del corso, le entità hanno memorie separate e cooperano scambiando messaggi, anche a distanza. In entrambi i casi le operazioni possono svolgersi in parallelo. La memoria separata è un'ipotesi del modello studiato qui, non una proprietà universale di ogni sistema distribuito.
 
 #### Il modello
 
 [[teacher_slides/2_distributed algorithms.pdf#page=23|Slide della docente, p. 23]]
 
-La rete di comunicazione è rappresentata da un grafo $G=(V,A)$: i vertici sono le **entità** (dette anche *nodi*) e gli archi orientati sono i collegamenti lungo i quali si possono inviare messaggi. L'orientamento permette di descrivere anche canali unidirezionali; quando si assume la restrizione dei collegamenti bidirezionali, il grafo si può trattare come non orientato e scrivere $G=(V,E)$.
+Rappresentiamo la rete di comunicazione con un grafo $G=(V,A)$: i vertici sono le entità, dette anche *nodi*, e gli archi orientati rappresentano i collegamenti sui quali si possono inviare messaggi. Il grafo diretto descrive anche collegamenti unidirezionali. Se il protocollo assume collegamenti bidirezionali, i vicinati in ingresso e in uscita coincidono e si può rappresentare la rete con un grafo non orientato $G=(V,E)$.
 
 #### Entità
 
 [[teacher_slides/2_distributed algorithms.pdf#page=10|Slide della docente, p. 10]]
 [[teacher_slides/2_distributed algorithms.pdf#page=11|Slide della docente, p. 11]]
+[[teacher_slides/2_distributed algorithms.pdf#page=16|Slide della docente, p. 16]]
 [[teacher_slides/2_distributed algorithms.pdf#page=18|Slide della docente, p. 18]]
-[[teacher_slides/2_distributed algorithms.pdf#page=19|Slide della docente, p. 19]]
+[[teacher_slides/2_distributed algorithms.pdf#page=20|Slide della docente, p. 20]]
 
-Ogni entità $x$ riceve un input locale, eventualmente vuoto, ed è chiamata a produrre un output conforme alla specifica del problema. I valori prodotti dai singoli nodi possono essere diversi: per esempio, dopo un'elezione uno risulta *leader* e gli altri *follower*.
+Ogni entità $x$ riceve un input locale, eventualmente vuoto, e produce un output conforme alla specifica del problema. Gli output locali non devono essere uguali: per esempio, nell'elezione un nodo diventa *leader* e gli altri *follower*.
 
-Il registro $status(x)$ indica lo **stato** corrente di $x$, scelto da un insieme finito $S$: in ogni momento vale $status(x)\in S$. Il comportamento è **reattivo**: un'azione è innescata da un evento, come l'arrivo di un messaggio, un battito del clock locale o un impulso spontaneo esterno (per esempio, una richiesta a uno sportello ATM inattivo). In assenza di eventi, l'entità non compie azioni.
+Il registro $status(x)$ indica lo **stato** corrente dell'entità. Il suo valore appartiene all'insieme finito $S$ degli stati previsti dal protocollo; ciò non significa che tutta la memoria privata dell'entità sia finita. Il comportamento è **reattivo**: un'azione viene attivata da un evento, per esempio l'arrivo di un messaggio, il segnale del clock locale o un impulso spontaneo esterno. Quest'ultimo può essere, per esempio, una richiesta di prelievo a uno sportello ATM inattivo. Senza eventi, l'entità non agisce.
 
-Un'**azione** può comprendere calcolo locale, lettura o scrittura della memoria privata, invio di messaggi, cambio di stato, impostazione o azzeramento del clock oppure nessuna operazione (*NIL*). È atomica rispetto agli altri eventi e termina in tempo finito. Il protocollo assegna un'azione a ogni coppia possibile $(\text{stato},\text{evento})$: la regola è **completa** se nessuna coppia resta indefinita e **deterministica** se a ciascuna coppia corrisponde una sola azione.
+Un'**azione** è una sequenza finita di attività, atomica rispetto agli altri eventi: una volta iniziata non viene interrotta. Può comprendere calcolo locale, lettura o scrittura della memoria privata, invio di messaggi, cambio di stato, impostazione o azzeramento del clock, oppure l'azione nulla (*NIL*). Il protocollo specifica regole per le coppie $(\text{stato},\text{evento})$: è **completo** se definisce un'azione per ogni coppia possibile e **deterministico** se ne definisce una sola; ogni azione termina in tempo finito.
 
-Nel seguito consideriamo un sistema **simmetrico**: tutte le entità seguono la stessa descrizione del protocollo, pur potendo agire diversamente in base a stato, input e ruolo locale. Per esempio, lo stesso codice può scegliere un'azione per un nodo *iniziatore* (*initiator*) e un'altra per un nodo *dormiente* leggendo una variabile di ruolo; la simmetria del codice non richiede che i nodi si trovino nello stesso stato.
+Nel seguito consideriamo sistemi **simmetrici**: tutte le entità seguono la stessa descrizione del protocollo, ma non per questo agiscono nello stesso modo. Il codice può scegliere azioni diverse in base allo stato, all'input o a un ruolo locale, come *iniziatore* (*initiator*) o nodo dormiente. La simmetria riguarda il codice, non gli stati o gli output dei nodi.
 
 #### Comunicazione
 
 [[teacher_slides/2_distributed algorithms.pdf#page=22|Slide della docente, p. 22]]
 [[teacher_slides/2_distributed algorithms.pdf#page=23|Slide della docente, p. 23]]
 
-Un messaggio è una sequenza **finita di bit**. La comunicazione è *point-to-point*: un'entità $x$ può inviare direttamente solo ai suoi **vicini in uscita** $N_o(x)$ e ricevere solo dai **vicini in ingresso** $N_i(x)$. Indichiamo con $N(x)=N_o(x)\cup N_i(x)$ l'insieme dei suoi vicini; con collegamenti bidirezionali i due insiemi coincidono. L'ordine FIFO dei messaggi lungo un collegamento non è garantito dal modello generale: quando serve, va dichiarato come restrizione.
+Un messaggio è una sequenza **finita di bit**. Nel modello *point-to-point*, un'entità $x$ può inviare direttamente solo ai vicini in uscita $N_o(x)$ e ricevere solo dai vicini in ingresso $N_i(x)$. Poniamo $N(x)=N_o(x)\cup N_i(x)$. Con collegamenti bidirezionali i due insiemi coincidono. L'ordine FIFO sullo stesso collegamento non appartiene al modello generale: si assume solo quando il protocollo lo dichiara come restrizione.
 
 #### Assiomi
 
 [[teacher_slides/2_distributed algorithms.pdf#page=25|Slide della docente, p. 25]]
 [[teacher_slides/2_distributed algorithms.pdf#page=26|Slide della docente, p. 26]]
 
-Nel modello di base valgono due assiomi; le ulteriori ipotesi richieste da un protocollo sono **restrizioni**.
+Il modello di base ha **due soli assiomi**; le ulteriori proprietà richieste dal protocollo sono restrizioni.
 
-- **Ritardi di comunicazione finiti.** In assenza di guasti, un messaggio inviato a un vicino in uscita arriva integro ed è elaborato in tempo finito. L'assioma non fornisce un limite superiore noto o uniforme al ritardo.
-- **Orientamento locale.** Ogni entità distingue i propri vicini in uscita e quelli in ingresso: può scegliere a quale vicino inviare e riconoscere da quale porta locale proviene un messaggio ricevuto. Le etichette delle porte sono distinte per i vicini dello stesso nodo, ma restano locali e non costituiscono identificativi globali delle entità.
+- **Ritardi di comunicazione finiti.** In assenza di guasti, un messaggio inviato a un vicino in uscita arriva integro ed è elaborato in tempo finito. Questo non implica un limite superiore noto o uniforme ai ritardi.
+- **Orientamento locale.** Ogni entità distingue i propri vicini in ingresso da quelli in uscita. Può scegliere a quale vicino in uscita inviare un messaggio e riconoscere da quale vicino in ingresso proviene un messaggio ricevuto. Le porte locali hanno etichette distinte presso ciascun nodo; le etichette non sono identificativi globali e non devono coincidere ai due estremi di un collegamento.
 
 #### Restrizioni
 
@@ -1412,26 +1358,26 @@ Nel modello di base valgono due assiomi; le ulteriori ipotesi richieste da un pr
 [[teacher_slides/2_distributed algorithms.pdf#page=32|Slide della docente, p. 32]]
 [[teacher_slides/2_distributed algorithms.pdf#page=33|Slide della docente, p. 33]]
 
-Una **restrizione** è una proprietà aggiuntiva sfruttata dal protocollo: ne può rendere possibile o più efficiente l'esecuzione, ma limita i sistemi a cui si applica. Le ipotesi vanno quindi dichiarate per ogni algoritmo. Fra quelle ricorrenti ci sono:
+Una **restrizione** è una proprietà aggiuntiva sfruttata dal protocollo: può facilitarne o renderne possibile l'esecuzione, ma limita i sistemi a cui si applica. Le ipotesi usate vanno dichiarate. Esempi ricorrenti sono:
 
-- **Comunicazione:** ordine FIFO dei messaggi sullo stesso canale; **collegamenti bidirezionali** ($N_i(x)=N_o(x)=N(x)$).
-- **Affidabilità:** rilevazione dei guasti di nodi o collegamenti, consegna garantita dei messaggi, limiti ai tipi di guasto. Nella terminologia delle slide, **affidabilità parziale** significa che non ci saranno guasti futuri, pur potendocene essere stati; **affidabilità totale** significa che non ce ne sono stati e non ce ne saranno.
-- **Topologia e conoscenza:** connettività forte per un grafo diretto, semplice connettività per uno bidirezionale; eventuale conoscenza iniziale del numero $n$ di nodi, del numero $m$ di collegamenti o del diametro $D(G)$.
-- **Tempo:** un *bounded communication delay* impone, in assenza di guasti, un limite $\Delta$ al ritardo di ogni messaggio; l'*unitary communication delay* lo fissa a un'unità, mentre i *synchronized clocks* fanno avanzare insieme i clock locali. Salvo indicazione contraria, il modello del corso è **asincrono**: i ritardi sono finiti in assenza di guasti, ma non hanno un bound noto.
+- **Comunicazione:** FIFO, cioè i messaggi inviati sullo stesso collegamento arrivano nello stesso ordine; collegamenti bidirezionali, per cui $N_i(x)=N_o(x)=N(x)$.
+- **Affidabilità:** rilevazione dei guasti di nodi o collegamenti, consegna garantita dei messaggi e restrizioni ai guasti ammessi. Nella terminologia delle slide, l'affidabilità **parziale** esclude guasti futuri ma ammette che ve ne siano stati; quella **totale** esclude guasti passati e futuri.
+- **Topologia e conoscenza:** connettività forte se il grafo è diretto, connessione se è non orientato; conoscenza iniziale di quantità quali il numero $n$ di nodi, il numero $m$ di collegamenti o il diametro $D(G)$.
+- **Tempo:** un *bounded communication delay* impone, in assenza di guasti, un limite $\Delta$ al ritardo di ogni messaggio; l'*unitary communication delay* lo fissa a un'unità. Con *synchronized clocks* i clock locali avanzano insieme. Salvo indicazione contraria, il corso considera sistemi **asincroni**: in assenza di guasti i ritardi sono finiti, ma non è noto un loro limite superiore.
 
 #### Misure di efficienza per gli algoritmi distribuiti
 
 [[teacher_slides/2_distributed algorithms.pdf#page=35|Slide della docente, p. 35]]
 [[teacher_slides/2_distributed algorithms.pdf#page=36|Slide della docente, p. 36]]
 
-Le misure principali sono la **quantità di comunicazione** e il **tempo**. Di norma la prima conta le trasmissioni di messaggi: un invio su un collegamento vale un messaggio, anche se un guasto ne impedisce la consegna. Se i messaggi hanno lunghezze molto diverse, si contano invece i **bit trasmessi** (*bit complexity*). Lo spazio locale resta una risorsa, ma qui l'analisi si concentra soprattutto sulla comunicazione; il costo del calcolo locale è considerato trascurabile rispetto alla trasmissione.
+Le misure principali sono la **quantità di comunicazione** e il **tempo**. La prima conta di norma i messaggi trasmessi: ciascun invio su un collegamento vale un messaggio, indipendentemente dalla successiva consegna. Se le lunghezze dei messaggi variano molto, si può contare il numero di **bit trasmessi** (*bit complexity*). Anche lo spazio locale è una risorsa da considerare; nelle misure introdotte qui l'attenzione è soprattutto sulla comunicazione, mentre il tempo di calcolo locale è assunto trascurabile rispetto a quello di trasmissione e incluso in esso.
 
-Il **tempo fisico** va dall'avvio della prima entità alla terminazione dell'ultima. Nel modello asincrono generale non ha un bound uniforme ricavabile dalla sola topologia, perché il ritardo di ciascun messaggio può essere arbitrariamente grande. Per analizzare un protocollo distinguiamo quindi due misure astratte:
+Il **tempo fisico** è l'intervallo dall'avvio della prima entità alla terminazione dell'ultima. Nel modello asincrono generale non è limitato da un bound uniforme determinato dalla sola topologia, perché i ritardi possono essere arbitrariamente grandi. Si usano quindi misure astratte, specificando quale si intende:
 
-- **Tempo ideale (*ideal time*):** durata in un'esecuzione sincrona con clock sincronizzati e un'unità di tempo per trasmettere ed elaborare un messaggio. Un messaggio può così avanzare di un collegamento per unità di tempo; catene indipendenti possono procedere in parallelo.
-- **Tempo causale (*causal time*):** lunghezza massima di una catena di trasmissioni causalmente dipendenti, considerando le possibili esecuzioni. Conta la profondità delle dipendenze tra messaggi, non i secondi trascorsi; in generale non coincide con il tempo ideale.
+- **Tempo ideale (*ideal time*):** durata dell'esecuzione nel modello sincrono, con clock sincronizzati e un'unità di tempo per trasmettere un messaggio; il calcolo locale è incluso nel costo della trasmissione. Un messaggio avanza di un collegamento per unità di tempo e catene indipendenti possono avanzare in parallelo.
+- **Tempo causale (*causal time*):** nei sistemi asincroni, lunghezza massima, su tutte le esecuzioni considerate, di una catena di messaggi che si susseguono causalmente. Misura la profondità delle dipendenze, non il tempo trascorso; non va identificato automaticamente con il tempo ideale.
 
-Quando si indica una *time complexity* occorre specificare quale misura e quali restrizioni temporali si stanno usando. Il caso del broadcast mostrerà perché la distinzione conta.
+Quando si riporta una *time complexity* bisogna quindi indicare la misura temporale e le restrizioni del modello. Il broadcast della sezione successiva mostrerà perché questa distinzione è utile.
 
 #### Broadcast
 
@@ -1511,13 +1457,13 @@ $$
 
 [[teacher_slides/2_distributed algorithms.pdf#page=54|Slide della docente, p. 54]]
 
-Nel modello ideale sincrono, dopo $t$ unità hanno appreso $I$ tutti i nodi a distanza al più $t$ da $s$. Il tempo fino all'ultima prima ricezione è l'**eccentricità** $r(s)=\max_y d(s,y)$; nel caso peggiore rispetto all'iniziatore è il diametro $D(G)=\max_s r(s)\le n-1$. Nel modello asincrono, invece, il **tempo fisico** non ha un bound uniforme senza un limite ai ritardi. La catena che porta alla *prima* ricezione di un nodo segue nodi distinti e contiene al più $n-1$ trasmissioni, ma può seguire un cammino non minimo. Il **tempo causale** conta anche le copie ridondanti: poiché ogni nodo invia una sola volta, una catena di inoltri può contenere fino a $n$ trasmissioni. In un triangolo si può avere $s\to a\to b\to s$, con l'ultima copia ricevuta da $s$ già in $DONE$. Questi conteggi causali non vanno identificati con $D(G)$.
+Nel **tempo ideale**, ogni messaggio impiega un'unità di tempo e ogni vicino riceve il messaggio entro quell'unità. Dopo $t$ unità hanno appreso $I$ tutti i nodi a distanza al più $t$ da $s$, quindi l'ultima prima ricezione avviene dopo $r(s)=\max_y d(s,y)$ unità. Nel caso peggiore su tutte le scelte dell'iniziatore, $\max_s r(s)=D(G)\le n-1$. Nel modello asincrono il **tempo fisico** non ha un limite uniforme senza un limite ai ritardi. Il **tempo causale** misura invece la lunghezza della più lunga catena di messaggi causalmente dipendenti. La catena che porta alla prima ricezione di un nodo segue nodi distinti e contiene al più $n-1$ trasmissioni, ma può seguire un cammino non minimo. Una catena che include anche copie ridondanti può arrivare a $n$ trasmissioni: in un triangolo si può avere $s\to a\to b\to s$, con l'ultima copia ricevuta da $s$ già in $DONE$. Questo limite causale non è il diametro $D(G)$.
 
 ##### Lower bound
 
 [[teacher_slides/2_distributed algorithms.pdf#page=57|Slide della docente, p. 57]]
 
-In *ideal time*, per l'iniziatore $s$ ogni broadcast deve impiegare almeno $r(s)$ unità per raggiungere il nodo più lontano; se l'iniziatore è arbitrario, il caso peggiore è almeno $D(G)$. Flooding lo raggiunge ed è quindi ottimale per questa misura. Quanto ai messaggi, almeno $n-1$ nodi devono ricevere $I$. Per un protocollo generico corretto su **tutti** i grafi connessi, senza conoscenza globale della topologia o di $n$, vale il bound più forte $m$: se in un'esecuzione un arco non trasmettesse mai, potremmo sostituirlo con un cammino attraverso un nuovo nodo dormiente, lasciando invariata la vista locale degli estremi; il nuovo nodo non riceverebbe $I$. Questa contraddizione spiega perché Flooding, che usa meno di $2m$ messaggi, è ottimale **nell'ordine di grandezza** sotto quelle ipotesi.
+Nel tempo ideale, con iniziatore fissato $s$, almeno $r(s)$ unità sono necessarie per raggiungere il nodo più lontano. Se il caso peggiore include ogni possibile iniziatore, il limite diventa $D(G)=\max_s r(s)$. Flooding raggiunge entrambi i limiti. Per i messaggi, il limite immediato è $n-1$, perché ogni nodo diverso da $s$ deve ricevere almeno una copia di $I$. Le slide della docente danno il limite più forte $m$ per un protocollo generico corretto su tutti i grafi connessi, senza conoscenza globale della topologia o di $n$. L'idea è che ogni arco deve trasportare almeno un messaggio: se un arco non fosse mai usato in un'esecuzione, si potrebbe sostituirlo con un cammino che passa per un nuovo nodo dormiente. Gli estremi non distinguerebbero localmente le due reti, mentre il nuovo nodo non riceverebbe $I$, in contraddizione con la correttezza. Il limite dipende dall'ipotesi di protocollo generico; non vale per protocolli che sfruttano conoscenza della topologia, come il simple broadcast su grafo completo. Poiché Flooding usa esattamente $2m-n+1<2m$ messaggi, è ottimale nell'ordine di grandezza rispetto a $m$.
 
 ##### Topologie particolari e raccordo
 
@@ -1576,7 +1522,7 @@ Con un solo iniziatore il costo coincide con Flooding; se tutti sono iniziatori 
 
 ###### Tempo ideale
 
-Se un insieme $S$ di iniziatori si attiva simultaneamente all'istante iniziale e non intervengono altri impulsi, l'ultimo risveglio avviene dopo $\max_{v\in V}\min_{s\in S}d(s,v)$ unità: più iniziatori possono accelerare l'esecuzione. Nel caso peggiore ammesso, però, può attivarsi un solo iniziatore in un nodo di eccentricità $D(G)$, perciò la complessità ideale worst-case è $\Theta(D(G))$. Anche se altri impulsi spontanei arrivano più tardi, il primo iniziatore garantisce un upper bound ideale di $D(G)$; senza un bound sui ritardi il tempo fisico asincrono resta non limitato uniformemente.
+Nel tempo ideale, se l'insieme $S$ degli iniziatori si attiva simultaneamente all'istante iniziale e non intervengono altri impulsi, ogni nodo $v$ si sveglia dopo $\min_{s\in S}d(s,v)$ unità. Il tempo totale è quindi $\max_{v\in V}\min_{s\in S}d(s,v)$: più iniziatori possono accelerare l'esecuzione. Nel caso peggiore, può esserci un solo iniziatore, scelto in un nodo di eccentricità $D(G)$; la complessità ideale worst-case è dunque $\Theta(D(G))$. Impulsi spontanei successivi possono solo aiutare: dal primo iniziatore, WFlood raggiunge ogni nodo entro al più $D(G)$ unità ideali. In asincrono il tempo fisico non ha un limite uniforme senza un bound sui ritardi.
 
 #### Spanning tree
 
@@ -1591,6 +1537,8 @@ Per SHOUT e per la visita DFT assumiamo **un solo iniziatore**, grafo connesso, 
 **Problema e modello.** SHOUT costruisce uno spanning tree che ogni nodo conosce tramite i propri vicini nell'albero; la specifica e le restrizioni sono in [[#Spanning tree]]. In particolare c'è un unico iniziatore, il grafo è connesso e bidirezionale, non vi sono guasti e, per la variante con risposte $NO$ e il contatore qui descritti, i messaggi su ciascun collegamento arrivano in ordine FIFO.
 
 **Idea.** SHOUT estende Flooding: l'iniziatore invia una richiesta $Q$ a ogni vicino. Un nodo ancora $IDLE$ accetta la prima richiesta con $YES$, sceglie il mittente come parent e invia $Q$ agli altri vicini. Se è già $ACTIVE$, risponde $NO$ alle richieste successive. Ogni nodo conta una risposta per ciascun vicino a cui ha inviato $Q$; per un nodo non iniziatore si conta anche il parent, già deciso con $YES$.
+
+[[teacher_slides/2_distributed algorithms.pdf#page=72|Slide della docente, p. 72]]
 
 ![[assets/Screenshot 2024-10-11 161549.png|600]]
 
@@ -1641,9 +1589,13 @@ M(\text{SHOUT})
 \end{aligned}
 $$
 
+[[teacher_slides/2_distributed algorithms.pdf#page=80|Slide della docente, p. 80]]
+
 **Tempo ideale.** Con trasmissioni simultanee di un'unità, i $Q$ raggiungono ogni nodo alla sua distanza dall'iniziatore $s$. Per $n\ge2$, l'ultimo nodo non può terminare prima di $r(s)+1$ unità, dove $r(s)=\max_x d(s,x)$ è l'eccentricità di $s$. Un $Q$ fra due nodi all'ultimo livello può però richiedere un successivo $NO$: per la terminazione locale di tutti i nodi vale quindi $r(s)+1\le T_{ideal}(\text{SHOUT})\le r(s)+2\le D(G)+2$. In un triangolo con iniziatore in un vertice, gli altri due si scambiano $Q$ e poi $NO$, raggiungendo il limite superiore. Il libro consigliato riporta $r(s)+1$ anche per SHOUT (*Design and Analysis of Distributed Algorithms*, p. 56): il triangolo mostra che, contando il passaggio di **tutti** i nodi a $DONE$ nel pseudocodice con $NO$, può servire un'unità in più. Per $n=1$ il tempo è zero. Senza un limite ai ritardi, il tempo fisico asincrono non ha un bound uniforme.
 
 **SHOUT+** elimina i messaggi $NO$. Le azioni degli stati iniziali restano uguali; in $ACTIVE$, ricevere $Q$ da un vicino equivale a ricevere un rifiuto implicito: si incrementa `counter` senza rispondere. La gestione di $YES$ resta invariata. Quando due $Q$ si incrociano su un arco, ciascun estremo riceve il $Q$ dell'altro e conta la risposta implicita. Anche qui tutti i contatori arrivano a $|N(x)|$.
+
+[[teacher_slides/2_distributed algorithms.pdf#page=83|Slide della docente, p. 83]]
 
 ![[assets/Screenshot 2024-10-15 114636.png|400]]
 
@@ -1653,11 +1605,13 @@ Ogni arco trasporta esattamente due messaggi: $Q$–$YES$ se entra nell'albero, 
 
 #### Costruzione dello spanning tree tramite traversal
 
-**Problema e modello.** La visita in profondità distribuita (*depth-first traversal*, **DFT**) costruisce uno spanning tree con un solo iniziatore su un grafo connesso e bidirezionale, senza guasti; i nodi conoscono i propri vicini. La specifica locale dell'output è in [[#Spanning tree]]. Come per [[#Protocollo Shout|SHOUT]], assumiamo messaggi FIFO sui singoli collegamenti.
+**Problema e modello.** La visita in profondità distribuita (*depth-first traversal*, **DFT**) costruisce uno spanning tree con un solo iniziatore su un grafo connesso e bidirezionale, senza guasti; i nodi conoscono i propri vicini. La specifica locale dell'output è in [[#Spanning tree]]. La visita con un solo token attivo non richiede FIFO.
 
 **Idea.** Circola un solo token di visita: un nodo prova un vicino alla volta e attende il ritorno del token prima di provarne un altro. Gli archi con cui il token raggiunge per la prima volta un nodo formano l'albero; i tentativi verso nodi già visitati individuano le *back-edge*, che ne restano fuori.
 
 I tre messaggi sono `ForwardToken`, per tentare la visita, `ReturnToken`, per tornare dopo aver completato un sottoalbero, e `BackEdgeToken`, per respingere il token quando il nodo era già visitato.
+
+[[teacher_slides/2_distributed algorithms.pdf#page=94|Slide della docente, p. 94]]
 
 ![[assets/Screenshot 2024-10-15 120009.png|600]]
 
@@ -1695,6 +1649,8 @@ Pertanto $M(\text{DFT})=2m$, come per SHOUT+. Il costo è $\Theta(m)$ e raggiung
 
 **Variante Visited/Ack.** La DFT base spende tempo sequenziale anche sui tentativi che diventano back-edge. Per evitarli, quando un nodo riceve il token per la prima volta (iniziatore compreso), invia `Visited` ai vicini tranne il parent e **attende i loro `Ack`** prima di chiamare `VISIT`. Chi riceve `Visited` risponde con `Ack` e rimuove il mittente da `Unvisited`; se è ancora $IDLE$, conserva questa informazione per inizializzare `Unvisited` quando arriverà il token. Così non invierà in seguito il token a un vicino già visitato. Gli scambi `Visited`/`Ack` con vicini diversi procedono in parallelo, mentre il token continua a muoversi in modo sequenziale.
 
+[[teacher_slides/2_distributed algorithms.pdf#page=100|Slide della docente, p. 100]]
+
 ![[assets/Screenshot 2024-10-15 121746.png|750]]
 
 ![[assets/Screenshot 2024-10-15 121941.png|600]]
@@ -1719,6 +1675,8 @@ Anche DFT, come SHOUT, richiede un unico iniziatore: lanciare più visite indipe
 
 #### Spanning tree con iniziatori multipli
 
+[[teacher_slides/2_distributed algorithms.pdf#page=109|Slide della docente, p. 109]]
+
 **Problema.** Anche con più iniziatori vogliamo costruire un solo spanning tree, noto localmente tramite i vicini dell'albero come in [[#Spanning tree]]. Un nodo non sa se nella rete siano presenti altri iniziatori. Lanciare [[#Protocollo Shout|SHOUT]] o [[#Costruzione dello spanning tree tramite traversal|DFT]] indipendentemente da più nodi può produrre una foresta. Le slide presentano due **idee di soluzione** con identificatori univoci, senza specificare qui un protocollo completo o una sua complessità precisa:
 
 - **Multiple spanning tree:** ogni iniziatore costruisce il proprio spanning tree con un protocollo a iniziatore unico; gli identificatori distinguono le costruzioni. Il costo in messaggi dipende dal numero di iniziatori e dal protocollo usato, e può essere elevato.
@@ -1729,62 +1687,49 @@ Un'altra strada è eleggere un unico iniziatore, detto **leader**, prima di cost
 
 #### Computazione negli alberi
 
-In questa sezione la rete è un **albero**: un grafo connesso e aciclico con $n$ nodi e $n-1$ archi. Ogni nodo sa che la rete è un albero e conosce i propri vicini, ma non necessariamente l'intera topologia. Un albero può essere *rooted* (con radice e direzione padre–figli) oppure *unrooted* (senza radice designata).
+La rete è un **albero**, cioè un grafo connesso e aciclico con $n$ nodi e $n-1$ archi. In questo modello ogni nodo conosce i propri vicini e sa che la rete è un albero; non conosce necessariamente l'intera topologia. Un albero *rooted* ha una radice designata e una direzione padre–figli; un albero *unrooted* non ha una radice designata.
 
 ![[assets/Screenshot 2024-10-16 093438.png|700]]
 
-Le restrizioni più tipicamente applicate nel caso di alberi sono:
-
-- Collegamenti bidirezionali
-
-- Connettività
-
-- Messaggi FIFO
-
-- Affidabilità completa
-
-- Conoscenza del fatto che la rete è un albero e del proprio vicinato
+Nel caso di alberi non radicati, consideriamo collegamenti bidirezionali, rete connessa e affidabile e messaggi FIFO. Sono le restrizioni del modello usato nelle slide per questa computazione; FIFO è un'ipotesi del protocollo, non una proprietà intrinseca degli alberi. La conoscenza della topologia significa qui che ciascun nodo sa di essere in un albero e conosce i propri vicini: può così distinguere una foglia (un solo vicino) da un nodo interno.
 
 #### Tecnica di saturazione
 
-**Problema e modello.** In un albero bidirezionale e affidabile con $n$ nodi, ogni nodo $x$ ha un valore $v(x)$, non necessariamente distinto dagli altri. Alla fine ciascuno deve sapere se il proprio valore è uguale al minimo globale. I nodi conoscono i propri vicini e sanno di trovarsi in un albero; la distinzione tra albero con e senza radice è in [[#Computazione negli alberi]].
-Le foglie dell'albero avviano la computazione, mandando il proprio valore verso il proprio unico vicino, che può essere interno oppure, nel caso limite di un albero con due nodi, un'altra foglia. Un nodo attende che tutti i vicini tranne uno gli inviino il loro valore. Dopodiché calcola il minimo tra il proprio valore e quelli ricevuti e lo inoltra sul collegamento rimasto.
-Ad un certo punto della computazione, da qualche parte nell'albero, due nodi adiacenti si scambieranno tra loro il valore minimo corrente ottenuto dalle due porzioni dell'albero.
-La computazione procede propagando il minimo globale nuovamente verso la periferia dell'albero, così che alla fine tutti i nodi possano stabilire se il loro valore è corrisponde al minimo o no.
+La saturazione permette ai nodi di combinare valori distribuiti nella rete e poi di comunicare a tutti il risultato. Consideriamo il problema del minimo: ogni nodo $x$ possiede un valore $v(x)$, che può coincidere con quello di altri nodi; al termine ogni nodo deve sapere se il proprio valore è uguale al minimo globale.
+
+Le foglie avviano la fase di saturazione inviando il proprio valore al loro unico vicino. Quando un nodo interno ha ricevuto valori da tutti i vicini tranne uno, calcola il minimo tra il proprio valore e quelli ricevuti, quindi invia quel minimo al vicino rimasto. Così ogni messaggio riassume i valori nella parte dell'albero da cui proviene. La propagazione procede verso una coppia di nodi adiacenti: entrambi ricevono un messaggio di saturazione da tutti i vicini e la coppia diventa la coppia **saturata**. A questo punto i due messaggi contengono i minimi delle rispettive parti dell'albero.
 
 ![[assets/Screenshot 2024-10-16 093901.png|1000]]
 
-Per un albero con $n\geq2$, la procedura completa può essere avviata da un numero arbitrario di iniziatori: prima Wake-up attiva tutti i nodi, poi le foglie avviano la saturazione. La prima fase si chiama **attivazione**.
-Le due fasi successive si dicono "saturazione" e "risoluzione". Nella prima viene inviato un peculiare messaggio detto "di saturazione". Quando i nodi ricevono i messaggi di saturazione provenienti dalla periferia, passano allo stato di "processing". Ogni nodo $x$ attende $|N(x)|-1$ messaggi di saturazione, poi calcola il minimo e lo inoltra sul collegamento mancante con un nuovo messaggio di saturazione.
-È possibile dimostrare che, ad un certo punto della computazione, esattamente due nodi adiacenti si "saturano" scambiandosi il messaggio sul loro arco comune. Non è necessario che siano entrambi nodi interni: in un albero di due nodi sono entrambe foglie. Questi sono gli ultimi due nodi verso i quali fluiscono i messaggi di saturazione. Diverse esecuzioni possono portare a diverse coppie, ma la proprietà di adiacenza rimane valida.
+La coppia saturata è formata da esattamente due nodi adiacenti. Quale coppia viene selezionata può dipendere dai ritardi di comunicazione, ma l'adiacenza vale in ogni esecuzione. Per $n=2$ i due nodi sono entrambi foglie e ciascuno è l'unico vicino dell'altro: si scambiano direttamente i propri valori e diventano la coppia saturata. Questo caso limite non richiede nodi interni.
+
+La computazione completa, detta **saturazione completa**, ha tre fasi:
+
+1. **Attivazione.** Se la rete non è già attiva, almeno un iniziatore spontaneo avvia *Wake-up*, che attiva tutti i nodi. La fase può essere avviata da un numero arbitrario di iniziatori. Una volta attivi, i nodi sanno di appartenere a un albero e conoscono i propri vicini; non serve che conoscano l'intera topologia.
+2. **Saturazione.** Le foglie iniziano l'invio dei messaggi; i nodi interni, nello stato di *processing*, aggregano i valori ricevuti e li inoltrano come descritto sopra. Alla fine viene selezionata la coppia adiacente saturata.
+3. **Risoluzione.** La coppia saturata avvia la fase dipendente dall'applicazione, di solito una notifica che si propaga verso l'esterno. Nel problema del minimo, i due nodi confrontano i minimi ricevuti e propagano il minimo globale; così ogni nodo può decidere se il proprio valore lo realizza.
 
 ![[assets/Screenshot 2024-10-16 094713.png|400]]
 
-La resolution consiste dell'invio di una notifica da parte delle entità saturate, con inoltro, dall'interno verso l'esterno della struttura.
-Vediamo i costi relativi alla saturazione:
+**Complessità dei messaggi.** Per $n\geq2$, nel caso peggiore:
 
-- Messaggi inviati (caso peggiore, $n\geq2$)
+- l'attivazione invia al più $2(n-1)$ messaggi di *Wake-up*;
+- la saturazione invia $n$ messaggi: i primi $n-1$ coprono gli archi dell'albero e il messaggio sull'arco tra i due nodi saturati è contato una seconda volta;
+- la risoluzione invia $n-2$ messaggi, perché non ripercorre l'arco tra i nodi saturati.
 
-  - Attivazione: Wake-up usa al più $2(n-1)$ messaggi, con il massimo raggiunto se tutti gli $n$ nodi sono inizialmente iniziatori
+![[assets/Screenshot 2024-10-16 113456.png|700]]
 
-  - Saturazione: $(n - 1) + 1 = n$ messaggi, dove i primi $n - 1$ coprono tutti gli archi dell'albero e quello tra i due nodi saturati è contato 2 volte
+Il totale è quindi al più $2(n-1)+n+(n-2)=4n-4$ messaggi. Per $n=2$ la risoluzione non invia messaggi e le due fasi di scambio contano complessivamente quattro messaggi, in accordo con il bound. La procedura termina: ogni foglia invia una volta, ogni nodo interno inoltra una volta dopo aver ricevuto i messaggi attesi, e la risoluzione attraversa una sola volta ciascun arco restante. Il conteggio misura i messaggi, non i bit trasmessi né il tempo fisico; in un sistema asincrono senza un limite sui ritardi, il tempo fisico non ha un limite uniforme. Per $n=1$ non occorre inviare messaggi: l'unico nodo conosce già il minimo. Diffondere separatamente il valore di ogni nodo con flooding potrebbe invece richiedere un numero quadratico di messaggi.
 
-  - Risoluzione: $(n - 2)$ messaggi, perché quello tra i due nodi saturati non viene ripercorso
+La saturazione si applica anche ad altre funzioni calcolabili a partire da dati distribuiti, tra cui statistiche cardinali, eccentricità, centro, mediana e cammino diametrale. Il minimo è l'esempio usato qui per mostrare l'aggregazione e la successiva diffusione del risultato.
 
-  ![[assets/Screenshot 2024-10-16 113456.png|700]]
-
-  Il costo complessivo è **al più $4n-4$ messaggi**. Questo bound conta i messaggi inviati nelle tre fasi, non i bit trasmessi. Se ogni nodo diffondesse separatamente il proprio valore a tutta la rete con flooding, il costo potrebbe invece essere quadratico.
-
-La procedura termina perché ogni messaggio di saturazione attraversa un arco verso la coppia finale e la risoluzione percorre gli archi rimasti verso le foglie. Per $n=1$ non serve alcun messaggio: l'unico nodo conosce già il minimo. In assenza di un limite sui ritardi dei collegamenti, il tempo fisico asincrono non ha un bound uniforme.
-
-La saturazione viene usata per risolvere problemi che richiedono di lavorare su formazioni conosciute localmente e che possono essere calcolate globalmente. Il minimo è solo un esempio di casi di questo genere.
-Nel caso di un albero rooted, l'iniziatore naturale per diverse attività della rete è la radice. In questi casi tipicamente si fa partire un broadcasting dalla radice, le risposte vengono raccolte dal basso con la tecnica della saturazione e la radice attende i risultati dai propri vicini i risultati e dunque la fine della computazione.
+In un albero rooted, invece, la radice è già designata. Per le computazioni che lo richiedono, la radice avvia un *broadcast*; le risposte dei figli vengono raccolte verso l'alto con un *convergecast*: le foglie inviano al padre e ogni nodo interno invia il proprio risultato dopo aver ricevuto quelli da tutti i figli. La radice può quindi riconoscere il completamento quando riceve i risultati dai propri figli.
 
 ### 3.2 Leader election in alberi
 
 #### Introduzione
 
-**Problema e modello.** La *leader election* su un albero con collegamenti bidirezionali e senza guasti deve far decidere a ogni nodo il proprio stato: uno solo è leader, tutti gli altri sono follower. I nodi conoscono i propri vicini; quando l'albero non ha una radice designata, il protocollo qui descritto usa identificativi univoci per distinguere i candidati. La rete può essere già attiva oppure richiedere la fase di wake-up indicata in [[#Tecnica di saturazione]].
+La *leader election* porta il sistema a una configurazione in cui un solo nodo è leader e tutti gli altri sono follower. In assenza di una radice designata, l'elezione richiede un modo per distinguere i candidati; nel caso trattato qui si usano identificativi univoci. Ogni nodo deve conoscere il proprio stato finale.
 
 ![[assets/Screenshot 2024-10-25 111800.png|600]]
 
@@ -1796,390 +1741,251 @@ Nel caso di un albero rooted, l'iniziatore naturale per diverse attività della 
 [[teacher_slides/2_distributed algorithms.pdf#page=136|Slide della docente, p. 136]]
 [[teacher_slides/2_distributed algorithms.pdf#page=137|Slide della docente, p. 137]]
 
-**Significato nel modello.** Con collegamenti bidirezionali, grafo connesso e assenza di guasti, un protocollo deterministico non può eleggere un solo nodo se le entità partono anonime e indistinguibili. Un identificativo distinto permette invece di confrontare i candidati. Una radice già designata rompe anch'essa la simmetria iniziale: è il caso separato del paragrafo seguente.
-
-##### Idea della dimostrazione
-
-Su una rete simmetrica di due entità anonime con lo stesso stato iniziale, i due nodi eseguono le stesse azioni e ricevono gli stessi messaggi in ogni istante. Restano quindi indistinguibili: se uno si dichiara leader, lo fa anche l'altro, contraddicendo l'unicità richiesta.
+**Precisazione sul modello.** Il teorema riguarda un protocollo deterministico che deve risolvere l'elezione per reti connesse senza guasti e con collegamenti bidirezionali. La dimostrazione delle slide considera due entità anonime, sincrone, nello stesso stato iniziale: ricevono gli stessi messaggi, restano nello stesso stato e non possono eleggere esattamente una leader. Quindi, senza informazione che distingua i nodi, l'elezione non è garantita in generale. Una radice già designata rompe la simmetria iniziale e costituisce il caso distinto qui sotto.
 
 #### Leader election in alberi
 
-Nel caso di alberi rooted il problema è particolarmente semplice: la radice si auto-elegge leader e tutti gli altri nodi follower. Non vengono scambiati messaggi nel processo di elezione e bastano $O(n)$ messaggi per la notifica.
-Quando l'albero non è rooted, si usa la [[#Tecnica di saturazione|saturazione]]: i valori propagati verso il centro arrivano a due nodi adiacenti, che confrontano i propri identificativi univoci e scelgono il leader; una notifica diffonde poi il risultato. Il numero di messaggi è **al più $4n-4$** per $n\geq2$, includendo attivazione, saturazione e notifica; la rappresentazione degli identificativi richiede $O(\log MaxID)$ bit.
+In un albero rooted, la radice si elegge leader e gli altri nodi diventano follower. L'elezione in sé non richiede messaggi; per notificare lo stato agli altri nodi occorrono $O(n)$ messaggi.
+
+In un albero unrooted, i nodi usano la saturazione per selezionare due nodi adiacenti. I due nodi confrontano i propri identificativi univoci e diventa leader quello con l'identificativo minore; la risoluzione notifica l'esito al resto dell'albero. Includendo l'attivazione, il numero di messaggi è al più $4n-4$ per $n\geq2$. Nella saturazione bastano messaggi di $c=O(1)$ bit per individuare la coppia; l'invio dei due identificativi richiede $O(2\log MaxID)$ bit, dove $MaxID$ è il massimo identificativo. Il costo in bit indicato nelle slide è dunque $O(2\log MaxID+cn)$.
 
 #### Leader election e spanning tree
 
-Se è già disponibile uno spanning tree con radice designata, quella radice può essere il leader e la notifica percorre l'albero. Se invece si elegge prima un leader in un grafo connesso, lo si può usare come unico iniziatore per la costruzione di uno [[#Spanning tree|spanning tree]]. Queste due direzioni richiedono ipotesi iniziali diverse: un albero con radice già nota oppure un protocollo di elezione applicabile al grafo dato.
+Se uno spanning tree con radice designata è già disponibile, la radice può essere il leader e la notifica si propaga lungo l'albero. Nel verso opposto, se un protocollo elegge un leader in un grafo connesso, il leader può avviare la costruzione di uno spanning tree. Le ipotesi iniziali sono diverse: nel primo caso la radice è già designata; nel secondo serve un protocollo di elezione applicabile al grafo dato.
 
 ### 3.3 Leader election in anelli
 
 #### Introduzione
 
-**Problema e modello.** Nell'anello con $n$ nodi e $m=n$ archi bisogna eleggere un solo leader e far conoscere a ciascun nodo se è leader o follower. La topologia è simmetrica: senza identificativi distinti, nodi con la stessa vista locale non possono essere differenziati da un protocollo deterministico. Qui assumiamo identificativi univoci, collegamenti affidabili e una direzione di percorrenza riconoscibile localmente; i singoli algoritmi precisano se richiedono collegamenti bidirezionali. Il criterio è l'identificativo minimo.
+[[teacher_slides/2_distributed algorithms.pdf#page=140|Slide della docente, p. 140]]
+
+Un anello con $n$ nodi ha $m=n$ archi e una topologia simmetrica. Per eleggere deterministicamente un solo leader usiamo identificativi distinti; in questa sezione viene eletto il nodo con ID minimo. Ogni nodo deve infine sapere se è leader o follower. Assumiamo link affidabili e un orientamento locale, cioè ciascun nodo distingue i due vicini e può inoltrare in una direzione scelta localmente. Non serve che tutti concordino su un senso globale dell’anello. Gli algoritmi precisano se ammettono link unidirezionali o richiedono link bidirezionali.
 
 ![[assets/Screenshot 2024-10-25 113100.png|400]]
 
-Le reti ad anello furono effettivamente molto usate prima dell'avvento del WiFi, motivo per cui si tratta di un caso d'uso molto studiato. Anche oggigiorno può accadere che i nodi all'interno di una rete si riconfigurino formando un anello virtuale.
-Vedremo generalmente algoritmi deterministici con identificativi unici associati a ciascun nodo. Il criterio di selezione si baserà sull'identificativo più piccolo. Verrà infine eletto un solo leader, proprio perché gli identificativi sono unici.
-
 #### All The Way
 
-**Obiettivo e idea.** Ogni nodo deve poter confrontare il proprio identificativo con tutti gli altri, così da decidere localmente se è il minimo. All The Way fa percorrere l'intero anello a un messaggio per nodo, senza eliminare candidati durante il viaggio.
+Ogni nodo invia il proprio ID lungo l’anello. Quando riceve un ID da un vicino, lo inoltra all'altro vicino; se riceve di ritorno il proprio ID, ne termina l'inoltro. Così i messaggi percorrono un giro completo e ogni nodo aggiorna il minimo osservato. Quando ha confrontato tutti gli ID, il nodo sa autonomamente se è il minimo: non serve una notifica separata.
 
-**Restrizioni:**
+[[teacher_slides/2_distributed algorithms.pdf#page=145|Slide della docente, pp. 145–154]]
 
-- Collegamenti unidirezionali/bidirezionali
-
-- Orientamento locale
-
-- Identificatori distinti
-
-- Affidabilità totale
-
-Affinché ogni nodo sappia se il proprio identificativo è il più piccolo, per ogni nodo viene mandato un messaggio contente il relativo identificativo sull'anello. Il ritorno del messaggio avviene dalla parte opposta rispetto quella su cui lo si è inviato. Se due o più messaggi partono simultaneamente, non vi è alcun problema per l'esecuzione del protocollo.
-All'atto dell'elezione del leader, il viaggio di tutti i messaggi lungo l'anello deve essersi concluso. Questo significa che la computazione è terminata.
-L'unico problema è che, perché un nodo sappia di aver ricevuto tutti gli identificativi, dovrebbe:
-
-- Poter conoscere il numero totale di nodi sull'anello
-
-- Essere connesso ai propri vicini da un canale FIFO: in questo modo, il suo messaggio "starà dietro" a quelli di tutti gli altri
-
-In entrambi i casi, è necessario aggiungere una nuova restrizione a quelle date.
+**Modello.** Link affidabili, ID distinti e orientamento locale. Il protocollo funziona su anelli unidirezionali o bidirezionali e ammette più iniziatori. Per sapere di aver ricevuto tutti gli ID, un nodo deve conoscere $n$ oppure usare canali FIFO; altrimenti il suo messaggio di ritorno potrebbe precedere messaggi di altri nodi. In alternativa, come nelle slide, può ricavare la dimensione dell’anello contando i salti nel messaggio e contando quanti ID distinti ha ricevuto.
 
 ![[assets/Screenshot 2024-10-25 114925.png|600]]
 
-Possiamo dunque introdurre un contatore associato a ciascun identificativo ed allegarlo al messaggio. Quando il messaggio contenente l'identificativo ritorna al proprio nodo di partenza, il contatore associato sarà $n$. A quel punto, il nodo saprà il numero totale di nodi sull'anello, quindi anche quanto deve aspettare prima di terminare il protocollo. Il numero di nodi sull'anello in questo modo non viene posto tra le restrizioni, ma calcolato a tempo d'esecuzione.
-Una volta terminato il protocollo, ogni nodo si auto-proclama leader o follower in autonomia. Non è necessario che siano inviati ulteriori messaggi sull'anello con questa informazione.
+Con il contatore nel messaggio, quando il messaggio torna al mittente il nodo conosce la lunghezza dell’anello. Il contatore locale gli permette anche di tenere traccia degli ID distinti già visti. Quando il numero di ID distinti, incluso il proprio, raggiunge $n$, il nodo ha visto tutti gli identificativi e può terminare.
 
 ![[assets/Screenshot 2024-10-25 190012.png|800]]
 
-- Numero di messaggi: un ogni messaggio attraversa $n$ link e vi sono in totale $n$ messaggi sull'anello durante l'esecuzione, per un costo complessivo di $O(n^2)$
+**Messaggi.** Ogni ID attraversa $n$ archi e ci sono $n$ ID, per un totale di $n^2=O(n^2)$ messaggi. Le slide misurano separatamente anche i bit: se ogni ID richiede $O(\log(\mathrm{MaxID}))$ bit, il totale è $O(n^2\log(\mathrm{MaxID}))$.
 
-- Tempo di esecuzione: ogni volta che viene ricevuto un messaggio nello stato $ASLEEP$, il corrispondente nodo viene attivato ed invia a sua volta. Nel caso peggiore, con un singolo nodo di partenza, tutti gli altri sono attivati al primo giro del messaggio sull'anello, e procedono a loro volta all'invio. Per questo motivo, la catena di messaggi più lunga è $2 \cdot n - 1 \in O(n)$ ($n$ per la catena del primo messaggio e $n - 1$ per quella di tutti gli altri)
+**Tempo.** Nel caso peggiore considerato nelle slide, un solo iniziatore sveglia gli altri nodi in sequenza. La catena più lunga comprende gli $n-1$ invii che risvegliano i nodi e il messaggio dell’ultimo nodo risvegliato, che percorre $n$ archi: al più $2n-1$ invii in catena, cioè $O(n)$ unità nel modello a ritardo unitario.
 
 #### As Far As It Can
 
-**Problema e modello.** Su un anello affidabile con identificativi distinti e direzione di inoltro comune, vogliamo eleggere il minimo. Come in [[#All The Way]], i candidati fanno circolare il proprio ID; qui un nodo **inoltra** un identificativo ricevuto solo se è più piccolo del minimo visto finora. Un ID più grande viene fermato, perché non può prevalere. Chi riceve di ritorno il proprio identificativo è il leader.
+As Far As It Can (LCR) riduce i messaggi di All The Way: un ID ricevuto viene inoltrato solo se è più piccolo del minimo osservato finora. Se è più grande, quel candidato non può diventare leader e il messaggio viene fermato. L’unico ID che compie il giro e torna al mittente è il minimo.
+
+[[teacher_slides/2_distributed algorithms.pdf#page=155|Slide della docente, pp. 155–168]]
+
+**Modello.** Link affidabili, ID distinti e orientamento locale. L’algoritmo usa un solo senso di inoltro, anche se l’anello fisico può essere bidirezionale. Non richiede di conoscere $n$ e ammette più iniziatori.
 
 ![[assets/Screenshot 2024-10-25 124227.png|600]]
 
-In questo modo solo il leader riceverà il proprio messaggio di ritorno e tutti gli altri andranno persi, da qualche parte, nel loro giro sull'anello.
+Quando un nodo si attiva spontaneamente, invia il proprio ID e lo registra come minimo visto. Un nodo addormentato che riceve un ID si risveglia: se l’ID ricevuto è maggiore del proprio, lo ferma e avvia il proprio ID; se è minore, inoltra quello ricevuto e lo registra come minimo visto. Un nodo già sveglio inoltra un ID ricevuto se è minore del minimo che ha visto; se riceve il proprio ID di ritorno, si proclama leader e invia una notifica. Gli altri nodi inoltrano la notifica e diventano follower. Il nodo risvegliato non deve perdere l’avvio del proprio ID quando ferma un identificativo maggiore: entrambi i comportamenti fanno parte della regola di risveglio.
 
 ![[assets/Screenshot 2024-10-25 190720.png|400]]
 
-L'edge-case è quello in cui il leader stesso ferma tutti i messaggi contenenti identificatori più alti.
-Il protocollo termina con una notifica del leader, perché non vi sono i presupposti perché i followers sappiano quando finisce la computazione sul sistema. As Far As It Can funziona anche nel caso in cui i collegamenti siano bidirezionali, ammesso che i messaggi viaggino in un solo dei due sensi.
-
 ![[assets/Screenshot 2024-10-29 113216.png|650]]
 
-- Messaggi inviati: il caso peggiore è quello in cui i nodi sono disposti sull'anello con gli identificatori ordinati in senso crescente, e tutti i nodi si svegliano contemporaneamente. Il nodo con l'identificativo più alto è responsabile di una catena di un solo messaggio, quello con l'identificativo immediatamente più basso di due, e così via. Il numero complessivo di messaggi è:
+**Messaggi.** Nel caso pessimo tutti i nodi si svegliano insieme e gli ID sono disposti in ordine crescente nella direzione di inoltro. L’ID più alto percorre un arco, quello immediatamente inferiore due, e così via. Prima della notifica si inviano
 
-  $$\begin{aligned}
-                          n + (n - 1) + \dots + 2 + 1 = \frac{n \cdot (n + 1)}{2}
-  \end{aligned}$$
+$$\sum_{j=1}^{n}j=\frac{n(n+1)}2$$
 
-  Il costo asintotico rimane $O(n^2)$, anche se lo abbiamo almeno dimezzato.
-  Nel caso migliore invece, il messaggio del leader è l'unico nodo che si sveglia e tutti gli altri non vengono nemmeno spediti. In questo caso abbiamo $n$ messaggi più $n$ di notifica per un $O(n)$ complessivo
+messaggi. La notifica aggiunge $n$ invii, quindi il totale in questo caso è $\frac{n(n+1)}2+n=O(n^2)$. Nel caso migliore un solo iniziatore è il leader minimo: il suo ID compie il giro in $n$ invii, gli altri ID non vengono avviati e la notifica costa altri $n$, per un totale di $2n=O(n)$.
 
-- Tempo di esecuzione: il caso peggiore è quello in cui l'iniziatore sia adiacente al nodo con l'identificatore più basso ed abbia un identificatore immediatamente più alto di quest'ultimo. La catena di messaggi deve partire nella direzione opposta rispetto al futuro leader, che viene svegliato dopo $n - 1$ messaggi. A questo punto, il messaggio del futuro leader attraversa tutto l'anello ed infine il leader invia la notifica. In totale abbiamo una catena di $3 \cdot n - 1 \in O(n)$ messaggi
+**Tempo.** Nel caso pessimo delle slide per la versione unidirezionale sincrona, l’iniziatore è il vicino successivo del futuro leader nella direzione che lo sveglia. Il risveglio del leader richiede $n-1$ invii; il giro del suo ID ne richiede $n$ e la notifica altri $n$. La catena fino alla notifica è quindi $3n-1=O(n)$ unità di tempo. Questo conto dipende dal modello sincrono e dalla catena di risveglio descritta; non è un tempo fisico indipendente dalle ipotesi di attivazione e ritardo.
 
 #### Controlled Distance
 
-**Problema e modello.** Su un anello affidabile con identificativi univoci, collegamenti **bidirezionali** e orientamento locale, Controlled Distance elegge l'ID minimo anche con più iniziatori. Lavora per *stage*: in ciascuno ci sono candidati e nodi sconfitti. I candidati cercano prima identificativi più piccoli nelle vicinanze; quelli che sopravvivono ampliano progressivamente la distanza esplorata. Alla fine rimane un solo leader.
-Al generico passo $i$-esimo, i candidati inviano i propri messaggi in entrambe le direzioni. Questi messaggi devono arrivare ad una distanza $2^i$ in cerca di identificatori più piccoli e tornano indietro solo nel caso in cui non ne abbiano trovati. Un candidato leader che vede ritornare entrambi i messaggi inviati ricomincerà come candidato leader anche al prossimo stage.
-Ad un generico stage $i$, se un candidato leader riceve un messaggio con un identificativo più basso, passa automaticamente allo stato di leader sconfitto ed inoltra il messaggio. Un leader sconfitto rimane tale per tutto il resto dell'esecuzione del protocollo e continuerà passivamente a fare circolare i messaggi lungo l'anello. Un candidato leader che riceve un messaggio con un identificativo più alto, ferma la corsa del messaggio.
+Controlled Distance (HS) riduce il numero di messaggi rispetto a LCR ampliando a ogni stage la distanza percorsa dai candidati. Il candidato sopravvive se non incontra un ID più piccolo entro la distanza prevista in entrambe le direzioni. Dopo un numero finito di stage resta il minimo globale.
+
+[[teacher_slides/2_distributed algorithms.pdf#page=169|Slide della docente, pp. 169–195]]
+
+**Modello.** Link bidirezionali affidabili, ID distinti e orientamento locale. Sono ammessi più iniziatori; all’inizio tutti i nodi sono candidati oppure diventano candidati quando si attivano. Non è necessario conoscere $n$.
 
 ![[assets/Screenshot 2024-10-29 114205.png|700]]
 
-Potenzialmente, allungando la distanza percorsa dei messaggi con la legge $2^i$, un candidato leader potrà ricevere in forward il proprio stesso messaggio. Questo significa banalmente che l'identificativo è il più basso di tutti, per cui il candidato può auto-proclamarsi leader.
-Possiamo avere più iniziatori per questo protocollo.
+Allo stage $i$ ogni candidato invia in entrambe le direzioni un messaggio **Forth** con il proprio ID e limite $2^i$. Il nodo inoltra il messaggio finché non raggiunge quel limite o incontra un ID più piccolo. Se un candidato riceve l’ID più piccolo di un altro candidato, diventa **DEFEATED** e da quel momento inoltra passivamente i messaggi altrui. Se un messaggio Forth incontra un candidato con ID minore, viene fermato; se raggiunge il limite senza essere fermato, torna indietro come **Back**. Il candidato passa allo stage successivo solo dopo aver ricevuto indietro entrambi i messaggi. Se un messaggio Forth del candidato minimo compie il giro e ritorna al mittente, il candidato è il leader e invia una notifica che raggiunge tutti i nodi.
 
 ![[assets/Screenshot 2024-10-29 114514.png|800]]
 
-L'invio finale di una notifica è indispensabile, perché diversamente i nodi non possono sapere se la computazione sia terminata.
-
 ![[assets/Screenshot 2024-10-29 115446.png|1000]]
 
-Controlled Distance termina sempre, perché prima o poi la distanza da percorrere per i messaggi supera senz'altro $n$, eleggendo leader il nodo con l'identificatore più basso.
+**Terminazione.** Il limite raddoppia a ogni stage; prima o poi supera $n$. Il minimo globale non viene sconfitto e il suo messaggio Forth completa il giro, permettendogli di dichiararsi leader. La notifica informa gli altri nodi della terminazione.
 
-- Numero di stage: lo stage finale ha indice $d$, il minimo intero tale che $2^d\geq n$. Poiché gli indici partono da $0$, gli stage sono $d+1$ in totale:
+**Numero di stage.** Per $n\ge2$, il primo stage ha indice $0$ e il primo limite che raggiunge almeno $n$ è quello con indice $d=\lceil\log_2 n\rceil$. Gli stage sono quindi $d+1=\lceil\log_2 n\rceil+1$.
 
-  $$\begin{aligned}
-                          d=\lceil\log_2 n\rceil,\qquad s=d+1=\lceil\log_2 n\rceil+1.
-  \end{aligned}$$
+![[assets/Screenshot 2024-10-29 120125.png|1000]]
 
-- Messaggi inviati: nel caso peggiore, per ogni candidato allo stage $i$-esimo, abbiamo $2^i$ messaggi verso entrambe le direzioni, andata e ritorno. Dunque, complessivamente: $4 \cdot 2^i$.
-  Se un nodo è candidato leader allo stage $i$-esimo, significa che ha sconfitto tutti i vicini entro una distanza di $2^{i - 1}$ allo stage precedente. Un certo candidato leader al passo $i$-esimo si trova ad una distanza di almeno $2^{i - 1} + 1$ dal più vicino e non possono essercene altri nel mezzo.
+**Messaggi.** Per $i\ge1$, un candidato sopravvissuto allo stage precedente ha ID minore di tutti quelli entro distanza $2^{i-1}$ su entrambi i lati. Due candidati superstiti sono pertanto separati da almeno $2^{i-1}+1$ archi; il numero di candidati allo stage $i$ è al più $\left\lfloor n/(2^{i-1}+1)\right\rfloor$.
 
-  ![[assets/Screenshot 2024-10-29 120125.png|1000]]
+Un candidato invia al più $2^i$ messaggi Forth in ciascuna direzione e altrettanti Back, per un massimo di $4\cdot2^i$ messaggi. Per ogni stage interno $1\le i<d$:
 
-  La regola è che il numero massimo di candidati leader allo stage $i$-esimo è:
+$$4\cdot2^i\left\lfloor\frac{n}{2^{i-1}+1}\right\rfloor\le 8n\frac{2^{i-1}}{2^{i-1}+1}<8n.$$
 
-  $$\begin{aligned}
-                          \max{ \{ floor(\frac{n}{2^{i - 1} + 1}) \} }
-  \end{aligned}$$
+Allo stage $0$ possono essere candidati tutti i nodi: il limite è $4n$ invii. All’ultimo stage $d$, il messaggio del minimo percorre il giro dell’anello in entrambe le direzioni, per $2n$ invii complessivi. La notifica costa $n$ invii. Per $n\ge2$, quindi, il limite riportato nelle slide è
 
-  Occorre prendere la parte intera inferiore perché un risultato che non sia intero viola gli assunti dell'algoritmo (in pratica ci dà uno spazio di lunghezza inferiore a $2^{i - 1}$ tra i candidati leader). Quindi, complessivamente, per il generico stage $i$-esimo abbiamo:
+$$4n+\sum_{i=1}^{d-1}8n+2n+n=7n+8n(d-1)=O(n\log n).$$
 
-  $$\begin{aligned}
-                          (4 \cdot 2^i ) \cdot floor(\frac{n}{2^{i - 1} + 1}) \leq 8 \cdot 2^{i-1} \cdot \frac{n}{2^{i - 1} + 1} = 8 \cdot n \cdot \underbrace{\frac{2^{i - 1}}{2^{i - 1} + 1}}_{< 1} < 8 \cdot n
-  \end{aligned}$$
+Il limite per l’ultimo stage è separato da quello degli stage interni: in quest’ultimo, il conteggio $4\cdot2^i$ per candidato e il limite sul numero di candidati non vanno applicati al leader quando il messaggio ha già percorso l’intero anello. Per $n=1$ l’unico nodo è leader senza eseguire gli stage dell’analisi per $n\ge2$.
 
-  Per calcolare il numero complessivo di messaggi, dobbiamo considerare la somma di quelli inviati ad ogni stage.
-
-  - Al primo stage ($i = 0$) inviamo $4 \cdot n$ messaggi, perché ogni nodo ne manda uno ad ogni suo vicino, andata e ritorno
-
-  - In tutti gli altri stages prima dell'ultimo ($0 < i < ceil(\log_2{n}))$ abbiamo un massimo di $8 \cdot n$ messaggi, come appena osservato
-
-  - Nell'ultimo stage ($i = ceil(\log_2{n})$), abbiamo un numero di messaggi pari a $2 \cdot n$, perché entrambi i messaggi del futuro leader percorrono l'intero anello
-
-  - In fase di notifica abbiamo $n$ messaggi
-
-  Il totale è:
-
-  $$\begin{aligned}
-                          4 \cdot n + \sum_{i = 1}^{ceil(\log_2{n}) - 1} 8 \cdot n + 2 \cdot n + n = 7 \cdot n + 8 \cdot n \cdot (ceil(\log_2{n}) - 1) \in O(n \cdot \log_2{n})
-  \end{aligned}$$
-
-- Tempo di esecuzione: il tempo richesto allo stage $i$ dipende essenzialmente dalla distanza percorsa dal messaggio con l'identificativo più piccolo (che chiameremo $dist(i)$), andata e ritorno. In più va aggiunta la catena di $n$ messaggi per raggiungere il nodo con l'identificativo più piccolo all'avvio dell'algoritmo (caso peggiore) più gli $n$ messaggi di notifica. Complessivamente:
-
-  $$\begin{aligned}
-                          2 \cdot n + \sum_{i = 1}^{ceil(\log_2{n})} 2 \cdot dist(i) \in O(n)
-  \end{aligned}$$
+**Tempo.** Con attivazioni simultanee e nel modello ideale a un invio per arco senza attese di coda, il risveglio dei nodi richiede al più $O(n)$ lungo l’anello. Lo stage $i$ impiega al più un tempo proporzionale a $2^i$ per andata e ritorno fino a $d-1$; la somma geometrica è $O(2^d)=O(n)$. L’ultimo stage e la notifica richiedono ciascuno $O(n)$. Il tempo ideale complessivo è quindi $O(n)$. Il bound esatto della docente non viene assunto per attivazioni arbitrarie o ritardi non unitari.
 
 ### 3.4 Leader election in grafi generici
 
 #### Introduzione
 
-**Problema e modello.** In un grafo connesso e bidirezionale $G=(V,E)$ ogni nodo deve conoscere se è l'unico leader oppure un follower. Assumiamo identificativi distinti, canali affidabili e orientamento locale; i protocolli precisano le ulteriori conoscenze necessarie. Qui il leader è il nodo con **identificativo massimo**, tranne in YO-YO, che elegge il minimo.
-
-Per il protocollo FloodMax aggiungiamo:
-
-- Canali FIFO
-
-- Conoscenza di proprietà del grafo, in particolare il suo diametro $d$, da parte dei nodi
-
-FloodMax usa round coordinati e la conoscenza del diametro $d$; YO-YO è descritto separatamente con le proprie ipotesi.
+In un grafo connesso e bidirezionale $G=(V,E)$ vogliamo che ogni nodo sappia se è l’unico leader o un follower. Assumiamo ID distinti, link affidabili e porte locali per distinguere i vicini. FloodMax elegge il nodo con ID massimo; YO-YO elegge quello con ID minimo. Le conoscenze ulteriori sono specificate per ciascun protocollo.
 
 #### FloodMax
 
-**Idea.** Per eleggere l'ID massimo, ogni nodo propaga il massimo visto finora. A differenza del [[#Broadcast|broadcast]] con un solo dato iniziale, qui ogni nodo parte dal proprio identificativo. Il grafo è connesso, bidirezionale e affidabile; i nodi conoscono il diametro $d$ e procedono in round coordinati.
-Ogni entità mantiene il massimo identificativo visto fino a quel momento. L'esecuzione è divisa in "rounds". A ciascun round ogni entità invia l'identificativo massimo visto fino a quel momento alle altre ed attende quello dei vicini. Dopo un certo numero $d$ di rounds (pari al diametro del grafo), se il valore massimo dell'identificativo è quello dell'entità $x$, essa diventa leader, altrimenti follower. Scegliere di attendere esattamente $d$ passi ci assicura che l'esecuzione sia terminata per tutti i nodi.
+[[teacher_slides/2_distributed algorithms.pdf#page=198|Slide della docente, pp. 198–203]]
+
+**Idea e modello.** Ogni nodo propaga il massimo ID che ha visto, iniziando dal proprio. FloodMax richiede un grafo connesso e bidirezionale, link affidabili, canali FIFO e round coordinati. Ogni nodo conosce il diametro $d$ del grafo o un suo limite superiore, così può fermarsi dopo quel numero di round.
 
 ![[assets/Screenshot 2024-10-30 185342.png|600]]
 
-- Messaggi inviati: ogni entità ad ogni round invia un messaggio ad ogni vicino, dunque abbiamo $2 \cdot m \cdot d$ messaggi totali
+Al round $r$ ogni nodo invia ai vicini il massimo ID noto e attende un messaggio da ciascuno. Dopo $r$ round, il massimo globale è arrivato a tutti i nodi a distanza al più $r$ dal nodo che possiede quell’ID: questa è l’invariante di correttezza. Dopo $d$ round ogni nodo conosce quindi l’ID massimo globale e si dichiara leader se coincide col proprio; altrimenti diventa follower.
 
-- Tempo di esecuzione: uguale all'algoritmo di flooding, è banalmente il diametro $d$ del grafo
+**Messaggi e tempo.** Ogni round ogni nodo invia un messaggio a ciascun vicino. Poiché la somma dei gradi è $2m$, in $d$ round vengono inviati $2md$ messaggi. Il tempo è $d$ round, in base alla sincronizzazione e all’attesa di tutti i messaggi del round.
 
 #### Protocollo YO-YO
 
-**Problema e modello.** YO-YO è un protocollo deterministico per eleggere un solo leader in un grafo connesso, bidirezionale e affidabile con identificativi distinti; sceglie il nodo con identificativo **minimo**. I nodi conoscono i vicini e distinguono le porte locali; la descrizione non usa la conoscenza preventiva del diametro richiesta da [[#FloodMax]]. Mantiene un orientamento logico aciclico del grafo e distingue:
+[[teacher_slides/2_distributed algorithms.pdf#page=204|Slide della docente, pp. 204–258]]
 
-- **source**, senza archi logici entranti e quindi ancora candidato;
-- **sink**, senza archi logici uscenti;
-- **internal**, con archi sia entranti sia uscenti.
+YO-YO elegge il nodo con ID minimo senza richiedere la conoscenza del diametro. Il grafo fisico resta connesso, bidirezionale e affidabile e gli ID sono distinti. Il protocollo usa gli ID dei vicini per costruire un orientamento logico aciclico e poi lo aggiorna durante le iterazioni.
 
-**Setup.** Ogni coppia di vicini si scambia gli identificativi e orienta logicamente il proprio arco dal valore minore verso il maggiore. L'orientamento è un DAG: un ciclo diretto imporrebbe una catena strettamente crescente di identificativi che torna al valore iniziale. Lo scambio iniziale usa due messaggi per arco, quindi $2m$ messaggi.
+**Orientamento iniziale.** Ogni coppia di vicini si scambia il proprio ID; l’arco viene orientato dal nodo con ID minore verso quello con ID maggiore. L’orientamento è un DAG, perché lungo ogni arco diretto gli ID crescono strettamente e quindi non può esistere un ciclo diretto. Un nodo con soli archi uscenti è una **source**; uno con soli archi entranti è un **sink**; un nodo con entrambi i tipi è **internal**.
 
 **Iterazione.** Ogni iterazione ha due passi.
 
-1. **YO, verso il basso.** Ogni source invia il proprio identificativo sugli archi uscenti. Un nodo interno attende un valore da ogni arco entrante, ne calcola il minimo e lo inoltra su tutti gli archi uscenti. Quando il minimo raggiunge i sink comincia il passo di ritorno.
-2. **-YO, verso l'alto.** Un sink invia $YES$ sugli archi entranti dai quali ha ricevuto il minimo e $NO$ sugli altri. Un nodo interno attende un voto da ogni arco uscente: se sono tutti $YES$, propaga $YES$ solo sugli archi dai quali era arrivato il minimo e $NO$ sugli altri; se riceve almeno un $NO$, propaga $NO$ su tutti gli archi entranti. Una source che riceve soltanto $YES$ resta candidata; se riceve almeno un $NO$ è sconfitta.
+1. **YO, invio verso il basso.** Ogni source invia il proprio ID sugli archi uscenti. Un nodo internal attende un messaggio da ciascun arco entrante, calcola il minimo ricevuto e lo invia su tutti gli archi uscenti. I sink avviano il passo di ritorno.
+2. **-YO, invio verso l’alto.** Ogni sink invia YES sugli archi dai quali ha ricevuto il minimo e NO sugli altri. Un nodo internal attende un voto da ciascun arco uscente. Se riceve solo YES, invia YES sugli archi entranti dai quali arrivava il minimo e NO sugli altri. Se riceve almeno un NO, invia NO su tutti gli archi entranti. Una source che riceve solo YES resta candidata; se riceve almeno un NO è sconfitta.
 
-Prima dell'iterazione successiva, ogni arco attraversato da un $NO$ viene invertito logicamente (**flip**): in questo modo una source sconfitta diventa sink o nodo interno. L'orientamento rimane aciclico.
+Prima dell’iterazione successiva, ogni arco percorso da un NO viene **invertito logicamente (flip)**. Una source sconfitta diventa sink o nodo internal; le nuove source sono perciò soltanto source sopravvissute. L’orientamento resta aciclico anche dopo i flip.
 
-**Pruning.** Durante il passo -YO si eliminano logicamente gli archi che non potranno influire sulle decisioni successive:
+[[teacher_slides/2_distributed algorithms.pdf#page=239|Slide della docente, pp. 239–249]]
 
-- un sink con un solo arco entrante elimina quell'arco, perché la sua decisione coincide con quella del predecessore;
-- se un nodo riceve più copie dello stesso minimo, conserva un solo arco corrispondente ed elimina gli altri.
+**Pruning logico e terminazione.** Durante il passo -YO si possono eliminare logicamente gli archi che non serviranno più: un sink con un solo arco entrante può eliminare quell’arco, perché la propria decisione coincide con quella del predecessore; quando un nodo riceve più copie dello stesso minimo, conserva un solo arco corrispondente. Il pruning non rimuove link fisici: i nodi non li useranno nelle iterazioni successive.
 
-Il pruning non rimuove collegamenti fisici: impedisce soltanto di riutilizzarli nelle iterazioni successive. Quando rimane una sola source, al più un'ulteriore iterazione elimina tutti gli archi residui; la source rileva di essere isolata, si dichiara leader e notifica gli altri nodi seguendo gli ultimi archi potati.
+A ogni iterazione almeno una source viene sconfitta. Nel grafo delle source usato nelle slide, due source sono collegate se condividono un sink; in ogni cammino almeno una source su due viene sconfitta. Dopo il flip, le source superstiti formano quindi cammini lunghi al più la metà, e servono $O(\log n)$ iterazioni. Il minimo globale non riceve mai NO e resta candidato; è l’unica source che può sopravvivere. Quando resta una sola source, al più un’ulteriore iterazione elimina logicamente gli archi residui. La source rileva di non avere più archi, si dichiara leader e invia la notifica lungo gli ultimi archi potati.
 
-**Correttezza e terminazione.** A ogni iterazione almeno una source viene sconfitta; dopo il flip né un nodo interno né un sink possono diventare source. Il minimo globale non riceve mai $NO$, quindi è l'unica source che può sopravvivere. Il grafo delle source dimezza la lunghezza dei cammini a ogni iterazione, da cui $O(\log n)$ iterazioni.
+[[teacher_slides/2_distributed algorithms.pdf#page=230|Slide della docente, p. 230]]
 
-**Complessità.** Senza sfruttare il risparmio del pruning, setup e notifica costano rispettivamente $2m$ e $n-1$ messaggi; ogni iterazione usa al più due messaggi per arco attivo. Ne segue l'upper bound $O(m\log n)$. Le slide sottolineano che la complessità effettiva con il pruning dipende dagli archi rimasti ed è in genere inferiore, ma non è caratterizzata da una formula esatta unica.
+**Messaggi.** Senza pruning, il setup usa due messaggi per arco ($2m$) e ogni iterazione al più due messaggi per arco ($2m$). La notifica usa $n-1$ messaggi. Con $O(\log n)$ iterazioni si ottiene l’upper bound $O(m\log n)$; le slide non danno un conteggio esatto valido per ogni esecuzione con pruning, perché il numero di archi attivi varia.
 
 ### 3.5 Leader election in anelli sincroni
 
 #### Introduzione
 
-**Problema e modello.** Vogliamo eleggere l'ID minimo su un anello affidabile con identificativi distinti e orientamento riconoscibile. Qui, in più, il sistema è **sincrono**: tutti i clock battono insieme, ogni nodo può inviare a uno stesso vicino al più un messaggio per battito e il ritardo dei collegamenti ha un limite noto. Quando un protocollo richiede che tutti conoscano $n$, lo dichiara localmente.
+Nei protocolli sincroni i nodi possono usare il tempo per coordinare le proprie azioni e distinguere i candidati. Assumiamo un sistema affidabile con clock sincronizzati: i nodi inviano messaggi ai vicini soltanto al battito del clock e, a ogni battito, inviano al più un messaggio allo stesso vicino. Il ritardo di comunicazione ha un limite superiore noto. Indichiamo con $\delta$ il tempo tra due battiti. Assumiamo inoltre che ogni messaggio abbia dimensione al più $c$ bit; un messaggio più grande viene suddiviso in pacchetti di $c$ bit, e questa suddivisione può incidere sui costi.
 
-In particolare assumiamo che:
-
-- Ogni entità, quando deve mandare un messaggio, lo fa al battito del clock
-
-- Quando avviene il battito del clock, un'entità può inviare al massimo un solo messaggio allo stesso vicino
-
-- Si conosce il bound superiore del ritardo di comunicazione sui canali
-
-Si prende come riferimento il tempo $\delta$ che intercorre tra due battiti di clock. Essendo il tempo lo stesso per tutti i nodi, lo si può sfruttare per definire i protocolli.
-È importante il fatto che, per i sistemi sincroni, esiste un limite $c$ alla dimensione dei messaggi per garantire il bound del ritardo di comunicazione. Messaggi più grandi di $c$ vengono spezzati in messaggi più piccoli, delle dimensioni proprio di $c$.
+Nei protocolli seguenti il grafo è un anello orientato, salvo dove è indicato il caso generale. Quando si parla di elezione deterministica, gli ID sono distinti e l'obiettivo è eleggere quello minimo. Le informazioni note ai nodi, come $n$, sono specificate per ciascun protocollo.
 
 #### Speeding
 
-**Problema e modello.** Su un anello sincrono affidabile con ID distinti, Speeding vuole eleggere il minimo riducendo i messaggi. Qui consideriamo l'avvio simultaneo; le slide osservano che non è indispensabile al protocollo. Come in [[#As Far As It Can]], gli identificativi più grandi vengono bloccati da quelli più piccoli. L'idea aggiuntiva è dare priorità temporale agli ID piccoli, affinché possano bloccare prima quelli grandi.
+**Problema e idea.** In un anello sincrono unidirezionale con ID distinti, vogliamo eleggere il nodo con ID minimo. Come in [[#As Far As It Can]], un ID più piccolo può fermare un candidato più grande. Speeding assegna ai messaggi ritardi maggiori quanto più grande è il loro ID, così il candidato minimo può raggiungere e bloccare gli altri prima che completino il giro.
 
 [[teacher_slides/2_distributed algorithms.pdf#page=269|Slide della docente, p. 269]]
-Pur non potendo effettivamente aumentare la velocità di propagazione per i messaggi con identificativi più piccoli, si possono introdurre dei ritardi alla propagazione di quelli con identificativi più grandi. Ogni candidato immette il proprio ID nell'anello; i nodi inoltrano il messaggio con un ritardo dipendente dall'ID e fermano un candidato quando conoscono un ID minore. L'immagine mostra i tempi di inoltro del protocollo.
+
+La slide della docente precisa che la partenza simultanea serve a esporre l'analisi, ma non è un requisito intrinseco del protocollo; non occorre conoscere $n$ (slide p. 269). Scegliamo la funzione crescente $f(i)=2^i$. Quando un nodo riceve un ID $i$ più piccolo del proprio, lo inoltra dopo $2^i$ unità di tempo. Se riceve il proprio ID di ritorno, si elegge leader e invia una notifica senza ritardo.
 
 ![[assets/Screenshot 2024-10-30 185452.png|600]]
 
-Una buone funzione da applicare all'identificativo è $f(i) = 2^i$.
+**Tempo.** Sia $m$ il minimo ID. Il suo messaggio attende $2^m$ unità presso ciascuno degli $n$ nodi e attraversa $n$ archi, impiegando un'unità per arco. Il leader viene quindi eletto e notificato entro $2^m n+n=O(2^m n)$ unità di tempo.
 
-- Tempo di esecuzione: l'identificativo più piccolo impiega $2^{min} \cdot n + n$ istanti per percorrere l'intero anello, dati da un ritardo di $2^{min}$ su ognuno degli $n$ nodi, più la notifica attraverso gli $n$ archi dell'anello.
-  Il secondo identificativo più piccolo (come tutti gli altri) non riesce a completare il giro dell'intero anello. In particolare, il numero di collegamenti attraversati è pari a:
+Gli altri candidati non completano il giro prima che la notifica li raggiunga. Infatti, il secondo ID più piccolo è almeno $m+1$ e, durante il tempo $2^m n+n$ impiegato dal minimo, può attraversare al più
 
-  $$\begin{aligned}
-                          \frac{2^{min} \cdot n + n}{2^{min + 1}} \leq \frac{n}{2} + \frac{n}{2} = n
-  \end{aligned}$$
+$$\frac{2^m n+n}{2^{m+1}}=\frac n2+\frac{n}{2^{m+1}}\le n$$
 
-  Questo significa che vengono attraversati al più $n$ collegamenti, ed in ogni caso non rimane tempo per la notifica.
-  Se ripetiamo il calcolo per tutti gli identificativi più grandi, verifichiamo che a maggior ragione nessuno di essi completa il giro dell'anello.
+nodi; per completare il giro dovrebbe attraversare $n$ archi, ma dopo aver atteso presso i nodi attraversa un numero di archi strettamente minore del numero di nodi visitati. Gli ID successivi attendono almeno altrettanto a ogni inoltro, quindi non possono completare il giro prima. L'argomento riguarda il tempo fino alla notifica: il conteggio dei nodi visitati da solo non va confuso con il conteggio degli archi già attraversati.
 
-  ![[assets/Screenshot 2024-11-05 111636.png|700]]
+![[assets/Screenshot 2024-11-05 111636.png|700]]
 
-  Il tempo di esecuzione è dunque un $O(2^{min} \cdot n)$
+**Messaggi.** Il minimo invia un messaggio su ciascuno degli $n$ archi. Il secondo ID più piccolo attraversa meno di $n$ archi; per il candidato in posizione $j\ge3$, il confronto temporale mostra che attraversa meno di $n/2^{j-2}$ archi: il suo ID è almeno $m+j-1$, perciò attende almeno $2^{m+j-1}$ a ogni nodo. Sommando, il numero totale di messaggi è al più $n+n+\sum_{j=3}^{n}n/2^{j-2}=O(n)$. Il bound $O(n)$ conta messaggi logici e assume che un ID occupi un messaggio. Se gli ID sono interi non negativi fino a $\mathrm{Max}$, la loro lunghezza è $O(\log(\mathrm{Max}+2))$ bit: il traffico è $O(n\log(\mathrm{Max}+2))$ bit. Se il limite $c$ impone di spezzare un ID, aumentano il numero di pacchetti e il tempo di trasmissione.
 
-- Messaggi inviati: ci basiamo sui calcoli fatti per il tempo di esecuzione. Il numero dei messaggi corrisponde essenzialmente ai collegamenti attraversati, percui dobbiamo eseguire la somma per tutti i nodi:
-
-  $$\begin{aligned}
-                          n + n + \frac{n}{2} + \dots + \frac{n}{2^{n - 2}} = n + n \cdot \sum_{i = 0}^{n - 2} \frac{1}{2^i} \in O(n)
-  \end{aligned}$$
-
-Il protocollo Speeding che abbiamo presentato non performa particolarmente bene, soprattutto per quanto riguarda il tempo di esecuzione. Possiamo pensare di usare il "silenzio" per risolvere questo problema. Ad esempio, se un nodo vuole comunicare un identificativo ad un altro, entrambi contano gli istanti di tempo decorsi tra invio e ricezione del messaggio, rispettivamente. Il mittente invia un secondo messaggio dopo un numero $x$ di istanti pari al proprio identificativo ed allora il ricevente è in grado di calcolarlo.
+**Usare il silenzio.** In un sistema sincrono si può codificare una quantità nel tempo tra due messaggi. Per trasmettere un intero $x$ a un vicino, il mittente invia un bit, attende $x$ unità e ne invia un secondo. Il destinatario misura la distanza temporale tra le ricezioni e ricava $x$. Si usano due bit e $x$ unità di attesa (oltre alla propagazione dei due bit); questa idea di codifica non modifica da sola il protocollo Speeding.
 
 ![[assets/Screenshot 2024-11-05 111823.png|700]]
 
-Per attuare il protocollo in questo modo basta l'invio di 2 bits (uno per ogni fase). Il tempo di attesa è banalmente pari all'identificativo $x$.
-
 #### Waiting
 
-**Problema e modello.** Waiting elegge l'ID minimo in un anello sincrono affidabile con identificativi distinti; ogni nodo conosce anche la dimensione $n$ dell'anello. Ogni entità attende un tempo determinato dal proprio ID. Se non riceve alcuna notifica allo scadere si elegge leader e avvisa gli altri; altrimenti diventa follower. La notifica deve arrivare agli altri nodi prima della loro scadenza.
-I requisiti di una funzione che stabilisce il tempo di attesa sono:
+**Problema e idea.** Waiting elegge l'ID minimo in un anello sincrono affidabile con ID distinti e con $n$ noto a tutti. Ogni nodo attende un tempo determinato dal proprio ID; se entro la scadenza non riceve una notifica, si elegge leader e notifica gli altri. La funzione di attesa deve crescere con l'ID e lasciare alla notifica del minimo il tempo di raggiungere ogni altro nodo prima che questo scada.
 
-- L'entità $i$ attende $f(i, n)$ istanti, dove $f$ è crescente
+Sia $d(x,y)$ la distanza orientata dal nodo $x$ al nodo $y$, misurata in archi. Con avvio simultaneo, il caso peggiore per separare il minimo $x$ dal candidato successivo $y$ è $y=x+1$ in valore di ID e $d(x,y)=n-1$. Per far arrivare la notifica prima della scadenza di $y$ occorre
 
-- La notificazione dell'elezione a leader deve raggiungere tutti i nodi mentre questi sono ancora in stato di attesa
+$$f(x,n)+d(x,y)<f(y,n),$$
 
-Nel caso in cui tutti i nodi si sveglino nello stesso momento, anche la loro attesa inizierà nello stesso istante. Il caso peggiore è quello in cui il secondo minimo sia il nodo più lontano sull'anello rispetto al minimo, e che abbia l'identificativo immediatamente successivo, cioè $y = x + 1$.
+e quindi è sufficiente che $f(x+1,n)-f(x,n)>n-1$. La scelta $f(i,n)=in$ soddisfa il vincolo: la differenza è $n$. Ogni nodo invia una notifica di un bit, per un totale di $n$ messaggi. Il tempo fino all'elezione e alla notifica è al più $mn+n=O((m+1)n)$, dove $m$ è il minimo ID; il termine additivo mantiene valido il bound anche se $m=0$.
 
 ![[assets/Screenshot 2024-11-05 112934.png|700]]
-
-Per questo motivo, dobbiamo per forza avere che:
-
-$$\begin{aligned}
-                    f(x + 1, n) - f(x, n) > n - 1
-\end{aligned}$$
-
-Un buon candidato è $f(i, n) = i \cdot n$. Questa è tra l'altro la funzione minore che realizza lo scopo. Come si vede nell'immagine, il secondo minimo viene fermato giusto in tempo prima che si elegga leader.
-
 ![[assets/Screenshot 2024-11-05 113015.png|700]]
 
-- Numero di messaggi: vengono inviati semplicemente $n$ messaggi, da 1 bit ciascuno
+**Risveglio progressivo.** Se i nodi non partono insieme, un nodo sveglio spontaneamente invia un messaggio di *wake-up* al vicino prima di iniziare l'attesa; un nodo addormentato che lo riceve lo inoltra e poi inizia ad attendere. Sia $t(i)$ l'istante in cui il nodo $i$ si sveglia, $x$ il minimo ID e $y$ un altro ID. La notifica di $x$ deve raggiungere $y$ prima che termini la sua attesa:
 
-- Tempo di esecuzione: dipende essenzialmente dalla funzione di attesa. In questo caso è pari a $min \cdot n + n \in O((min+1)n)$; diventa $O(n)$ se il minimo identificativo è limitato da una costante
+$$t(x)+f(x,n)+d(x,y)<t(y)+f(y,n).$$
 
-Cosa accade invece se non tutti i nodi partono assieme? Possiamo imporre che questi sveglino i loro vicini, mettendoli a loro volta in attesa. Nella pratica si tratta di una catena di messaggi di wake-up. Così facendo però, dobbiamo modificare la nostra funzione di attesa.
-Sia $t(i)$ l'istante di risveglio dall'entità $i$, $x$ l'identificativo del leader ed $y$ quello di ogni altro nodo. La funzione deve soddisfare la disuguaglianza:
+Sul ciclo, un risveglio propagato e una notifica percorrono al più $n-1$ archi, dunque $t(x)-t(y)<n$ e $d(x,y)<n$. È quindi sufficiente imporre $f(x,n)+2n\le f(y,n)$. Nel caso peggiore $y=x+1$; la scelta $f(i,n)=2ni$ soddisfa il requisito, perché $f(x+1,n)-f(x,n)=2n$. La stretta disuguaglianza iniziale garantisce che la notifica arrivi prima della scadenza anche quando gli istanti sono interi.
 
-$$\begin{aligned}
-                    t(x) + f(x, n) + d(x, y) < t(y) + f(y, n), \forall y
-\end{aligned}$$
+Si invia un messaggio di wake-up e uno di notifica su ciascun arco: $2n$ messaggi di un bit, quindi $O(n)$ bit. Il tempo è al più $2nm+2n=O((m+1)n)$ unità.
 
-Cioè, l'istante di risveglio più il tempo di attesa e quello di notifica del leader devono essere minori dell'istante di risveglio più quello di attesa di ogni altro nodo. Questo ci assicura che la notifica del leader arrivi almeno un istante prima di quella di ogni altra entità.
-Il caso peggiore è quello in cui il futuro leader si sveglia dopo un altro nodo. Anche in una situazione così sfavorevole abbiamo che: $t(x) - t(y) < n$, infatti il leader verrà svegliato in al più $n - 1$ istanti, perché $d(x, y) < n$. Sfruttando queste assunzioni, possiamo scrivere che:
+#### Universal Waiting
 
-$$\begin{aligned}
-                    t(x) - t(y) + f(x, n) + d(x, y) < f(x, n) + 2 \cdot n
-\end{aligned}$$
+La strategia Waiting si estende a un grafo connesso e affidabile con ID distinti, clock sincronizzati e $n$ noto. Il protocollo diffonde un messaggio di avvio; quando un nodo diventa attivo, attende $f(i,n)$ unità. Se non riceve una notifica di elezione entro la scadenza, dichiara di avere l'ID minimo e diffonde uno *stop*; chi riceve lo stop mentre attende rinuncia e lo inoltra.
 
-Per legare questa disuguaglianza alla prima, con la quale avevamo imposto i requisiti della funzione di attesa, introduciamo un'ulteriore ipotesi:
-
-$$\begin{aligned}
-                    f(x, n) + 2 \cdot n \leq f(y, n)
-\end{aligned}$$
-
-Il caso peggiore che questa disuguaglianza deve affrontare è quello in cui $y = 1 + x$, cioè deve valere che: $f(x, n) + 2 \cdot n \leq f(x + 1, n)$. La funzione che fa al caso nostro è:
-
-$$\begin{aligned}
-                    f(i, n) = 2 \cdot n \cdot i
-\end{aligned}$$
-
-Se andiamo a sostituire, verifica la seconda disuguaglianza ed in particolare il suo caso peggiore:
-
-$$\begin{aligned}
-                    f(x, n) + 2 \cdot n &= 2 \cdot n \cdot x + 2 \cdot n = 2 \cdot n \cdot (x + 1)\\
-                    &\leq f(y, n), \qquad y\geq x+1
-\end{aligned}$$
-
-- Messaggi inviati: siccome ogni volta che si viene svegliati si tenta di svegliare il proprio vicino, sull'anello viaggiano $n$ messaggi di wake-up più $n$ notifiche, per un totale di $2 \cdot n \in O(n)$ messaggi
-
-- Tempo di esecuzione: rispetto al caso in cui tutti i nodi si svegliano contemporaneamente, abbiamo raddoppiato il coefficiente nella funzione di attesa. Complessivamente: $2n\cdot min+2n\in O((min+1)n)$
-
-Questo protocollo non è applicabile nel caso si ricerchi l'identificativo più alto piuttosto di quello più basso. In ogni caso, usare l'identificativo più piccolo offre dei vantaggi computazionali.
-
-#### Universal waiting
-
-**Obiettivo e modello.** Si vuole eleggere l'ID minimo in un grafo connesso e affidabile, con clock sincronizzati, identificativi distinti e un bound noto sul tempo di diffusione della notifica. [[#Waiting]] usa la lunghezza massima del percorso su un anello di $n$ nodi per separare i tempi di autoelezione; Universal Waiting sostituisce quel bound con il diametro $d$ del grafo.
+Perché la separazione delle scadenze funzioni, serve un limite noto $D$ sul tempo di propagazione sia dell'attivazione sia della notifica. Se ogni trasmissione lungo un arco impiega al più un’unità di tempo, in un grafo connesso di $n$ nodi il diametro è al più $n-1$, quindi si può usare $n$ come limite superiore e scegliere $f(i,n)=2ni$, come nelle slide (pp. 288; il ragionamento di Waiting è alle pp. 282–286). In forma generale, se si dispone direttamente del limite $D$, una separazione di almeno $2D$ tra scadenze di ID consecutivi è sufficiente per lo stesso argomento. Questa formulazione esplicita il bound necessario: sostituire semplicemente $n$ con il diametro senza specificare quale ritardo esso limita non basta.
 
 ![[assets/Screenshot 2024-11-06 100832.png|700]]
 
-Per quanto riguarda i costi, sostituiamo il diametro $d$ al numero di nodi $n$ usato come bound di propagazione sull'anello. Si applicano funzioni di attesa analoghe a quelle di [[#Waiting]], distinguendo l'avvio simultaneo da quello con risveglio progressivo.
-
 #### Elezione casuale del leader
 
-**Problema e modello.** Su un anello sincrono affidabile senza identificativi univoci iniziali, nodi indistinguibili non possono rompere deterministicamente la simmetria. Vogliamo comunque eleggere un solo leader e comunicare il risultato a tutti, usando scelte casuali indipendenti e round ripetuti. Le due forme usuali di garanzia per un algoritmo randomizzato sono:
+**Problema e garanzia.** Se i nodi di un anello sono anonimi o hanno tutti lo stesso ID, un protocollo deterministico non può eleggere un unico leader: nodi indistinguibili ricevono le stesse informazioni e si comportano nello stesso modo. Un protocollo randomizzato usa scelte casuali per rompere questa simmetria.
 
-- Monte Carlo: terminano sempre, ma non è detto che ogni volta che lo fanno diano un risultato corretto
+Un protocollo **Monte Carlo** termina sempre, ma può dare un risultato errato con una certa probabilità. Un protocollo **Las Vegas** dà sempre un risultato corretto quando termina, ma può non terminare; nel protocollo qui descritto termina con probabilità 1, senza un limite deterministico al numero di round.
 
-- Las Vegas: possono non terminare, ma quando lo fanno danno sempre il risultato corretto
-
-L'idea dietro all'uso di identificativi era quella di trovare, alla fine del procedimento, un solo leader. Nel caso probabilistico, ogni nodo sceglie casualmente un identificativo intero e nel caso di minimi uguali si ripete il processo.
+**Protocollo.** Si ripetono round indipendenti. In ogni round ogni nodo sceglie in modo indipendente un ID casuale in $\{0,1\}$. Si usa Waiting per individuare il minimo. Il round ha successo solo se il minimo è unico: con scelte in $\{0,1\}$ questo accade quando un solo nodo sceglie $0$ e tutti gli altri scelgono $1$. Quel nodo verifica che il suo messaggio percorra l'intero anello e ritorni dopo $n$ unità, poi si elegge. Se il minimo non è unico (anche nel caso in cui tutti scelgano $1$), la rilevazione di pareggio del protocollo Waiting avvia un nuovo round tramite un messaggio di *restart*.
 
 ![[assets/Screenshot 2024-11-06 102152.png|800]]
 
-Possiamo ad esempio utilizzare Waiting combinato ad un approccio probabilistico. I minimi fanno partire la notifica per primi e, siccome ci troviamo in un sistema sincrono, la attendono di ritorno dopo $i$ istanti di tempo. Quando arriva una notifica dopo meno di $i$ istanti, chi riceve la notifica diventa follower, altrimenti diventerà leader alla fine del processo.
-Per un singolo round abbiamo:
+Per $n\ge2$, ogni nodo sceglie $0$ con probabilità $1/n$ e $1$ con probabilità $(n-1)/n$. Il round riesce quando un solo nodo sceglie $0$ e tutti gli altri scelgono $1$. Per una scelta fissata $x$, la probabilità è $(1/n)((n-1)/n)^{n-1}$; vi sono $n$ possibili nodi $x$, quindi
 
-- Comunicazione per round: $O(n)$ trasmissioni di messaggi da un bit, quindi $O(n)$ bit complessivi includendo la notifica o il riavvio; la dimensione del singolo messaggio resta $O(1)$
+$$p_n=n\cdot\frac1n\left(\frac{n-1}{n}\right)^{n-1}=\left(1-\frac1n\right)^{n-1}\xrightarrow[n\to\infty]{}\frac1e.$$
 
-- Tempo di esecuzione: con identificativi estratti da $\{0,1\}$, un round richiede $O(n)$ unità di tempo, includendo la propagazione sull'anello; la scelta limita il tempo di attesa, non elimina il tempo di comunicazione. Per ottenere una probabilità di successo costante per round, ogni nodo sceglie $0$ con probabilità $1/n$ e $1$ con probabilità $(n-1)/n$. Il round ha successo quando un solo nodo sceglie $0$ e tutti gli altri scelgono $1$. La probabilità è:
-
-  $$\begin{aligned}
-                          P = n\cdot\frac{1}{n} \cdot (\frac{n - 1}{n})^{n - 1} = (\frac{n - 1}{n})^{n - 1} \xrightarrow{n \to \infty} \frac{1}{e} \sim 0.37
-  \end{aligned}$$
-
-  Per una specifica entità si moltiplicano la probabilità che scelga 0 e quelle che tutte le altre scelgano 1; il fattore $n$ conta le possibili scelte dell'unica entità che estrae 0.
-  I round sono tentativi indipendenti con probabilità di successo che tende a $1/e$: il numero **atteso** di round tende a $e$, cioè circa $3$. Di conseguenza, tempo e comunicazione **attesi** dell'intero protocollo sono rispettivamente $O(n)$ unità di tempo e $O(n)$ bit. La terminazione è quasi certa, ma non esiste un numero massimo deterministico di round.
+Per ogni round i messaggi di ricerca e quelli di notifica o restart totalizzano $O(n)$ bit. Il tempo di un round è $O(n)$ unità: la propagazione sull'anello richiede fino a $n$ unità e l'attesa è limitata perché gli ID sono solo 0 e 1. I round sono indipendenti; il numero di round ha distribuzione geometrica e valore atteso $1/p_n$, che tende a $e$ (perciò è circa 3 per $n$ grande). Ne seguono $O(n)$ bit e $O(n)$ unità di tempo attesi per l'intera elezione. Non c'è un massimo deterministico di round, ma la probabilità di non terminare dopo $r$ round è $(1-p_n)^r$, che tende a zero.
 
 ## 4 Algoritmi di routing
 
 ### Introduzione
 
-**Problema.** Una sorgente $x$ deve far arrivare un messaggio a una destinazione $y$ scegliendo, a ogni nodo intermedio, il collegamento successivo. Il [[#Broadcast|broadcast]] potrebbe diffondere il messaggio a tutti, ma usa molte trasmissioni quando interessa una sola destinazione. Il routing costruisce invece le informazioni locali necessarie per instradare il messaggio.
-Tipicamente il routing consiste nel processo di determinare un cammino tra una sorgente $x$ ed una destinazione $y$. Un router è un nodo che ha la proprietà di determinare automaticamente il percorso per i messaggi che lo attraversano in base all'indirizzo specificato, prendendo come riferimento ad un'apposita routing table locale.
-Le restrizioni imposte per questa tipologia di problemi sono le seguenti:
+**Problema.** Una sorgente $x$ deve far arrivare un messaggio a una destinazione $y$. Il [[#Broadcast|broadcast]] raggiungerebbe anche tutti gli altri nodi; il *routing* permette invece a ogni nodo attraversato di scegliere il collegamento successivo dalla propria tabella locale, usando l'indirizzo di destinazione. Vogliamo costruire queste tabelle in una rete con:
 
-- Collegamenti bidirezionali: con possibili costi associati
+- collegamenti bidirezionali, eventualmente con costi associati;
 
-- Connettività
+- grafo connesso;
 
-- Affidabilità totale
+- comunicazione affidabile;
 
-- Orientamento locale: tutti i nodi sono in grado di discernere tra i propri vicini, dunque da chi ricevono i messaggi
+- orientamento locale: ogni nodo distingue i propri vicini e la provenienza dei messaggi;
 
-- Identificativi unici
+- identificativi univoci.
 
 ### Routing table
 
-Ciascun nodo ha una propria routing table che indica, per ogni possibile destinazione, su quale collegamento rimandare un messaggio in ingresso.
-Sono di particolare interesse nella risoluzione di problemi di routing:
+Ciascun nodo conserva, per ogni destinazione, il vicino a cui inoltrare il messaggio (*next hop*) e, quando si cercano cammini minimi, il costo del cammino noto. Ci interessano:
 
-- La dimensione della tabella di routing, espresso in numero di bits
+- lo spazio della tabella, misurato in bit;
 
-- Il tempo impiegato per scegliere il link da utilizzare
+- il tempo necessario per scegliere il collegamento in uscita.
 
 ![[assets/Screenshot 2024-11-06 164323.png|700]]
 
@@ -2187,34 +1993,37 @@ Ogni nodo sceglie il prossimo collegamento in base ai cammini minimi dal proprio
 
 ### Gossiping
 
-**Problema e modello.** Su un grafo connesso, bidirezionale e affidabile, ogni nodo vuole costruire una [[#Routing table|tabella di routing]] per tutte le destinazioni. Nel *gossiping* ogni nodo comunica a tutti la propria lista di vicini; raccogliendo queste informazioni, ciascuno può ricostruire il grafo. La costruzione presuppone uno [[#Spanning tree|spanning tree]] lungo cui diffondere i dati.
-Essenzialmente, per fare gossiping si costruisce uno spanning tree, attraverso il quale le entità possono fare il broadcasting di tali informazioni. Una volta che ciascun nodo ha ottenuto il grafo, può costruire il proprio albero dei cammini minimi e generare la tabella di routing. Il grafo memorizzato può quindi essere cancellato. Un downside del gossiping può essere dato dalla dimensione del grafo.
+[[teacher_slides/2_distributed algorithms.pdf#page=306|Slide della docente: Gossiping, p. 306]]
+
+**Idea.** Ogni nodo comunica a tutti la propria lista di vicini. Dopo la costruzione di uno [[#Spanning tree|spanning tree]], le liste sono diffuse lungo l'albero: ogni nodo ricostruisce il grafo, calcola i cammini minimi verso le destinazioni e genera la propria tabella. La mappa può poi essere scartata, ma durante la costruzione ogni nodo deve poterla conservare.
 
 ![[assets/Screenshot 2024-11-06 165045.png|600]]
 
 - Comunicazione: il conteggio delle slide considera ogni informazione su un vicino come un elemento trasmesso separatamente lungo l'albero. Le fasi sono:
 
-  - Shout+ per generare lo spanning tree: $O(2 \cdot m)$
+  - SHOUT+ per generare lo spanning tree: $2m$ messaggi;
 
-  - Ottenimento delle informazioni sul vicinato, per ogni nodo: 2 messaggi scambiati per ogni collegamento (uno per direzione), dunque ancora: $O(2 \cdot m)$
+  - scambio delle informazioni sul vicinato: due messaggi per collegamento, uno per direzione, quindi $2m$ invii;
 
-  - Broadcast delle informazioni di ciascun nodo circa i propri vicini ($deg(x)$ messaggi, uno per ciascun vicino) attraverso tutti gli $n - 1$ collegamenti dello spanning tree:
+  - diffusione lungo lo spanning tree: la lista di $x$ contiene $\deg(x)$ elementi; se ciascuno viaggia separatamente, viene trasmesso sui $n-1$ archi dell'albero:
 
     $$\begin{aligned}
                                 \sum_{x} (n - 1) \cdot deg(x) = (n - 1) \cdot \sum_{x} deg(x) = (n - 1) \cdot 2 \cdot m
     \end{aligned}$$
 
-    Naturalmente, la somma dei gradi di tutti i nodi è uguale a $2 \cdot m$.
+    La somma dei gradi è $2m$ perché ogni arco è incidente a due nodi.
 
   Con questa convenzione, il costo è $O(mn)$ trasmissioni di elementi. Se più informazioni vengono accorpate in un messaggio, il numero di invii può diminuire, mentre cresce la dimensione dei messaggi. Ogni nodo deve poter memorizzare la mappa completa del grafo, che richiede spazio $\Theta(n+m)$ in unità di vertici e archi.
 
 ### Iterating
 
-**Problema e modello.** Ogni nodo deve costruire una tabella di routing su un grafo connesso e affidabile con costi dei collegamenti noti localmente. A differenza del [[#Gossiping|gossiping]], che diffonde il grafo intero, Iterating scambia stime delle distanze: all'inizio ogni nodo conosce solo i propri vicini, poi invia ai vicini il proprio *distance vector* e lo aggiorna usando quelli ricevuti. Le iterazioni e i conteggi sotto assumono l'esecuzione per round descritta nelle slide.
+[[teacher_slides/2_distributed algorithms.pdf#page=314|Slide della docente: Iterating, p. 314]]
+
+**Problema e modello.** Ogni nodo deve costruire una tabella di routing su un grafo connesso e affidabile con costi non negativi dei collegamenti noti ai loro estremi. A differenza del [[#Gossiping|gossiping]], che diffonde il grafo intero, Iterating scambia stime delle distanze: all'inizio ogni nodo conosce il costo dei collegamenti ai propri vicini, poi invia ai vicini il proprio *distance vector* di $n$ costi e lo aggiorna usando quelli ricevuti. Le iterazioni e i conteggi sotto assumono round coordinati e conoscenza di $n$, come nelle slide.
 
 ![[assets/Screenshot 2024-11-08 170555.png|1000]]
 
-Questo modo di procedere è lo stesso previsto dall'algoritmo di Bellman-Ford; nella fattispepcie stiamo usando un Bellman-Ford distribuito. Il protocollo converge in al più $n - 1$ iterazioni, perché tale è la lunghezza massima di un cammino minimo tra due nodi. Al termine della computazione, a differenza di Gossiping, i nodi non conoscono né la mappa del grafo né l'albero dei cammini minimi da ogni sorgente.
+È una forma distribuita di Bellman–Ford: dopo il round $k$, ogni nodo conosce il costo minimo di un cammino con al più $k$ archi verso ciascuna destinazione e il vicino che realizza la stima. Con costi non negativi esiste un cammino minimo semplice, con al più $n-1$ archi; quindi dopo $n-1$ round tutte le tabelle sono corrette. A differenza di Gossiping, i nodi non ricostruiscono la mappa completa.
 
 - Comunicazione: a ogni iterazione ciascun nodo invia il proprio distance vector di $n$ costi a tutti i vicini. Se il vettore è **un messaggio**, gli invii sono $\sum_x |N(x)|=2m$ per iterazione, dunque al più $2m(n-1)\in O(mn)$ invii in totale. Se invece contiamo i singoli **elementi trasmessi**, come nel calcolo delle slide, otteniamo:
 
@@ -2222,45 +2031,40 @@ Questo modo di procedere è lo stesso previsto dall'algoritmo di Bellman-Ford; n
                       (n-1)n\sum_x |N(x)|=2mn(n-1)\in O(n^2m).
   \end{aligned}$$
 
-  Nel conteggio per elementi, Iterating comunica più di Gossiping. Ogni nodo conserva il proprio vettore e le informazioni necessarie all'aggiornamento, senza memorizzare l'intera mappa del grafo.
+  Nel conteggio per elementi, Iterating ha il bound $O(n^2m)$ contro $O(mn)$ di Gossiping. Ogni nodo conserva il proprio vettore e le stime ricevute dai vicini per aggiornarlo; non memorizza l'intera mappa del grafo. Lo spazio dipende anche da come vengono conservati questi vettori.
 
-Ci chiediamo a questo punto se sia possibile costruire tabelle di routing con una quantità di messaggi e memoria limitata. Possiamo farlo realizzando una versione distribuita degli algoritmi di Dijkstra o BFS, come vediamo nel seguito.
+I due algoritmi seguenti costruiscono invece un albero dei cammini minimi da una sorgente alla volta: Min-Hop per il numero di archi e Dijkstra per i costi positivi.
 
 ### Min-Hop routing
 
-**Problema e modello.** Da una sorgente $s$ vogliamo costruire un albero dei cammini con il **minor numero di archi** verso ogni nodo. Assumiamo grafo connesso, bidirezionale e affidabile, con collegamenti senza peso oppure tutti dello stesso costo. Nel modello ideale sincrono, [[#Protocollo Shout|SHOUT]] scopre i nodi per livelli di distanza da $s$ e costruisce un albero BFS. Nel modello asincrono qui considerato occorre invece coordinare esplicitamente le esplorazioni dei livelli.
-Nel caso asincrono si deve in qualche modo inserire la sincronizzazione artificialmente. Cioè, tutti i nodi che ricevono un messaggio dalla sorgente devono notificare la ricezione prima di andare a ricercare i propri figli. In questo modo si risolvono le possibili incongruenze introdotte dai diversi tempi di arrivo dei messaggi. Il parallelismo è in qualche modo implicito, perché in fase di ricerca ogni nodo invia più messaggi contemporaneamente verso i propri figli.
-Il protocollo è iterativo: ad ogni nuova iterazione si aggiunge un livello all'albero dei cammini minimi.
+[[teacher_slides/2_distributed algorithms.pdf#page=333|Slide della docente: Min-Hop, p. 333]]
+
+**Problema e modello.** Da una sorgente $s$ vogliamo costruire un albero dei cammini con il **minor numero di archi** verso ogni nodo. Assumiamo un grafo connesso, bidirezionale e affidabile, con collegamenti senza peso oppure tutti dello stesso costo. Nel modello ideale sincrono, [[#Protocollo Shout|SHOUT]] scopre i nodi per livelli di distanza da $s$ e costruisce un albero BFS. In una rete asincrona l'ordine di arrivo dei messaggi non identifica il livello: Min-Hop coordina esplicitamente l'esplorazione di un livello per volta. Ogni nodo può esplorare in parallelo più collegamenti, ma la radice avvia il livello successivo soltanto dopo tutte le risposte del livello corrente.
 
 ![[assets/Screenshot 2024-11-08 171837.png|600]]
 
-All'inizio di una generica iterazione $i$, l'albero costruito fino a quel momento contiene nodi che vanno fino ad una distanza $i - 1$ dalla sorgente $s$. I nodi inclusi nell'albero parziale conoscono i propri padri, figli ed in particolare la loro distanza da $s$. Al termine dell'iterazione anche i nodi a distanza $i$ da $s$ saranno stati scoperti.
-All'iterazione $i$-esima, la radice $s$ invia un flood nell'albero parziale. Una generica entità che riceve il messaggio lo inoltra se non è una foglia, altrimenti inizia la fase di esplorazione.
-L'esplorazione consiste nell'invio di un broadcast di messaggi ai propri vicini, che ricevono diversi ack a seconda dello stato di questi ultimi.
+All'inizio dell'iterazione $i$, l'albero parziale contiene esattamente i nodi a distanza al più $i-1$ da $s$. Ogni nodo già incluso conosce il padre, i figli e la propria distanza. La radice diffonde `start` nell'albero; le foglie di livello $i-1$ esplorano i collegamenti ancora non trattati. Un nodo esterno che riceve il primo `explore` entra nell'albero al livello $i$ e risponde; una risposta negativa o un'esplorazione incrociata evita di aggiungere di nuovo un nodo già raggiunto. Al termine, i nuovi nodi sono precisamente quelli a distanza $i$.
 
 ![[assets/Screenshot 2024-11-08 172142.png|600]]
 
-Quando un nodo che ha avviato la ricerca riceve gli ack da tutti i propri figli, invia un messaggio verso la radice con un convergecast. Una volta che $s$ ha ricevuto tutti i convergecast di ritorno, può fare partire una nuova iterazione.
-Come terminare l'esecuzione del protocollo? In modo del tutto naive la radice sa che dopo al più $n - 1$ iterazioni la computazione sarà sicuramente finita. A quel punto verrà quindi inviato in flooding un messaggio di notifica verso gli altri nodi.
-Altrimenti, possiamo fare sì che il messaggio di convergecast contenga il numero di nodi scoperti in fase di ricerca, e che i nodi interni che ne ricevono più di uno sommino tale numero, ripetendo questa procedura fino alla radice. In questo modo, una volta raggiunti tutti gli $n - 1$ nodi che non sono $s$, lo stesso $s$ lo saprà e potrà inviare la notifica per fermare la computazione.
-Un ulteriore modo potrebbe essere quello di inviare un particolare messaggio di convergecast quando i nodi non trovano nuovi vicini. Nel momento in cui $s$ riceve solo messaggi di questo tipo, significa che l'albero di copertura ha raggiunto tutto $G$.
+Quando ogni esploratore ha ricevuto le risposte attese, un *convergecast* nell'albero riporta l'esito a $s$. La radice può arrestarsi dopo aver contato $n-1$ nodi aggiunti o eseguito $n-1$ iterazioni, se conosce $n$; altrimenti può arrestarsi quando un'iterazione completa non scopre alcun nodo nuovo. Quest'ultima prova di stagnazione può richiedere un'iterazione ulteriore dopo la scoperta dell'ultimo livello. La radice diffonde infine `stop` nell'albero.
 
 - Messaggi inviati: all'$i$-esima iterazione abbiamo un flooding sull'albero parziale (di profondità esattamente pari a $i - 1$), poi la fase di esplorazione ed infine il convergecast.
-  Entrambi convergecast e flooding implicano l'invio di $n_i - 1$ messaggi (uno su ogni collegamento dell'albero parziale). Per questi, abbiamo complessivamente:
+  Sia $n_i$ il numero di nodi già nell’albero all’inizio dell’iterazione $i$. Sia il convergecast sia il flooding implicano $n_i-1$ messaggi, uno per arco dell’albero parziale. Per questi, abbiamo complessivamente:
 
   $$\begin{aligned}
-                      \sum_{i = 1}^{r(s)} 2 \cdot (n_i - 1) \leq 2 \cdot (n - 1) \sum_{i = 1}^{r(s)} 1 \leq 2 \cdot (n - 1) \cdot d(G)
+                      \sum_{i = 1}^{r(s)} 2 \cdot (n_i - 1) \leq 2 \cdot (n - 1) \sum_{i = 1}^{r(s)} 1 \leq 2 \cdot (n - 1) \cdot D(G)
   \end{aligned}$$
 
-  dove $r(s)$ è il numero di iterazioni al quale il protocollo è concluso. $d(G)$ è l'upper bound naturale per il numero di iterazioni.
+  dove $r(s)$ è l’eccentricità di $s$, cioè la massima distanza da $s$, e $D(G)$ è il diametro. Queste sono le iterazioni che scoprono livelli nuovi, con $r(s)\le D(G)\le n-1$; un’eventuale verifica finale di stagnazione aggiunge al più $2(n-1)$ messaggi nell’albero.
   Nella fase di esplorazione, ogni arco viene considerato una sola volta: passa un messaggio `explore` e una risposta, oppure due `explore` incrociati fra nodi dello stesso livello. Il totale è quindi **$2m$ messaggi**, come nelle slide; non bisogna contare una seconda esplorazione dello stesso arco.
   Sommando il tutto otteniamo:
 
   $$\begin{aligned}
-                      2(n-1)d(G)+2m\leq 2(n-1)^2+2m\in O(n^2).
+                      2(n-1)D(G)+2m\leq 2(n-1)^2+2m\in O(n^2).
   \end{aligned}$$
 
-  La scelta di $n-1$ come upper bound per $d(G)$ vale per ogni grafo connesso. Il conteggio fino a $r(s)$ iterazioni usa la terminazione quando non si scoprono nuovi nodi; se la radice esegue sempre $n-1$ iterazioni perché conosce $n$, il bound resta $O(n^2)$.
+  La maggiorazione $D(G)\le n-1$ vale per ogni grafo connesso. Eseguire comunque $n-1$ iterazioni, oppure una verifica finale senza nodi nuovi, mantiene il bound $O(n^2)$.
 
 - Tempo di esecuzione: anche in questo caso, possiamo distinguere tre diversi costi per la generica iterazione $i$-esima. Explore e convergecast sono catene di $i - 1$ messaggi, mentre la ricerca è una catena di $2$ messaggi. Sommando il tutto troviamo $2 \cdot i$ messaggi consecutivi per ogni iterazione.
   Per tutte le iterazioni abbiamo:
@@ -2269,12 +2073,13 @@ Un ulteriore modo potrebbe essere quello di inviare un particolare messaggio di 
                       \sum_{i = 1}^{r(s)} 2 \cdot i = 2 \cdot \frac{r(s) \cdot (r(s) + 1)}{2} = r(s) \cdot (r(s) + 1) \in O(r(s)^2) \in O(n^2)
   \end{aligned}$$
 
-  Ancora una volta usiamo $n - 1 \in O(n)$ come upper bound per $r(s)$
+  Per la verifica finale di stagnazione si sostituisce $r(s)$ con al più $r(s)+1$: il tempo resta $O(n^2)$.
 
 ### Algoritmo di Dijkstra
 
-**Problema e modello.** Da una sorgente $s$ vogliamo costruire un albero dei cammini di **costo minimo** verso tutti i nodi di un grafo connesso, bidirezionale e affidabile. I pesi dei collegamenti sono positivi e noti ai loro estremi; a differenza di [[#Min-Hop routing|Min-Hop]], possono essere diversi. La radice coordina iterazioni distribuite tramite flooding e convergecast sull'albero parziale.
-Nella versione classica dell'algoritmo di Dijkstra, ad ogni iterazione alcuni nodi fanno parte dell'albero di copertura dei cammini minimi ed altri no. Collegamenti in uscita dai primi li connettono con i secondi, generando una vera e propria "zona di confine". Ad ogni iterazione viene aggiunto all'albero di copertura dei cammini minimi (SPST) il nodo che ancora non ne fa parte verso il quale la distanza da $s$ è minima.
+[[teacher_slides/2_distributed algorithms.pdf#page=349|Slide della docente: Dijkstra, p. 349]]
+
+**Problema e modello.** Da una sorgente $s$ vogliamo costruire un albero dei cammini di **costo minimo** verso tutti i nodi di un grafo connesso, bidirezionale e affidabile. I pesi dei collegamenti sono strettamente positivi e noti ai loro estremi; a differenza di [[#Min-Hop routing|Min-Hop]], possono essere diversi. La radice coordina iterazioni distribuite tramite flooding e convergecast sull'albero parziale. In ogni iterazione aggiunge il nodo esterno con la minima stima $\Delta(x)+c(x,y)$ fra gli archi $(x,y)$ sul confine. L'invariante è che $\Delta(x)$ è già la distanza minima da $s$ per ogni nodo $x$ nell'albero; la scelta del minimo sul confine rende definitiva anche la distanza del nuovo nodo.
 
 ![[assets/Screenshot 2024-11-12 095921.png|1000]]
 
@@ -2282,9 +2087,7 @@ Nella versione classica dell'algoritmo di Dijkstra, ad ogni iterazione alcuni no
 
 ![[assets/Screenshot 2024-11-12 100018.png|550]]
 
-Ogni nodo vede i collegamenti verso i vicini dal proprio punto di vista. Uno stesso collegamento può essere inteso in due modi diversi dai nodi che lo condividono.
-Alla generica iterazione, la radice $s$ fa il flooding di un messaggio di inizio verso tutto l'albero.
-Quando una generica entità $x$ lo riceve, va a proporre il proprio candidato $y_x$ per l'inserimento nell'albero. Per individuarlo minimizza su ogni collegamento "outgoing" la somma:
+Ogni nodo conosce localmente lo stato dei propri collegamenti; un vicino appena inserito segnala la variazione, così gli altri nodi non lo considerano più un candidato esterno. La radice diffonde `start iteration` nell'albero. Ogni nodo interno $x$ sceglie tra i suoi archi ancora *outgoing* il candidato $y_x$ che minimizza:
 
 $$\begin{aligned}
                 \Delta (x) + c(x, y)
@@ -2293,16 +2096,15 @@ $$\begin{aligned}
 La selezione del nuovo nodo da aggiungere all'albero è fatta attraverso un convergecast, che propaga verso $s$ l'aggregazione:
 
 $$\begin{aligned}
-                \hat{x} = argmin_x \{\Delta(x) + c(x, y_x)\}
+                \hat{x} = \operatorname*{argmin}_{x\text{ nell'albero},\; y_x\text{ esterno}} \{\Delta(x) + c(x, y_x)\}
 \end{aligned}$$
 
-Una volta che la radice riceve l'ultimo convergecast, determina quale sia il nuovo nodo (dunque il nuovo collegamento $(\hat{x}, y_{\hat{x}})$) da aggiungere all'albero. A questo punto, fa partire un nuovo messaggio di notifica verso $y_{\hat{x}}$. $\hat{x}$ manda a $y_{\hat{x}}$ il valore $\Delta (y_{\hat{x}})$ ed entrambi $\hat{x}$ e $y_{\hat{x}}$ marcano il collegamento tra loro come "tree". Questa notifica non deve avvenire necessariamente tramite flooding, infatti basta che ogni entità ricordi qual'era la distanza minima che aveva ricevuto in fase di convergecast per ricostruire il percorso esatto.
+Ricevuto il risultato del convergecast, la radice invia la notifica lungo il percorso dell'albero verso $\hat{x}$; ogni nodo intermedio ricorda da quale figlio è arrivata l'offerta minima. $\hat{x}$ comunica a $y_{\hat{x}}$ la distanza definitiva $\Delta(y_{\hat{x}})=\Delta(\hat{x})+c(\hat{x},y_{\hat{x}})$ ed entrambi marcano l'arco come appartenente all'albero. La notifica percorre soltanto quel cammino, senza flooding generale.
 A questo punto, $y_{\hat{x}}$ notifica ai propri vicini (tranne $\hat{x}$) di essere stato aggiunto all'albero, in modo che questi possano marcare il collegamento verso $y_{\hat{x}}$ come "non-outgoing". $y_{\hat{x}}$ attende gli ack e quando li ha ricevuti tutti, invia verso $s$ un messaggio di "end iteration".
 
 ![[assets/Screenshot 2024-11-12 113900.png|1000]]
 
-Solo la radice può decidere quando il protocollo è terminato. Per avvisare tutti i nodi dell'albero, invia una notifica.
-Se supponiamo che la sorgente conosca il numero di nodi, invierà una notifica al termine delle $n - 1$ iterazioni. In alternativa, basta che $s$ veda quando non arrivano più notifiche di candidati in convergecast. Siccome non abbiamo alcuna certezza sui possibili ritardi, si può pensare di mandare un tipo particolare di messaggio attraverso il convergecast, ad esempio un "-1", qualora non si trovino più possibili candidati.
+Solo la radice decide la terminazione e diffonde poi `stop`. Se conosce $n$, bastano $n-1$ aggiunte. Altrimenti esegue un'ulteriore iterazione: ogni nodo senza archi candidati restituisce un marcatore «nessun candidato» nel convergecast; se tutte le offerte sono vuote, la radice sa che il grafo connesso è stato interamente coperto. Il silenzio, da solo, non certifica la fine in una rete asincrona.
 
 - Messaggi inviati: dobbiamo sommare le complessità delle diverse fasi in cui si articola il protocollo.
 
@@ -2314,20 +2116,20 @@ Se supponiamo che la sorgente conosca il numero di nodi, invierà una notifica a
 
   - Notifica di fine iterazione: uguale alla notifica precedente, quindi al più $(i - 1) + 1=i$ messaggi
 
-  percui, in tutto $4 \cdot i - 2$. Sommando per tutte le iterazioni, abbiamo:
+  quindi $4i-2$ messaggi sulla struttura ad albero per ogni iterazione che aggiunge un nodo. Sommando le $n-1$ aggiunte, abbiamo:
 
   $$\begin{aligned}
                           \sum_{i = 1}^{n - 1} (4 \cdot i - 2) &= 4 \cdot \sum_{i = 1}^{n - 1} i  - 2 \cdot \sum_{i = 1}^{n - 1} 1 = 4 \cdot \frac{(n - 1) \cdot n}{2} - 2 \cdot (n - 1)\\
                           &= 2 \cdot (n - 1)^2 \in O (n^2)
   \end{aligned}$$
 
-  Dobbiamo poi aggiungere le notifiche inviate da $y_{\hat{x}}$ ai propri vicini e gli ack relativi, per ogni nodo scoperto:
+  Aggiungiamo le notifiche ai vicini del nodo inserito e i relativi ack, oltre alla fase iniziale della sorgente:
 
   $$\begin{aligned}
                           2\left(\sum_{x\neq s}(deg(x)-1)+deg(s)\right)=4m-2(n-1)
   \end{aligned}$$
 
-  Sommando il tutto abbiamo:
+  Sommando otteniamo il conteggio delle slide; la diffusione finale di `stop` e l'eventuale iterazione che verifica l'assenza di candidati aggiungono $O(n)$ invii e non cambiano il bound:
 
   $$\begin{aligned}
                           2 \cdot (n - 1)^2 + 4 \cdot m - 2 \cdot (n-1) \in O(n^2)
@@ -2353,43 +2155,46 @@ Se supponiamo che la sorgente conosca il numero di nodi, invierà una notifica a
 
   - Primo passo della notifica di fine iterazione da $y_{\hat{x}}$ verso $\hat{x}$
 
-  Il totale complessivo è di $4 \cdot i$ messaggi in catena per iterazione.
+  La lunghezza della catena causale è al più $4i$ unità ideali per iterazione, contando un'unità per trasmissione e non il numero totale di invii paralleli.
   Complessivamente, per tutte le iterazioni:
 
   $$\begin{aligned}
                           4 \cdot \sum_{i = 1}^{n - 1} i = 4 \cdot \frac{n \cdot (n - 1)}{2} = 2 \cdot (n) \cdot (n - 1)
   \end{aligned}$$
 
-  Aggiungendo la catena di inizializzazione lunga 2 e la notifica finale lunga al più $n-1$, il totale è $2+2n(n-1)+(n-1)=2n^2-n-1\in O(n^2)$
+  Aggiungendo l'inizializzazione lunga 2 e la notifica finale lunga al più $n-1$, il totale è $2+2n(n-1)+(n-1)=2n^2-n-1\in O(n^2)$ unità ideali. Una verifica finale senza candidati aggiunge al più un'altra iterazione $O(n)$.
 
-Se vogliamo ottenere le tabelle di routing su tutta la rete, tutti i nodi devono calcolare il proprio spanning tree. Il costo in termini di messaggi diventa di $n$ volte $O(n^2)$, cioè un algoritmo di Dijkstra distribuito con ogni nodo come sorgente, cioè $O(n^3)$ in tutto. Gli algoritmi di Dijkstra distribuiti si possono idealmente eseguire in parallelo, inviando messaggi opportunamente contrassegnati.
-Per tutte le sorgenti, Dijkstra distribuito usa $O(n^3)$ messaggi, mentre il conteggio per elementi delle slide dà $O(mn)$ per Gossiping e $O(n^2m)$ per Iterating. Nel caso denso $m=\Theta(n^2)$, il bound di Gossiping ha anch'esso ordine $O(n^3)$, ma **misura elementi trasmessi**, non necessariamente invii di messaggi; nel caso sparso $m=\Theta(n)$ scende a $O(n^2)$ elementi. Il vantaggio di memoria di Dijkstra è che non richiede a ogni nodo di conservare la mappa completa della rete.
-L'algoritmo di Dijkstra distribuito è, in qualche modo, più semplice della versione sequenziale, perché non dobbiamo attingere ad una struttura dati aggiuntiva come la coda con priorità.
+Per avere tabelle di routing per tutte le sorgenti, ogni nodo avvia una propria costruzione dell'albero, identificando i messaggi della propria istanza. Il bound complessivo è $n\cdot O(n^2)=O(n^3)$ **invii**; le istanze possono sovrapporsi nel tempo, ma ciò non riduce il numero totale di invii. Gossiping usa invece $O(mn)$ **elementi trasmessi** e Iterating $O(n^2m)$ elementi: il confronto numerico ha senso soltanto ricordando che sono unità diverse. Se $m=\Theta(n^2)$, $O(mn)=O(n^3)$; se $m=\Theta(n)$, è $O(n^2)$. Dijkstra evita la memorizzazione della mappa completa in ogni nodo; la selezione globale è realizzata dal convergecast, senza una coda con priorità condivisa.
 
 ## 5 Errori e fallimenti
 
 ### Introduzione
 
-I protocolli senza guasti assumono che nodi e collegamenti seguano le regole previste e che i messaggi arrivino integri in tempo finito. Qui studiamo come cambiano problema, possibilità e costo quando nodi o collegamenti possono fallire. La distinzione tra assiomi del modello e restrizioni di affidabilità è in [[#Assiomi]] e [[#Restrizioni]].
-Esistono diverse classificazioni per i fallimenti:
+Finora abbiamo assunto che nodi e collegamenti rispettino il protocollo e che i messaggi siano consegnati correttamente. In questa sezione consideriamo sistemi in cui nodi o collegamenti possono guastarsi. Le slide classificano i guasti per componente, comportamento, durata ed estensione; qui useremo soprattutto le prime due classificazioni.
 
 ![[assets/Screenshot 2024-11-12 121215.png|600]]
 
-Solitamente si impongono restrizioni sul tipo di fallimento, per restringere il campo verso certi casi d'uso. Non è possibile progettare protocolli resistenti ad un numero arbitrario di fallimenti. Esistono poi protocolli che sono in grado di resistere fino ad un certo numero di fallimenti dello stesso tipo. Determinare tale numero è a carico di chi li definisce.
+Un protocollo dichiara quali guasti ammette e quanti ne tollera. Non si può garantire il funzionamento in presenza di un numero arbitrario di guasti.
 
 ### Tipi di fallimenti
 
-Le slide distinguono prima **quale componente** può fallire: solo nodi (*entity failure*), solo collegamenti (*link failure*) oppure entrambi (*hybrid failure*). Nel modello considerato qui un componente, una volta guasto, rimane tale. La gravità del comportamento dipende poi dal tipo di guasto:
+Le slide distinguono il componente che può guastarsi:
 
-- **Nodi:** con un *crash* il nodo si ferma definitivamente; con un'omissione può non inviare o non ricevere alcuni messaggi; con un guasto *bizantino* può compiere azioni arbitrarie, anche incoerenti con il protocollo.
+- **Entity failure:** possono guastarsi solo i nodi.
+- **Link failure:** possono guastarsi solo i collegamenti.
+- **Hybrid failure:** possono guastarsi sia nodi sia collegamenti.
+
+Nel modello usato nelle slide i guasti sono permanenti: un componente guasto resta guasto. Il tipo di guasto descrive invece il comportamento del componente difettoso.
+
+- **Guasti dei nodi.** Con un *crash* (o *fail-stop*) il nodo si arresta. Con un guasto di omissione il nodo può non inviare messaggi preparati o non ricevere alcuni messaggi. Un nodo bizantino non è vincolato dal protocollo e può compiere qualunque azione.
 
   ![[assets/Screenshot 2024-11-12 121453.png|600]]
 
-- **Collegamenti:** un'omissione perde un messaggio inviato; un'aggiunta consegna un messaggio mai inviato; una corruzione altera il messaggio durante la consegna. Aggiunta e corruzione sono comportamenti bizantini del collegamento nella classificazione delle slide.
+- **Guasti dei collegamenti.** Con un'omissione un messaggio inviato non viene consegnato; con un'aggiunta viene consegnato un messaggio che nessuno ha inviato; con una corruzione viene consegnato un messaggio diverso da quello inviato. Aggiunta e corruzione sono comportamenti bizantini del collegamento nella classificazione delle slide.
 
   ![[assets/Screenshot 2024-11-12 121505.png|600]]
 
-- **Entrambi:** il modello ibrido ammette guasti sia dei nodi sia dei collegamenti. Ogni protocollo successivo specifica quali di questi eventi sono ammessi.
+Ogni protocollo deve specificare quali comportamenti ammette. Un guasto ibrido ammette guasti sia dei nodi sia dei collegamenti.
 
 [[teacher_slides/2_distributed algorithms.pdf#page=358|Slide della docente, p. 358]]
 [[teacher_slides/2_distributed algorithms.pdf#page=359|Slide della docente, p. 359]]
@@ -2397,449 +2202,372 @@ Le slide distinguono prima **quale componente** può fallire: solo nodi (*entity
 
 ### Fault-tolerance e topologie di rete
 
-La definizione di un protocollo fault-tolerant dipende in maniera preponderante dalla topologia del sistema. Si può disconnettere un grafo rimuovendo nodi o collegamenti.
+La connettività della rete limita quali guasti un protocollo può tollerare. La **connettività per nodi** è il minimo numero di nodi la cui rimozione disconnette il grafo; la **connettività per archi** è il minimo numero di archi la cui rimozione lo disconnette. Per esempio, un albero ha entrambe pari a 1, un anello bidirezionale pari a 2 e un grafo completo con $n$ nodi pari a $n-1$.
 
 ![[assets/Screenshot 2024-11-12 121743.png|600]]
 
-Se $k$ nodi/collegamenti arbitrari possono crashare, è impossibile eseguire un flooding, a meno che la rete non sia $(k+1)$-node/edge-connected.
+Se possono andare in crash fino a $k$ nodi, il flooding richiede una rete $(k+1)$-connessa per nodi; se possono fallire fino a $k$ collegamenti, richiede una rete $(k+1)$-connessa per archi. La condizione impedisce che i guasti ammessi separino la rete.
+
+[[teacher_slides/2_distributed algorithms.pdf#page=361|Slide della docente, p. 361]]
+[[teacher_slides/2_distributed algorithms.pdf#page=362|Slide della docente, p. 362]]
 
 ### Problema di Agreement/Consensus
 
-**Obiettivo.** I nodi devono scegliere valori compatibili anche quando il modello ammette guasti. Nelle sezioni successive distinguiamo guasti di collegamento, crash dei nodi e comportamento bizantino, dichiarando per ciascuno quali nodi sono tenuti a decidere.
+Ogni entità $x$ propone un valore iniziale $v(x)$ scelto da un insieme noto. Il protocollo deve far decidere a un gruppo di almeno $p$ entità un valore comune, appartenente allo stesso insieme. Si parla di **$p$-agreement**; quando $p=n$, dove $n$ è il numero delle entità, si parla di **consenso**.
 
-Ogni entità $x$ ha associato un valore $v(x)$, estratto da un insieme conosciuto di valori. Alla fine del protocollo, almeno $p$ entità devono accordarsi su di uno stesso valore $d(x)$, anch'esso appartenente all'insieme.
-La risoluzione del problema è tipicamente vincolata dalla "non-trivialità": se tutte le entità hanno inizialmente associato lo stesso valore, la decisione deve convergere verso di esso.
-Per un accordo tra $p$ entità si parla di "$p$-agreement", mentre quando $p = n$ si parla di "consenso".
+Le proprietà richieste comprendono:
+
+- **Agreement:** le entità tenute a decidere scelgono tutte lo stesso valore.
+- **Validità (o non-trivialità nel lessico delle slide):** se tutti propongono inizialmente lo stesso valore, quello è il valore deciso.
+- **Terminazione:** ogni entità tenuta a decidere prende una decisione.
+
+Le sezioni seguenti specificano quali nodi devono decidere e quali guasti sono ammessi.
 
 ### 5.1 Consensus problem con fallimenti sui collegamenti
 
 #### Introduzione
 
-**Problema e modello.** Ogni nodo propone un valore; tutti i nodi, che qui non falliscono, devono terminare e decidere lo stesso valore. Possono invece perdersi messaggi a causa di fallimenti dei collegamenti. Per la definizione generale di accordo e non-trivialità si veda [[#Problema di Agreement/Consensus]]. Richiediamo:
-
-- Agreement: le entità devono decidere tutte lo stesso valore
-
-- Non-trivialità
-
-- Terminazione: tutte le entità alla fine decidono
+Qui nessun nodo si guasta; possono invece perdersi messaggi a causa di guasti dei collegamenti. Tutti i nodi devono terminare e decidere lo stesso valore, rispettando agreement, validità (non-trivialità) e terminazione definiti sopra.
 
 #### Il problema dei due generali
 
-Due generali, ciascuno a capo di un esercito, devono coordinare un attacco contro il nemico. I due eserciti sono posizionati su colline opposte e possono comunicare solo inviandosi messaggi tramite un messaggero appiedato, che deve attraversare la valle. Essendo la valle controllata dal nemico, c'è il rischio che i messaggeri vengano intercettati e non raggiungano l'altro generale.
-Entrambi i generali sanno che per vincere la battaglia devono attaccare contemporaneamente, quindi è fondamentale la loro coordinazione. Il problema nasce dal fatto che, anche se uno dei generali invia un messaggio per confermare l'attacco, non può essere certo che l'altro generale abbia ricevuto il messaggio, e viceversa. Potrebbero continuare a inviarsi messaggi di conferma indefinitamente, però rimane sempre l'incertezza che l'ultimo messaggio non sia stato ricevuto dall'altro generale.
-Il problema dei due generali dimostra che in un sistema con un canale di comunicazione inaffidabile non sia possibile garantire un consenso certo.
+Due generali, a capo di eserciti su colline opposte, devono attaccare contemporaneamente. Possono comunicare solo tramite messaggeri che attraversano una valle controllata dal nemico: un messaggio può essere intercettato e perso. Se un generale invia una conferma, non può sapere con certezza che l'altro l'abbia ricevuta; anche una conferma della conferma può andare persa. Qualunque sia l'ultimo messaggio inviato, il mittente non può sapere se è stato consegnato.
 
 ![[assets/0_elHKtsxKn5VMl8cZ.jpg|500]]
 
-#### Impossibilità nel problema dei due generali
+> [!theorem] Impossibilità dei due generali
+> Il problema dei due generali non si può risolvere, nemmeno se il sistema è completamente sincrono.
 
-Il problema dei due generali non si può risolvere, nemmeno se il sistema è completamente sincrono.
+> [!theorem] Lemma necessario
+> In ogni esecuzione di un protocollo in cui entrambi i generali decidono di attaccare, almeno un messaggio deve essere consegnato. Se non ne viene consegnato nessuno, un generale non può distinguere fra il caso in cui l'altro abbia deciso di non attaccare e quello in cui abbia deciso di attaccare ma i suoi messaggi siano andati persi.
 
-##### Lemma necessario
-
-In ogni esecuzione di ogni protocollo in cui i due generali decidono di attaccare, almeno un messaggio deve essere consegnato. Altrimenti, l'altro generale è incapace di stabilire se il primo ha deciso di non attaccare o se il messaggio è andato perso.
-
-##### Dimostrazione
-
-Dimostriamo per assurdo il teorema. Supponiamo che un protocollo risolva il problema e scegliamo, fra le esecuzioni in cui entrambi attaccano, una esecuzione $E$ con il **numero minimo $k\geq1$ di messaggi consegnati**. Costruiamo $E'$ identica fino all'ultimo invio, ma in cui l'ultimo messaggio e ogni eventuale messaggio successivo vengono persi.
+**Dimostrazione.** Supponiamo per assurdo che esista un protocollo corretto. Fra le esecuzioni in cui entrambi decidono di attaccare, scegliamone una, $E$, con il numero minimo $k$ di messaggi consegnati. Per il lemma, $k\geq1$. Costruiamo un'esecuzione $E'$ identica a $E$ fino all'invio dell'ultimo messaggio consegnato, ma in cui quel messaggio viene perso; anche eventuali messaggi successivi non vengono consegnati.
 
 ![[assets/Screenshot 2024-11-13 091232.png|800]]
 
-Per il **mittente dell'ultimo messaggio** le due esecuzioni sono indistinguibili: non può sapere se quel messaggio è stato consegnato, quindi decide di attaccare anche in $E'$. Se il protocollo fosse corretto, anche l'altro generale dovrebbe attaccare in $E'$. Ma in $E'$ sono stati **consegnati** solo $k-1$ messaggi. Dividiamo i casi:
+Il mittente dell'ultimo messaggio non può distinguere $E$ da $E'$: sa di averlo inviato, ma non se sia stato consegnato. Decide quindi di attaccare anche in $E'$. Per agreement, anche l'altro generale deve decidere di attaccare. In $E'$ sono stati consegnati $k-1$ messaggi:
 
-- Se $k-1>0$, contraddiciamo la minimalità di $k$ messaggi consegnati
+- se $k-1>0$, ciò contraddice la scelta di $E$ con il minimo numero di messaggi consegnati;
+- se $k-1=0$, ciò contraddice il lemma.
 
-- Se $k-1=0$, contraddiciamo il lemma: nessun messaggio viene consegnato
+Non esiste quindi un protocollo corretto. L'impossibilità dipende dal fatto che il collegamento **può** fallire, non dal fatto che fallisca necessariamente.
 
-La possibilità del fallimento dell'unico collegamento tra i due generali, non l'effettivo fallimento di esso, è il fattore chiave che ci dà l'insolubilità del problema.
+[[teacher_slides/2_distributed algorithms.pdf#page=371|Slide della docente, p. 371]]
+[[teacher_slides/2_distributed algorithms.pdf#page=372|Slide della docente, p. 372]]
+[[teacher_slides/2_distributed algorithms.pdf#page=373|Slide della docente, p. 373]]
+[[teacher_slides/2_distributed algorithms.pdf#page=374|Slide della docente, p. 374]]
+[[teacher_slides/2_distributed algorithms.pdf#page=375|Slide della docente, p. 375]]
+[[teacher_slides/2_distributed algorithms.pdf#page=376|Slide della docente, p. 376]]
 
 #### Connettività necessaria con guasti sui collegamenti
 
-Se $F > 0$ collegamenti possono fallire, il consenso non si può raggiungere se il sistema non è $(F + 1)$-connesso, anche nelle condizioni di sincronicità. Qui la connettività è **per archi**: dopo la rimozione di fino a $F$ collegamenti, i nodi devono poter ancora comunicare. Senza questa condizione, un guasto può separare due gruppi che non riescono a coordinare le decisioni.
-In un sistema con le proprietà appena descritte si può fare flooding, perché la rete non può essere disconnessa. Usando il flooding, ciascun nodo può diffondere il proprio valore, calcolare il valore di convergenza come funzione di quelli ricevuti e trovare l'agreement con gli altri. Diventa quindi possibile raggiungere il consenso.
+**Teorema.** Se possono fallire $F>0$ collegamenti, il consenso non è realizzabile quando la rete non è $(F+1)$-connessa per archi, anche se il sistema è sincrono.
+
+Questa è una condizione necessaria: eliminando fino a $F$ archi la rete potrebbe dividersi in gruppi che non possono coordinare le decisioni. Viceversa, se $F$ è strettamente minore della connettività per archi, la rimozione di al più $F$ collegamenti lascia la rete connessa. Il flooding può allora portare ogni valore a tutti i nodi; se tutti calcolano la stessa funzione dei valori ricevuti (per esempio il minimo), ottengono la stessa decisione. Questa sufficienza riguarda il modello di guasti e broadcast descritto dalle slide; non estende automaticamente la garanzia a protocolli non specificati per guasti di aggiunta o corruzione.
+
+La slide 378 riporta «not larger than edge-connectivity», in contrasto con la disuguaglianza stretta e l'argomento della slide 379. Per il risultato di consenso appena enunciato si segue la slide 379: $F$ deve essere **minore** della connettività per archi.
+
+[[teacher_slides/2_distributed algorithms.pdf#page=377|Slide della docente, p. 377]]
+[[teacher_slides/2_distributed algorithms.pdf#page=378|Slide della docente, p. 378]]
+[[teacher_slides/2_distributed algorithms.pdf#page=379|Slide della docente, p. 379]]
 
 #### Flooding in grafi completi con fallimenti nei collegamenti
 
-**Problema e modello.** Un nodo $x$ deve diffondere un'informazione $I$ a tutti gli altri in un grafo completo con $n$ nodi, mentre al più $F<n-1$ collegamenti possono fallire; $x$ conosce $F$. I nodi non falliscono. Senza guasti, il *simple broadcast* di [[#Topologie particolari e raccordo]] richiede $n-1$ invii diretti. Qui si usano più possibili intermediari per tollerare i collegamenti guasti.
-Il protocollo si articola in due fasi:
+**Problema e modello.** Un nodo $x$ deve diffondere un'informazione $I$ a tutti gli altri nodi di un grafo completo con $n$ nodi. Possono fallire al più $F<n-1$ collegamenti; $x$ conosce $F$ e i nodi non si guastano. Senza guasti, $x$ invia direttamente a tutti gli altri con $n-1$ messaggi. Il protocollo *TwoSteps* usa destinatari intermedi per tollerare le omissioni dei collegamenti.
 
-- Nella prima $x$ invia il messaggio $I$ a $F + 1$ vicini
-
-- Ogni nodo che riceve il messaggio da $x$ lo inoltra a tutti i propri vicini, eccetto $x$
+1. $x$ invia $I$ a $F+1$ vicini distinti.
+2. Ogni nodo che riceve $I$ direttamente da $x$ la inoltra a tutti i propri vicini tranne $x$.
 
 ![[assets/Screenshot 2024-11-13 093705.png|800]]
 
-Siccome ci sono al massimo $F$ collegamenti faulty (cioè soggetti a fallimento), la somma dei collegamenti faulty per i due step è appunto al più $F$: $f_1 (x) + f_2 (x) \leq F$.
-Al primo step, imporre l'invio a $F + 1$ vicini fa sì che almeno uno di questi venga raggiunto, anche nel caso peggiore in cui $F$ vicini di $x$ siano faulty. Al secondo step, ogni generica entità $y$ viene raggiunta da almeno un messaggio, perché:
+Fissiamo un destinatario $y\ne x$. Se $y$ è tra i $F+1$ vicini scelti e il collegamento $x\!\to y$ funziona, riceve $I$ direttamente. Se quel collegamento è guasto, restano gli altri $F$ intermediari e il guasto diretto ha già consumato una delle $F$ possibilità di fallimento. Se invece $y$ non è tra i vicini scelti, vi sono $F+1$ cammini di due archi $x\to z\to y$, uno per ciascun intermediario $z$. In entrambi i casi possiamo contare $F+1$ vie alternative: la via diretta quando $y$ è scelto, più le vie via gli altri intermediari, oppure soltanto le $F+1$ vie via intermediari quando $y$ non è scelto. Queste vie non condividono archi. Indichiamo con $f_1(x)$ i collegamenti guasti nel primo passo e con $f_2(x)$ quelli guasti dalle vie via intermediari verso $y$. La somma è al più $F$; quindi almeno una via resta funzionante:
 
-$$\begin{aligned}
-                    F + 1 - \underbrace{(f_1 (x) + f_2 (x))}_{\leq F} \geq 1
-\end{aligned}$$
+$$F+1-(f_1(x)+f_2(x))\geq1.$$
 
-I collegamenti guasti incontrati nei due passi sono in totale al più $F$: fra gli $F+1$ possibili intermediari ne resta quindi almeno uno che raggiunge $y$.
+Se la via rimasta è diretta, $x$ consegna $I$ a $y$; altrimenti l'intermediario la riceve da $x$ e la consegna a $y$. Poiché l'argomento vale per ogni $y\ne x$, tutti i nodi ricevono l'informazione. Il caso limite $F=n-2$ è ammesso: $x$ ha $n-1$ vicini e può sceglierne $F+1=n-1$.
 
-- Messaggi inviati: $(F + 1)$ al primo step e $(F + 1) \cdot (n - 2)$ al secondo (a prescindere dal fatto che i collegamenti siano faulty). In tutto:
+**Messaggi.** Il primo passo comporta $F+1$ invii. Ciascuno degli intermediari che ha ricevuto $I$ invia poi ad al più $n-2$ nodi, escluso $x$. Contando anche gli invii su collegamenti guasti, il numero totale è **al più**
 
-  $$\begin{aligned}
-                          (F+1)+(F+1)(n-2)=(F+1)(n-1)\in O((F+1)n)
-  \end{aligned}$$
+$$ (F+1)+(F+1)(n-2)=(F+1)(n-1)\in O((F+1)n). $$
 
-  Il costo asintotico dipende dal valore di $F$, che può determinare un oscillazione da $O(n)$ ad $O(n^2)$
+Questo conteggio vale anche per $F=0$ e varia da $O(n)$ a $O(n^2)$ al variare di $F$ nell'intervallo ammesso.
+
+[[teacher_slides/2_distributed algorithms.pdf#page=381|Slide della docente, p. 381]]
+[[teacher_slides/2_distributed algorithms.pdf#page=382|Slide della docente, p. 382]]
 
 ### 5.2 Consensus problem con fallimenti sui nodi
 
 #### Problema e modello con guasti dei nodi
 
-Ogni nodo propone un valore; i nodi **non faulty** devono terminare, concordare un'unica decisione e rispettare la non-trivialità definita in [[#Problema di Agreement/Consensus]]. Qui i collegamenti non falliscono, mentre alcuni nodi possono smettere di partecipare (*crash*) o, nelle sezioni dedicate, comportarsi in modo bizantino. Il numero massimo di nodi guasti è indicato con $F$.
+Ogni nodo propone un valore iniziale. I nodi non faulty devono decidere lo stesso valore e terminare; se tutti i nodi propongono lo stesso valore, i nodi non faulty devono decidere quel valore. Questa è la definizione di consenso richiamata in [[#Problema di Agreement/Consensus]]. Indichiamo con $F$ il massimo numero di nodi guasti; le slide usano $f$. Nei protocolli seguenti i collegamenti non falliscono; cambiano invece il tipo di guasto ammesso e le ipotesi di sincronia.
 
 ![[assets/Screenshot 2024-11-13 100304.png|600]]
 
 #### Impossibilità deterministica asincrona
 
-È impossibile ottenere il consenso con un protocollo deterministico in un sistema asincrono, anche nelle condizioni più favorevoli, cioè:
+[[teacher_slides/2_distributed algorithms.pdf#page=385|Slide della docente, p. 385]]
 
-- Il fallimento è minimo: $F = 1$
+> [!theorem] Teorema (FLP)
+> In un sistema asincrono con grafo completo, non esiste un protocollo deterministico che garantisca il consenso anche con un solo possibile guasto di tipo crash.
 
-- Il fallimento è il più facile da gestire: cioè nel caso di crash
-
-- Il grafo è completo
-
-Questo è il risultato FLP: nel modello asincrono non esiste un protocollo deterministico che garantisca contemporaneamente agreement, validità e terminazione del consenso anche con un solo possibile crash. Non implica l'impossibilità generale del software fault-tolerant: si può cambiare modello o garanzia, per esempio introducendo sincronia parziale, failure detector o randomizzazione.
-Per dimostrare quanto abbiamo detto, consideriamo il seguente fatto: i ritardi di comunicazione sono finiti ma impredicibili. L'idea è che, quando un nodo attende un messaggio ed è possibile che vi siano stati dei crash, esso non può stabilire in alcun modo se il messaggio arriverà oppure no.
-In un contesto pratico, una possibile soluzione è quella di impostare dei time-out (es. TCP).
+La slide presenta il caso più favorevole: al più un crash ($F=1$) e rete completa. In un sistema asincrono i ritardi sono finiti ma imprevedibili: se un nodo non riceve una risposta, non può distinguere un ritardo da un crash. Il risultato esclude la garanzia deterministica di terminazione richiesta dal consenso in questo modello. Non afferma che sia impossibile costruire in generale software tollerante ai guasti: si può cambiare ipotesi, per esempio adottando sincronia, un rilevatore di guasti oppure randomizzazione.
 
 #### Consensus in sistemi sincroni
 
-**Problema e modello.** I nodi non faulty devono decidere lo stesso valore booleano e terminare nonostante al più $F$ crash; se tutti propongono lo stesso valore, devono decidere quello. La definizione generale è in [[#Problema di Agreement/Consensus]]. A differenza del modello dell'[[#Impossibilità deterministica asincrona|impossibilità asincrona]], qui i round sono sincroni. Assumiamo:
+[[teacher_slides/2_distributed algorithms.pdf#page=387|Slide della docente, pp. 387–411]]
 
-- Grafo completo
+**Problema e modello.** Vogliamo che i nodi non faulty decidano lo stesso valore booleano e terminino, anche se si verificano al più $F<n$ crash. Se tutti i nodi hanno lo stesso valore iniziale, quello deve essere deciso. Il protocollo `TellAll_Crash` assume:
 
-- Connettività forte
+- grafo completo e fortemente connesso;
+- round sincroni e avvio simultaneo;
+- guasti di tipo crash e conoscenza di $F$;
+- valori iniziali in $\{0,1\}$.
 
-- Sincronicità
+**Idea.** Per $F+1$ round ogni nodo comunica il proprio report agli altri. Un report contiene l'AND dei valori già conosciuti e dei report ricevuti. Se in un round manca il messaggio di un vicino, si usa il valore neutro $1$: un crash non introduce così uno $0$ che quel nodo non ha comunicato.
 
-- Fallimenti di tipo crash
+Il report iniziale del nodo $x$ è $r(x,0)=v(x)$. Al tempo $t$, per $1\le t\le F+1$, il nodo aggiorna il report con
 
-- Inizio simultaneo
+$$r(x,t)=r(x,t-1)\land\bigwedge_{y\in N(x)}m(y,t),$$
 
-- Conoscenza di $F$ da parte dei nodi
-
-Assumiamo inoltre che $v(x)\in\{0,1\}$ per ogni entità $x$.
-Con queste ipotesi possiamo definire protocolli che raggiungano il consenso tollerando al più $F<n$ crash.
-Il protocollo è iterativo ed esegue per $F + 1$ iterazioni.
+dove $m(y,t)$ è il messaggio ricevuto da $y$ nel round $t$, oppure $1$ se il messaggio non arriva entro la fine del round. Il grafo è completo, quindi $N(x)$ contiene tutti gli altri nodi. Dopo il round $F+1$, ogni nodo non faulty decide $r(x,F+1)$.
 
 ![[assets/Screenshot 2024-11-13 101007.png|600]]
 
-Il report $r(x, t)$ si riferisce al nodo $x$ all'istante $t$. Il primissimo report, ovvero $r(x, 0)$ contiene semplicemente $v(x)$. Per i report successivi, ovvero i generici $r(x, t)$, applichiamo:
-
-$$\begin{aligned}
-                    r(x, t) = r(x, t - 1) \land m(y_1, t) \land m(y_2, t) \land \dots \land m(y_{|N(x)|}, t)
-\end{aligned}$$
-
 ![[assets/Screenshot 2024-11-13 101244.png|250]]
 
-Un esempio di possibile esecuzione è mostrato in figura.
+La figura mostra un'esecuzione possibile. La successiva illustra perché $F+1$ round bastano anche quando un crash avviene durante l'invio.
 
 ![[assets/Screenshot 2024-11-13 101354.png|700]]
 
-- Numero di messaggi: nel caso peggiore, cioè quello senza crash, vengono inviati $n - 1$ messaggi da $n$ nodi per $F + 1$ iterazioni, dunque complessivamente:
-
-  $$\begin{aligned}
-                          n(F+1)(n-1)\in O(n^2(F+1))
-  \end{aligned}$$
-
-- Tempo di esecuzione: la catena di messaggi è singola per ogni iterazione, perciò abbiamo in totale:
-
-  $$\begin{aligned}
-                          F+1\in O(F+1)
-  \end{aligned}$$
-
-Alcune osservazioni:
-
-- Il protocollo termina, banalmente perché ci sono $F + 1$ iterazioni
-
-- Se un nodo non-faulty riceve uno 0 all'istante $t \leq F$, allora tutte le altre riceveranno uno 0 a $t + 1$. In particolare, tale entità sceglierà 0
-
-- Se tutte le entità iniziano con 1, allora tutte le non-faulty convergeranno ad 1
-
-Possiamo usare le osservazioni fatte per verificare i vincoli di:
-
-- Non-trivialità: se tutte le entità inizialmente sono 0, il valore 0 si propaga nei round e tutte decideranno 0. Se tutte iniziano con 1, nessuna introduce uno 0 e tutte decideranno 1.
-
-- Agreement: se almeno un'entità non faulty inizia con 0, tutte le altre decideranno 0; se tutte le entità iniziano con 1, tutte decideranno 1. Resta il caso in cui gli unici 0 iniziali appartengano a nodi che poi crashano: se uno 0 arriva a un nodo non faulty entro il round $F$, si propaga a tutti; altrimenti tutti i non faulty mantengono 1. La prova seguente esclude che uno 0 arrivi per la prima volta soltanto ad alcuni non faulty nell'ultimo round.
-
-Le $F + 1$ iterazioni sono giustificate dal fatto che all'istante $t \leq F$ i nodi non faulty possono aver ricevuto solo 1 ed all'istante $t + 1$ potrebbero ricevere uno 0 da un nodo faulty.
-
 ![[assets/Screenshot 2024-11-13 102453.png|1000]]
 
-Il caso in cui i nodi non faulty ricevano solo 1 fino all'istante $F + 1$ e poi per la prima volta uno 0 è il peggiore che possa verificarsi, ma di fatto non può accadere.
-Possiamo dimostrarlo ripercorrendo la sequenza temporale all'indietro. Se un nodo faulty ha 0, deve averlo ricevuto per forza all'istante precedente. Ma se i nodi non faulty in quello stesso istante hanno valore 1, significa che il nodo dal quale esso ha ricevuto lo 0 all'istante precedente era faulty a sua volta. Ripetiamo questa logica a ritroso per esattamente $F$ volte. All'istante $t = 0$ abbiamo dunque individuato già $F$ nodi faulty, il che significa che non può essere avvenuto un crash. Se un nodo avesse inviato uno 0 agli altri a $t = 0$, non avrebbe potuto crashare, percui a $t = 1$ tutti gli altri avrebbero dovuto necessariamente essere a loro volta 0. La contraddizione ci porta a dimostrare l'assunto.
+**Correttezza.** Se un nodo non faulty riceve uno $0$ entro il round $F$, il suo report resta $0$ e nel round seguente lo comunica a tutti i nodi non faulty; dunque tutti decidono $0$ entro il round $F+1$. Il caso delicato è che uno $0$ compaia per la prima volta presso soltanto alcuni nodi non faulty nell'ultimo round. La prova illustrata nella figura risale la catena dei messaggi che ha propagato quello zero: per ogni round precedente in cui gli altri nodi non faulty avevano ancora report $1$, il mittente dello zero deve essere faulty. Dopo aver individuato $F$ nodi faulty, il mittente iniziale al tempo zero non può essere un ulteriore nodo faulty; è quindi non faulty e avrebbe trasmesso lo zero a tutti al primo round. Ne segue che lo zero non può comparire per la prima volta soltanto presso alcuni nodi non faulty al round $F+1$.
 
 ![[assets/Screenshot 2024-11-15 174808.png|600]]
 
-La dimostrazione appena fatta fornisce un'ulteriore garanzia a supporto della proprietà di agreement.
-Possiamo ridurre il numero di messaggi inviati dal protocollo. Infatti, i messaggi utili sono solo gli 0, perché determinano il valore dell'and logico calcolato sui nodi. Ogni 0 può dunque essere mandato una sola volta per assolvere al proprio uso. Poi, trovandoci in un sistema sincrono, non è necessario usare i messaggi per la sincronizzazione tra le entità; la computazione terminerà semplicemente dopo $F + 1$ iterazioni.
+Ne segue agreement: o un valore $0$ raggiunge tutti i nodi non faulty e tutti decidono $0$, oppure nessuno di loro ne riceve uno e tutti conservano $1$. Per la non-trivialità, se tutti iniziano con $0$ l'AND resta $0$; se tutti iniziano con $1$, tutti i report restano $1$.
 
-- Messaggi inviati: il caso peggiore è quello in cui ogni nodo invia uno 0 a tutti i propri vicini, dunque i messaggi si riducono a $n \cdot (n - 1) \in O(n^2)$
+La terminazione avviene dopo esattamente $F+1$ unità di tempo. Nel caso peggiore senza crash, ogni nodo invia un messaggio a ciascuno degli altri in ciascun round: il numero di invii è
 
-- Tempo di esecuzione: le iterazioni rimangono $F + 1$, sempre per garantire la tolleranza a $F$ crash
+$$n(n-1)(F+1)\in O(n^2(F+1)).$$
 
-I risultati che abbiamo ottenuto sono generalizzabili per insiemi di valori diversi da $\{0, 1\}$, per avvii non simultanei e per grafi generici quando $F$ è minore del grado di connettività.
+Il fattore $F+1$ va mantenuto anche per $F=0$. La docente scrive $O(n^2F)$, forma che non copre il caso senza guasti. Per inviare solo le informazioni utili si può usare la variante delle slide: ogni nodo inoltra al più una volta ciascuno zero, e non invia messaggi contenenti solo uno. Questa variante usa al più $n(n-1)=O(n^2)$ invii e mantiene $F+1$ round.
+
+Le slide indicano che si possono generalizzare i valori iniziali, l'avvio non simultaneo e i grafi non completi quando $F$ è minore della connettività per nodi; non sviluppano qui le modifiche al protocollo e alle relative ipotesi.
 
 #### Consensus in sistemi asincroni
 
-**Problema e modello.** Vogliamo consenso booleano fra i nodi non faulty con al più $F$ crash. L'[[#Impossibilità deterministica asincrona|impossibilità FLP]] esclude una garanzia deterministica di terminazione nel modello asincrono con un possibile crash; Ben-Or usa scelte casuali e garantisce terminazione quasi certa. Le restrizioni sono:
+[[teacher_slides/2_distributed algorithms.pdf#page=412|Slide della docente, pp. 412–431]]
 
-- Connettività forte
+FLP impedisce di garantire terminazione deterministica anche con un crash. Ben-Or usa scelte casuali: con probabilità 1 i nodi non faulty decidono, ma non esiste un limite deterministico al numero di round. Il modello assume grafo completo e fortemente connesso, crash, conoscenza di $n$ e $F$, e $F<n/2$. I valori sono booleani.
 
-- Grafo completo
+Ogni messaggio porta il numero del round in cui è stato generato. Un nodo usa i messaggi del round corrente, ignora quelli di round precedenti e conserva per dopo quelli di round futuri. Il broadcast comprende anche il mittente.
 
-- Fallimenti di tipo crash
+Ogni round ha due fasi:
 
-- Conoscenza di $n$ e $F$
-
-Possiamo definire un protocollo (detto di Ben-Or) randomizzato che realizza il consenso tollerando al più $F < \frac{n}{2}$ crash.
-Il protocollo lavora in rounds successivi. Ad ogni messaggio è associato il numero $r$ del round in cui esso è stato generato ed un valore nell'insieme $\{0, 1\}$. Le entità tengono traccia del round che stanno eseguendo ed in base al numero di round associato ai messaggi ricevuti reagiscono diversamente.
+1. **Propose.** Il nodo trasmette `MyValue(r,v)` e attende $n-F$ messaggi di questo tipo. Se più di $n/2$ contengono lo stesso valore, trasmette `Propose(r,v)`; altrimenti trasmette `Propose(r,?)`, dove `?` indica un valore indefinito. La soglia è una maggioranza stretta, cioè almeno $\lfloor n/2\rfloor+1$. È raggiungibile tra gli $n-F$ messaggi attesi perché
+   $$F<n/2\quad\Longrightarrow\quad n-F>n/2.$$
+2. **Adapt.** Il nodo attende $n-F$ messaggi `Propose`. Se ne riceve almeno uno con valore definito, adotta quel valore; se almeno $F+1$ messaggi riportano lo stesso valore definito, decide quel valore. Se tutti i valori ricevuti sono indefiniti, sceglie uniformemente a caso il valore da proporre nel round successivo. La soglia di decisione è raggiungibile fra i messaggi attesi:
+   $$F<n/2\quad\Longrightarrow\quad F+1\le n-F.$$
 
 ![[assets/Screenshot 2024-11-15 180257.png|500]]
 
-Ogni round si articola in due passi: nel primo ogni entità propone il proprio valore alle altre e nel secondo, in base alle proposte ricevute, ogni entità sceglie il valore da proporre al round successivo.
-
 ![[assets/Screenshot 2024-11-15 180402.png|750]]
-
-Nel primo passo, il broadcast conta anche il valore del mittente. Ogni entità attende $n-F$ messaggi `MyValue`. Se **più di $n/2$** messaggi contengono lo stesso valore, invia `Propose` con quel valore; altrimenti propone un valore indefinito. La soglia intera della maggioranza assoluta è $\lfloor n/2\rfloor+1$. I messaggi attesi bastano per poterla raggiungere, perché:
-
-$$\begin{aligned}
-                    F < \frac{n}{2} \Rightarrow n - F > \frac{n}{2}
-\end{aligned}$$
-
-Nel secondo passo, tutte le entità si mettono in attesa di $n - F$ messaggi di $Propose$. Quando viene ricevuto almeno un valore non indefinito, l'entità $x$ lo imposta come proprio. Quando ci sono almeno $F + 1$ messaggi $Propose$ con lo stesso valore (non indefinito), $x$ decide per tale valore. Se tutti i valori di $Propose$ sono indefiniti, il prossimo valore di $x$ è determinato casualmente, con probabilità uniforme.
-$F+1$ messaggi possono essere ricevuti fra gli $n-F$ attesi, perché $n\geq2F+1$:
-
-$$\begin{aligned}
-                    F<\frac n2\quad\Longrightarrow\quad F+1\leq n-F.
-\end{aligned}$$
 
 ![[assets/Screenshot 2024-11-15 181853.png|1000]]
 
-Ora verifichiamo le proprietà del protocollo:
+**Non-trivialità.** Se tutti iniziano con $v$, tutti inviano `MyValue(r,v)` al primo round. Poiché $n-F>n/2$, ogni nodo vede una maggioranza stretta di $v$ e invia `Propose(r,v)`. I nodi non faulty ricevono almeno $n-F\ge F+1$ messaggi `Propose(r,v)` e decidono $v$.
 
-- Non-trivialità: se tutti i nodi partono con il valore $v \in \{0, 1\}$, il primo step si conclude con la proposta di $v$ per ognuno di essi.
-  Al secondo step i messaggi $Propose$ (tutti identici) saranno $n - F$, quindi più della soglia di $F + 1$ imposta sulla decisione. $v$ verrà infine deciso all'unanimità.
+![[assets/Screenshot 2024-11-15 183550.png|600]]
 
-  ![[assets/Screenshot 2024-11-15 183550.png|600]]
+**Agreement.** Se un nodo non faulty $x$ decide $v$, ha ricevuto almeno $F+1$ messaggi `Propose(r,v)`. Sia $S$ l'insieme dei loro mittenti e $T$ l'insieme dei mittenti dei $n-F$ messaggi attesi da un altro nodo non faulty $y$. Allora $|S|=F+1$, $|T|=n-F$ e
 
-  Possiamo generalizzare il fatto che, al generico round $r$, se un'entità vede una maggioranza assoluta di valori, devono vederla anche tutte le altre. Non è infatti possibile che le maggioranze siano due: questo implicherebbe un numero di nodi maggiore di $n$. Ne deduciamo che, quando verranno inviati i messaggi di $Propose$ alla fine del primo step, questi porteranno tutti lo stesso valore $v$
+$$|S\cap T|\ge |S|+|T|-n=1.$$
 
-- Agreement: se un nodo non faulty $x$ decide $v$, ha ricevuto almeno $F+1$ messaggi `Propose(v)`. Il gruppo che li ha inviati interseca qualunque insieme di $n-F$ mittenti da cui un altro nodo non faulty attende i messaggi: $(F+1)+(n-F)>n$. Poiché i guasti sono crash e i mittenti non inviano valori diversi a destinatari diversi, anche ogni altro nodo vede almeno un `Propose(v)` e adotta $v$. Al round successivo i nodi non faulty inviano quindi $v$ e decidono lo stesso valore.
+Quindi $y$ riceve almeno un `Propose(r,v)`. Poiché i guasti sono crash, un mittente non può inviare valori diversi ai destinatari; se quel mittente è poi faulty, il valore già inviato resta comunque $v$. Il nodo $y$ adotta quindi $v$. Nel round successivo tutti i nodi non faulty propongono $v$. Poiché sono almeno $n-F>n/2$ e nessun altro valore può avere una maggioranza stretta, tutti i nodi non faulty inviano `Propose(r+1,v)` e poi decidono $v$.
 
-  ![[assets/Screenshot 2024-11-15 185935.png|1000]]
+![[assets/Screenshot 2024-11-15 185935.png|1000]]
 
-- Terminazione: ogni nodo non faulty decide **quasi certamente**, e il numero **atteso** di round è $O(2^n)$; non c'è un bound deterministico sul numero di round.
-  Per quanto abbiamo visto finora, essenzialmente il protocollo termina al round successivo quando c'è un numero di $MyValue$ uguali sufficientemente alto (cioè la maggioranza assoluta). Quando ciò non accade, è possibile che il protocollo non termini al round successivo. Ogni entità sceglierà il proprio valore al round successivo in base ai messaggi $Propose$ ricevuti oppure casualmente.
-  La probabilità $p$ che al passo successivo si abbia una maggioranza è più alta di quella $q$ che tutte le entità scelgano casualmente lo stesso valore, che la limita dal basso.
+Un'osservazione utile per la prova è più circoscritta: in una fase `Propose`, se un nodo invia `Propose(r,v)` con $v$ definito, ha visto una maggioranza stretta di `MyValue(r,v)`. Due valori distinti non possono entrambi avere maggioranza stretta nell'intero insieme di $n$ nodi; quindi tutti i messaggi `Propose` definiti inviati in quel round hanno lo stesso valore. Non è necessario, né sempre vero, che ogni nodo veda quella maggioranza.
 
-  $$\begin{aligned}
-                          p \geq q = \frac{1}{2^n}
-  \end{aligned}$$
+**Terminazione e costo atteso.** Se un nodo non faulty vede una maggioranza stretta nella fase `Propose`, la docente mostra che tutti i nodi non faulty decidono entro il round successivo (pp. 426–428). Se ciò non accade, quando tutti i messaggi `Propose` sono indefiniti, i nodi non faulty fanno scelte indipendenti e uniformi: la probabilità che scelgano tutti lo stesso valore è almeno $2^{-n}$. Una scelta concorde porta alla decisione nei round successivi. Anche condizionatamente alla storia dei round precedenti, la probabilità di convergere in ciascun tentativo è quindi almeno $2^{-n}$; il numero di round è dominato da una variabile geometrica di parametro $2^{-n}$ e il suo valore atteso è al più $2^n$. Il protocollo termina quasi certamente, in $O(2^n)$ round **attesi**, non in un numero massimo deterministico di round.
 
-  Se la probabilità di successo fosse esattamente la stessa $p$ a ogni round indipendente, il numero di round seguirebbe una distribuzione geometrica:
-
-  $$\begin{aligned}
-                          P(r) = p \cdot (1 - p)^{r - 1}
-  \end{aligned}$$
-
-  In pratica si tratta del prodotto tra la probabilità di $r - 1$ insuccessi e quella di un successo.
-  L'expected value di una distribuzione geometrica è:
-
-  $$\begin{aligned}
-                          \mathbb{E} (X) = \frac{1}{p}
-  \end{aligned}$$
-
-  Qui basta il limite inferiore **condizionato alla storia precedente**: il tempo di decisione $T$ è dominato da una geometrica con parametro $2^{-n}$, quindi:
-
-  $$\begin{aligned}
-                          p\geq 2^{-n}\quad\Longrightarrow\quad \mathbb{E}[T]\leq 2^n.
-  \end{aligned}$$
-
-Le slide citano inoltre una variante che tollera fino a circa $n/3$ crash e termina in un numero **atteso** di round costante; non ne sviluppano qui il protocollo.
+Le slide citano una variante che tollera fino a circa $n/3$ crash e termina in un numero costante di round attesi, senza svilupparne qui il protocollo.
 
 #### Consensus deterministico con fallimenti bizantini
 
-> **Status d'esame da confermare.** Le slide ufficiali disponibili trattano integralmente questa parte, mentre gli appunti precedenti la indicavano come facoltativa. Viene quindi mantenuta come approfondimento verificato.
+[[teacher_slides/2_distributed algorithms.pdf#page=432|Slide della docente, pp. 432–464]]
 
-**Problema e modello.** I nodi non faulty devono raggiungere consenso su un valore booleano anche se fino a $F$ nodi possono inviare messaggi arbitrari o incoerenti (*guasti bizantini*). L'[[#Impossibilità deterministica asincrona|impossibilità deterministica asincrona]] con un crash vale a maggior ragione in presenza di guasti bizantini. Qui il sistema è **sincrono e completo**; si assume $F<n/3$, avvio simultaneo, identificativi distinti non falsificabili e conoscenza degli identificativi dei vicini.
+> **Status d'esame da confermare.** Le slide ufficiali disponibili sviluppano questa variante; l'originale dell'amico la indica come facoltativa. La manteniamo come approfondimento finché il perimetro d'esame non è confermato.
 
-**RegisteredMail.** Per registrare in modo coerente la proposta di uno 0 originata da $y$ al tempo $t$:
+**Problema e modello.** I nodi non faulty devono raggiungere consenso sui valori booleani anche se fino a $F$ nodi possono inviare messaggi arbitrari o diversi a destinatari diversi. Il protocollo qui descritto è sincrono, ha grafo completo e avvio simultaneo, usa identificativi unici non falsificabili noti ai nodi, e tollera $F<n/3$. Nel modello sincrono anche un nodo guasto può inviare al più un messaggio per vicino a ogni unità di tempo: questo limite è usato nel conteggio degli invii. I broadcast includono il mittente. L'algoritmo deterministico è `TellZero_Byz`: i nodi non faulty propongono solo la possibilità di decidere $0$; se non ricevono prove sufficienti, decidono $1$.
 
-1. $y$ trasmette `(init, 0, id(y), t)`;
-2. chi riceve un `init` valido direttamente da $y$ esattamente a $t+1$ trasmette `(echo, 0, id(y), t)`; messaggi con mittente, tempo o seconda registrazione incoerenti vengono ignorati;
-3. chi raccoglie almeno $F+1$ `echo` distinti ritrasmette l'`echo`, se non lo ha già fatto: almeno uno dei mittenti è non faulty;
-4. chi raccoglie almeno $n-F$ `echo` distinti accetta la proposta: almeno $n-2F$ provengono da entità non faulty.
+> [!theorem] Limite per il consenso deterministico bizantino
+> In un sistema sincrono con grafo completo non è possibile garantire il consenso deterministico tollerando $F\ge n/3$ guasti bizantini.
 
-Questa soglia garantisce che una proposta accettata da una entità non faulty si propaghi a tutte le altre senza permettere a un singolo bizantino di inventare identità o tempi.
+Questo limite, presentato nelle slide p. 432, spiega la soglia stretta $F<n/3$ assunta dal protocollo.
 
-**TellZero-Byz.** Il protocollo procede per stage $i=0,\ldots,F+2$, lunghi due unità di tempo.
+**RegisteredMail.** Questo sottoprotocollo registra in modo coerente una proposta `(0,id(y),t)` originata da $y$ al tempo $t$.
 
-- Al tempo 0 ogni entità non faulty con valore iniziale 0 avvia una sola RegisteredMail.
-- Al tempo $2i$, per $1\le i\le F+1$, una entità non faulty che non ha ancora originato una proposta la avvia se entro quel momento ha accettato proposte da più di $F+i-1$ identità distinte.
-- Al tempo $2(F+2)$ decide 0 se ha accettato almeno $2F+1$ proposte distinte, altrimenti decide 1.
+1. $y$ invia `(init,0,id(y),t)`.
+2. Un nodo che riceve direttamente da $y$ un `init` valido esattamente al tempo $t+1$ invia `(echo,0,id(y),t)`. Mittente, identità e tempo devono corrispondere; un nodo ignora messaggi incoerenti e registra al più una volta quella proposta.
+3. Dopo aver ricevuto, al tempo $t'\ge t+2$, $F+1$ `echo` da identità distinte, un nodo inoltra quell'`echo` a tutti, se non l'ha già inoltrato. Fra i mittenti c'è almeno un nodo non faulty.
+4. Dopo aver ricevuto, al tempo $t'\ge t+2$, $n-F$ `echo` distinti, il nodo accetta la proposta. Almeno $n-2F$ di questi echo provengono da nodi non faulty.
 
-Il protocollo termina per costruzione; le soglie e $F<n/3$ garantiscono non-trivialità e agreement. La durata è $O(F)$ e il conteggio delle slide è $O(n^3)$ messaggi nel caso peggiore. Il risultato si estende a domini finiti noti e, su grafi non completi, richiede connettività per nodi maggiore di $2F$.
+Se un nodo non faulty accetta una proposta, gli almeno $n-2F\ge F+1$ echo non faulty la propagano; tutti i nodi non faulty ricevono così almeno $F+1$ echo e la inoltrano. Al round successivo ogni nodo non faulty raccoglie gli almeno $n-F$ echo non faulty e accetta la stessa proposta. La soglia $F+1$ impedisce inoltre che una proposta inventata da soli nodi faulty venga inoltrata dai nodi non faulty.
+
+**TellZero_Byz.** Il protocollo è diviso in stage $i=0,\ldots,F+2$, ciascuno di due unità di tempo. Ogni nodo non faulty applica queste regole:
+
+1. Al tempo $0$, se il suo valore iniziale è $0$, avvia una sola `RegisteredMail` con la propria identità e tempo $0$.
+2. Al tempo $2i$, per $1\le i\le F+1$, se non ha già originato una proposta, ne avvia una quando ha accettato proposte da più di $F+i-1$ identità distinte.
+3. Al tempo $2(F+2)$, decide $0$ se ha accettato proposte da almeno $2F+1$ identità distinte; altrimenti decide $1$.
+
+**Correttezza.** Il protocollo termina dopo $2(F+2)$ unità di tempo. Se tutti i valori iniziali sono $0$, ogni nodo non faulty avvia una proposta al tempo zero; la proprietà di RegisteredMail le fa accettare da tutti, e i nodi non faulty accettano almeno $n-F\ge 2F+1$ identità e decidono $0$. Se tutti i valori iniziali sono $1$, nessun nodo non faulty avvia una proposta al tempo zero. Ai tempi successivi, per avviarne una servirebbero più di $F$ proposte accettate; al massimo $F$ proposte possono provenire dai nodi faulty, quindi nessun nodo non faulty ne avvia una. Tutti decidono $1$.
+
+Per agreement, supponiamo che un nodo non faulty $x$ decida $0$. Ha accettato almeno $2F+1$ identità, dunque almeno $F+1$ delle proposte sono state avviate da nodi non faulty. Consideriamo l'insieme di queste proposte non faulty. Le proposte avviate al tempo zero sono accettate da tutti; anche una proposta accettata da un nodo non faulty in uno stage successivo si propaga a tutti gli altri. Se un nodo non faulty avvia una proposta al tempo $2i$, lo fa perché ha già accettato più di $F+i-1$ proposte. Entro il tempo $2i+2$, RegisteredMail propaga a tutti sia quelle proposte sia la nuova proposta: tutti hanno quindi accettato più di $F+i$ identità. Se $i\le F$, al tempo $2(i+1)$ tutti superano la soglia dello stage successivo e avviano la proposta se non l'hanno già fatto. Ripetendo l'argomento, entro lo stage finale tutti hanno accettato almeno $2F+1$ proposte e decidono $0$. Il caso in cui una proposta non faulty venga avviata già nello stage finale soddisfa direttamente la soglia finale, perché in quello stage è richiesta una soglia strettamente maggiore di $2F$. Se nessun nodo non faulty decide $0$, tutti decidono $1$. Dunque l'accordo vale in entrambi i casi.
+
+Le slide riportano per `TellZero_Byz` un costo di $O(n^3)$ messaggi nel caso peggiore. La formula dettagliata della slide p. 463 conta invii `init`, `echo` dei nodi non faulty e messaggi possibili dei nodi faulty; con $F<n/3$ il totale è $O(n^3)$. La durata è $2(F+2)=O(F+1)$ unità di tempo. Le slide indicano inoltre due estensioni, senza svilupparle qui: domini finiti noti per i valori iniziali e grafi non completi con connettività per nodi maggiore di $2F$.
 
 #### Consensus problem con fallimenti bizantini
 
-**Problema e modello.** Questa è la versione randomizzata del consenso booleano con fallimenti bizantini: i nodi non faulty devono concordare e terminare quasi certamente, mentre un nodo guasto può inviare valori diversi a destinatari diversi. La versione [[#Consensus deterministico con fallimenti bizantini|deterministica]] usa un modello sincrono completo e tollera $F<n/3$; qui la soglia e il protocollo sono diversi. Il suo status d'esame resta da confermare.
-Imponiamo le seguenti restrizioni:
+[[teacher_slides/2_distributed algorithms.pdf#page=465|Slide della docente, pp. 465–474]]
 
-- Grafo completo
+Questa variante randomizzata tollera $F<n/9$ guasti bizantini su un grafo completo e fortemente connesso. Gli identificativi sono unici; i valori iniziali sono in $\{0,1\}$ e restano distinti dagli identificativi. Ogni nodo non faulty attende $n-F$ messaggi `Propose` per round; i messaggi includono il numero di round e il broadcast include il mittente.
 
-- Connettività forte
-
-- Fallimenti bizantini
-
-- Identificativi unici; i valori proposti, distinti dagli identificativi, appartengono a $\{0,1\}$
-
-La dinamica del protocollo è simile alla versione di Consensus con fallimenti sui nodi (seppur in qualche misura sia più semplice, poiché mira a raggiungere un risultato più debole). Il protocollo tollera al più $F < \frac{n}{9}$ fallimenti bizantini.
+Al primo round ciascun nodo propone il proprio valore. In ogni round successivo un nodo non faulty applica queste regole ai $n-F$ messaggi ricevuti:
 
 ![[assets/Screenshot 2024-11-20 092309.png|800]]
 
-Al primo round ciascuna entità fa un broadcast del proprio valore con un messaggio $Propose$ e si mette in attesa di $n - F$ messaggi $Propose$. Se almeno $n - 2 \cdot F$ di essi contengono lo stesso valore, allora l'entità lo imposta come suo e decide. Altrimenti, se almeno $n - 4 \cdot F$ messaggi $Propose$ contengono lo stesso valore, lo imposta semplicemente come suo. Se vengono ricevuti meno di $n - 4 \cdot F$ messaggi $Propose$ con lo stesso valore, viene effettuata una scelta casuale con probabilità uniforme. Il tutto è ripetuto ciclicamente fino al raggiungimento del consenso.
-Verifichiamo separatamente non-trivialità, agreement e terminazione quasi certa per questo protocollo:
+- se almeno $n-2F$ messaggi contengono lo stesso valore $v$, adotta $v$ e decide;
+- altrimenti, se almeno $n-4F$ messaggi contengono lo stesso valore $v$, adotta $v$ senza decidere;
+- se nessun valore raggiunge $n-4F$, sceglie $0$ o $1$ uniformemente a caso.
 
-- Non-triviality: tutte le entità iniziano con lo stesso valore $v \in \{0, 1\}$. Tutte le entità non faulty propongono il proprio valore $v$ al primo round e ricevono almeno $n - F \geq n - 2 \cdot F$ proposte per $v$. Siccome, appunto, i messaggi contenenti $v$ sono più di $n - 2 \cdot F$, tutte le entità non faulty finiscono per decidere $v$
+Poi trasmette `Propose(v,r+1)` e continua finché decide. I nodi faulty possono inviare valori diversi a destinatari diversi.
 
-- Agreement: al generico round $r$ un'entità non faulty $x$ decide per il valore $v \in \{0, 1\}$. Ciò significa che ha ricevuto $n - F$ messaggi $Propose$, di cui almeno $n - 2 \cdot F$ contenevano $v$.
-  Allo stesso round $r$, un'altra entità non faulty $y \neq x$ attende $n - F$ messaggi. Alcuni mittenti dei messaggi verso $x$ e verso $y$ sono comuni, ma ce ne possono essere al più $F$ diversi per le regole base dell'insiemistica. Inoltre, al più $F$ dei mittenti comuni possono essere bizantini, cioè aver inviato valori diversi ad $x$ e $y$.
-  Se togliamo due volte $F$ (cioè gli $F$ potenziali nodi non in comune tra $x$ ed $y$ e gli $F$ potenziali nodi bizantini) agli $n - 2 \cdot F$ valori necessari alla decisione, troviamo:
+**Non-trivialità.** Se tutti iniziano con $v$, i nodi non faulty propongono $v$ al primo round. Ogni nodo non faulty riceve almeno $n-F\ge n-2F$ proposte per $v$ e decide $v$.
 
-  $$\begin{aligned}
-                      n - 2 \cdot F - 2 \cdot F = n - 4 \cdot F
-  \end{aligned}$$
+**Agreement.** Se un nodo non faulty $x$ decide $v$ al round $r$, ha ricevuto almeno $n-2F$ proposte per $v$. Un altro nodo non faulty $y$ attende anch'esso $n-F$ proposte. Fra i mittenti verso $x$ e quelli verso $y$ possono differire al più $F$ identità; inoltre al più $F$ mittenti comuni possono essere faulty e aver inviato valori diversi. Quindi $y$ riceve almeno
 
-  Questo è il numero minimo complessivo di messaggi $Propose$ giunti a $y$ che contengono $v$.
-  A questo punto, $x$ ha deciso $v$ ed $y$ ha assunto $v$ (perché, come abbiamo detto, almeno $n - 4 \cdot F$ messaggi lo contenevano). Al round $r + 1$ tutte le entità riceveranno almeno $n - F \geq n - 2 \cdot F$ messaggi $Propose$ contenenti $v$ da parte delle entità non faulty e decideranno unanimemente per esso
+$$n-2F-F-F=n-4F$$
 
-- Terminazione: le entità non faulty decidono quasi certamente in un numero **atteso di round** $O(2^n)$; i round non hanno un massimo deterministico.
-  Osserviamo per prima cosa che al round $r$, tutti i messaggi $Propose$ mandati da entità non faulty con scelta non-casuale portano lo stesso valore $v$.
-  Se al round $r$ un'entità non faulty $x$ ha scelto $v \in \{0, 1\}$ in modo non-casuale, significa che ha ricevuto almeno $n - 4 \cdot F$ proposte per $v$, delle quali $n - 5 \cdot F$ da entità non faulty.
-  Allo stesso tempo, supponiamo che un'altra entità non faulty $y \neq x$ scelga $v^\prime \neq v$ in modo non-casuale. Seguendo lo stesso ragionamento che per $x$, anche $y$ deve avere ricevuto $n - 5 \cdot F$ proposte per $v^\prime$. Secondo queste supposizioni però, il numero di entità sarebbe pari a:
+proposte per $v$ e adotta $v$. Nel round successivo tutti i nodi non faulty inviano $v$; sono $n-F\ge n-2F$, perciò tutti decidono $v$.
 
-  $$\begin{aligned}
-                      n \geq \underbrace{2 \cdot (n - 5 \cdot F)}_{non faulty} + \underbrace{F}_{faulty} = 2 \cdot n - 9 \cdot F = n + (n - 9 \cdot F) > n
-  \end{aligned}$$
+**Terminazione e costo atteso.** Nel round $r$, tutti i messaggi inviati dai nodi non faulty che scelgono senza estrazione casuale portano lo stesso valore. Infatti, se due nodi non faulty scegliessero senza casualità valori opposti, ciascuno avrebbe ricevuto almeno $n-4F$ proposte del proprio valore, di cui almeno $n-5F$ da nodi non faulty. Insieme ai possibili $F$ nodi faulty servirebbero
 
-  La catena di uguaglianze e disuguaglianze è chiaramente impossibile, percui vale l'assunto.
-  L'argomento di agreement in questa sezione mostra che, quando un'entità non faulty decide, le altre adottano il suo valore e decidono al round successivo. Per decidere occorrono $n-2F$ proposte per uno stesso valore $v$: i nodi non faulty che scelgono senza estrazione casuale non possono scegliere valori opposti, come mostra il conteggio $2(n-5F)+F>n$ qui sopra; i restanti nodi devono estrarre casualmente $v$.
-  La probabilità che tutte le entità non faulty che estraggono casualmente scelgano uno stesso valore prefissato $v$ è **almeno** $2^{-n}$. Questo dà un limite inferiore alla probabilità condizionata di convergenza per round; come nel caso dei crash, il tempo di decisione è dominato da una geometrica con parametro $2^{-n}$ e ha valore atteso $O(2^n)$.
+$$2(n-5F)+F=2n-9F>n$$
 
-Le slide citano anche una variante per $F<n/500$ fallimenti bizantini con $O(n^{2.5})$ round **attesi**, senza svilupparla qui.
+nodi, impossibile perché $F<n/9$. Quindi, per raggiungere la soglia di decisione $n-2F$, basta che i nodi non faulty che scelgono casualmente scelgano tutti uno stesso valore: i nodi non faulty che non estraggono hanno già scelto quel valore. La probabilità condizionata di questo evento in ciascun round è almeno $2^{-n}$. Perciò il protocollo termina quasi certamente e il numero di round atteso è $O(2^n)$; non ha un massimo deterministico.
+
+Le slide citano una variante che tollera $F<n/500$ e termina in $O(n^{2.5})$ round **attesi**, senza specificarne qui il protocollo.
 
 ## 6 Strutture dati distribuite
 
 ### Introduzione
 
-Una struttura dati distribuita colloca dati su più nodi e deve restare utilizzabile quando cambia il numero dei partecipanti. Qui l'operazione centrale è la ricerca di una chiave: partiamo dalle hash table e dalle reti peer-to-peer, poi studiamo come Chord organizza chiavi e nodi in un anello logico.
+Una struttura dati distribuita deve conservare e rendere accessibili i dati mentre cambia il numero dei nodi che li ospitano. Qui ci interessa soprattutto cercare una coppia chiave-valore: partiamo dalle hash table e da alcune architetture peer-to-peer, poi vediamo come Chord assegna le chiavi ai nodi e le cerca in una rete overlay.
 
 ### Hash tables
 
-Sono strutture dati che memorizzano i dati sotto la forma di coppie $(key, value)$. Una apposita funzione di hash mappa ogni chiave su un indice, o bucket, di un vettore; il valore associato alla chiave viene memorizzato nel bucket corrispondente. Presso ogni casella può essere posta una lista di trabocco che raccoglie più coppie in caso di collisione.
+Una hash table memorizza coppie $(key, value)$. Una funzione di hash associa ogni chiave a un indice, detto *bucket*, di un vettore; nel bucket si conserva il valore associato. Se più chiavi finiscono nello stesso bucket, una lista di trabocco raccoglie le coppie in collisione.
 
 ![[assets/Screenshot 2024-11-20 101146.png|600]]
 
-La funzione di hash deve distribuire il più uniformemente possibile le chiavi sui differenti bucket.
-In un contesto distribuito, le coppie $(key, value)$ sono dislocate su un insieme di nodi. Bisogna tenere ben presente che il numero di tali nodi non è noto e può variare dinamicamente.
+La funzione di hash dovrebbe distribuire le chiavi nel modo più uniforme possibile fra i bucket. In una hash table distribuita, invece, le coppie $(key, value)$ sono collocate su più nodi. Il numero dei nodi che compongono il sistema non è noto localmente e può cambiare dinamicamente.
 
 ### Gli inizi
 
-Alla fine degli anni '90 nacque Napster, un software per la libera condivisione di musica su Internet. Napster era realizzato con un indice centralizzato, che conteneva le informazioni su dove localizzare tutti i vari files musicali, che si trovavano distribuiti sui computer degli utenti. Un utente che volesse scaricare un file musicale interrogava l'indice centralizzato, che forniva tutte le informazioni necessarie al reperimento della risorsa. Il download coinvolgeva direttamente i due computers. Fu proprio Napster a coniare per primo il termine "peer-to-peer".
+Alla fine degli anni ’90 Napster permetteva di condividere musica su Internet. Un indice centralizzato teneva le informazioni sulla posizione dei file, memorizzati sui computer degli utenti. Chi voleva scaricare un file interrogava l’indice e poi scaricava la risorsa direttamente dal computer che la ospitava. L’indice centralizzato costituiva un punto singolo di guasto: se non era disponibile, il sistema non funzionava. Le slide indicano che Napster fu chiuso nel 2001 per decisione del tribunale legata alla condivisione di file protetti da copyright.
 
 ![[assets/Screenshot 2024-11-20 101658.png|600]]
 
-Napster fu chiuso perché, trovandosi tutte le informazioni in un nodo centrale, si potevano accusare i proprietari di avere arrecato un danno su larga scala all'industria discografica.
-Nel 2000 Gnutella introdusse un sistema completamente distribuito. Per unirsi al sistema, un nuovo computer doveva conoscerne almeno un altro già appartenente. Ogni computer conteneva una parte dei files ed era connesso con un numero limitato di vicini. Le query erano inviate ricorsivamente a tutti i vicini (similmente a flooding).
-Gnutella costituiva di fatto una rete virtuale giacente sulla rete IP ("overlayed"). Due vicini sulla rete Gnutella non dovevano esserlo necessariamente sulla rete IP.
+[[teacher_slides/2_distributed algorithms.pdf#page=483|Slide della docente, p. 483]]
+
+Nel 2000 Gnutella propose una rete completamente distribuita. Per unirsi, un computer doveva conoscere almeno un partecipante; ogni computer ospitava una parte dei file ed era collegato a un numero limitato di vicini. Le query venivano inoltrate ricorsivamente ai vicini tramite *flooding*, fino a un limite di hop indicato dal TTL (*Time To Live*). Se il file esiste ma si trova oltre quel limite, la query può non raggiungerlo e il file può non essere trovato. I collegamenti formavano una rete *overlay* sulla rete IP: due vicini logici potevano non essere vicini fisici. Il flooding rendeva la ricerca robusta, ma poteva riempire la rete di richieste.
 
 ![[assets/Screenshot 2024-11-20 101837.png|1000]]
 
-L'approccio completamente distribuito di Gnutella era robusto, ma il flooding tendeva a riempire la rete di richieste.
-KaZaA (2001) adottò un approccio ibrido tra Napster e Gnutella, differenziando tra nodi ordinari (ON) e supernodi (SN).
+[[teacher_slides/2_distributed algorithms.pdf#page=484|Slide della docente, p. 484]]
+[[teacher_slides/2_distributed algorithms.pdf#page=489|Slide della docente, p. 489: limite di ricerca dovuto al TTL]]
+
+KaZaA (2001) adottò un’organizzazione ibrida fra Napster e Gnutella: distingueva nodi ordinari (*ordinary nodes*, ON) e supernodi (*supernodes*, SN). Ogni ON era collegato a un solo SN per volta; gli SN comunicavano fra loro. Un ON registrava presso il proprio SN l’elenco dei file condivisi. Quando cercava un file, interrogava lo SN, che rispondeva per gli ON a esso collegati oppure inoltrava la richiesta agli altri SN. Questa soluzione riduceva il flooding, ma manteneva punti centrali di possibile guasto.
 
 ![[assets/Screenshot 2024-11-20 102317.png|600]]
 
-Gli ON erano collegati ciascuno ad un solo SN e gli SN comunicavano direttament tra loro. Per unirsi al sistema, un ON inviava una richiesta ad un SN condividendo la propria lista di files da condividere. Quando un ON richiedeva un file, mandava un messaggio al proprio SN, che rispondeva direttamente per gli ON ad esso connessi e diversamente doveva inoltrare richieste agli altri SN.
-KaZaA, pur unendo i punti forti di Napster e Gnutella (meno flooding e più servers "centrali") univa anche i loro difetti, come i point of failure.
-Nelle reti strutturate, ovvero quelle per le quali la struttura stessa determina dove si trovino nodi e dati, una ricerca può essere fatta in modo efficiente. In reti non strutturate, cioè nelle quali nodi e dati possono essere aggiunti ovunque, vi è invece la necessità di trovare un meccanismo che consenta ricerche parimenti efficienti. Le hash tables distribuite possono essere questo meccanismo.
+In una rete *strutturata*, la struttura determina dove si trovano nodi e dati e permette di instradare le ricerche in modo efficiente. In una rete *non strutturata*, nodi e dati possono essere aggiunti senza una collocazione determinata, perciò una ricerca può non essere efficiente. Una DHT (*Distributed Hash Table*) organizza invece un overlay strutturato: la struttura determina dove assegnare gli oggetti e come instradare le ricerche in modo efficiente.
 
 ![[assets/Screenshot 2024-11-20 104158.png|1000]]
 
+[[teacher_slides/2_distributed algorithms.pdf#page=494|Slide della docente, pp. 494–496]]
+
 ### Chord
 
-**Problema e modello.** Chord organizza la dislocazione e la ricerca delle coppie chiave-valore di una [[#Hash tables|hash table distribuita]] in una rete *overlay*: i vicini logici possono non essere vicini nella rete fisica. Nodi e chiavi ricevono identificativi tramite hash e sono ordinati su un anello logico. Lo spazio degli identificativi va da 0 a $2^m-1$, dove qui $m$ è il **numero di bit degli ID**; la notazione $m=|E|$ per i grafi non è usata in questa sezione. Le garanzie di lookup descritte sotto assumono puntatori aggiornati e assenza di guasti, salvo quando sono specificate procedure di recupero.
+[[teacher_slides/2_distributed algorithms.pdf#page=497|Slide della docente, pp. 497–501]]
+
+Chord è una DHT che organizza nodi e chiavi su un anello logico, sovrapposto alla rete fisica, per realizzare una [[#Hash tables|hash table distribuita]]. Una funzione di hash assegna un identificativo (*ID*) sia ai nodi sia alle chiavi; l’ID della chiave e quello del nodo responsabile appartengono allo stesso spazio. Le slide usano identificativi di $m$ bit, da $0$ a $2^m-1$, ordinati in senso circolare: dopo $2^m-1$ si torna a $0$. Il parametro $m$ indica il numero di bit degli ID, mentre $n$ indica il numero di nodi effettivamente presenti.
 
 #### Lookup con il successore
 
-Nella versione di base, per effettuare un lookup basta che ogni nodo conosca il proprio **successore** sull'anello, cioè il primo nodo successivo in ordine circolare di identificativo. Il mapping delle chiavi usa lo stesso spazio degli identificativi: la chiave $k$ è assegnata al primo nodo con ID almeno $k$ percorrendo l'anello, con ritorno a zero quando necessario.
+Nella versione di base, ogni nodo conosce il proprio **successore**: il primo nodo successivo nell’ordine circolare degli ID. La chiave $k$ è assegnata al nodo `successor(k)`, cioè al primo nodo il cui ID è almeno $k$; se non esiste un ID sufficiente prima della fine dello spazio, si riprende la ricerca da $0$.
 
 ![[assets/Screenshot 2024-11-26 111716.png|800]]
 
-Nella presentazione originale di Chord, SHA-1 produce identificativi di $m=160$ bit per nodi e chiavi. Quando un nodo riceve una richiesta di lookup, se è responsabile della chiave può rispondere; altrimenti inoltra la richiesta al successore.
+Le slide presentano SHA-1 come funzione di hash per chiavi e nodi, con ID di $m=160$ bit. Quando un nodo riceve un lookup, risponde se è responsabile della chiave; altrimenti inoltra la richiesta al successore.
 
 ![[assets/Screenshot 2024-11-26 112149.png|400]]
 
-In questo modo, il protocollo può richiedere l'attraversamento dell'intero anello nel caso peggiore: la catena contiene al più $n$ nodi presenti, quindi usa $O(n)$ hop. Il valore $2^m$ è la dimensione dello spazio degli identificativi, non il numero di nodi effettivamente attraversati. In assenza di guasti e con puntatori ai successori corretti, il lookup raggiunge sempre il nodo responsabile.
+Per esempio, nell’anello illustrato, il lookup di $K37$ raggiunge $N44$: l’ID $44$ è il primo ID di nodo almeno pari a $37$. Con il solo puntatore al successore la richiesta può attraversare l’intero anello. Nel caso peggiore il lookup visita quindi fino a $n$ nodi effettivi e costa $O(n)$ hop; $2^m$ è la dimensione dello spazio degli ID, non il numero di nodi della rete. Se i puntatori ai successori sono corretti e non ci sono guasti, il lookup raggiunge il nodo responsabile.
+
 #### Finger table e lookup accelerato
 
-Con il solo puntatore al successore, [[#Lookup con il successore|il lookup]] può attraversare fino a $n$ nodi. Per ridurre gli hop, ogni nodo tiene una **finger table** con informazioni su dove trovare chiavi con ID più grandi. Le entry sono tante quanti i bit degli identificativi: per $j=1,\ldots,m$, l'entry $j$ punta al successore di $(i+2^{j-1})\bmod 2^m$. Gli offset sono quindi $1,2,4,\ldots,2^{m-1}$; a ogni posizione è associato il nodo responsabile di quell'intervallo.
+[[teacher_slides/2_distributed algorithms.pdf#page=502|Slide della docente, pp. 502–504]]
+
+Per ridurre il numero di hop rispetto al [[#Lookup con il successore|lookup con il solo successore]], ogni nodo $i$ mantiene una *finger table* con $m$ voci. Per $j=1,\ldots,m$, la voce $j$ contiene il nodo `successor((i+2^{j-1}) mod 2^m)`. Gli offset sono dunque $1,2,4,\ldots,2^{m-1}$; la prima voce coincide con il successore. La tabella registra più dettagli sui nodi vicini nell’ordine degli ID e meno su quelli lontani.
 
 ![[assets/Screenshot 2024-11-26 112658.png|400]]
 
-In fase di look-up della fingertable, il nodo che riceve la richiesta può tentare di contattare direttamente il nodo che ne è in possesso sulla base alle proprie informazioni. L'unica accortezza alla ci si deve attenere è quella di inviare la richiesta al nodo con identificativo immediatamente inferiore a quello della richiesta. In questo modo non è possibile in alcun modo saltare il nodo che ne sia in possesso.
+Per cercare la chiave $k$, il nodo controlla prima se è responsabile oppure se lo è il suo successore. Altrimenti inoltra il lookup al nodo della propria finger table che precede $k$ più da vicino nell’ordine circolare, senza oltrepassarla. Se nessuna voce fornisce un predecessore, inoltra al successore. Da quel nodo la ricerca continua con la stessa regola. Il controllo del successore evita di saltare il responsabile quando questo è il successore immediato.
 
 ![[assets/Screenshot 2024-11-26 112958.png|400]]
 
-In media, il numero di nodi da contattare è $log (n)$. Ogni hop teoricamente dovrebbe dimezzare la distanza dal nodo desiderato.
+Le slide danno un costo medio di $O(\log n)$ hop: in media, ogni hop riduce la distanza dal nodo cercato. Questa è una garanzia media, sotto l’ipotesi che gli ID siano distribuiti in modo adeguato; non è il limite del caso peggiore per ogni configurazione.
+
 #### Join e stabilizzazione
 
-Quando un nodo si aggiunge all'anello, cambiano la responsabilità per alcune chiavi e le informazioni di instradamento. Oltre al successore, per gestire questa operazione ogni nodo mantiene il proprio **predecessore**, cioè il nodo immediatamente precedente nell'ordine circolare.
-L'inserimento di un nuovo nodo nell'anello attraversa le seguenti fasi:
+[[teacher_slides/2_distributed algorithms.pdf#page=505|Slide della docente, pp. 505–510]]
 
-- Inizializzazione del nuovo nodo (predecessore/successore e fingertable)
+Quando entra un nuovo nodo, Chord deve mantenere corretti i puntatori ai successori e assegnare ogni chiave al suo nuovo responsabile. Per gestire l’inserimento, ogni nodo mantiene anche un puntatore al **predecessore**, il nodo immediatamente precedente nell’ordine circolare.
 
-- Aggiornamento di predecessore/successore e fingertable dei nodi esistenti
+L’inserimento comprende tre operazioni:
 
-- Trasferimento delle chiavi assegnate al nuovo nodo
+1. **Inizializzazione:** il nuovo nodo trova il proprio successore e inizializza successore, predecessore e finger table.
+2. **Aggiornamento:** i nodi esistenti aggiornano i puntatori a successore e predecessore e le finger table interessate.
+3. **Trasferimento:** il successore trasferisce al nuovo nodo i valori associati alle chiavi che ora gli competono.
 
-La procedura che aggiorna esplicitamente le finger table ha costo **medio** $O(\log^2 n)$ secondo le slide. Una soluzione più semplice usa la **stabilizzazione periodica**: aggiornamenti e lookup possono essere intercalati nel tempo, senza attendere che tutte le finger table siano aggiornate. In questa fase la correttezza del lookup richiede che i puntatori ai successori siano corretti e che si controlli il successore prima di usare una finger entry potenzialmente vecchia; la ricerca può risultare più lenta.
+L’aggiornamento esplicito può essere eseguito in tempo medio $O(\log^2 n)$, secondo le slide. Un protocollo più semplice usa la **stabilizzazione periodica** e accetta che le finger table non siano sempre aggiornate. Con successori corretti, un lookup resta corretto se controlla il successore prima di consultare le finger table; una finger table obsoleta può rallentare la ricerca. Questa garanzia presuppone che inserimenti, stabilizzazione e lookup siano intercalati in modo compatibile: non implica correttezza automatica per ogni possibile interleaving concorrente.
 
 ![[assets/Screenshot 2024-11-26 114109.png|350]]
 
-A cadenza regolare ogni nodo $A$ esegue `stabilize` interrogando il proprio successore corrente $B$ sul predecessore di $B$, diciamo $B'$. Se $B'$ appartiene all'intervallo circolare aperto $(A,B)$, allora $A$ aggiorna il proprio successore a $B'$. Infine $A$ notifica la propria esistenza al successore scelto; quest'ultimo aggiorna il proprio predecessore ad $A$ soltanto se $A$ è più vicino del predecessore già noto. Il valore restituito da $B$ è quindi il predecessore di $B$, non l'identificativo che $A$ dovrebbe aspettarsi di ricevere.
+A intervalli regolari, un nodo $A$ esegue `stabilize` interrogando il successore corrente $B$ per conoscere il predecessore di $B$, che indichiamo con $B'$. Se $B'$ appartiene all’intervallo circolare aperto $(A,B)$, $A$ aggiorna il successore a $B'$. Poi $A$ notifica la propria presenza al successore scelto; il successore aggiorna il predecessore ad $A$ se $A$ è più vicino del predecessore che conosceva. Quindi `stabilize` fa ottenere ad $A$ il predecessore di $B$; non gli restituisce necessariamente un ID atteso in anticipo.
 
 ![[assets/Screenshot 2024-11-26 114626.png|1000]]
 
-Per aggiungersi all'anello, un nuovo nodo deve conoscere almeno un nodo già presente. Il suo successore gli trasferisce le chiavi di cui diventa responsabile; solo dopo il trasferimento elimina la copia precedente, secondo la politica di replica adottata. Durante l'aggiornamento delle finger table, il nuovo nodo può chiedere al successore di risolvere le entry mancanti e i lookup possono ripiegare sui puntatori ai successori. I nodi aggiornano periodicamente le proprie finger table, scegliendo una riga alla volta.
-Un nodo può uscire dall'anello principalmente in due casi: fallimento e non.
-
-![[assets/Screenshot 2024-11-26 120047.png|600]]
+Per entrare nell’anello, il nuovo nodo deve conoscere almeno un nodo già presente. Interroga quel nodo per trovare il proprio successore, inizializza i puntatori e la finger table e riceve dal successore i valori delle chiavi di cui diventa responsabile. Il successore elimina la propria copia solo dopo il trasferimento, secondo la politica di replica adottata. Le finger table vengono aggiornate progressivamente: il nuovo nodo può chiedere al successore di risolvere i lookup necessari per le proprie voci, mentre i nodi ricalcolano periodicamente le proprie tabelle, una voce per volta. Le finger table obsolete rendono il routing più lento; finché i puntatori ai successori sono aggiornati e le operazioni rispettano le ipotesi di interleaving indicate sopra, il lookup può proseguire.
 
 ### Chord: leave, failure e replicazione
 
-**Problema e modello.** In Chord, una chiave è assegnata al primo nodo con ID almeno pari alla chiave nell'anello logico; [[#Chord|lookup, finger table e stabilizzazione]] mantengono raggiungibile il responsabile quando i puntatori sono corretti. Qui consideriamo la perdita di un partecipante: l'uscita può essere **pulita** oppure dovuta a un **fallimento** improvviso. La replica dei valori è distinta dalla sola continuità dell'instradamento.
+[[teacher_slides/2_distributed algorithms.pdf#page=511|Slide della docente, p. 511]]
 
-**Leave pulita.** Un nodo $x$ che può cooperare prima di uscire:
+Una chiave è assegnata al suo successore nell’anello. Quando un nodo esce, occorre quindi aggiornare il routing e mantenere disponibili i valori che ospitava. Le operazioni di [[#Chord|lookup, finger table e stabilizzazione]] permettono di raggiungere un responsabile quando i puntatori sono corretti; la replica protegge i dati dalla perdita di un nodo.
 
-1. trasferisce al proprio successore tutte le chiavi di cui è responsabile;
-2. comunica al predecessore il nuovo successore;
-3. comunica al successore il nuovo predecessore.
+**Leave pulita.** Se il nodo $x$ può cooperare prima di uscire, trasferisce al successore i valori delle chiavi di cui è responsabile, notifica al predecessore il nuovo successore e al successore il nuovo predecessore. Gli altri puntatori e le finger table che riferiscono $x$ possono essere aggiornati progressivamente.
 
-I puntatori immediati restano così connessi; le finger table che contengono $x$ possono essere corrette gradualmente dai normali aggiornamenti periodici.
+![[assets/Screenshot 2024-11-26 120047.png|600]]
 
-**Fallimento.** Un nodo guasto non può migrare chiavi né inviare notifiche. Per non dipendere da un solo puntatore, ogni nodo mantiene una **successor list** contenente i primi $r$ successori sull'anello. Se il successore non risponde, viene sostituito con la prima entry viva della lista e `stabilize` ricostruisce progressivamente i puntatori. Se durante un lookup non risponde una finger entry, si prova una finger precedente, cioè un'alternativa che non oltrepassi la chiave; per indici bassi si ricorre anche alla successor list. Il routing può continuare, eventualmente con più hop, **se resta raggiungibile almeno un successore vivo e l'anello non si è partizionato**.
+**Fallimento.** Un nodo che si guasta non può trasferire i valori né notificare i vicini. Per non dipendere da un solo successore, ogni nodo mantiene una lista dei primi $r$ successori (*successor list*). Se un successore non risponde, il nodo prova il successivo nella lista e `stabilize` ricostruisce i puntatori. Se non risponde una finger entry, il nodo prova una finger precedente; per gli indici bassi può ricorrere alla successor list. Il routing può continuare, anche con più hop, se almeno un successore vivo resta raggiungibile e l’anello non è partizionato.
 
-La continuità del routing non recupera automaticamente i dati memorizzati soltanto sul nodo guasto. Come estensione per tollerare la perdita di nodi, un'applicazione può replicare ogni coppia chiave-valore sui primi $r$ successori del nodo responsabile. Dopo un fallimento, il primo successore vivo diventa responsabile e le repliche vengono ricostituite. L'aumento di $r$ migliora la tolleranza ai guasti consecutivi, al costo di più memoria e traffico di aggiornamento.
+La continuità del routing non ripristina i valori che erano conservati soltanto sul nodo guasto. Per tollerare la perdita dei nodi, l’applicazione può replicare ogni coppia chiave-valore sui primi $r$ successori del nodo responsabile. Dopo un guasto, il primo successore vivo assume la responsabilità e le repliche possono essere ricostituite. Aumentare $r$ permette di tollerare più guasti consecutivi, ma richiede più spazio e traffico di aggiornamento.
 
-In condizioni stabili la finger table permette lookup attesi in $O(\log n)$ hop; successor list e fallback aiutano a mantenere raggiungibile il nodo responsabile durante la stabilizzazione, mentre la replica è il meccanismo separato che preserva i valori.
+In condizioni stabili, le finger table consentono lookup in $O(\log n)$ hop attesi; le liste di successori e i fallback sostengono il routing durante i guasti, mentre la replica è il meccanismo separato che conserva i valori.
 
 ## Appendice: Ricorrenze e Master Theorem (facoltativo)
 
@@ -2867,7 +2595,9 @@ Nei casi 1 e 3, $\varepsilon>0$ è una costante: il divario rispetto a $n^p$ dev
 
 Il teorema non si applica direttamente a ricorrenze con sottoproblemi di dimensioni diverse, come $T(n)=T(n/3)+T(2n/3)+n$, né a forme decrementali come $T(n)=T(n-1)+n$.
 
-**Riferimento per questo approfondimento:** Cormen, *Introduction to Algorithms*, cap. 4, teorema 4.1 (p. 94 del libro; p. 115 del PDF presente in `teacher_slides/based_by/`). La ricorrenza e il caso Merge Sort sono trattati nello stesso capitolo.
+**Riferimento per questo approfondimento:** Cormen, *Introduction to Algorithms*, cap. 4, teorema 4.1 (p. 94 del libro; p. 115 del PDF locale). La ricorrenza e il caso Merge Sort sono trattati nello stesso capitolo.
+
+[[teacher_slides/based_by/Cormen Introduction to Algorithms.pdf#page=115|Cormen, PDF locale, p. 115]]
 
 ## Vocabolario trasversale
 
