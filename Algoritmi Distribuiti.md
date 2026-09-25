@@ -2,6 +2,7 @@
 
 ## Indice
 
+- [[#Ripasso essenziale sui grafi|Ripasso essenziale sui grafi]]
 - [[#1 Introduzione|1 Introduzione]]
 - [[#2 Teoria della Complessità|2 Teoria della Complessità]]
   - [[#2.1 Classificazione dei problemi per complessità|2.1 Classificazione dei problemi per complessità]]
@@ -74,6 +75,33 @@
 21. [[#Consensus deterministico con fallimenti bizantini|RegisteredMail / TellZero-Byz]]
 22. [[#Consensus problem con fallimenti bizantini|Consensus randomizzato bizantino]]
 23. [[#Chord|Chord: lookup, join, stabilize, leave e failure]]
+
+## Ripasso essenziale sui grafi
+
+*Prerequisito utile per leggere i problemi su grafi e le topologie di comunicazione.*
+Un **grafo** $G=(V,E)$ è formato da vertici (o nodi) $V$ e archi $E$.
+La **cardinalità** $|S|$ è il numero di elementi di un insieme $S$:
+- $n=|V|$ conta i vertici
+- $m=|E|$ gli archi.
+
+| Tipo | Che cosa significa | Esempio |
+| --- | --- | --- |
+| **Non diretto** (non orientato) | Un arco $\{a,b\}$ collega $a$ e $b$ senza verso. | $V=\{a,b,c\}$, $E=\{\{a,b\},\{b,c\}\}$: $a$—$b$—$c$. |
+| **Diretto** (orientato) | Un arco $(a,b)$ ha verso $a\to b$; $(b,a)$ è un arco diverso. Nelle topologie del corso si usa anche $G=(V,A)$ per l'insieme degli archi diretti. | $A=\{(a,b),(b,c)\}$: $a\to b\to c$. |
+| **Completo** | Ogni coppia di vertici distinti è collegata. Se il grafo è semplice e non diretto, $m=n(n-1)/2$. | $K_3$: $E=\{\{a,b\},\{a,c\},\{b,c\}\}$. |
+| **Bipartito** | I vertici si dividono in $L$ e $R$; ogni arco collega una parte all'altra, mai due vertici della stessa parte. È **bipartito completo** se sono presenti tutti gli archi tra $L$ e $R$. | $L=\{a,b\}$, $R=\{c,d\}$, $E=\{\{a,c\},\{b,d\}\}$. |
+
+![[assets/ripasso-grafi.svg|800]]
+
+- **Adiacenti / vicini:** due vertici uniti da un arco.
+- Il **grado** $\deg(v)$ è il numero di archi incidenti a $v$; nell'esempio non diretto $a$—$b$—$c$, i gradi sono $1,2,1$. In un grafo diretto si distinguono **grado uscente** (archi che partono da $v$) ed **entrante** (archi che arrivano a $v$).
+- **Cammino:** sequenza di vertici consecutivi collegati da archi, rispettandone il verso se il grafo è diretto. È **semplice** se non ripete vertici; può altrimenti ripassare da un vertice.
+- Un **ciclo** è un percorso chiuso: torna al vertice iniziale. Nel ciclo semplice non si ripetono altri vertici.
+- La **lunghezza** di un cammino non pesato è il numero di archi attraversati.
+- **Connesso:** in un grafo non diretto esiste un cammino fra ogni coppia di vertici. Un grafo diretto è **fortemente connesso** se esiste un cammino diretto da ogni vertice a ogni altro.
+- **Pesato:** a ogni arco è associato un peso; il costo di un cammino è la somma dei pesi degli archi attraversati.
+
+![[assets/ripasso-cammini-cicli.svg|800]]
 
 ## 1 Introduzione
 
@@ -1040,15 +1068,9 @@ Il calcolo del bound e la costruzione dei figli richiedono tempo polinomiale per
 
 [[teacher_slides/1_complexity theory.pdf#page=55|Slide della docente, p. 55]]
 
-Nel seguito $G$ è non orientato e chiamiamo $C$ il vertex cover, invece di $V'$, per non confonderlo con l'insieme dei vertici. La condizione di copertura equivale a
+Qui $G$ è non orientato. L'insieme $V$ è sempre un vertex cover; il problema consiste nel trovarne uno di cardinalità minima. Si distinguono quindi:
 
-$$
-\forall (u,v)\in E:\quad u\in C\ \vee\ v\in C.
-$$
-
-L'insieme $V$ è sempre un vertex cover; il problema consiste nel trovarne uno di cardinalità minima. Si distinguono quindi:
-
-- **versione di ottimizzazione** $VC_{opt}$: trovare un vertex cover $C^*$ tale che $|C^*|=\min\{|C|:C\text{ è un vertex cover di }G\}$;
+- **versione di ottimizzazione** $VC$: trovare un vertex cover $V'$ di cardinalità minima;
 - **versione decisionale** $VCD$: dati $G$ e un intero $k\leq |V|$, stabilire se esista un vertex cover di cardinalità al più $k$.
 
 ![[assets/vertex_covers.png|500]]
@@ -1060,15 +1082,15 @@ L'insieme $V$ è sempre un vertex cover; il problema consiste nel trovarne uno d
 
 #### Dimostrazione
 
-Il problema $VCD$ è NP-completo: una soluzione proposta si verifica in tempo polinomiale controllando la cardinalità e verificando che ogni arco abbia almeno un estremo selezionato; la NP-hardness è un risultato noto. Per dimostrare la NP-hardness di $VC_{opt}$, riduciamo $VCD$ a $VC_{opt}$.
+Il problema $VCD$ è NP-completo: una soluzione proposta si verifica in tempo polinomiale controllando la cardinalità e verificando che ogni arco abbia almeno un estremo selezionato; la NP-hardness è un risultato noto. Per dimostrare la NP-hardness di $VC$, riduciamo $VCD$ a $VC$.
 
-**Schema della riduzione.** L'istanza è la coppia $(G,k)$. Passiamo il grafo $G$ a un oracolo per $VC_{opt}$ e confrontiamo con $k$ la cardinalità della copertura restituita.
+**Schema della riduzione.** L'istanza è la coppia $(G,k)$. Passiamo il grafo $G$ a un oracolo per $VC$ e confrontiamo con $k$ la cardinalità della copertura restituita.
 
 ![[assets/vertex-cover-riduzione-vcd-vc.png|850]]
 
 È una riduzione di Turing con una chiamata a un oracolo di ottimizzazione, non una riduzione di Karp tra problemi decisionali.
 
-L'oracolo restituisce una copertura minima $C^*$ di $G$. Rispondiamo `YES` se e solo se $|C^*|\leq k$: questa condizione equivale alla risposta positiva di $VCD$. La riduzione effettua una sola chiamata all'oracolo e un confronto polinomiale, dunque $VCD\leq_T^p VC_{opt}$. Ne segue che $VC_{opt}$ è NP-hard.
+L'oracolo restituisce una copertura minima $V'$ di $G$. Rispondiamo `YES` se e solo se $|V'|\leq k$: questa condizione equivale alla risposta positiva di $VCD$. La riduzione effettua una sola chiamata all'oracolo e un confronto polinomiale, dunque $VCD\leq_T^p VC$. Ne segue che $VC$ è NP-hard.
 
 ### Self-reduction del Vertex Cover
 
@@ -1115,7 +1137,7 @@ L'invariante è che il grafo corrente possiede un vertex cover di cardinalità a
 
 ### Approssimazione greedy del Vertex Cover
 
-L'obiettivo è trovare, in un grafo non orientato $G=(V,E)$, una copertura $C$ che contenga almeno un estremo di ogni arco e sia vicina alla cardinalità minima $|C^*|$; si veda [[#Vertex Cover Problem]] per la specifica completa. Le tre scelte seguenti condividono l'idea di selezionare elementi finché tutti gli archi sono coperti, ma hanno garanzie diverse.
+L'obiettivo è trovare, in un grafo non orientato $G=(V,E)$, una copertura $C$ che contenga almeno un estremo di ogni arco e sia vicina alla cardinalità minima $|OPT|$; qui $OPT$ indica una copertura ottima, come nelle slide. Si veda [[#Vertex Cover Problem]] per la specifica completa. Le tre scelte seguenti condividono l'idea di selezionare elementi finché tutti gli archi sono coperti, ma hanno garanzie diverse.
 
 [[teacher_slides/1_complexity theory.pdf#page=58|Slide della docente, p. 58]]
 [[teacher_slides/1_complexity theory.pdf#page=59|Slide della docente, p. 59]]
@@ -1125,12 +1147,13 @@ Un algoritmo greedy costruisce la soluzione incrementalmente. Per Vertex Cover, 
 
 #### Prima scelta: un vertice arbitrario
 
-La prima euristica seleziona un vertice arbitrario di grado positivo, lo aggiunge alla copertura ed elimina gli archi incidenti, ripetendo finché non rimangono archi. Con liste di adiacenza e opportune marcature, il costo è $O(|V|+|E|)$ e la soluzione è ammissibile, ma il rapporto di approssimazione non è limitato da una costante.
+La prima euristica: seleziona un vertice arbitrario di grado positivo, lo aggiunge alla copertura ed elimina gli archi incidenti, ripetendo finché non rimangono archi.
+Con liste di adiacenza e opportune marcature, il costo è $O(|V|+|E|)$ e la soluzione è ammissibile, ma il rapporto di approssimazione non è limitato da una costante.
 
-Si consideri una stella $S_k$ con un centro $c$ e $k$ foglie. L'ottimo è $C^*=\{c\}$, di cardinalità $1$; con scelte sfavorevoli, l'euristica può invece selezionare tutte le $k$ foglie. Il rapporto è quindi
+Si consideri una stella $S_k$ con un centro $c$ e $k$ foglie. L'ottimo è $OPT=\{c\}$, di cardinalità $1$; con scelte sfavorevoli, l'euristica può invece selezionare tutte le $k$ foglie. Il rapporto è quindi
 
 $$
-\frac{|C|}{|C^*|}=k,
+\frac{|C|}{|OPT|}=k,
 $$
 
 che cresce linearmente con il numero dei vertici.
@@ -1139,26 +1162,31 @@ che cresce linearmente con il numero dei vertici.
 
 #### Seconda scelta: un vertice di grado massimo
 
-Sulla stella, scegliere il vertice di grado massimo evita quel comportamento: il centro viene selezionato subito. In generale, l'euristica sceglie a ogni iterazione un vertice di grado massimo corrente, cioè quello che copre il maggior numero di archi ancora scoperti. La soluzione resta ammissibile e l'algoritmo è polinomiale, ma neppure questa euristica garantisce un fattore di approssimazione costante.
+Sulla stella, scegliere il vertice di grado massimo evita quel comportamento: il centro viene selezionato subito.
+In generale, l'euristica sceglie a ogni iterazione un vertice di grado massimo **nel grafo degli archi ancora scoperti**: così copre il maggior numero possibile di archi in quel passo. La soluzione è sempre un vertex cover e l'algoritmo è polinomiale. Questa scelta locale, però, può portarlo a selezionare molti più vertici di quanti ne servano in una copertura ottima; l'approfondimento mostra perché il rapporto non è limitato da una costante.
 
-La figura seguente mostra un piccolo esempio. Inizialmente i quattro vertici di $A$ hanno grado $3$, mentre in $B$ vi sono due vertici di grado $4$ e quattro di grado $1$. L'algoritmo può scegliere prima i due vertici di grado $4$; sugli archi rimasti tutti i vertici hanno grado $1$ e un tie-breaking sfavorevole può fargli scegliere anche gli altri quattro vertici di $B$. Restituisce così una copertura di cardinalità $6$, mentre $A$ è una copertura ottima di cardinalità $4$: il rapporto è $3/2$.
-
-![[assets/vertex-cover-grado-massimo-esempio.png|500]]
-
-> **Approfondimento — famiglia con rapporto logaritmico**
-> Il piccolo esempio spiega il meccanismo, ma non dimostra che il rapporto possa crescere senza limite. Per farlo si usa una famiglia di grafi bipartiti $B=(L,R,E)$: $L$ contiene $r$ vertici e $R$ è suddiviso in gruppi $R_1,\ldots,R_r$. Il gruppo $R_i$ contiene $\lfloor r/i\rfloor$ vertici, ciascuno adiacente a $i$ vertici di $L$; i vertici dello stesso gruppo non condividono vicini.
+> [!note]- Approfondimento — perché il grado massimo non dà un fattore costante
+> **Un esempio piccolo.** Nel grafo della figura, $A$ contiene quattro vertici. Ciascuno è collegato ai due vertici superiori di $B$ e a un diverso vertice inferiore di $B$: ha quindi grado $3$. I due vertici superiori di $B$ hanno grado $4$, gli altri quattro grado $1$.
+>
+> ![[assets/vertex-cover-grado-massimo-esempio.png|500]]
+>
+> L'euristica sceglie uno dei vertici di grado $4$ in $B$ e ne elimina gli archi: ogni vertice di $A$ scende a grado $2$, mentre l'altro vertice superiore di $B$ resta di grado $4$ e viene scelto a sua volta. Rimangono quattro archi disgiunti, uno per ogni coppia fra $A$ e i vertici inferiori di $B$. Tutti i loro estremi hanno grado $1$; scegliendo ogni volta l'estremo in $B$, l'euristica restituisce $|C|=6$. Quei quattro archi disgiunti richiedono almeno quattro vertici in qualsiasi copertura, e l'insieme $A$ li copre tutti: $|OPT|=4$. Il rapporto è $6/4=3/2$.
+>
+> **Perché il rapporto può crescere.** Il singolo valore $3/2$ mostra una scelta sfavorevole, ma non esclude un limite costante valido per tutti i grafi. Consideriamo allora una famiglia di grafi bipartiti con $r\geq2$ vertici in $L$ e con $R$ diviso nei gruppi $R_1,\ldots,R_r$. In $R_i$ mettiamo $\lfloor r/i\rfloor$ vertici, ciascuno collegato a $i$ vertici di $L$. All'interno dello stesso gruppo, i vicini in $L$ sono distinti: ogni vertice di $L$ ha al più un vicino in ciascun $R_i$.
 >
 > ![[assets/vertex-cover-grado-massimo-famiglia-logaritmica.png|700]]
 >
-> Con un tie-breaking sfavorevole, l'euristica può scegliere progressivamente tutti i vertici di $R_r,R_{r-1},\ldots,R_1$. L'insieme $L$ è un vertex cover di cardinalità $r$. Poniamo $n=|L|+|R|=\Theta(r\log r)$; indicando con $C$ la soluzione greedy e con $C^*$ l'ottimo,
+> All'inizio i vertici di $R_r$ hanno grado $r$, mentre quelli di $L$ hanno grado al più $r$: l'euristica può scegliere $R_r$. Dopo aver eliminato tutti gli archi di $R_r$, ogni vertice di $L$ ha al più un vicino per ciascuno dei $r-1$ gruppi rimasti. Lo stesso ragionamento vale a ogni livello: quando restano $R_1,\ldots,R_i$, ogni vertice di $L$ ha grado al più $i$, mentre quelli di $R_i$ hanno grado $i$. Risolvendo i pareggi a favore di $R_i$, l'euristica può quindi scegliere tutti i vertici di $R_r,R_{r-1},\ldots,R_1$.
+>
+> $L$ copre tutti gli archi. Inoltre, i $r$ vertici di $R_1$ formano $r$ archi disgiunti con $L$, quindi ogni copertura richiede almeno $r$ vertici: $|OPT|=|L|=r$. L'euristica descritta sceglie invece $|C|=|R|=\sum_{i=1}^{r}\lfloor r/i\rfloor$. Poiché questa somma cresce come $r\log r$ e il numero totale di vertici è $n=|L|+|R|=\Theta(r\log r)$, otteniamo
 >
 > $$
-> \frac{|C|}{|C^*|}\geq \frac{|R|}{|L|}
+> \frac{|C|}{|OPT|}
 > =\frac{\sum_{i=1}^{r}\lfloor r/i\rfloor}{r}
 > =\Omega(\log r)=\Omega(\log n).
 > $$
 >
-> L'euristica coincide con il greedy standard per Set Cover applicato agli archi e ha anche garanzia $O(\log n)$; il suo comportamento worst-case è dunque $\Theta(\log n)$, non costante. Questa costruzione è un approfondimento esterno al materiale ufficiale del corso.[^vc-max-degree]
+> Al crescere di $n$, anche il rapporto può quindi crescere senza limite. Il greedy per Set Cover, applicato agli archi come elementi da coprire, fornisce anche il limite superiore $O(\log n)$: il rapporto nel caso peggiore è $\Theta(\log n)$. La costruzione e questa analisi sono un approfondimento esterno alle slide della docente, che enunciano il risultato senza svolgere l'esempio.[^vc-max-degree]
 
 #### Terza scelta: un arco arbitrario
 
@@ -1183,21 +1211,27 @@ L'algoritmo termina perché a ogni iterazione elimina almeno l'arco scelto. Inol
 
 [[teacher_slides/1_complexity theory.pdf#page=59|Slide della docente, p. 59]]
 
-Sia $M\subseteq E$ l'insieme degli archi scelti. Questi archi non condividono estremi, perché dopo aver scelto $(u,v)$ vengono eliminati tutti gli archi incidenti a $u$ o $v$: $M$ è dunque un **matching**. È anche **massimale**, perché al termine non esiste un altro arco disgiunto da tutti quelli in $M$ che possa esservi aggiunto.
+Sia $E'\subseteq E$ l'insieme degli archi scelti. Questi archi non condividono estremi, perché dopo aver scelto $(u,v)$ vengono eliminati tutti gli archi incidenti a $u$ o $v$: $E'$ è dunque un **matching**. È anche **massimale**, perché al termine non esiste un altro arco disgiunto da tutti quelli in $E'$ che possa esservi aggiunto.
 
-> **Massimale non significa massimo**
-> Un matching **massimale** non può essere esteso aggiungendo un arco; un matching **massimo** ha invece la cardinalità più grande possibile. L'algoritmo richiede soltanto la prima proprietà.
+La massimalità si riferisce al **grafo originale**: ogni arco non scelto tocca almeno un estremo di un arco in $E'$, altrimenti l'algoritmo avrebbe potuto scegliere anche quell'arco. Questo non implica che $E'$ contenga il maggior numero possibile di archi.
+
+Nel cammino $a-b-c-d$, se si sceglie prima $(b,c)$, vengono eliminati anche $(a,b)$ e $(c,d)$. Il matching $\{(b,c)\}$ è massimale: non possiamo aggiungervi nessuno dei due archi, perché condividono rispettivamente $b$ e $c$ con quello scelto. I vertici $a$ e $d$ restano fuori dal matching; l'algoritmo restituisce comunque il vertex cover $C=\{b,c\}$.
+
+![[assets/vertex-cover-matching-massimale.svg|900]]
+
+**Massimale, massimo e perfetto.**
+Nello stesso grafo, $\{(a,b),(c,d)\}$ è un matching **massimo**: contiene due archi e, con quattro vertici, nessun matching può contenerne di più. È anche **perfetto** perché copre tutti e quattro i vertici. L'algoritmo di Vertex Cover costruisce un matching massimale senza doverne cercare uno massimo o perfetto. In [[#Algoritmo di Christofides|Christofides]], invece, si cerca un perfect matching di peso minimo sui vertici di grado dispari dell'MST.
 
 Per ogni arco selezionato vengono inseriti due vertici, perciò
 
 $$
-|C|=2|M|.
+|C|=2|E'|.
 $$
 
-Ogni vertex cover, incluso quello ottimo $C^*$, deve coprire tutti gli archi di $M$. Poiché tali archi sono disgiunti, servono almeno $|M|$ vertici distinti:
+Ogni vertex cover, incluso quello ottimo $OPT$, deve coprire tutti gli archi di $E'$. Poiché tali archi sono disgiunti, servono almeno $|E'|$ vertici distinti:
 
 $$
-|C^*|\geq |M|.
+|OPT|\geq |E'|.
 $$
 
 > [!theorem] Teorema
@@ -1210,12 +1244,12 @@ $$
 Combinando le due relazioni si ottiene
 
 $$
-|C|=2|M|\leq 2|C^*|
+|C|=2|E'|\leq 2|OPT|
 \qquad\Longrightarrow\qquad
-\frac{|C|}{|C^*|}\leq 2.
+\frac{|C|}{|OPT|}\leq 2.
 $$
 
-**Precisazione nostra.** Nella prova a p. 60 il lower bound necessario è $|C^*|\geq |M|$, non $|C^*|\geq |C|$: ogni arco del matching impone un vertice distinto nell'ottimo, ma questo non contiene necessariamente entrambi gli estremi scelti dall'algoritmo.
+**Precisazione nostra.** Nella prova a p. 60 il lower bound necessario è $|OPT|\geq |E'|$, non $|OPT|\geq |C|$: ogni arco del matching impone un vertice distinto nell'ottimo, ma questo non contiene necessariamente entrambi gli estremi scelti dall'algoritmo.
 
 L'analisi è **tight**. Nel grafo bipartito completo $K_{m,m}$, tutti i vertici di una delle due partizioni formano un vertex cover ottimo di cardinalità $m$. L'algoritmo può scegliere un matching perfetto di $m$ archi e inserire entrambi gli estremi di ciascuno, restituendo tutti i $2m$ vertici. Il rapporto è esattamente $2$.
 
@@ -1239,7 +1273,7 @@ Per ogni vertice $v\in V$ introduciamo una variabile binaria $x_v$:
 $$
 x_v=
 \begin{cases}
-1 & \text{se }v\in C,\\
+1 & \text{se }v\text{ è nella copertura},\\
 0 & \text{altrimenti.}
 \end{cases}
 $$
@@ -1268,14 +1302,14 @@ $$
 \end{aligned}
 $$
 
-Il rilassamento è un problema di programmazione lineare risolvibile in tempo polinomiale. Indichiamo con $x^*$ una sua soluzione ottima e con $OPT_{LP}=\sum_{v\in V}x_v^*$ il relativo costo.
+Il rilassamento è un problema di programmazione lineare risolvibile in tempo polinomiale. Come nelle slide, indichiamo con $X^*=(x_v^*)_{v\in V}$ una sua soluzione ottima e con $\mathrm{Cost}(X^*)=\sum_{v\in V}x_v^*$ il relativo costo. Indichiamo con $OPT$ una soluzione intera ottima.
 
 #### Arrotondamento
 
-Trasformiamo $x^*$ in una soluzione binaria $\hat{x}$ usando la soglia $1/2$:
+Trasformiamo $X^*$ nella soluzione binaria $X=(x_v)_{v\in V}$ usando la soglia $1/2$:
 
 $$
-\hat{x}_v=
+x_v=
 \begin{cases}
 1 & \text{se }x_v^*\geq \frac12,\\
 0 & \text{se }x_v^*<\frac12.
@@ -1285,34 +1319,34 @@ $$
 **Algorithm 7 Relax & Round per Vertex Cover** ^algorithm-7
 
 > 1. **function** RelaxAndRoundVC($G$)<br>
-> 2.  $x^*\gets solveFractionalVertexCoverLP(G)$<br>
-> 3.  $C\gets\{v\in V:x_v^*\geq\frac{1}{2}\}$<br>
-> 4.  **return** $C$<br>
+> 2.  $X^*\gets solveFractionalVertexCoverLP(G)$<br>
+> 3.  per ogni $v\in V$, poni $x_v\gets 1$ se $x_v^*\geq\frac{1}{2}$, altrimenti $x_v\gets 0$<br>
+> 4.  **return** $X=(x_v)_{v\in V}$<br>
 > 5. **end function**
 
 #### Ammissibilità e fattore di approssimazione
 
-Per ogni arco $(u,v)$, la soluzione frazionaria soddisfa $x_u^*+x_v^*\geq 1$. I due valori non possono quindi essere entrambi strettamente minori di $1/2$: almeno uno dei due estremi viene inserito in $C$ e l'arco risulta coperto. Il segno di uguaglianza nella regola di rounding è essenziale proprio nel caso $x_u^*=x_v^*=1/2$.
+Per ogni arco $(u,v)$, la soluzione frazionaria soddisfa $x_u^*+x_v^*\geq 1$. I due valori non possono quindi essere entrambi strettamente minori di $1/2$: almeno una delle due variabili $x_u,x_v$ vale $1$ e l'arco risulta coperto. Il segno di uguaglianza nella regola di rounding è essenziale proprio nel caso $x_u^*=x_v^*=1/2$.
 
 Ogni soluzione intera ammissibile è anche ammissibile per il rilassamento LP; dunque il dominio intero è contenuto in quello frazionario e
 
 $$
-OPT_{LP}\leq OPT,
+\mathrm{Cost}(X^*)\leq\mathrm{Cost}(OPT),
 $$
 
-dove $OPT$ è il costo del vertex cover ottimo. Inoltre, per ogni vertice vale
+dove $OPT$ è la soluzione intera ottima. La soluzione approssimata è $APPROX=X$. Inoltre, per ogni vertice vale
 
 $$
-\hat{x}_v\leq 2x_v^*:
+x_v\leq 2x_v^*:
 $$
 
-se $\hat{x}_v=0$ la disuguaglianza è immediata; se $\hat{x}_v=1$, allora $x_v^*\geq 1/2$ e quindi $1\leq 2x_v^*$. Sommando sui vertici,
+se $x_v=0$ la disuguaglianza è immediata; se $x_v=1$, allora $x_v^*\geq 1/2$ e quindi $1\leq 2x_v^*$. Sommando sui vertici,
 
 $$
-|C|=\sum_{v\in V}\hat{x}_v
+\mathrm{Cost}(APPROX)=\sum_{v\in V}x_v
 \leq 2\sum_{v\in V}x_v^*
-=2OPT_{LP}
-\leq 2OPT.
+=2\mathrm{Cost}(X^*)
+\leq 2\mathrm{Cost}(OPT).
 $$
 
 L'analisi è tight per questa regola di rounding. In un ciclo con un numero pari $n$ di vertici, un vertex cover ottimo contiene un vertice sì e uno no e ha costo $n/2$. La soluzione $x_v^*=1/2$ per ogni $v$ è ottima: sommando i vincoli dei $n$ archi si ottiene $2\sum_v x_v\geq n$, e questa assegnazione raggiunge il limite. Se il risolutore restituisce questa soluzione, il rounding seleziona tutti gli $n$ vertici e il rapporto è $2$. L'LP ammette anche soluzioni ottime intere su questi cicli: l'esempio mostra quindi il caso peggiore rispetto alla soluzione ottima frazionaria prodotta dal risolutore.
@@ -2649,7 +2683,7 @@ Il teorema non si applica direttamente a ricorrenze con sottoproblemi di dimensi
 
 ### Grafi e protocolli
 
-- **[[#Il modello|Grafo]]:** $G=(V,E)$ ha vertici $V$ e archi $E$; di norma $n=|V|$ e $m=|E|$. Nei grafi diretti gli archi orientati possono essere indicati con $A$. In Chord $m$ indica invece i bit degli identificativi.
+- **[[#Ripasso essenziale sui grafi|Grafo]]:** $G=(V,E)$ ha vertici $V$ e archi $E$; di norma $n=|V|$ e $m=|E|$. Nei grafi diretti gli archi orientati possono essere indicati con $A$. In Chord $m$ indica invece i bit degli identificativi.
 - **[[#Broadcast|Distanza e diametro]]:** la distanza è il numero minimo di archi fra due nodi nel grafo non pesato; il diametro è la massima distanza fra coppie di nodi.
 - **[[#Spanning tree|Spanning tree]]:** sottografo connesso e aciclico che contiene tutti i nodi; ha $n-1$ archi.
 - **[[#Ambienti distribuiti|Entità, nodo e protocollo]]:** entità e nodo sono sinonimi; il protocollo descrive azioni locali che realizzano un obiettivo collettivo.

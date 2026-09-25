@@ -126,6 +126,30 @@
               "icon": "lucide-file",
               "title": "Algoritmi Distribuiti"
             }
+          },
+          {
+            "id": "2343118bf124cf1f",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "teacher_slides/1_complexity theory.pdf"
+              },
+              "icon": "lucide-file-text",
+              "title": "1_complexity theory"
+            }
+          },
+          {
+            "id": "4f5c15d494981ca9",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "teacher_slides/1_complexity theory.pdf"
+              },
+              "icon": "lucide-file-text",
+              "title": "1_complexity theory"
+            }
           }
         ]
       }
@@ -297,12 +321,6 @@
   },
   "active": "17ba5ddf354c7035",
   "lastOpenFiles": [
-    "teacher_slides/1_complexity theory.pdf",
-    "Algoritmi Distribuiti.md",
-    "assets/Pasted image 20260925180036.png",
-    "Algoritmi_Distribuiti_originale.pdf",
-    "Feedback.md",
-    "my_notes.md",
     "dist/index.html",
     "dist/widgets/sat-fnc/index.html",
     "dist/widgets/master-theorem/index.html",
@@ -311,15 +329,22 @@
     "dist/widgets",
     "dist/_astro/SiteHeader.DazENAoK.css",
     "dist/_astro/KaTeX_Typewriter-Regular.D3Ib7_Hf.ttf",
+    "dist/_astro/KaTeX_Typewriter-Regular.CO6r4hn1.woff2",
+    "dist/_astro/KaTeX_Typewriter-Regular.C0xS9mPB.woff",
+    "dist/_astro/KaTeX_Size4-Regular.Dl5lxZxV.woff2",
     "dist/vertexcoverILP.png",
     "dist/vertex_covers.png",
     "dist/vertex-cover-stella-greedy.png",
     "dist/vertex-cover-riduzione-vcd-vc.png",
+    "dist/vertex-cover-matching-massimale.svg",
     "dist/vertex-cover-grado-massimo-famiglia-logaritmica.png",
     "dist/vertex-cover-grado-massimo-esempio.png",
     "dist/tsp-pesi-01-12-triangolo.svg",
     "dist/tsp-inapprossimabilita-due-casi.png",
     "dist/teorema-14-scorciatoie.png",
+    "my_notes.md",
+    "Algoritmi Distribuiti.md",
+    "Feedback.md",
     "archived/REVISIONE-SEMANTICA-ESITO.md",
     "archived/ROADMAP.md",
     "archived/PIANO-REVISIONE-SEMANTICA.md",

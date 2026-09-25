@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Quattro esempi di grafi</title>
+  <desc id="desc">In alto: grafo non diretto a-b-c e grafo diretto a verso b verso c. In basso: grafo completo K3 con tutti e tre gli archi e grafo bipartito con partizioni L uguale a, b e R uguale a c, d, e soli archi a-c e b-d.</desc>
+  <defs>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #243447; }
+      .background { fill: #f7f9fc; }
+      .panel { fill: #fff; stroke: #d5dce7; stroke-width: 2; }
+      .heading { font-size: 27px; font-weight: 700; }
+      .note { font-size: 20px; fill: #596b7d; }
+      .edge { fill: none; stroke: #3e6696; stroke-width: 5; stroke-linecap: round; }
+      .node { fill: #fff; stroke: #254e7a; stroke-width: 4; }
+      .node-label { font-size: 25px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+      .group { fill: #eaf1fb; }
+      .group-label { font-size: 22px; font-weight: 700; fill: #315b87; text-anchor: middle; }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M1 1 L11 6 L1 11 Z" fill="#3e6696"/>
+    </marker>
+  </defs>
+
+  <rect class="background" width="1200" height="760" rx="20"/>
+  <text class="heading" x="40" y="51">Ripasso sui grafi</text>
+  <rect class="panel" x="35" y="80" width="550" height="305" rx="17"/>
+  <rect class="panel" x="615" y="80" width="550" height="305" rx="17"/>
+  <rect class="panel" x="35" y="415" width="550" height="305" rx="17"/>
+  <rect class="panel" x="615" y="415" width="550" height="305" rx="17"/>
+
+  <text class="heading" x="65" y="125">Non diretto</text>
+  <text class="note" x="65" y="155">Gli archi non hanno verso</text>
+  <path class="edge" stroke="#3e6696" stroke-width="5" d="M198 248 H292 M328 248 H422"/>
+  <g>
+    <circle class="node" stroke="#254e7a" stroke-width="4" cx="180" cy="248" r="25"/><text class="node-label" x="180" y="248">a</text>
+    <circle class="node" stroke="#254e7a" stroke-width="4" cx="310" cy="248" r="25"/><text class="node-label" x="310" y="248">b</text>
+    <circle class="node" stroke="#254e7a" stroke-width="4" cx="440" cy="248" r="25"/><text class="node-label" x="440" y="248">c</text>
+  </g>
+  <text class="note" x="65" y="345">grado(a) = 1 · grado(b) = 2 · grado(c) = 1</text>
+
+  <text class="heading" x="645" y="125">Diretto (orientato)</text>
+  <text class="note" x="645" y="155">Le frecce indicano il verso</text>
+  <path class="edge" stroke="#3e6696" stroke-width="5" d="M785 248 H860 M915 248 H990" marker-end="url(#arrow)"/>
+  <g>
+    <circle class="node" stroke="#254e7a" stroke-width="4" cx="760" cy="248" r="25"/><text class="node-label" x="760" y="248">a</text>
+    <circle class="node" stroke="#254e7a" stroke-width="4" cx="890" cy="248" r="25"/><text class="node-label" x="890" y="248">b</text>
+    <circle class="node" stroke="#254e7a" stroke-width="4" cx="1020" cy="248" r="25"/><text class="node-label" x="1020" y="248">c</text>
+  </g>
+  <text class="note" x="645" y="345">a → b → c; non vale il verso opposto</text>
+
+  <text class="heading" x="65" y="460">Completo non diretto: K3</text>
+  <text class="note" x="65" y="490">Ogni coppia di vertici è collegata</text>
+  <path class="edge" stroke="#3e6696" stroke-width="5" d="M200 564 H420 M188 582 L300 652 M432 582 L320 652"/>
+  <g>
+    <circle class="node" stroke="#254e7a" stroke-width="4" cx="180" cy="564" r="25"/><text class="node-label" x="180" y="564">a</text>
+    <circle class="node" stroke="#254e7a" stroke-width="4" cx="440" cy="564" r="25"/><text class="node-label" x="440" y="564">b</text>
+    <circle class="node" stroke="#254e7a" stroke-width="4" cx="310" cy="665" r="25"/><text class="node-label" x="310" y="665">c</text>
+  </g>
+  <text class="note" x="65" y="700">3 vertici, 3 archi</text>
+
+  <text class="heading" x="645" y="460">Bipartito</text>
+  <text class="note" x="645" y="490">Archi solo tra le due parti</text>
+  <rect class="group" x="710" y="520" width="110" height="158" rx="15"/>
+  <rect class="group" x="940" y="520" width="110" height="158" rx="15"/>
+  <text class="group-label" x="765" y="545">L</text>
+  <text class="group-label" x="995" y="545">R</text>
+  <path class="edge" stroke="#3e6696" stroke-width="5" d="M790 575 H970 M790 635 H970"/>
+  <g>
+    <circle class="node" stroke="#254e7a" stroke-width="4" cx="765" cy="575" r="24"/><text class="node-label" x="765" y="575">a</text>
+    <circle class="node" stroke="#254e7a" stroke-width="4" cx="765" cy="635" r="24"/><text class="node-label" x="765" y="635">b</text>
+    <circle class="node" stroke="#254e7a" stroke-width="4" cx="995" cy="575" r="24"/><text class="node-label" x="995" y="575">c</text>
+    <circle class="node" stroke="#254e7a" stroke-width="4" cx="995" cy="635" r="24"/><text class="node-label" x="995" y="635">d</text>
+  </g>
+</svg>

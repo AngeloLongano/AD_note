@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="270" viewBox="0 0 900 270" role="img" aria-labelledby="title desc">
+  <title id="title">Confronto fra matching massimale e matching massimo e perfetto</title>
+  <desc id="desc">Due copie del cammino a-b-c-d. A sinistra è selezionato solo l'arco b-c: il matching è massimale, ma lascia scoperti a e d. A destra sono selezionati a-b e c-d: il matching ha due archi e copre tutti i vertici.</desc>
+  <rect width="900" height="270" rx="16" fill="#f8fafc"/>
+  <rect x="20" y="20" width="420" height="230" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+  <rect x="460" y="20" width="420" height="230" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#172033">
+    <text x="230" y="58" text-anchor="middle" font-size="20" font-weight="700">Massimale, non massimo</text>
+    <text x="670" y="58" text-anchor="middle" font-size="20" font-weight="700">Massimo e perfetto</text>
+    <text x="230" y="224" text-anchor="middle" font-size="16">E′ = {(b,c)} · a e d scoperti</text>
+    <text x="670" y="224" text-anchor="middle" font-size="16">E′ = {(a,b),(c,d)} · tutti coperti</text>
+  </g>
+  <g>
+    <rect x="90" y="129" width="90" height="8" rx="4" fill="#cbd5e1"/>
+    <rect x="180" y="129" width="100" height="8" rx="4" fill="#2563eb"/>
+    <rect x="280" y="129" width="90" height="8" rx="4" fill="#cbd5e1"/>
+    <rect x="530" y="129" width="90" height="8" rx="4" fill="#2563eb"/>
+    <rect x="620" y="129" width="100" height="8" rx="4" fill="#cbd5e1"/>
+    <rect x="720" y="129" width="90" height="8" rx="4" fill="#2563eb"/>
+  </g>
+  <g fill="#ffffff" stroke="#334155" stroke-width="3">
+    <circle cx="90" cy="133" r="18"/>
+    <circle cx="370" cy="133" r="18"/>
+  </g>
+  <g fill="#dbeafe" stroke="#2563eb" stroke-width="3">
+    <circle cx="180" cy="133" r="18"/>
+    <circle cx="280" cy="133" r="18"/>
+    <circle cx="530" cy="133" r="18"/>
+    <circle cx="620" cy="133" r="18"/>
+    <circle cx="720" cy="133" r="18"/>
+    <circle cx="810" cy="133" r="18"/>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central" fill="#172033">
+    <text x="90" y="133">a</text><text x="180" y="133">b</text><text x="280" y="133">c</text><text x="370" y="133">d</text>
+    <text x="530" y="133">a</text><text x="620" y="133">b</text><text x="720" y="133">c</text><text x="810" y="133">d</text>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#475569">
+    <text x="230" y="183" text-anchor="middle">blu = arco scelto · grigio = arco escluso</text>
+    <text x="670" y="183" text-anchor="middle">blu = archi scelti · grigio = arco escluso</text>
+  </g>
+</svg>

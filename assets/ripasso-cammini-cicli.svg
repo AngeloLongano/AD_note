@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" role="img" aria-labelledby="title desc">
+  <title id="title">Cammino semplice, cammino con ripetizione e ciclo</title>
+  <desc id="desc">Tre esempi sullo stesso grafo non diretto. Il cammino semplice A-B-C non ripete vertici. Il cammino A-B-C-D-B-E visita B due volte. Il ciclo B-C-D-B ritorna al punto di partenza.</desc>
+  <defs>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #243447; }
+      .background { fill: #f7f9fc; }
+      .panel { fill: #fff; stroke: #d5dce7; stroke-width: 2; }
+      .heading { font-size: 25px; font-weight: 700; }
+      .subheading { font-size: 19px; fill: #596b7d; }
+      .base-edge { stroke: #c3ceda; stroke-width: 5; fill: none; stroke-linecap: round; }
+      .selected { stroke: #24659a; stroke-width: 7; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .node { fill: #fff; stroke: #315a82; stroke-width: 3; }
+      .node-label { font-size: 23px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+      .sequence { font-size: 22px; font-weight: 700; text-anchor: middle; fill: #245f91; }
+      .footnote { font-size: 18px; text-anchor: middle; fill: #596b7d; }
+      .repeat { fill: #fff2d5; stroke: #bd7425; stroke-width: 4; }
+    </style>
+  </defs>
+
+  <rect class="background" width="1200" height="500" rx="20"/>
+  <text class="heading" x="30" y="48">Cammini e cicli: stesso grafo, percorsi diversi</text>
+  <rect class="panel" x="25" y="75" width="370" height="395" rx="17"/>
+  <rect class="panel" x="415" y="75" width="370" height="395" rx="17"/>
+  <rect class="panel" x="805" y="75" width="370" height="395" rx="17"/>
+
+  <text class="heading" x="50" y="120">Cammino semplice</text>
+  <text class="subheading" x="50" y="148">Nessun vertice ripetuto</text>
+  <path class="base-edge" d="M100 260 H185 M185 260 L285 205 M285 205 V315 M285 315 L185 260 M185 260 V350"/>
+  <path class="selected" d="M100 260 H185 L285 205"/>
+  <g>
+    <circle class="node" cx="100" cy="260" r="23"/><text class="node-label" x="100" y="260">A</text>
+    <circle class="node" cx="185" cy="260" r="23"/><text class="node-label" x="185" y="260">B</text>
+    <circle class="node" cx="285" cy="205" r="23"/><text class="node-label" x="285" y="205">C</text>
+    <circle class="node" cx="285" cy="315" r="23"/><text class="node-label" x="285" y="315">D</text>
+    <circle class="node" cx="185" cy="350" r="23"/><text class="node-label" x="185" y="350">E</text>
+  </g>
+  <text class="sequence" x="210" y="412">A → B → C</text>
+  <text class="footnote" x="210" y="443">Inizio A · fine C</text>
+
+  <text class="heading" x="440" y="120">Con ripetizione</text>
+  <text class="subheading" x="440" y="148">B viene visitato due volte</text>
+  <path class="base-edge" d="M490 260 H575 M575 260 L675 205 M675 205 V315 M675 315 L575 260 M575 260 V350"/>
+  <path class="selected" d="M490 260 H575 L675 205 V315 L575 260 V350"/>
+  <g>
+    <circle class="node" cx="490" cy="260" r="23"/><text class="node-label" x="490" y="260">A</text>
+    <circle class="repeat" cx="575" cy="260" r="23"/><text class="node-label" x="575" y="260">B</text>
+    <circle class="node" cx="675" cy="205" r="23"/><text class="node-label" x="675" y="205">C</text>
+    <circle class="node" cx="675" cy="315" r="23"/><text class="node-label" x="675" y="315">D</text>
+    <circle class="node" cx="575" cy="350" r="23"/><text class="node-label" x="575" y="350">E</text>
+  </g>
+  <text class="sequence" x="600" y="412">A → B → C → D → B → E</text>
+  <text class="footnote" x="600" y="443">Inizio A · fine E</text>
+
+  <text class="heading" x="830" y="120">Ciclo</text>
+  <text class="subheading" x="830" y="148">Si torna al punto di partenza</text>
+  <path class="base-edge" d="M880 260 H965 M965 260 L1065 205 M1065 205 V315 M1065 315 L965 260 M965 260 V350"/>
+  <path class="selected" d="M965 260 L1065 205 V315 Z"/>
+  <g>
+    <circle class="node" cx="880" cy="260" r="23"/><text class="node-label" x="880" y="260">A</text>
+    <circle class="node" cx="965" cy="260" r="23"/><text class="node-label" x="965" y="260">B</text>
+    <circle class="node" cx="1065" cy="205" r="23"/><text class="node-label" x="1065" y="205">C</text>
+    <circle class="node" cx="1065" cy="315" r="23"/><text class="node-label" x="1065" y="315">D</text>
+    <circle class="node" cx="965" cy="350" r="23"/><text class="node-label" x="965" y="350">E</text>
+  </g>
+  <text class="sequence" x="990" y="412">B → C → D → B</text>
+  <text class="footnote" x="990" y="443">Inizio e fine B</text>
+</svg>
