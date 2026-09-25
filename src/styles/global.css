@@ -40,6 +40,12 @@ a { color: #176e60; text-underline-offset: .16em; }
 .prose h2 { margin: 5rem 0 1.4rem; padding-top: 1rem; color: var(--green); font: 700 clamp(2rem, 5vw, 3.4rem)/1.08 var(--font-serif); letter-spacing: -.025em; }
 .prose h3 { margin: 3.5rem 0 1rem; color: #183f38; font: 700 1.65rem/1.2 var(--font-serif); }
 .prose h4 { margin: 2.6rem 0 .65rem; color: #1a5147; font: 700 1.25rem/1.3 var(--font-serif); }
+.prose details.optional-section { margin: 2.6rem 0; border: 1px solid var(--line); border-radius: .65rem; background: #f5f8f6; }
+.prose details.optional-section > summary { display: flex; align-items: baseline; gap: .65rem; padding: .85rem 1rem; color: #1a5147; cursor: pointer; font: 700 1.15rem/1.3 var(--font-serif); }
+.prose details.optional-section > summary span { color: var(--muted); font: 700 .67rem/1 var(--font-sans); letter-spacing: .06em; text-transform: uppercase; }
+.prose details.optional-section[open] > summary { border-bottom: 1px solid var(--line); }
+.prose details.optional-section > :not(summary) { margin-inline: 1rem; }
+.prose details.optional-section > :last-child { margin-bottom: 1rem; }
 .prose p { margin: .8rem 0 1.15rem; }
 .prose strong { color: #102f29; }
 .prose ul, .prose ol { padding-left: 1.35rem; }

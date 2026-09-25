@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 695" role="img" aria-labelledby="title desc">
+  <title id="title">Teorema 14: tre modi per raggiungere v5 da v1</title>
+  <desc id="desc">Nel grafo, il cammino originale v1-v2-v3-v4-v5 costa 14. L'ipotesi induttiva accorcia il prefisso v1-v2-v3 nell'arco v1-v3 di costo 6. La disuguaglianza triangolare accorcia v3-v4-v5 nell'arco v3-v5 di costo 6. Il passo induttivo applica ancora la triangolare e usa l'arco diretto v1-v5 di costo 10.</desc>
+  <defs>
+    <marker id="blue-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#376f9e"/></marker>
+    <marker id="orange-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#c27717"/></marker>
+    <marker id="green-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#258061"/></marker>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #203048; }
+      .title { font-size: 29px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #56677c; }
+      .node { fill: #fff; stroke: #26364c; stroke-width: 3; }
+      .node-label { font-size: 21px; font-weight: 700; text-anchor: middle; dominant-baseline: middle; }
+      .edge-label { font-size: 19px; font-weight: 700; text-anchor: middle; paint-order: stroke; stroke: #fff; stroke-width: 7px; }
+      .route-label { font-size: 19px; font-weight: 700; }
+      .route-cost { font-size: 20px; font-weight: 700; text-anchor: end; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="695" rx="24" fill="#fff"/>
+  <text class="title" x="50" y="51">Dal cammino all'arco diretto</text>
+  <text class="subtitle" x="50" y="84">Esempio del passo induttivo con k = 4: partenza v₁, destinazione v₅</text>
+  <rect x="36" y="111" width="1128" height="353" rx="18" fill="#f8fbfe" stroke="#dce5ee" stroke-width="2"/>
+
+  <!-- Arco diretto: ultimo confronto della prova. -->
+  <path d="M159 359 H1041" fill="none" stroke="#258061" stroke-width="7" marker-end="url(#green-arrow)"/>
+  <text class="edge-label" x="600" y="344" fill="#258061">c(v₁,v₅) = 10</text>
+
+  <!-- I due archi ottenuti con induzione e disuguaglianza triangolare. -->
+  <path d="M157 343 L578 175" fill="none" stroke="#c27717" stroke-width="5" stroke-dasharray="14 10" marker-end="url(#orange-arrow)"/>
+  <path d="M611 175 L1042 343" fill="none" stroke="#c27717" stroke-width="5" stroke-dasharray="14 10" marker-end="url(#orange-arrow)"/>
+  <text class="edge-label" x="360" y="298" fill="#a65f0b">6</text>
+  <text class="edge-label" x="846" y="298" fill="#a65f0b">6</text>
+  <text x="345" y="326" text-anchor="middle" font-size="16" font-weight="700" fill="#a65f0b">IPOTESI INDUTTIVA</text>
+  <text x="830" y="326" text-anchor="middle" font-size="16" font-weight="700" fill="#a65f0b">TRIANGOLARE</text>
+
+  <!-- Cammino originale di quattro archi. -->
+  <path d="M154 337 L330 206 L578 161 L806 202 L1045 338" fill="none" stroke="#376f9e" stroke-width="6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+  <text class="edge-label" x="232" y="248" fill="#285d88">3</text>
+  <text class="edge-label" x="458" y="156" fill="#285d88">4</text>
+  <text class="edge-label" x="708" y="156" fill="#285d88">3</text>
+  <text class="edge-label" x="925" y="248" fill="#285d88">4</text>
+
+  <circle class="node" cx="140" cy="350" r="20"/><text class="node-label" x="140" y="350">v₁</text>
+  <circle class="node" cx="346" cy="195" r="20"/><text class="node-label" x="346" y="195">v₂</text>
+  <circle class="node" cx="594" cy="160" r="20"/><text class="node-label" x="594" y="160">v₃</text>
+  <circle class="node" cx="822" cy="205" r="20"/><text class="node-label" x="822" y="205">v₄</text>
+  <circle class="node" cx="1060" cy="350" r="20"/><text class="node-label" x="1060" y="350">v₅</text>
+  <text class="subtitle" x="594" y="127" text-anchor="middle">vₖ₋₁</text>
+  <text class="subtitle" x="1060" y="406" text-anchor="middle">destinazione</text>
+  <text x="600" y="405" text-anchor="middle" font-size="16" font-weight="700" fill="#258061">PASSO INDUTTIVO: ARCO DIRETTO</text>
+
+  <line x1="61" y1="505" x2="112" y2="505" stroke="#376f9e" stroke-width="6"/>
+  <text class="route-label" x="130" y="512">Cammino originale C</text>
+  <text class="route-cost" x="1105" y="512">3 + 4 + 3 + 4 = 14</text>
+
+  <line x1="61" y1="550" x2="112" y2="550" stroke="#c27717" stroke-width="5" stroke-dasharray="12 8"/>
+  <text class="route-label" x="130" y="557">Ipotesi induttiva: v₁ → v₂ → v₃ diventa v₁ → v₃</text>
+  <text class="route-cost" x="1105" y="557">6 ≤ 3 + 4</text>
+
+  <line x1="61" y1="595" x2="112" y2="595" stroke="#c27717" stroke-width="5" stroke-dasharray="12 8"/>
+  <text class="route-label" x="130" y="602">Triangolare: v₃ → v₄ → v₅ diventa v₃ → v₅</text>
+  <text class="route-cost" x="1105" y="602">6 ≤ 3 + 4</text>
+
+  <line x1="61" y1="640" x2="112" y2="640" stroke="#258061" stroke-width="7"/>
+  <text class="route-label" x="130" y="647">Passo induttivo: v₁ → v₃ → v₅ diventa v₁ → v₅</text>
+  <text class="route-cost" x="1105" y="647">10 ≤ 6 + 6 ≤ 14</text>
+</svg>

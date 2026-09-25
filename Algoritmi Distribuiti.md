@@ -42,7 +42,7 @@
 ### Algoritmi sequenziali
 
 1. [[#^algorithm-1|Risoluzione Ciclo Hamiltoniano con TSP]]
-2. [[#^algorithm-2|2-approssimazione di TSP]]
+2. [[#^algorithm-2|2-approssimazione di TSP (facoltativa)]]
 3. [[#^algorithm-3|Algoritmo di Christofides per TSP]]
 4. [[#^algorithm-4|Algoritmo ricorsivo generico per B&B]]
 5. [[#^algorithm-5|Self-reduction del Vertex Cover]]
@@ -244,10 +244,12 @@ $P$ sta per *Polynomial-time*: riguarda la risoluzione in tempo polinomiale. $NP
 
 #### Certificati e algoritmo verificatore
 
-Un **certificato** è un'informazione aggiuntiva che può attestare che un'istanza ha risposta sì. Un **algoritmo verificatore** riceve l'istanza e una sequenza candidata come certificato e restituisce sì se l'istanza è positiva e la sequenza ne è una prova; altrimenti restituisce no.
+Un **certificato** è una sequenza fornita al verificatore insieme all'istanza del problema decisionale per provare che la risposta è sì. Un **algoritmo verificatore** riceve l'istanza e una sequenza candidata come certificato e restituisce sì se l'istanza è positiva e la sequenza ne è una prova; altrimenti restituisce no.
 
 > [!definition] Certificato per un'istanza positiva $i\in I_Y$ del problema $\Pi$
 > Sequenza di caratteri (informazione aggiuntiva) di dimensione al massimo polinomiale nella dimensione dell'input che contiene l'evidenza del fatto che $i$ sia un'istanza positiva per $\Pi$.
+
+Qui «informazione aggiuntiva» significa fornita oltre all'istanza $i$: nel ciclo hamiltoniano, $i$ è il grafo e il certificato è la sequenza dei vertici del ciclo proposto.
 
 > [!definition] Algoritmo verificatore
 > Algoritmo decisionale che prende in input un'istanza $i\in I$ di un problema decisionale $\Pi$ e una sequenza di caratteri $C_i$ e restituisce SI se l'istanza $i$ è un'istanza positiva per $\Pi$, NO altrimenti.
@@ -631,52 +633,55 @@ Lo pseudocodice compatta la procedura già descritta:
 
 ### Inapprossimabilità del TSP generale
 
-Il problema è il TSP di ottimizzazione su grafi completi con costi positivi, senza vincolo di disuguaglianza triangolare. La riduzione da ciclo hamiltoniano in [[#TSP è un problema NP-hard]] distingue le istanze SI e NO tramite il costo **ottimo**, quindi richiede un risolutore esatto. Qui chiediamo se un tour garantito entro un fattore costante dall'ottimo possa comunque decidere $HC$: assegniamo agli archi aggiunti un costo abbastanza grande da superare anche il margine concesso dall'approssimazione.
+Il problema è il TSP di ottimizzazione su grafi completi con **costi positivi** (>0), senza vincolo di disuguaglianza triangolare. 
+La riduzione da ciclo hamiltoniano in [[#TSP è un problema NP-hard]] distingue le istanze SI e NO tramite il costo **ottimo**, quindi richiede un risolutore esatto. 
+Qui chiediamo se un tour garantito entro un fattore costante dall'ottimo possa comunque decidere $HC$: assegniamo agli archi aggiunti un costo abbastanza grande da superare anche il margine concesso dall'approssimazione.
 
 > [!theorem] Teorema
 > Non esiste un algoritmo di approssimazione polinomiale per il problema del commesso viaggiatore che abbia fattore di approssimazione costante, a meno che $P=NP$.
 
-[[teacher_slides/1_complexity theory.pdf#page=68|Slide della docente, p. 68]]
-[[teacher_slides/1_complexity theory.pdf#page=69|Slide della docente, p. 69]]
+[[teacher_slides/1_complexity theory.pdf#page=68|Docente: pagina 68 del PDF (p. 14 stampata)]]
+[[teacher_slides/1_complexity theory.pdf#page=69|Docente: pagina 69 del PDF (p. 15 stampata)]]
 
 #### Dimostrazione
 
-La dimostrazione è per assurdo. Supponiamo che esista un algoritmo polinomiale $A$ con fattore di approssimazione costante $r\geq1$. Usiamolo per decidere il problema NP-completo del ciclo Hamiltoniano. Data un'istanza $G=(V,E)$ di quest'ultimo problema, costruiamo il grafo completo $G'=(V,E')$: gli archi già presenti in $G$ costano $1$, quelli aggiunti costano $K$, scelto in modo che $K>r|V|$:
+La dimostrazione è per assurdo. Supponiamo che esista un algoritmo polinomiale $A$ con fattore di approssimazione costante $r\geq1$. Usiamo $A$ per decidere il problema NP-completo del ciclo Hamiltoniano. Data un'istanza $G=(V,E)$ di quest'ultimo problema, costruiamo il grafo completo $G'=(V,E')$ con costi positivi:
 
 $$
 c(e)=
 \begin{cases}
 1 & \text{se } e\in E,\\
-K & \text{se } e\notin E.
+r|V|+1 & \text{se } e\notin E.
 \end{cases}
 $$
 
-Nelle slide si sceglie $K=r|V|+1$. Per garantire che il peso sia un intero codificabile anche quando $r$ è una costante reale, fissiamo un intero costante $R\geq r$ e usiamo $K=R|V|+1$; resta $K>r|V|$. Per $r=2$ possiamo scegliere $R=2$, come nella figura sotto. Il costo $1$ rende positivo l'ottimo quando $G$ ha un ciclo Hamiltoniano; il costo $K$ separa i due casi anche se $A$ restituisce un tour soltanto approssimato.
+Il costo $r|V|+1$ degli archi aggiunti supera la soglia $r|V|$ anche se $A$ restituisce un tour soltanto approssimato.
 
 1. **Caso SI.** Se $G$ contiene un ciclo Hamiltoniano, in $G'$ possiamo usare soltanto archi originali: il tour costa $|V|$. Poiché ogni tour ha $|V|$ archi e ciascuno costa almeno $1$, questo è l'ottimo. Per la garanzia di $A$, il tour restituito costa **al massimo $r|V|$**.
 2. **Caso NO.** Se $G$ non contiene un ciclo Hamiltoniano, ogni tour di $G'$ usa almeno un arco aggiunto. Gli altri $|V|-1$ archi costano almeno $1$ ciascuno, quindi ogni tour costa almeno
 
-  $$K+(|V|-1)>r|V|.$$
+  $$(r|V|+1)+(|V|-1)>r|V|.$$
 
   Anche il tour restituito da $A$ costa dunque **più di $r|V|$**.
 
-La figura istanzia i due casi con gli stessi quattro vertici, $r=2$, $K=9$ e soglia comune $r|V|=8$: nel caso SI il tour di costo $4$ è accettato, nel caso NO ogni tour costa almeno $12$. Gli archi tratteggiati sono altri archi aggiunti al grafo completo, non usati nei tour evidenziati.
+3. **Conclusione.** Per assurdo abbiamo supposto che esista $A$. Confrontando il costo del suo tour con $r|V|$, rispondiamo **SI** se il costo è al più questa soglia e **NO** altrimenti. I due casi appena dimostrati garantiscono che la risposta è corretta. Così risolveremmo il ciclo Hamiltoniano in tempo polinomiale. Poiché è un problema NP-completo, potremmo risolvere in tempo polinomiale anche tutti gli altri problemi in $NP$: quindi $P=NP$. Sotto l'ipotesi $P\neq NP$, l'algoritmo di approssimazione $A$ non può esistere.
 
-![[assets/tsp-inapprossimabilita-due-casi.png|1000]]
-
-3. **Conclusione.** La soglia è $r|V|$: confrontando con essa il costo del tour prodotto da $A$, potremmo decidere in tempo polinomiale se $G$ ha un ciclo Hamiltoniano. Ne seguirebbe $P=NP$; dunque, se $P\neq NP$, l'algoritmo $A$ non può esistere.
-
-#### Complessità della riduzione
-
-Il grafo completo ha $|V|(|V|-1)/2$ archi: assegnare i costi richiede $O(|V|^2)$ operazioni nel modello a costo uniforme. Poiché $R$ è costante, bastano $O(\log |V|)$ bit per rappresentare $K=R|V|+1$. Anche considerando la scrittura dei pesi, la trasformazione resta quindi polinomiale.
+**In sostanza.** Abbiamo supposto per assurdo che esista l'algoritmo di approssimazione. Se esistesse, potremmo risolvere in tempo polinomiale il ciclo Hamiltoniano e, poiché è NP-completo, anche tutti gli altri problemi in $NP$. Ne seguirebbe $P=NP$.
 
 Il risultato riguarda il **TSP generale**: i costi costruiti non soddisfano necessariamente la disuguaglianza triangolare e quindi non esclude approssimazioni costanti per il TSP metrico.
 
 ### Approssimazioni per il TSP metrico
 
-Qui sfruttiamo la disuguaglianza triangolare per ottenere garanzie di approssimazione costanti per una restrizione del TSP generale: il **TSP metrico** su grafi completi non diretti con costi positivi. La prova di inapprossimabilità in [[#Inapprossimabilità del TSP generale]] usa archi di costo $1$ e archi di costo $K$, e può violare questa proprietà, quindi riguarda il TSP generale.
+Abbiamo visto che, per il TSP generale, non esiste un algoritmo polinomiale con fattore di approssimazione costante, a meno che $P=NP$. Questo risultato non esclude però una garanzia costante per le istanze in cui i costi rispettano la **disuguaglianza triangolare**. È il caso del TSP metrico.
 
-#### Problema e modello
+La disuguaglianza dice che andare direttamente da $i$ a $j$ non costa più che passare per un terzo vertice $k$:
+$$
+\forall i,j,k\in V:\qquad c((i,j))\leq c((i,k))+c((k,j)).
+$$
+
+Per esempio, se $c((i,k))=3$ e $c((k,j))=4$, il costo dell'arco diretto $(i,j)$ deve essere al più $7$. 
+
+Questa proprietà permetterà di saltare i vertici già visitati senza aumentare il costo del percorso.
 
 > [!problem] Problema del Commesso Viaggiatore con disuguaglianza triangolare ($TSP_{dt}$)
 >
@@ -686,72 +691,78 @@ Qui sfruttiamo la disuguaglianza triangolare per ottenere garanzie di approssima
 
 [[teacher_slides/1_complexity theory.pdf#page=69|Slide della docente, p. 69]]
 
-Per un sottografo o multigrafo $F$, indichiamo con $cost(F)$ la somma dei costi dei suoi archi, contati con la loro molteplicità. La condizione sui costi è
-
-$$
-\forall u,v,z\in V:\qquad c(u,z)\leq c(u,v)+c(v,z).
-$$
-
-Per i costi positivi della specifica, la triangolare implica anche la disuguaglianza per cammini con più archi dimostrata sotto. Nelle prove di lower bound useremo solo che questi costi sono non negativi.
-
-#### Dalla riduzione $0/1$ ai pesi metrici $1/2$
-
-La prova di [[#TSP è un problema NP-hard|NP-hardness del TSP]] usa i pesi $0/1$ delle slide della docente. Qui facciamo un'**osservazione aggiuntiva**: la stessa idea può produrre istanze metriche, mantenendo difficile la ricerca dell'ottimo esatto. ^tsp-pesi
-
-Prendiamo tre vertici $u,v,w$: gli archi $uv$ e $vw$ appartengono al grafo originale, mentre $uw$ è stato aggiunto per completarlo.
-
-![[assets/tsp-pesi-01-12-triangolo.svg|1000]]
-
-- **Pesi $0/1$ della prova nelle slide:** $c(uv)=c(vw)=0$ e $c(uw)=1$. La triangolare richiederebbe $1\leq0+0$, che è falso. Quella costruzione non garantisce istanze metriche.
-- **Pesi $1/2$ dell'osservazione aggiuntiva:** assegniamo $1$ agli archi originali e $2$ a quelli aggiunti. Per ogni terna, il lato diretto costa al massimo $2$ e gli altri due insieme almeno $2$: la disuguaglianza triangolare vale. I costi sono anche positivi, come richiesto dalla specifica del TSP metrico.
-
-Ogni tour ha $|V|$ archi: passando da $0/1$ a $1/2$ il costo di ciascun tour aumenta di $|V|$. Nell'istanza metrica l'ottimo è quindi $|V|$ se e solo se il grafo originale ha un ciclo hamiltoniano. Questa è una deduzione dalla riduzione precedente, **non una variante presentata nelle slide**: mostra la NP-hardness della soluzione esatta del TSP metrico. La disuguaglianza triangolare permette invece gli *shortcut* usati nelle approssimazioni che seguono.
-
-> **Esempio — uno shortcut**
-> Se $c(A,B)=3$, $c(B,C)=4$ e $c(A,C)=6$, percorrere $A\to B\to C$ costa $3+4=7$, mentre lo shortcut diretto $A\to C$ costa $6$. Saltare $B$ non aumenta quindi il costo. Se invece fosse $c(A,C)=9$, lo shortcut sarebbe più costoso: proprio questo caso è escluso dalla disuguaglianza triangolare.
+Vedremo due algoritmi per questo problema: il secondo migliora il fattore di approssimazione del primo. Entrambi restituiscono un ciclo hamiltoniano, anche se il suo costo potrebbe essere superiore al minimo. Per un sottografo o multigrafo $F$, indichiamo con $cost(F)$ la somma dei costi dei suoi archi, contati con la loro molteplicità.
 
 #### Strumenti usati dagli algoritmi
 
-> [!definition] Definizione
-> Dato un grafo $G=(V,E)$, un ciclo euleriano è un cammino chiuso che passa esattamente una volta per tutti gli archi del grafo.
+> **Ciclo euleriano.** È un percorso chiuso che attraversa ogni arco del grafo esattamente una volta. Può tornare su uno stesso vertice: nella figura il percorso $A\to B\to C\to D\to E\to C\to A$ visita due volte $C$, ma usa una sola volta ciascuno dei sei archi.
 
-> [!theorem] Teorema
-> Dato un grafo $G$, esiste un cammino euleriano in $G$ se e solo se tutti i nodi del grafo hanno grado pari. Se esiste, il ciclo può essere trovato in tempo polinomiale.
+![[assets/ciclo-euleriano.png|900]]
+
+> **Quando esiste.** In un grafo non diretto connesso, esiste un ciclo euleriano se e solo se ogni vertice ha grado pari. Quando esiste, si può trovare in **tempo polinomiale**.
 
 [[teacher_slides/1_complexity theory.pdf#page=69|Slide della docente, p. 69]]
 
-**Precisazione nostra.** Nell'enunciato della docente la connettività è implicita. Nella formulazione generale, un multigrafo non diretto ammette un ciclo euleriano se e solo se tutti i vertici di grado non nullo appartengono alla stessa componente connessa e hanno grado pari. Nei due algoritmi seguenti questa ipotesi è soddisfatta perché il multigrafo contiene un MST.
+**Precisazione nostra.** Il grado pari, da solo, non basta: due triangoli separati hanno tutti i vertici di grado $2$, ma non esiste un unico ciclo che attraversi tutti i loro archi. Serve anche che i vertici con almeno un arco siano collegati tra loro; eventuali vertici isolati non contano, perché non hanno archi da percorrere. Nelle slide questa condizione è implicita. Nei due algoritmi seguenti è soddisfatta: il multigrafo contiene un [[#Minimum spanning tree (MST)|MST]], che collega tutti i vertici, e aggiungere o raddoppiare archi non elimina quei collegamenti.
+##### Lo shortcut di un cammino semplice
 
-> [!theorem] Teorema
+> [!theorem] Teorema 14
 > Sia $G$ un grafo con archi pesati tale che la funzione costo sugli archi soddisfi la proprietà triangolare. Dato un cammino semplice $C=\langle v_1,\ldots,v_{k+1}\rangle$ di $k+1$ nodi e $k$ archi in $G$, abbiamo che
+>
 > $$
 > c((v_1,v_{k+1}))\leq \sum_{i=1}^{k}c((v_i,v_{i+1})),
 > $$
+>
+> ovvero il cammino diretto (con un solo arco) tra $v_1$ e $v_{k+1}$ ha costo non superiore al cammino $C$.
 
 [[teacher_slides/1_complexity theory.pdf#page=70|Slide della docente, p. 70]]
 
-Nel TSP metrico $G$ è completo, quindi per ogni coppia di vertici esiste l'arco diretto usato nello shortcut.
+**Precisazione.** Il costo $c((v_1,v_{k+1}))$ è definito quando l'arco tra gli estremi esiste. La dispensa lo dà per implicito; nel TSP metrico qui considerato l'arco esiste perché $G$ è completo.
 
 ##### Dimostrazione
 
-La prova è per induzione sul numero $k$ di archi del cammino.
+Procediamo per induzione sul numero $k$ di archi del cammino. Per $k=1$ la tesi è un'uguaglianza; per $k=2$ coincide con la proprietà triangolare. Supponiamo ora $k>2$ e che la tesi valga per i cammini più corti. Separiamo gli ultimi due archi del cammino:
 
-1. Per $k=1$ la tesi è un'uguaglianza; per $k=2$ è la disuguaglianza triangolare.
-2. Sia $k\geq3$ e supponiamo vera la tesi per cammini di $k-1$ archi. Applicandola al prefisso $\langle v_1,\ldots,v_k\rangle$ e poi usando la triangolare sugli archi $(v_1,v_k)$ e $(v_k,v_{k+1})$, otteniamo
-   $$
-   c((v_1,v_{k+1}))\leq c((v_1,v_k))+c((v_k,v_{k+1}))\leq \sum_{i=1}^{k}c((v_i,v_{i+1})).
-   $$
-   Questo prova il passo induttivo.
+$$
+\begin{aligned}
+\sum_{i=1}^{k}c((v_i,v_{i+1}))
+&=\underbrace{\sum_{i=1}^{k-2}c((v_i,v_{i+1}))}_{\text{ipotesi induttiva}}
+  +\underbrace{c((v_{k-1},v_k))+c((v_k,v_{k+1}))}_{\text{proprietà triangolare}}\\
+&\geq \underbrace{c((v_1,v_{k-1}))+c((v_{k-1},v_{k+1}))}_{\text{proprietà triangolare}}\\
+&\geq c((v_1,v_{k+1})).
+\end{aligned}
+$$
 
-Il lemma garantisce che sostituire un cammino con l'arco diretto tra i suoi estremi non aumenta il costo. La completezza garantisce che quell'arco esista; applicando l'operazione per saltare le visite ripetute si ottiene un ciclo Hamiltoniano di costo non maggiore.
+Nella prima disuguaglianza applichiamo l'ipotesi induttiva al prefisso $\langle v_1,\ldots,v_{k-1}\rangle$, che ha $k-2$ archi, e la proprietà triangolare ai vertici $v_{k-1},v_k,v_{k+1}$. Nella seconda applichiamo ancora la proprietà triangolare ai vertici $v_1,v_{k-1},v_{k+1}$. Questo conclude il passo induttivo.
 
-#### Algoritmo di 2-approssimazione
+La figura rappresenta un unico grafo con più percorsi da $v_1$ a $v_5$ nel caso $k=4$. Il cammino originale, in blu, costa $14$. L'ipotesi induttiva accorcia il prefisso fino a $v_3$; la proprietà triangolare accorcia gli ultimi due archi. I due archi tratteggiati così ottenuti costano in totale $12$. Il passo induttivo applica ancora la proprietà triangolare: l'arco diretto, in verde, costa $10\leq12\leq14$. I costi sono un esempio; gli altri archi del grafo completo non sono disegnati.
 
-> **Status per l'esame — non svolto nell'AA 2025/26.** L'analisi resta utile come preparazione della prova di Christofides.
+![[assets/teorema-14-grafo.svg|1000]]
+
+Il teorema giustifica la **scorciatoia** (*shortcut*): sostituire un cammino semplice con l'arco tra i suoi estremi non aumenta il costo. Se un tratto del ciclo euleriano ripassa per un vertice, possiamo prima eliminare i sottocammini chiusi: poiché i costi sono positivi, il costo non aumenta e resta un cammino semplice con gli stessi estremi. Possiamo quindi applicare il teorema per saltare le visite ripetute e ottenere un ciclo hamiltoniano senza aumentarne il costo.
+
+#### Algoritmo di 2-approssimazione (facoltativo)
+
+##### Minimum spanning tree (MST)
+
+In un grafo non diretto, connesso e pesato, uno *spanning tree* (albero di copertura) collega tutti i vertici senza formare cicli; con $n$ vertici ha $n-1$ archi. Un MST è un albero di copertura con la **somma dei costi degli archi minima** fra tutti gli alberi di copertura del grafo.
+
+Per trovarne uno si può usare l'algoritmo di Prim: partendo da un vertice, si aggiunge ogni volta l'arco meno costoso che collega i vertici già raggiunti a un vertice ancora fuori dall'albero. Nell'esempio si parte da $A$ e si scelgono, nell'ordine, $AB$ (costo $1$), $BC$ (costo $2$) e $CD$ (costo $3$). Il risultato collega tutti e quattro i vertici, non ha cicli e costa $1+2+3=6$. A destra sono mostrati solo gli archi scelti.
+
+![[assets/mst-prim-esempio.svg|1000]]
+
+##### Algoritmo
 
 L'idea è costruire un minimum spanning tree $T^*$, raddoppiarne gli archi per rendere pari ogni grado, calcolare un ciclo euleriano e applicare gli shortcut ai vertici già visitati.
 
-La figura mostra in sequenza l'MST $T^*$, il ciclo euleriano $E$ sul multigrafo con archi raddoppiati e il ciclo Hamiltoniano $H$ ottenuto mediante shortcut; per chiarezza non disegna gli altri archi del grafo completo.
+L'algoritmo prevede i seguenti passaggi, illustrati nella figura da sinistra a destra:
+
+1. Si calcola un MST $T^*$ del grafo $G$ (primo disegno).
+2. Si raddoppia ogni arco di $T^*$, ottenendo il multigrafo $G'$ in cui ogni vertice ha grado pari (secondo disegno).
+3. Si trova un ciclo euleriano $E$ in $G'$, che percorre ciascuna copia degli archi una volta; nella figura è evidenziato in blu (terzo disegno).
+4. Si saltano con gli [[#Lo shortcut di un cammino semplice|shortcut]] le visite ripetute ai vertici di $E$. Si ottiene così il ciclo hamiltoniano $H$, evidenziato in rosso (quarto disegno).
+
+Per chiarezza, la figura non mostra gli altri archi del grafo completo, che permettono gli shortcut.
 
 ![[assets/2-approx.jpg|1000]]
 
@@ -765,7 +776,7 @@ La figura mostra in sequenza l'MST $T^*$, il ciclo euleriano $E$ sul multigrafo 
 > 6.  **return** $H$
 > 7. **end function**
 
-**Realizzabilità e terminazione.** Il raddoppio degli archi conserva la connettività di $T^*$ e raddoppia il grado di ogni vertice; tutti i gradi di $G'$ sono quindi pari e il ciclo euleriano $E$ esiste. Poiché $G$ è completo, ogni shortcut usa un arco esistente; il teorema sul costo degli shortcut in [[#Strumenti usati dagli algoritmi]] garantisce che il costo non aumenti. MST, ciclo euleriano e scansione di $E$ sono tutti calcolabili in tempo polinomiale, quindi l'algoritmo termina in tempo polinomiale e restituisce un ciclo Hamiltoniano.
+**Realizzabilità e terminazione.** Il raddoppio degli archi conserva la connettività di $T^*$ e raddoppia il grado di ogni vertice; tutti i gradi di $G'$ sono quindi pari e il ciclo euleriano $E$ esiste. Poiché $G$ è completo, ogni shortcut usa un arco esistente; la disuguaglianza per le scorciatoie in [[#Strumenti usati dagli algoritmi]] garantisce che il costo non aumenti. MST, ciclo euleriano e scansione di $E$ sono tutti calcolabili in tempo polinomiale, quindi l'algoritmo termina in tempo polinomiale e restituisce un ciclo Hamiltoniano.
 
 > [!theorem] Teorema
 > L'algoritmo è una due approssimazione.
@@ -806,17 +817,28 @@ $$
 
 #### Algoritmo di Christofides
 
-Per il TSP metrico, un albero di copertura minimo costa al più un tour ottimo privato di un arco, quindi fornisce un lower bound sull'ottimo. La [[#Algoritmo di 2-approssimazione|2-approssimazione]] rende pari ogni grado raddoppiando l'intero MST; Christofides aggiunge invece archi soltanto ai vertici di grado dispari e garantisce un fattore di approssimazione $3/2$. Il ciclo euleriano risultante viene trasformato in un tour mediante gli shortcut definiti in [[#Strumenti usati dagli algoritmi]].
+Per il TSP metrico, un [[#Minimum spanning tree (MST)|albero di copertura minimo]] costa al più un tour ottimo privato di un arco, quindi fornisce un lower bound sull'ottimo. La [[#Algoritmo di 2-approssimazione (facoltativo)|2-approssimazione]] rende pari ogni grado raddoppiando l'intero MST; Christofides aggiunge invece archi soltanto ai vertici di grado dispari e garantisce un fattore di approssimazione $3/2$. Il ciclo euleriano risultante viene trasformato in un tour mediante gli shortcut definiti in [[#Strumenti usati dagli algoritmi]].
 
 Un **matching** è un insieme di archi a due a due privi di estremi comuni. Un **perfect matching** copre tutti i vertici: ciascun vertice è incidente a esattamente un arco del matching. Un numero pari di vertici è una condizione necessaria; in un grafo completo è anche sufficiente.
 
+>Per esempio nella figura sotto, i _matching_ sono M1 e M2 ed insieme formano un _perfect matching_. Possibile anche per il _numero di nodi è pari_.
+
 ![[assets/Screenshot 2024-10-01 111804.png|500]]
 
-Si calcola un MST $T^*$ e si considera l'insieme $U$ dei suoi vertici di grado dispari. Sul sottografo completo $G[U]$ si trova un **minimum-weight perfect matching** $M^*$.
+In questo algoritmo ci interesserà trovare il **minimum-weight perfect matching**, ovvero il perfect matching che ha la _somma dei pesi degli archi minore_.
+
+
+L'algoritmo prevede i seguenti passaggi:
+1. Si calcola un MST $T^*$
+2. Si considera l'insieme $V_d$ dei suoi vertici di **grado dispari** (evidenziati in viola).
+3. Sul sottografo completo $G_d=G[V_d]$ si trova un **minimum-weight perfect matching** $M^*$.
+
 
 ![[assets/christof1.png|800]]
 
-Unendo come multinsieme gli archi di $T^*$ e $M^*$ si ottiene un multigrafo euleriano $F$. Dal suo ciclo euleriano $E$ si ricava infine il ciclo Hamiltoniano $H$ mediante shortcut.
+4. Prendo gli archi di  $M^*$ e li aggiungo al MST di partenza ($T^*$)
+5. Trovo il ciclo euleriano E
+6. Grazie allo [[#Lo shortcut di un cammino semplice|shortcut]], troviamo il ciclo hamiltoniano H.
 
 ![[assets/christof2.png|700]]
 
@@ -824,11 +846,11 @@ Unendo come multinsieme gli archi di $T^*$ e $M^*$ si ottiene un multigrafo eule
 
 > 1. **function** Christofides-approx($G$)
 > 2.  $T^* \gets MSTPrim(G)$
-> 3.  $U \gets getOddDegreeNodes(T^*)$
-> 4.  $G^\prime \gets getInducedSubgraph(G, U)$
-> 5.  $M^* \gets minimumWeightPerfectMatching(G^\prime)$<br>
-> 6.  $F \gets multisetUnion(T^*, M^*)$<br>
-> 7.  $E \gets EulerTour(F)$<br>
+> 3.  $V_d \gets getOddDegreeNodes(T^*)$
+> 4.  $G_d \gets getInducedSubgraph(G, V_d)$
+> 5.  $M^* \gets minimumWeightPerfectMatching(G_d)$<br>
+> 6.  $G^\prime \gets multisetUnion(T^*, M^*)$<br>
+> 7.  $E \gets EulerTour(G^\prime)$<br>
 > 8.  $H \gets shortcutRepeatedVertices(E)$
 > 9.  **return** $H$
 > 10. **end function**
@@ -839,9 +861,9 @@ $$
 \sum_{v\in V}\deg(v)=2|E|,
 $$
 
-quindi ogni grafo non diretto ha un numero pari di vertici di grado dispari. Ne segue che $|U|$ è pari e, poiché $G[U]$ è completo, esiste un perfect matching; quello di costo minimo può essere calcolato in tempo polinomiale.
+quindi ogni grafo non diretto ha un numero pari di vertici di grado dispari. Ne segue che $|V_d|$ è pari e, poiché $G_d$ è completo, esiste un perfect matching; quello di costo minimo può essere calcolato in tempo polinomiale.
 
-Ogni vertice di $U$ riceve esattamente un arco aggiuntivo da $M^*$ e passa da grado dispari a grado pari; i vertici fuori da $U$ conservano grado pari. Inoltre $F$ è connesso perché contiene lo spanning tree $T^*$. Esiste dunque un ciclo euleriano $E$. Completezza e disuguaglianza triangolare permettono infine di trasformarlo mediante shortcut in un ciclo Hamiltoniano $H$ senza aumentarne il costo. Tutti i passi sono polinomiali; il più oneroso è il calcolo del minimum-weight perfect matching.
+Ogni vertice di $V_d$ riceve esattamente un arco aggiuntivo da $M^*$ e passa da grado dispari a grado pari; i vertici fuori da $V_d$ conservano grado pari. Inoltre $G^\prime$ è connesso perché contiene lo spanning tree $T^*$. Esiste dunque un ciclo euleriano $E$. Completezza e disuguaglianza triangolare permettono infine di trasformarlo mediante shortcut in un ciclo Hamiltoniano $H$ senza aumentarne il costo. Tutti i passi sono polinomiali; il più oneroso è il calcolo del minimum-weight perfect matching.
 
 > [!theorem] Teorema
 > L'algoritmo di Christofides ha un fattore di approssimazione uguale a $3/2$.
@@ -851,41 +873,52 @@ Ogni vertice di $U$ riceve esattamente un arco aggiuntivo da $M^*$ e passa da gr
 
 ##### Dimostrazione
 
-Rimuovendo un arco dal tour ottimo si ottiene uno spanning tree; per minimalità dell'MST e positività dei costi, vale il lower bound
+Per dimostrare il fattore di approssimazione, consideriamo il costo del ciclo hamiltoniano di questo algoritmo $H$, e quello ottimo $H^*$.
+$$
+cost(H^*)\leq cost(H).
+$$
+Il ciclo euleriano usato per costruire $H$ contiene l'MST $T^*$ e il matching $M^*$: troviamo quindi un limite al costo di ciascuno rispetto a $H^*$.
+
+**(a) Costo dell'MST.** Come nella prova della [[#Algoritmo di 2-approssimazione (facoltativo)|2-approssimazione]], togliendo un arco da $H^*$ otteniamo uno spanning tree. Poiché $T^*$ ha costo minimo tra gli spanning tree e i costi degli archi sono positivi, possiamo dire:
 
 $$
 cost(T^*)\leq cost(H^*).
 $$
 
-Consideriamo ora l'ordine in cui il tour ottimo $H^*$ visita i vertici di $U$. Applicando gli shortcut fra visite consecutive si ottiene un ciclo $\Gamma$ sui soli vertici di $U$ tale che
-
+**(b) Un ciclo sui vertici di grado dispari.** Consideriamo l'insieme $V_d$ dei vertici di grado dispari di $T^*$, che abbiamo visto essere in numero pari. Su questi nodi, definiamo il ciclo $\Gamma$.
+Questo ciclo si può ottenere prendendo il ciclo $H^*$, consideriamo solo i vertici dispari e semplifichiamo i collegamenti con shortcuts.
+A questo punto, per la proprietà della diseguaglianza triangolare, il costo del nuovo ciclo $\Gamma$ non possono aumentare rispetto al ciclo $H^*$
 $$
 cost(\Gamma)\leq cost(H^*).
 $$
 
-Poiché $|U|$ è pari, gli archi di $\Gamma$, contati con la loro molteplicità, si possono ripartire alternandoli in due perfect matching $M_1$ e $M_2$ di $G[U]$. Se $|U|=2$, $\Gamma$ è formato da due occorrenze dello stesso arco: ciascun matching contiene una occorrenza, quindi $M_1$ e $M_2$ coincidono come insieme di archi ma i loro costi sommano correttamente il costo di $\Gamma$.
+**(c) Costo del matching.** Il numero di vertici di $V_d$ è pari. 
+Percorrendo il ciclo $\Gamma$, assegniamo un arco a $M_1$, il successivo a $M_2$ e così via: ciascuno dei due insiemi copre ogni vertice di $V_d$ esattamente una volta, dunque è un perfect matching di $G_d$. Insieme contengono tutti gli archi di $\Gamma$, quindi $cost(\Gamma)=cost(M_1)+cost(M_2)$.
+Poiché $M^*$ è il perfect matching di costo minimo, non può costare più di nessuno dei due: $cost(M^*)\leq cost(M_1)$ e $cost(M^*)\leq cost(M_2)$.
 
-![[assets/christof3.png|1000]]
-
-Essendo $M^*$ un perfect matching di costo minimo,
-
-$$
-2\,cost(M^*)\leq cost(M_1)+cost(M_2)=cost(\Gamma)\leq cost(H^*),
-$$
-
-e pertanto
-
-$$
-cost(M^*)\leq \frac{cost(H^*)}{2}.
-$$
-
-Il ciclo euleriano contiene esattamente gli archi di $T^*$ e di $M^*$, mentre gli shortcut non aumentano il costo. Di conseguenza,
+Usando il punto (b), otteniamo
 
 $$
 \begin{aligned}
-cost(H)&\leq cost(E)\\
+\underbrace{cost(M^*)}_{\text{matching minimo}}
+&\leq \underbrace{\min\{cost(M_1),cost(M_2)\}}_{\text{il meno costoso dei due}}\\
+&\leq \underbrace{\frac{cost(\Gamma)}{2}}_{\text{almeno uno costa al più metà}}\\
+&\leq \underbrace{\frac{cost(H^*)}{2}}_{\text{gli shortcut non aumentano il costo}}.
+\end{aligned}
+$$
+
+![[assets/christof3.png]]
+
+
+**(d) Costo del tour restituito.** Il ciclo euleriano $E$ percorre tutti gli archi di $T^*$ e di $M^*$, contati con la loro molteplicità, quindi $cost(E)=cost(T^*)+cost(M^*)$. Gli shortcut che trasformano $E$ in $H$ non aumentano il costo: $cost(H)\leq cost(E)$. Usando i limiti dei punti (a) e (c), concludiamo:
+
+$$
+\begin{aligned}
+\underbrace{cost(H)}_{\text{giro restituito}}
+       &\leq \underbrace{cost(E)}_{\text{MST + matching}}\\
        &=cost(T^*)+cost(M^*)\\
-       &\leq cost(H^*)+\frac{cost(H^*)}{2}\\
+       &\leq \underbrace{cost(H^*)}_{\text{limite per l'MST}}
+       +\underbrace{\frac12cost(H^*)}_{\text{limite per il matching}}\\
        &=\frac{3}{2}\,cost(H^*).
 \end{aligned}
 $$

@@ -27,6 +27,18 @@ import Note from "../content/generated/algoritmi-distribuiti.mdx";
 </BaseLayout>
 
 <script>
+  const revealOptionalSection = () => {
+    if (!location.hash) return;
+    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    const section = target?.closest<HTMLDetailsElement>("details.optional-section");
+    if (section && !section.open) {
+      section.open = true;
+      target?.scrollIntoView();
+    }
+  };
+  addEventListener("hashchange", revealOptionalSection);
+  revealOptionalSection();
+
   const progress = document.querySelector<HTMLElement>(
     ".reading-progress span",
   );

@@ -41,9 +41,26 @@ function convertObsidian(source) {
   // I riferimenti al PDF della docente servono solo per la lettura in Obsidian.
   content = content.replace(/^\[\[teacher_slides\/[^\]\n]+\.pdf#page=\d+\|[^\]\n]+\]\][ \t]*\n?/gm, '');
 
-  // I callout formali mantengono il loro tipo per lo stile del sito.
-  content = content.replace(/^([ \t]*>[ \t]*)\[!(definition|theorem|problem)\][+-]?(?:[ \t]+([^\n]*))?$/gm, (_match, prefix, kind, label) => {
-    const title = label || { definition: 'Definizione', theorem: 'Teorema', problem: 'Problema' }[kind];
+  // Le sezioni marcate come facoltative diventano tendine chiuse inizialmente.
+  const headings = [...content.matchAll(/^(#{2,6}) (.+)$/gm)];
+  for (let i = headings.length - 1; i >= 0; i--) {
+    const [line, hashes, rawTitle] = headings[i];
+    const title = rawTitle.trim();
+    if (!title.endsWith('(facoltativo)')) continue;
+    const start = headings[i].index;
+    const contentStart = start + line.length;
+    const level = hashes.length;
+    const next = headings.slice(i + 1).find(([, nextHashes]) => nextHashes.length <= level);
+    const end = next?.index ?? content.length;
+    const body = content.slice(contentStart, end).replace(/^\n+|\n+$/g, '');
+    const label = title.replace(/\s*\(facoltativo\)$/, '');
+    const id = headingSlug(title);
+    content = `${content.slice(0, start)}<details class="optional-section">\n<summary id="${id}">${label} <span>Facoltativo</span></summary>\n\n${body}\n\n</details>\n\n${content.slice(end)}`;
+  }
+
+  // I callout mantengono il loro tipo per lo stile del sito.
+  content = content.replace(/^([ \t]*>[ \t]*)\[!(definition|theorem|problem|note)\][+-]?(?:[ \t]+([^\n]*))?$/gm, (_match, prefix, kind, label) => {
+    const title = label || { definition: 'Definizione', theorem: 'Teorema', problem: 'Problema', note: 'Nota' }[kind];
     return `${prefix}<strong class="formal-callout-label formal-callout-label--${kind}">${title}</strong>`;
   });
 
