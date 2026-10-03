@@ -1,0 +1,474 @@
+.cookbook-shell {
+  display: grid;
+  grid-template-columns: 13rem minmax(0, 53rem);
+  gap: clamp(2rem, 5vw, 5rem);
+  justify-content: center;
+  padding: 3.5rem clamp(1rem, 4vw, 3.5rem) 5rem;
+}
+.cookbook-main {
+  min-width: 0;
+  font-size: 1.03rem;
+  line-height: 1.65;
+}
+.cookbook-intro h1 {
+  margin: 0.5rem 0 1rem;
+  font: 700 clamp(3rem, 7vw, 5rem)/1 var(--font-serif);
+  color: var(--green);
+  letter-spacing: -0.04em;
+}
+.cookbook-intro > p:not(.intro-label) {
+  max-width: 42rem;
+  color: var(--muted);
+}
+.cookbook-links {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  font: 0.85rem/1.6 var(--font-sans);
+}
+.cookbook-index {
+  position: sticky;
+  top: 6rem;
+  align-self: start;
+  font-family: var(--font-sans);
+}
+.cookbook-index summary {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+}
+.cookbook-index nav {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.9rem;
+}
+.cookbook-index a {
+  padding: 0.4rem 0;
+  font-size: 0.83rem;
+  text-decoration: none;
+}
+.cookbook-family,
+.complexity-section {
+  scroll-margin-top: 5.5rem;
+}
+.cookbook-family h2,
+.complexity-section h2 {
+  margin: 3rem 0 1rem;
+  color: var(--green);
+  font: 700 2rem/1.2 var(--font-serif);
+}
+.protocol-card {
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  margin: 0.7rem 0;
+  background: #fff;
+  scroll-margin-top: 5.5rem;
+}
+.protocol-card > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.2rem;
+  cursor: pointer;
+  list-style: none;
+}
+.protocol-card > summary::-webkit-details-marker {
+  display: none;
+}
+.card-heading {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+}
+.card-name {
+  font-weight: 700;
+  font-size: 1.16rem;
+  color: var(--green);
+}
+.card-preview {
+  font: 0.8rem/1.5 var(--font-sans);
+  color: var(--muted);
+}
+.card-kind {
+  font: 650 0.68rem/1.3 var(--font-sans);
+  white-space: nowrap;
+  color: var(--muted);
+}
+.card-kind::after {
+  content: " +";
+  font-size: 1.2em;
+}
+.protocol-card[open] .card-kind::after {
+  content: " −";
+}
+.protocol-card[open] > summary {
+  border-bottom: 1px solid var(--line);
+  background: #f4f8f6;
+  border-radius: 0.6rem 0.6rem 0 0;
+}
+.card-body {
+  padding: 1rem 1.2rem 1.5rem;
+}
+.card-body h3 {
+  margin: 1.45rem 0 0.5rem;
+  color: var(--green);
+  font: 700 0.81rem/1.5 var(--font-sans);
+}
+.card-body p {
+  margin: 0.5rem 0;
+}
+.card-body ol,
+.card-body ul {
+  padding-left: 1.4rem;
+}
+.card-body li {
+  margin: 0.5rem 0;
+}
+.permalink {
+  font: 0.75rem/1.5 var(--font-sans);
+}
+.coverage-note {
+  padding: 0.8rem 1rem;
+  border-left: 3px solid #b18a3e;
+  background: #faf6ec;
+  font: 0.83rem/1.6 var(--font-sans);
+}
+.optional-card .card-kind {
+  color: #8b692d;
+}
+.optional-overview {
+  max-width: 46rem;
+}
+.model-key {
+  margin: 2rem 0;
+  border-block: 1px solid var(--line);
+  padding: 1rem 0;
+  font: 0.83rem/1.65 var(--font-sans);
+  color: var(--muted);
+}
+.model-key summary {
+  cursor: pointer;
+  color: var(--green);
+  font-weight: 650;
+}
+.protocol-player {
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: #fbfcfa;
+  padding: 1rem;
+  font: 0.8rem/1.55 var(--font-sans);
+}
+.player-settings,
+.player-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+.player-settings {
+  margin-bottom: 0.8rem;
+}
+.player-settings label {
+  display: grid;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 9rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+.player-settings label:first-child {
+  flex: 3;
+}
+.player-settings select {
+  width: 100%;
+  max-width: 100%;
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+  background: #fff;
+  color: var(--ink);
+}
+.player-controls button {
+  padding: 0.55rem 0.8rem;
+  background: #fff;
+  border: 1px solid #bacfc6;
+  border-radius: 0.35rem;
+  color: var(--green);
+  font: 650 0.77rem var(--font-sans);
+  cursor: pointer;
+}
+.player-controls button:first-child {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+  min-width: 5rem;
+}
+.player-controls button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.protocol-player :is(button, select):focus-visible,
+.protocol-card summary:focus-visible,
+.cookbook-index summary:focus-visible {
+  outline: 3px solid #d79a34;
+  outline-offset: 3px;
+}
+.player-note {
+  color: var(--muted);
+  font-size: 0.73rem;
+}
+.player-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  font-variant-numeric: tabular-nums;
+  border-block: 1px solid var(--line);
+  padding: 0.6rem 0;
+  font-size: 0.72rem;
+}
+.player-phase {
+  font-weight: 700;
+  color: var(--green);
+}
+.network-scroll {
+  overflow-x: auto;
+}
+[data-network] {
+  display: block;
+  width: 100%;
+  min-width: 480px;
+  max-height: 390px;
+}
+.network-edge {
+  stroke: #c4d1cb;
+  stroke-width: 1.7;
+}
+.tree-edge {
+  stroke: #428773;
+  stroke-width: 3;
+}
+.network-node {
+  fill: #fff;
+  stroke: #456b5e;
+  stroke-width: 2;
+}
+.leader-node {
+  fill: #0d3b35;
+  stroke: #0d3b35;
+  stroke-width: 3;
+}
+.faulty-node {
+  fill: #fff1ed;
+  stroke: #a55337;
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+.node-id {
+  font: 700 17px var(--font-sans);
+  text-anchor: middle;
+  fill: #173f35;
+}
+.leader-node + .node-id {
+  fill: white;
+}
+.node-status {
+  font: 600 10px var(--font-sans);
+  fill: #536b61;
+  text-anchor: middle;
+}
+.message-dot {
+  fill: #c88a27;
+  stroke: white;
+  stroke-width: 1;
+}
+.lost-message {
+  fill: #a64b32;
+  stroke: #a64b32;
+  stroke-dasharray: 2 2;
+}
+.edge-weight {
+  font: 12px var(--font-sans);
+  fill: #7c8e83;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: #fbfcfa;
+  stroke-width: 4;
+}
+.message-label {
+  font: 600 10px var(--font-sans);
+  fill: #956725;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: #fbfcfa;
+  stroke-width: 4;
+}
+.player-current {
+  min-height: 2.5rem;
+  border-left: 3px solid #bd882f;
+  padding-left: 0.75rem;
+}
+.player-result:not(:empty) {
+  padding: 0.65rem 0.75rem;
+  background: #e8f2ee;
+  color: var(--green);
+  font-weight: 650;
+}
+.player-table-scroll {
+  max-width: 100%;
+  overflow: auto;
+}
+.player-nodes {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.7rem;
+  text-align: left;
+}
+.player-nodes caption {
+  text-align: left;
+  color: var(--green);
+  font-weight: 650;
+  margin: 0.8rem 0 0.4rem;
+}
+.player-nodes th,
+.player-nodes td {
+  border-bottom: 1px solid var(--line);
+  padding: 0.45rem;
+  vertical-align: top;
+}
+.player-nodes td:last-child {
+  min-width: 11rem;
+  overflow-wrap: anywhere;
+}
+.player-nodes td:last-child span {
+  display: inline-block;
+  margin-right: 0.65rem;
+}
+.event-detail {
+  margin-top: 0.7rem;
+  font-size: 0.72rem;
+}
+.event-detail summary {
+  cursor: pointer;
+  color: var(--green);
+}
+.event-detail ol,
+.event-detail ul {
+  max-height: 12rem;
+  overflow: auto;
+}
+.event-detail li {
+  overflow-wrap: anywhere;
+}
+.complexity-section article {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.complexity-section h3 {
+  color: var(--green);
+  margin: 0.8rem 0;
+  font-size: 1.3rem;
+}
+.complexity-section p {
+  margin: 0.7rem 0;
+}
+.cookbook-formula {
+  max-width: 100%;
+  overflow-x: auto;
+  font-size: 0.95rem;
+}
+.reduction-flow {
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  text-align: center;
+  font: 0.85rem/1.7 var(--font-sans);
+}
+.reduction-flow span {
+  color: var(--muted);
+}
+.section-intro,
+.cookbook-end {
+  color: var(--muted);
+  font: 0.82rem/1.6 var(--font-sans);
+}
+.cookbook-end {
+  margin-top: 2rem;
+}
+@media (max-width: 900px) {
+  .cookbook-shell {
+    grid-template-columns: minmax(0, 53rem);
+    gap: 1.5rem;
+    padding-top: 1.5rem;
+  }
+  .cookbook-index {
+    position: static;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1rem;
+  }
+  .cookbook-index nav {
+    display: flex;
+    gap: 0.4rem 1rem;
+    flex-wrap: wrap;
+  }
+  .cookbook-index a {
+    padding: 0.15rem 0;
+    font-size: 0.75rem;
+  }
+}
+@media (max-width: 560px) {
+  .cookbook-main {
+    font-size: 0.94rem;
+  }
+  .protocol-card > summary {
+    padding: 0.85rem;
+    gap: 0.5rem;
+  }
+  .card-body {
+    padding: 0.8rem;
+  }
+  .card-kind {
+    font-size: 0.62rem;
+  }
+  .card-name {
+    font-size: 1.05rem;
+  }
+  .protocol-player {
+    padding: 0.7rem;
+  }
+  [data-network] {
+    min-width: 0;
+  }
+  .player-settings label {
+    min-width: 7rem;
+  }
+  .player-settings label:first-child {
+    flex-basis: 100%;
+  }
+  .player-metrics {
+    font-size: 0.65rem;
+  }
+  .card-preview {
+    font-size: 0.73rem;
+  }
+  .cookbook-family h2,
+  .complexity-section h2 {
+    font-size: 1.75rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.edge-message-label {
+  font: 600 10px var(--font-sans);
+  fill: #966021;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: #fbfcfa;
+  stroke-width: 4;
+}

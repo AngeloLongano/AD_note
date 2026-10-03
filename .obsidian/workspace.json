@@ -40,118 +40,21 @@
             }
           },
           {
-            "id": "11cfee7ba35886ef",
-            "type": "leaf",
-            "state": {
-              "type": "pdf",
-              "state": {
-                "file": "teacher_slides/1_complexity theory.pdf"
-              },
-              "icon": "lucide-file-text",
-              "title": "1_complexity theory"
-            }
-          },
-          {
-            "id": "2cb37b10b7f26657",
-            "type": "leaf",
-            "state": {
-              "type": "pdf",
-              "state": {
-                "file": "teacher_slides/1_complexity theory.pdf"
-              },
-              "icon": "lucide-file-text",
-              "title": "1_complexity theory"
-            }
-          },
-          {
-            "id": "41fea3ffb313d00e",
-            "type": "leaf",
-            "state": {
-              "type": "pdf",
-              "state": {
-                "file": "teacher_slides/1_complexity theory.pdf"
-              },
-              "icon": "lucide-file-text",
-              "title": "1_complexity theory"
-            }
-          },
-          {
-            "id": "2f2eb8ef3e008891",
+            "id": "26dba18ebd1471fc",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Algoritmi Distribuiti.md",
+                "file": "note_durante_studio.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Algoritmi Distribuiti"
-            }
-          },
-          {
-            "id": "e377da40fb8e9845",
-            "type": "leaf",
-            "state": {
-              "type": "pdf",
-              "state": {
-                "file": "teacher_slides/1_complexity theory.pdf"
-              },
-              "icon": "lucide-file-text",
-              "title": "1_complexity theory"
-            }
-          },
-          {
-            "id": "3e7a96c69ea1ca78",
-            "type": "leaf",
-            "state": {
-              "type": "pdf",
-              "state": {
-                "file": "teacher_slides/1_complexity theory.pdf"
-              },
-              "icon": "lucide-file-text",
-              "title": "1_complexity theory"
-            }
-          },
-          {
-            "id": "59f654e9c4446e2a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Algoritmi Distribuiti.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Algoritmi Distribuiti"
-            }
-          },
-          {
-            "id": "2343118bf124cf1f",
-            "type": "leaf",
-            "state": {
-              "type": "pdf",
-              "state": {
-                "file": "teacher_slides/1_complexity theory.pdf"
-              },
-              "icon": "lucide-file-text",
-              "title": "1_complexity theory"
-            }
-          },
-          {
-            "id": "4f5c15d494981ca9",
-            "type": "leaf",
-            "state": {
-              "type": "pdf",
-              "state": {
-                "file": "teacher_slides/1_complexity theory.pdf"
-              },
-              "icon": "lucide-file-text",
-              "title": "1_complexity theory"
+              "title": "note_durante_studio"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -319,7 +222,7 @@
       "bases:Crea nuova Base": false
     }
   },
-  "active": "17ba5ddf354c7035",
+  "active": "26dba18ebd1471fc",
   "lastOpenFiles": [
     "dist/index.html",
     "dist/widgets/sat-fnc/index.html",
@@ -327,11 +230,11 @@
     "dist/widgets/sat-fnc",
     "dist/widgets/master-theorem",
     "dist/widgets",
-    "dist/_astro/SiteHeader.DazENAoK.css",
-    "dist/_astro/KaTeX_Typewriter-Regular.D3Ib7_Hf.ttf",
-    "dist/_astro/KaTeX_Typewriter-Regular.CO6r4hn1.woff2",
-    "dist/_astro/KaTeX_Typewriter-Regular.C0xS9mPB.woff",
-    "dist/_astro/KaTeX_Size4-Regular.Dl5lxZxV.woff2",
+    "dist/cookbook.pdf",
+    "dist/cookbook/index.html",
+    "dist/cookbook",
+    "dist/_astro/protocols.CVEnFtGi.js",
+    "dist/_astro/cookbook.Bo03lXxP.css",
     "dist/vertexcoverILP.png",
     "dist/vertex_covers.png",
     "dist/vertex-cover-stella-greedy.png",
@@ -342,7 +245,13 @@
     "dist/tsp-pesi-01-12-triangolo.svg",
     "dist/tsp-inapprossimabilita-due-casi.png",
     "dist/teorema-14-scorciatoie.png",
+    "docs/COOKBOOK-VERIFICA.md",
+    "node_modules/undici-types/README.md",
+    "node_modules/@types/node/README.md",
     "my_notes.md",
+    "note_durante_studio.md",
+    "output/pdf/cookbook/MANUTENZIONE.md",
+    "output/pdf/cookbook/coverage.md",
     "Algoritmi Distribuiti.md",
     "Feedback.md",
     "archived/REVISIONE-SEMANTICA-ESITO.md",
@@ -360,12 +269,6 @@
     "Algoritmi_Distribuiti_originale/pages/page-090.md",
     "Algoritmi_Distribuiti_originale/pages/page-089.md",
     "Algoritmi_Distribuiti_originale/pages/page-088.md",
-    "Algoritmi_Distribuiti_originale/pages/page-087.md",
-    "Algoritmi_Distribuiti_originale/pages/page-086.md",
-    "Algoritmi_Distribuiti_originale/pages/page-085.md",
-    "Algoritmi_Distribuiti_originale/pages/page-084.md",
-    "Algoritmi_Distribuiti_originale/pages/page-083.md",
-    "Algoritmi_Distribuiti_originale/pages/page-082.md",
-    "Algoritmi_Distribuiti_originale/pages/page-081.md"
+    "Algoritmi_Distribuiti_originale/pages/page-087.md"
   ]
 }

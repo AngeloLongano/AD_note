@@ -8,7 +8,8 @@
     "dev": "npm run content:build && astro dev",
     "build": "npm run content:build && astro build",
     "preview": "astro preview",
-    "check": "npm run content:build && astro check"
+    "check": "npm run content:build && astro check",
+    "test:cookbook": "node scripts/check-cookbook.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.1",
@@ -20,6 +21,8 @@
   },
   "devDependencies": {
     "@astrojs/check": "latest",
+    "@types/node": "^26.6.4",
+    "esbuild": "^0.28.2",
     "prettier": "^3.9.8",
     "typescript": "latest"
   }

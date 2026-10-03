@@ -1,0 +1,28 @@
+---
+interface Props { protocol:string; title:string }
+const {protocol,title}=Astro.props;
+---
+<div class="protocol-player" data-protocol={protocol} aria-label={`Simulazione di ${title}`}>
+  <div class="player-settings">
+    <label>Scenario <select data-scenario aria-label={`Scenario di ${title}`}></select></label>
+    <label>Velocità <select data-speed aria-label={`Velocità di ${title}`}><option value="1400">Lenta</option><option value="850" selected>Normale</option><option value="350">Veloce</option></select></label>
+  </div>
+  <div class="player-controls">
+    <button type="button" data-play>Avvia</button>
+    <button type="button" data-step>Passo successivo</button>
+    <button type="button" data-reset>Ricomincia</button>
+  </div>
+  <p class="player-note" data-note>Apri la scheda per caricare l’esecuzione.</p>
+  <div class="player-metrics" aria-label="Contatori dell’esecuzione"><span data-count>Invii: 0</span><span data-time>Tempo: 0</span><span data-step-count>Passo: 0</span></div>
+  <p class="player-phase" data-phase></p>
+  <div class="network-scroll"><svg data-network role="img" aria-label={`Nodi e messaggi di ${title}`} viewBox="0 0 600 360"></svg></div>
+  <p class="player-current" data-current aria-live="polite" aria-atomic="true"></p>
+  <p class="player-result" data-result></p>
+  <div class="player-table-scroll"><table class="player-nodes"><caption>Stati e memoria locale</caption><thead><tr><th>Nodo</th><th>Stato</th><th>Variabili locali</th></tr></thead><tbody data-nodes></tbody></table></div>
+  <details class="event-detail"><summary>Messaggi e transizioni del passo</summary><ol data-events></ol></details>
+  <details class="event-detail"><summary>Messaggi ancora in viaggio <span data-pending-count></span></summary><ul data-pending></ul></details>
+</div>
+<script>
+  import { mountPlayers } from '../../lib/cookbook/player';
+  mountPlayers();
+</script>

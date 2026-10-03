@@ -1,0 +1,165 @@
+[
+  {
+    "page": 1,
+    "title": "Fondamenti e complessità",
+    "bottoms": [
+      560.0,
+      559.0,
+      542.0
+    ],
+    "text_elements": 145,
+    "body_pt": 10.15
+  },
+  {
+    "page": 2,
+    "title": "TSP generale e ricerca esatta",
+    "bottoms": [
+      460.0,
+      558.0
+    ],
+    "text_elements": 113,
+    "body_pt": 10.15
+  },
+  {
+    "page": 3,
+    "title": "TSP metrico: le due approssimazioni",
+    "bottoms": [
+      508.0,
+      499.0
+    ],
+    "text_elements": 116,
+    "body_pt": 10.15
+  },
+  {
+    "page": 4,
+    "title": "Vertex Cover: decisione, ricerca, approssimazione",
+    "bottoms": [
+      521.0,
+      484.0
+    ],
+    "text_elements": 113,
+    "body_pt": 10.15
+  },
+  {
+    "page": 5,
+    "title": "Diffusione: modello, broadcast e wake-up",
+    "bottoms": [
+      455.0,
+      449.0
+    ],
+    "text_elements": 95,
+    "body_pt": 10.15
+  },
+  {
+    "page": 6,
+    "title": "Spanning tree: parallelo o visita sequenziale?",
+    "bottoms": [
+      557.0,
+      498.0
+    ],
+    "text_elements": 102,
+    "body_pt": 10.15
+  },
+  {
+    "page": 7,
+    "title": "Saturazione ed elezione: raccogliere i valori",
+    "bottoms": [
+      518.0,
+      447.0
+    ],
+    "text_elements": 103,
+    "body_pt": 10.15
+  },
+  {
+    "page": 8,
+    "title": "Elezione in anello: fermare i candidati",
+    "bottoms": [
+      490.0,
+      518.0
+    ],
+    "text_elements": 113,
+    "body_pt": 10.15
+  },
+  {
+    "page": 9,
+    "title": "Elezione in grafi generici",
+    "bottoms": [
+      475.0,
+      439.0
+    ],
+    "text_elements": 94,
+    "body_pt": 10.15
+  },
+  {
+    "page": 10,
+    "title": "Elezione sincrona: tempo e casualità",
+    "bottoms": [
+      472.0,
+      465.0
+    ],
+    "text_elements": 104,
+    "body_pt": 10.15
+  },
+  {
+    "page": 11,
+    "title": "Routing: tutte le destinazioni",
+    "bottoms": [
+      499.0,
+      552.0
+    ],
+    "text_elements": 114,
+    "body_pt": 10.15
+  },
+  {
+    "page": 12,
+    "title": "Routing: alberi dei cammini minimi",
+    "bottoms": [
+      521.0,
+      545.0
+    ],
+    "text_elements": 107,
+    "body_pt": 10.15
+  },
+  {
+    "page": 13,
+    "title": "Guasti: collegamenti e crash sincroni",
+    "bottoms": [
+      552.0,
+      470.0,
+      534.0
+    ],
+    "text_elements": 145,
+    "body_pt": 10.15
+  },
+  {
+    "page": 14,
+    "title": "Consenso asincrono: quorum e casualità",
+    "bottoms": [
+      529.0,
+      486.0
+    ],
+    "text_elements": 119,
+    "body_pt": 10.15
+  },
+  {
+    "page": 15,
+    "title": "Consenso bizantino deterministico",
+    "bottoms": [
+      485.0,
+      549.0
+    ],
+    "text_elements": 110,
+    "body_pt": 10.15
+  },
+  {
+    "page": 16,
+    "title": "Chord: lookup e cambiamenti della rete",
+    "bottoms": [
+      535.0,
+      564.0,
+      549.0
+    ],
+    "text_elements": 160,
+    "body_pt": 10.15
+  }
+]

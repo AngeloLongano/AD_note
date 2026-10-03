@@ -1,0 +1,136 @@
+{
+  "date": "2026-09-30",
+  "checklist_items": 30,
+  "covered_items": 30,
+  "pdf_sha256": "065a424aceaa93cc1759ef722f28eb83bc5be35e59f03ec02a565ed4e813c468",
+  "pages": [
+    {
+      "page": 1,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 145,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "60d23e9aa208629544090c0708ee327892d3c33c4e35d594eac45d93867a5ade"
+    },
+    {
+      "page": 2,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 113,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "3f5d2ebb66f36a0e99198b01b9a65613f4c9730d4ef6f416ebf303cf01923a84"
+    },
+    {
+      "page": 3,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 116,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "bcc92dae1205a98569588949c57a64a4c4d353f87288ff7f70d102aa6de3d55b"
+    },
+    {
+      "page": 4,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 113,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "d02a6f1ae33543033413c0704da84c2ad1ba513d77bde9479aeda658cbd8baca"
+    },
+    {
+      "page": 5,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 95,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "bcefa885c843659f3f5277b57b2ed210d1a758ae78beb980b3e9394e5b64ade4"
+    },
+    {
+      "page": 6,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 102,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "0ba57f898dbec41cc3ad49f0bab5b11f63bd1f6961037a0f890696ef3fa3d692"
+    },
+    {
+      "page": 7,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 103,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "e74e0461343106424d5d335d5130edf42f20843e17d3b4cb6426901f4f1dcdb8"
+    },
+    {
+      "page": 8,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 113,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "2779d3b8fcdc4a0d2b3fabcf5d1761db75831a3e05d793532744ce2b2adef54c"
+    },
+    {
+      "page": 9,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 94,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "ede91ba0d1e3c4c9e29153ee8659679a41973ecb0bbd244f5605ff04724146eb"
+    },
+    {
+      "page": 10,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 104,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "2e8dfbd0fe6a73f7d28e12ed6873a547bbe21abc0a7c56da2a1accdadebe1ecd"
+    },
+    {
+      "page": 11,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 114,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "fe9ff40a884ee184de10b3eb7f47cc7d512d7db914a79b339a90bb8af53212ad"
+    },
+    {
+      "page": 12,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 107,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "8f08d4326b9b8a97cc8ec92a5588e9920d288111d6587c9a581e36c9bd88deac"
+    },
+    {
+      "page": 13,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 145,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "d0dd78a6a2fa7b7dfd46a79f4586d664f44e62c7d0456ea59294e4e83aa6de3e"
+    },
+    {
+      "page": 14,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 119,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "92817438814b1bdf398883863b92ed3cea65d3900a2adaa29bc63ef4a42fbc7a"
+    },
+    {
+      "page": 15,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 110,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "cd02a93d89a5d97a8257a9569cd67c33337a9dbd22c41d519d21c6d504c44193"
+    },
+    {
+      "page": 16,
+      "format": "A4 landscape",
+      "editable_svg_text_elements": 160,
+      "native_pdf_text_matches_svg": true,
+      "all_glyphs_available": true,
+      "svg_sha256": "7acd771815e86497d82da18a7fd5fbff4da05d7050ef854786ec5c88fcca701a"
+    }
+  ]
+}

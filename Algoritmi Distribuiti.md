@@ -1326,7 +1326,9 @@ $$
 
 #### Ammissibilità e fattore di approssimazione
 
-Per ogni arco $(u,v)$, la soluzione frazionaria soddisfa $x_u^*+x_v^*\geq 1$. I due valori non possono quindi essere entrambi strettamente minori di $1/2$: almeno una delle due variabili $x_u,x_v$ vale $1$ e l'arco risulta coperto. Il segno di uguaglianza nella regola di rounding è essenziale proprio nel caso $x_u^*=x_v^*=1/2$.
+Per ogni arco $(u,v)$, la soluzione frazionaria soddisfa $x_u^*+x_v^*\geq 1$. 
+I due valori non possono quindi essere entrambi strettamente minori di $1/2$: almeno una delle due variabili $x_u,x_v$ vale $1$ e l'arco risulta coperto. I
+l segno di uguaglianza nella regola di rounding è essenziale proprio nel caso $x_u^*=x_v^*=1/2$.
 
 Ogni soluzione intera ammissibile è anche ammissibile per il rilassamento LP; dunque il dominio intero è contenuto in quello frazionario e
 

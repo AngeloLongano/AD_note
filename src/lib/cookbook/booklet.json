@@ -1,0 +1,1377 @@
+{
+  "Il modello viene prima del bound": {
+    "title": "Il modello viene prima del bound",
+    "blocks": [
+      [
+        "p",
+        "Modello",
+        "Entità con stato e memoria locale; messaggi tra vicini, porte distinguibili. Ritardi finiti in assenza di guasti. Sincronia, FIFO, ID e conoscenza di n sono restrizioni aggiuntive."
+      ],
+      [
+        "p",
+        "Costo",
+        "M = invii, B = bit trasmessi. Tᵢ = tempo ideale: una trasmissione per unità; T_c = massima catena causale. In asincrono non c’è un bound uniforme sul tempo fisico senza limiti ai ritardi."
+      ],
+      [
+        "p",
+        "Ipotesi",
+        "In questa pagina: BL = link bidirezionali, CN = grafo connesso, TR = nessun guasto. Un iniziatore, tranne WFlood. Ogni nodo conosce i propri vicini."
+      ]
+    ],
+    "tag": null
+  },
+  "Flooding / Broadcast": {
+    "title": "Flooding / Broadcast",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "Solo s conosce I → tutti apprendono I. s invia a tutti; alla prima ricezione, inoltra a tutti tranne il mittente e passa a DONE. Ignora le copie successive."
+      ],
+      [
+        "p",
+        "Prova",
+        "Un nodo raggiunto deve inviare oltre ogni frontiera verso un nodo non raggiunto. Connessione e consegna finita ⇒ tutti raggiunti. Un solo inoltro per nodo ⇒ termina."
+      ],
+      ["formula", "M = 2m − n + 1; Tᵢ = r(s)"],
+      [
+        "p",
+        "Limite",
+        "DONE è locale, non rileva la fine globale. T_c≤n−1 fino alle prime ricezioni; ≤n includendo copie ridondanti."
+      ],
+      [
+        "p",
+        "Ricorda",
+        "Su albero M=n−1. Su completo noto: simple broadcast diretto, M=n−1 e Tᵢ=1."
+      ]
+    ],
+    "tag": null
+  },
+  "WFlood / Wake-up": {
+    "title": "WFlood / Wake-up",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "Almeno un risveglio spontaneo → tutti AWAKE. Sveglio spontaneamente: invia W a tutti. Sveglio su W: inoltra tranne al mittente. Dopo, ignora ogni W."
+      ],
+      [
+        "p",
+        "Prova",
+        "Stessa frontiera del Flooding. k conta chi si sveglia spontaneamente prima di ricevere W; gli altri n−k risparmiano un invio."
+      ],
+      ["formula", "M = 2m − (n−k), 1 ≤ k ≤ n"],
+      [
+        "p",
+        "Tempo",
+        "Dal primo iniziatore Tᵢ≤D. Con iniziatori S simultanei: Tᵢ=maxᵥ minₛ∈S d(s,v). Terminazione locale, non rilevazione globale."
+      ]
+    ],
+    "tag": null
+  },
+  "Lower bound: perché è inevitabile": {
+    "title": "Lower bound: perché è inevitabile",
+    "blocks": [
+      [
+        "p",
+        "Ipotesi",
+        "Protocollo generico corretto su ogni grafo connesso, senza mappa globale o conoscenza di n."
+      ],
+      [
+        "p",
+        "Prova",
+        "Se un arco non trasporta alcun messaggio, sostituiscilo con un cammino attraverso un nuovo nodo dormiente. Gli estremi non distinguono la rete; il nuovo nodo non riceve nulla. Contraddizione."
+      ],
+      ["formula", "M ≥ m; Flooding usa M < 2m"],
+      [
+        "p",
+        "Tempo",
+        "Da una sorgente s servono almeno r(s) unità ideali. Nel caso peggiore sulla sorgente serve D. Flooding raggiunge questi limiti."
+      ],
+      [
+        "p",
+        "Limite",
+        "Il bound m non vale per algoritmi che sfruttano una topologia nota: il completo noto permette n−1 invii diretti."
+      ]
+    ],
+    "tag": null
+  },
+  "SHOUT e SHOUT+": {
+    "title": "SHOUT e SHOUT+",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "G → ogni nodo conosce TreeNeighbours; i due estremi concordano sugli archi dell’albero."
+      ],
+      [
+        "p",
+        "Passi",
+        "SHOUT: s invia Q. Alla prima Q scegli parent, rispondi YES e invia Q agli altri. Alle successive Q rispondi NO. Attendi una risposta per ogni vicino."
+      ],
+      [
+        "p",
+        "Modello",
+        "FIFO per la versione con NO e contatore: evita che un NO superi una Q e faccia terminare troppo presto."
+      ],
+      [
+        "p",
+        "Prova",
+        "Un parent scelto alla prima scoperta precede il figlio; i parent risalgono a s senza cicli. Connettività ⇒ copertura. Gli YES identificano anche i figli."
+      ],
+      ["formula", "SHOUT: M = 4m−2n+2"],
+      ["p", "Tempo", "Per n≥2, fino al DONE di tutti: r(s)+1 ≤ Tᵢ ≤ r(s)+2."],
+      [
+        "p",
+        "Passi",
+        "SHOUT+: elimina NO; una Q incrociata conta come rifiuto implicito. Ogni arco porta Q/YES oppure Q/Q."
+      ],
+      ["formula", "SHOUT+: M = 2m; Tᵢ = r(s)+1"]
+    ],
+    "tag": null
+  },
+  "Che cosa certifica la fine?": {
+    "title": "Che cosa certifica la fine?",
+    "blocks": [
+      [
+        "p",
+        "Ricorda",
+        "SHOUT/SHOUT+: ogni nodo sa di aver classificato i propri vicini, ma non rileva la fine globale. DFT: il ritorno del token consente alla radice di sapere che la visita è finita."
+      ],
+      [
+        "diagram",
+        "timeline",
+        {
+          "labels": ["t=0", "t=1", "t=2", "t=3"],
+          "caption": "s invia Q → scoperta → Q incrociate → NO"
+        }
+      ],
+      [
+        "p",
+        "Esempio",
+        "Nel triangolo, SHOUT raggiunge gli altri due nodi al tempo 1; Q incrociate al tempo 2, NO al tempo 3. Per tutti DONE serve r(s)+2=3."
+      ],
+      [
+        "p",
+        "Spazio",
+        "O(deg(x)) record locali per vicini, archi dell’albero e stato della visita; gli identificativi, se memorizzati, hanno un costo in bit separato."
+      ]
+    ],
+    "tag": null
+  },
+  "DFT: un token alla volta": {
+    "title": "DFT: un token alla volta",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "G → spanning tree di visita in profondità. Un solo token; non richiede FIFO."
+      ],
+      [
+        "p",
+        "Passi",
+        "ForwardToken prova un vicino non visitato. Alla prima visita memorizza parent; esplora un vicino alla volta aspettando il ritorno. ReturnToken chiude il sottoalbero; BackEdgeToken rifiuta un arco verso un visitato."
+      ],
+      [
+        "p",
+        "Prova",
+        "Un parent per nodo; Unvisited diminuisce. Ogni arco è classificato; quando il token torna e s esaurisce i vicini, s rileva la fine globale."
+      ],
+      ["formula", "M = 2m; T_c = Tᵢ = 2m"],
+      [
+        "p",
+        "Ricorda",
+        "Ogni arco: Forward/Return oppure Forward/BackEdge. SHOUT può essere BFS solo con arrivi ideali per livelli; DFT può produrre grande diametro."
+      ]
+    ],
+    "tag": null
+  },
+  "DFT con Visited / Ack": {
+    "title": "DFT con Visited / Ack",
+    "blocks": [
+      [
+        "p",
+        "Passi",
+        "Alla prima visita invia Visited ai vicini tranne parent; attendi gli Ack prima di muovere il token. Chi riceve Visited rimuove il mittente dai vicini da esplorare."
+      ],
+      [
+        "p",
+        "Prova",
+        "Il token evita le back-edge; gli handshake con vicini diversi sono paralleli. Il token percorre soltanto i n−1 archi dell’albero, andata e ritorno."
+      ],
+      ["formula", "M ≤ 4m; Tᵢ ≤ 4n−2 = O(n)"],
+      [
+        "p",
+        "Costo",
+        "Tempo: 2(n−1) token + al più 2n di handshake sul cammino critico. Il termine 2n non conta tutti gli invii."
+      ],
+      [
+        "p",
+        "Limite",
+        "Più iniziatori indipendenti possono produrre una foresta. Per un albero unico: eleggi prima il leader oppure coordina costruzioni con ID."
+      ],
+      ["p", "Nota", "n=1: nessun messaggio per tutti questi protocolli."]
+    ],
+    "tag": null
+  },
+  "Saturazione su alberi": {
+    "title": "Saturazione su alberi",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "Albero non radicato, valori locali → minimo globale. BL, CN, TR, FIFO; ogni nodo sa di essere in un albero e conosce i vicini."
+      ],
+      [
+        "p",
+        "Passi",
+        "1. Wake-up. 2. Le foglie inviano il valore; un interno che ha ricevuto da tutti tranne uno aggrega e invia al vicino rimasto. 3. La coppia saturata diffonde il risultato verso l’esterno."
+      ],
+      ["diagram", "tree", {}],
+      [
+        "p",
+        "Prova",
+        "Ogni messaggio riassume una componente separata dall’arco. La saturazione termina in esattamente due vicini; insieme coprono l’albero. Quale coppia emerge dipende dai ritardi."
+      ],
+      ["formula", "M ≤ 2(n−1) + n + (n−2) = 4n−4"],
+      [
+        "p",
+        "Ricorda",
+        "n≥2; per n=1 nessun invio. Risoluzione e saturazione sono finite. Su albero radicato: broadcast dalla radice e convergecast dei risultati dai figli."
+      ]
+    ],
+    "tag": null
+  },
+  "Elezione nell’albero": {
+    "title": "Elezione nell’albero",
+    "blocks": [
+      [
+        "p",
+        "Passi",
+        "Radicato: eleggi la radice (0 invii; notifica O(n)). Non radicato: trova la coppia saturata, confronta i suoi due ID, eleggi il minore e notifica."
+      ],
+      [
+        "p",
+        "Costo",
+        "M≤4n−4 includendo attivazione; bit O(n+log MaxID), usando O(1) bit per saturare e due ID nel confronto."
+      ],
+      [
+        "p",
+        "Attenzione",
+        "È il minimo della coppia; eleggere il minimo globale è un’altra applicazione, che aggrega gli ID."
+      ]
+    ],
+    "tag": null
+  },
+  "All The Way": {
+    "title": "All The Way",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "Anello uni/bidirezionale → leader con ID minimo. Più iniziatori; nessun senso globale necessario sul bidirezionale."
+      ],
+      [
+        "p",
+        "Passi",
+        "Ogni nodo avvia il proprio ID. Inoltra gli ID ricevuti all’altro vicino, aggiorna il minimo; ferma il proprio ID al ritorno."
+      ],
+      [
+        "p",
+        "Termina",
+        "Con contatore di hop, il proprio ID restituisce n. Conta gli ID ricevuti, incluso il proprio: quando sono n, hai visto tutti. Alternativa: n noto; sul modello orientato, FIFO può aiutare a riconoscere la fine."
+      ],
+      [
+        "p",
+        "Prova",
+        "Tutti gli ID fanno un giro completo: ciascun nodo conosce il minimo e decide il proprio stato. Nessuna notifica separata."
+      ],
+      ["formula", "M = n²; Tᵢ ≤ 2n−1"],
+      [
+        "p",
+        "Costo",
+        "Tempo dalla prima attivazione nel caso a ritardo unitario. Gli hop richiedono anche O(log n) bit per messaggio."
+      ]
+    ],
+    "tag": null
+  },
+  "Perché gli ID contano": {
+    "title": "Perché gli ID contano",
+    "blocks": [
+      [
+        "p",
+        "Ipotesi",
+        "Protocollo deterministico per tutte le reti; due nodi anonimi sincroni nello stesso stato."
+      ],
+      [
+        "p",
+        "Prova",
+        "Ricevono gli stessi eventi e restano identici a ogni passo ⇒ entrambi leader o entrambi follower."
+      ],
+      [
+        "p",
+        "Limite",
+        "L’elezione non è garantita in generale senza rompere la simmetria. Una radice designata o la casualità cambiano le ipotesi."
+      ]
+    ],
+    "tag": null
+  },
+  "As Far As It Can / LCR": {
+    "title": "As Far As It Can / LCR",
+    "blocks": [
+      ["p", "Modello", "Un solo senso di inoltro; n non noto, più iniziatori."],
+      [
+        "p",
+        "Passi",
+        "Inoltra solo un ID minore del minimo visto. Se ti sveglia un ID maggiore del tuo, fermalo e avvia il tuo; se minore, inoltralo. Il ritorno del proprio ID elegge; poi notifica."
+      ],
+      [
+        "diagram",
+        "ring",
+        {
+          "notes": [
+            "ID crescenti →",
+            "percorsi: n, n−1, …, 1",
+            "solo il minimo",
+            "completa il giro"
+          ]
+        }
+      ],
+      [
+        "p",
+        "Prova",
+        "Il minimo non viene bloccato; ogni altro ID incontra prima un ID minore."
+      ],
+      [
+        "p",
+        "Costo",
+        "Worst case: n(n+1)/2+n invii. Best: 2n (solo il minimo iniziatore). Tᵢ≤3n−1 con risveglio progressivo unitario e notifica."
+      ]
+    ],
+    "tag": null
+  },
+  "Ricostruire il costo di LCR": {
+    "title": "Ricostruire il costo di LCR",
+    "blocks": [
+      [
+        "p",
+        "Esempio",
+        "ID 1,2,3,4,5 crescenti nel senso di inoltro, tutti svegli: 1 viaggia 5 archi, 2 ne viaggia 4, poi 3,2,1. Totale 15 invii elettorali + 5 di notifica."
+      ],
+      ["formula", "Σⱼ₌₁ⁿ j = n(n+1)/2"],
+      [
+        "p",
+        "Ricorda",
+        "La somma conta tutti gli invii, anche in parallelo. Il tempo segue invece una catena: risveglio del minimo, giro dell’ID, giro di notifica."
+      ],
+      [
+        "p",
+        "Nota",
+        "ID minimo unico ⇒ un solo leader. Per n=1 il nodo è già l’unico candidato; i conteggi a stage assumono n≥2."
+      ]
+    ],
+    "tag": null
+  },
+  "Controlled Distance / HS": {
+    "title": "Controlled Distance / HS",
+    "blocks": [
+      [
+        "p",
+        "Modello",
+        "Anello bidirezionale, ID distinti; n non noto; più iniziatori. Candidati iniziali o attivati al risveglio."
+      ],
+      [
+        "p",
+        "Passi",
+        "Stage i: Forth in entrambi i sensi fino a 2ⁱ hop; ID minore sconfigge il candidato maggiore. Se raggiunge il limite torna Back; due Back autorizzano lo stage successivo. Un Forth tornato dopo il giro elegge, poi notifica."
+      ],
+      ["diagram", "hs", {}],
+      [
+        "p",
+        "Prova",
+        "Il minimo globale sopravvive. Per i≥1, i candidati hanno distanza ≥2ⁱ⁻¹+1; ce ne sono al più ⌊n/(2ⁱ⁻¹+1)⌋. Ciascuno costa ≤4·2ⁱ invii: meno di 8n per stage interno."
+      ],
+      ["formula", "M = O(n log n)"],
+      [
+        "p",
+        "Termina",
+        "Il raggio raddoppia: d=⌈log₂n⌉, stage 0,…,d. Stage 0 ≤4n, finale 2n, notifica n; totale ≤7n+8n(d−1) per n≥2."
+      ],
+      [
+        "p",
+        "Tempo",
+        "Tᵢ=O(n) con avvii simultanei, ritardi unitari e senza code: la somma dei raggi è geometrica. Non è un bound fisico asincrono."
+      ]
+    ],
+    "tag": null
+  },
+  "Il vantaggio del raddoppio": {
+    "title": "Il vantaggio del raddoppio",
+    "blocks": [
+      [
+        "p",
+        "Prova",
+        "Un raggio grande costa di più per candidato, ma lascia meno candidati: costo O(n) per stage × O(log n) stage. Il tempo somma 1+2+4+…+2ᵈ=O(n)."
+      ],
+      [
+        "p",
+        "Attenzione",
+        "Per le prove di spaziatura contano gli stage completati, anche se l’esecuzione è asincrona. Il bound temporale qui usa il modello ideale indicato."
+      ]
+    ],
+    "tag": null
+  },
+  "FloodMax su grafo generico": {
+    "title": "FloodMax su grafo generico",
+    "blocks": [
+      [
+        "p",
+        "Modello",
+        "Link bidirezionali, FIFO, round coordinati; diametro D o un suo upper bound L noto a tutti."
+      ],
+      [
+        "p",
+        "Passi",
+        "Inizia dal tuo ID; a ogni round invia il massimo noto a tutti i vicini, attendi i messaggi del round e aggiorna. Dopo L round eleggi l’ID massimo."
+      ],
+      [
+        "p",
+        "Invariante",
+        "Dopo r round conosci il massimo nella palla di r hop. Se L≥D, tutti conoscono il massimo globale."
+      ],
+      ["formula", "M = 2mL; T = L round"]
+    ],
+    "tag": null
+  },
+  "Stesso problema, conoscenze diverse": {
+    "title": "Stesso problema, conoscenze diverse",
+    "blocks": [
+      [
+        "p",
+        "Ricorda",
+        "FloodMax propaga il massimo per un numero noto di round. YO-YO propaga il minimo e riduce il grafo logico fino a poter rilevare la fine."
+      ],
+      [
+        "diagram",
+        "flow",
+        {
+          "labels": [
+            "leader unico",
+            "costruzione\nspanning tree",
+            "broadcast\nsu n−1 archi"
+          ],
+          "caption": "la notifica e la costruzione hanno costi propri"
+        }
+      ],
+      [
+        "p",
+        "Prova",
+        "Un leader può avviare un protocollo a iniziatore unico. Se invece è già disponibile un albero con radice designata, la radice può essere leader: l’asimmetria è già data."
+      ],
+      [
+        "p",
+        "Nota",
+        "m conta gli archi fisici. Il pruning di YO-YO modifica gli archi logici usati, non cancella collegamenti dalla rete."
+      ],
+      [
+        "p",
+        "Limite",
+        "Il bound O(m log n) deriva dal lemma sulle iterazioni; la sola eliminazione di “almeno una source” darebbe soltanto O(n) iterazioni."
+      ]
+    ],
+    "tag": null
+  },
+  "YO-YO: senza diametro noto": {
+    "title": "YO-YO: senza diametro noto",
+    "blocks": [
+      [
+        "p",
+        "Passi",
+        "Scambia ID coi vicini; orienta dal minore al maggiore: è un DAG. Source = solo uscite; sink = solo entrate."
+      ],
+      ["diagram", "yoyo", {}],
+      [
+        "p",
+        "Passi",
+        "YO: le source inviano ID; ogni interno attende tutte le entrate e inoltra il minimo. −YO: sink votano YES agli archi col minimo, NO agli altri."
+      ],
+      [
+        "p",
+        "Passi",
+        "Interno: se riceve un NO, restituisce NO a tutte le entrate; altrimenti YES solo da dove è arrivato il minimo. Source con NO sconfitta. Inverti gli archi con NO."
+      ],
+      [
+        "p",
+        "Prova",
+        "Il DAG si conserva; il minimo non è sconfitto. Collega due source se condividono un sink: in ogni cammino almeno una su due è sconfitta. I cammini superstiti dimezzano ⇒ O(log n) iterazioni."
+      ],
+      [
+        "p",
+        "Termina",
+        "Pruning: elimina sink con una sola entrata e copie duplicate del minimo, conservandone una. L’unica source resta senza archi e notifica sui link potati."
+      ],
+      [
+        "p",
+        "Costo",
+        "Setup 2m, ≤2m per iterazione, notifica n−1: M=O(m log n). Nessun tempo preciso trasferito a ritardi asincroni."
+      ]
+    ],
+    "tag": null
+  },
+  "Speeding: ID piccoli più veloci": {
+    "title": "Speeding: ID piccoli più veloci",
+    "blocks": [
+      [
+        "p",
+        "Modello",
+        "Anello sincrono unidirezionale; n non noto. Analisi qui con avvio simultaneo. Ogni ID occupa un messaggio logico."
+      ],
+      [
+        "p",
+        "Passi",
+        "Regola di eliminazione come LCR. Un ID i più piccolo viene inoltrato dopo un’attesa 2ⁱ. Al ritorno del proprio ID: leader, poi notifica senza attesa."
+      ],
+      [
+        "p",
+        "Prova",
+        "Il minimo viaggia più veloce. Il candidato j-esimo ha ID ≥α+j−1: i suoi hop prima della notifica decrescono geometricamente. La somma resta O(n)."
+      ],
+      ["formula", "M = O(n); T = O(2ᵅn)"],
+      [
+        "p",
+        "Costo",
+        "B=O(n log(MaxID+2)). Con pacchetti di c bit bisogna contare la frammentazione: O(n) invii logici non implica O(n) pacchetti."
+      ]
+    ],
+    "tag": null
+  },
+  "Waiting: scadenze separate": {
+    "title": "Waiting: scadenze separate",
+    "blocks": [
+      [
+        "p",
+        "Modello",
+        "Anello sincrono orientato, n noto. Attendi f(i,n); se nessuna notifica è arrivata, eleggiti e inviala."
+      ],
+      [
+        "p",
+        "Prova",
+        "Sia t(i) il risveglio di i. Per minimo x e rivale y, serve t(x)+f(x,n)+d(x,y) < t(y)+f(y,n). La notifica deve precedere la scadenza rivale."
+      ],
+      [
+        "p",
+        "Passi",
+        "Avvio simultaneo: f(i,n)=ni. Scarto tra ID consecutivi =n > distanza massima n−1. M=n messaggi di un bit."
+      ],
+      [
+        "p",
+        "Passi",
+        "Risveglio progressivo: propaga wake-up e usa f(i,n)=2ni. Ritardo di risveglio più distanza <2n. M=2n messaggi di un bit."
+      ],
+      ["formula", "T = O((α+1)n)"],
+      [
+        "p",
+        "Nota",
+        "Il termine +1 copre α=0; non eliminare la dipendenza dal valore dell’ID."
+      ]
+    ],
+    "tag": null
+  },
+  "Universal Waiting": {
+    "title": "Universal Waiting",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "Grafo generico sincrono → minimo ID; n noto, tempo per arco ≤1."
+      ],
+      [
+        "p",
+        "Passi",
+        "Diffondi start; all’attivazione attendi 2ni. Se non arriva stop, eleggiti e diffondi stop. Chi riceve stop rinuncia e lo inoltra."
+      ],
+      [
+        "p",
+        "Prova",
+        "Attivazione e stop viaggiano in meno di n unità: scarto 2n tra scadenze consecutive evita due leader. Serve un limite sul tempo, non solo il nome “diametro”."
+      ],
+      [
+        "p",
+        "Costo",
+        "Con due flooding: O(m) invii e O((α+1)n) unità; conteggio derivato sotto il modello appena dichiarato."
+      ]
+    ],
+    "tag": null
+  },
+  "Leader election randomizzata": {
+    "title": "Leader election randomizzata",
+    "blocks": [
+      [
+        "p",
+        "Modello",
+        "Anello anonimo sincrono orientato, n noto; round con rilevazione dei pareggi. n≥2."
+      ],
+      [
+        "p",
+        "Passi",
+        "A ogni round scegli 0 con probabilità 1/n, 1 altrimenti. Waiting cerca il minimo; è leader solo se unico. Il giro in n unità lo certifica; altrimenti restart."
+      ],
+      ["formula", "p = (1−1/n)ⁿ⁻¹ → 1/e"],
+      [
+        "p",
+        "Prova",
+        "Successo = esattamente uno zero. I round indipendenti danno P(fallimento dopo r)=(1−p)ʳ →0. Il minimo unico è un solo nodo."
+      ],
+      [
+        "p",
+        "Costo",
+        "O(n) tempo e bit per round; E[round]=1/p≤e ⇒ O(n) tempo e bit attesi. Nessun massimo deterministico di round."
+      ],
+      [
+        "p",
+        "Ricorda",
+        "Las Vegas: risultato corretto, qui termina con probabilità 1. Monte Carlo: tempo limitato ma possibile errore."
+      ]
+    ],
+    "tag": null
+  },
+  "Gossiping: ricostruire la mappa": {
+    "title": "Gossiping: ricostruire la mappa",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "Informazioni locali → ogni nodo ottiene il grafo e calcola la tabella destinazione / next hop / costo."
+      ],
+      [
+        "p",
+        "Passi",
+        "Costruisci uno spanning tree (SHOUT+). Scambia le informazioni sui vicini. Ogni nodo diffonde la propria lista sull’albero; poi calcola localmente i cammini minimi."
+      ],
+      [
+        "diagram",
+        "flow",
+        {
+          "labels": ["liste locali", "mappa G\nin ogni nodo", "tabelle"],
+          "caption": "comunicazione → calcolo locale"
+        }
+      ],
+      [
+        "p",
+        "Prova",
+        "L’albero raggiunge tutti: ogni lista arriva a ogni nodo. Con la mappa completa, un algoritmo centrale corretto produce i cammini minimi."
+      ],
+      [
+        "p",
+        "Costo",
+        "Ogni elemento di vicinato percorre n−1 archi: (n−1)Σₓdeg(x)=2m(n−1), più setup O(m). Totale O(mn) trasmissioni di elementi."
+      ],
+      [
+        "p",
+        "Spazio",
+        "Θ(n+m) record per la mappa in ciascun nodo durante la costruzione. Il calcolo locale aggiunge il costo dell’algoritmo scelto."
+      ],
+      [
+        "p",
+        "Attenzione",
+        "Accorpare una lista in un pacchetto cambia il numero di invii, non la quantità di dati da diffondere."
+      ]
+    ],
+    "tag": null
+  },
+  "La proprietà che permette il routing": {
+    "title": "La proprietà che permette il routing",
+    "blocks": [
+      [
+        "p",
+        "Prova",
+        "Il suffisso di un cammino minimo è ancora minimo: altrimenti sostituiscilo con uno più economico e migliori il cammino originale."
+      ],
+      [
+        "p",
+        "Spazio",
+        "Una tabella ha n record: destinazione, next hop, costo. In bit vanno contate sia la lunghezza degli ID sia quella dei costi."
+      ]
+    ],
+    "tag": null
+  },
+  "Iterating / distance-vector": {
+    "title": "Iterating / distance-vector",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "G pesato con costi non negativi → distanze e next hop per tutte le destinazioni, senza mappa globale. n noto e round coordinati."
+      ],
+      [
+        "p",
+        "Passi",
+        "D₀(x,x)=0; D₀(x,z)=∞ se z≠x. A ogni round scambia il vettore con i vicini e aggiorna con Bellman–Ford; memorizza il vicino che realizza il minimo."
+      ],
+      ["formula", "Dₖ(x,z)=min{Dₖ₋₁(x,z),"],
+      ["formula", "minᵧ∈N(x)[c(x,y)+Dₖ₋₁(y,z)]}"],
+      [
+        "p",
+        "Invariante",
+        "Dopo k round conosci il minimo costo con ≤k archi. Senza cicli negativi basta un cammino semplice: qui i costi non negativi garantiscono ≤n−1 archi."
+      ],
+      [
+        "p",
+        "Costo",
+        "n−1 round; 2m(n−1) invii di vettori = O(mn). Ogni vettore contiene n costi ⇒ O(mn²) elementi trasmessi."
+      ],
+      [
+        "p",
+        "Spazio",
+        "n record propri; se conservi tutti i vettori ricevuti, O(n·deg(x)) record al nodo x. La codifica in bit dipende dai costi."
+      ]
+    ],
+    "tag": null
+  },
+  "Confrontare la stessa unità": {
+    "title": "Confrontare la stessa unità",
+    "blocks": [
+      [
+        "p",
+        "Costo",
+        "Gossiping: O(mn) elementi di vicinato. Iterating: O(mn²) elementi di vettore, ma O(mn) invii se il vettore intero conta come messaggio."
+      ],
+      [
+        "diagram",
+        "flow",
+        {
+          "labels": ["1 invio", "vettore di\nn costi", "n elementi"],
+          "caption": "invii, elementi e bit sono tre misure diverse"
+        }
+      ],
+      [
+        "p",
+        "Ricorda",
+        "Aumentare la dimensione massima di un messaggio può ridurre gli invii senza ridurre i bit. Un bound in record di memoria non è automaticamente un bound in bit."
+      ],
+      [
+        "p",
+        "Nota",
+        "Questi protocolli costruiscono tabelle su una topologia stabile. Cambiamenti o guasti richiedono regole ulteriori, non deducibili dal solo conteggio statico."
+      ]
+    ],
+    "tag": null
+  },
+  "Min-Hop: un livello per volta": {
+    "title": "Min-Hop: un livello per volta",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "Sorgente s; archi di costo uguale → albero BFS. Anche in asincrono, con livelli coordinati esplicitamente."
+      ],
+      [
+        "p",
+        "Passi",
+        "Start sull’albero parziale → frontiera esplora → primi arrivi scelgono parent → risposte → convergecast. Avvia il livello seguente solo quando quello attuale è chiuso."
+      ],
+      [
+        "p",
+        "Invariante",
+        "Inizio i: nodi a distanza ≤i−1. Fine i: esattamente quelli a distanza ≤i. Stop con n noto o dopo un livello senza nuove scoperte."
+      ],
+      [
+        "p",
+        "Costo",
+        "M≤2(n−1)D+2m, più O(n) per stop/verifica finale; O(n²) su grafo semplice. Tᵢ=O((r(s)+1)²): costo O(i) per livello."
+      ]
+    ],
+    "tag": null
+  },
+  "Da dove vengono i due bound?": {
+    "title": "Da dove vengono i due bound?",
+    "blocks": [
+      [
+        "p",
+        "Messaggi",
+        "Sia nᵢ il numero di nodi nell’albero all’inizio del livello i. Start e convergecast usano 2(nᵢ−1) invii; sommando i livelli: ≤2(n−1)r(s). Le esplorazioni complessive costano 2m."
+      ],
+      ["formula", "M ≤ 2(n−1)D + 2m + O(n)"],
+      [
+        "p",
+        "Tempo",
+        "Ogni livello i: discesa i−1, esplorazione/risposta 2, risalita i−1 ⇒ 2i unità ideali."
+      ],
+      ["formula", "Σᵢ₌₁ʳ 2i = r(r+1)"],
+      [
+        "p",
+        "Ricorda",
+        "L’eventuale livello finale senza nuove scoperte porta a r+1. La garanzia di BFS dipende dalla barriera fra livelli, non dall’ordine casuale degli arrivi."
+      ],
+      [
+        "diagram",
+        "flow",
+        {
+          "labels": ["livello i−1", "esplora\nfrontiera", "chiudi i"],
+          "caption": "prima di i+1 attendi tutte le risposte"
+        }
+      ]
+    ],
+    "tag": null
+  },
+  "Dijkstra distribuito": {
+    "title": "Dijkstra distribuito",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "Sorgente s; pesi strettamente positivi → albero dei cammini di costo minimo. La radice coordina ogni aggiunta."
+      ],
+      [
+        "p",
+        "Passi",
+        "Inizia con s e Δ(s)=0. Start sull’albero; ogni nodo x offre il miglior arco (x,y) verso l’esterno secondo Δ(x)+c(x,y). Il convergecast seleziona il minimo globale."
+      ],
+      [
+        "diagram",
+        "flow",
+        {
+          "labels": ["start", "minimo\nal confine", "aggiungi\nun nodo"],
+          "caption": "poi aggiorna vicini e chiudi l’iterazione"
+        }
+      ],
+      [
+        "p",
+        "Passi",
+        "Notifica il vincitore lungo il cammino dell’albero; aggiungi y con distanza definitiva. y avvisa i vicini, attende gli Ack e segnala fine iterazione a s."
+      ],
+      [
+        "p",
+        "Prova",
+        "Le distanze nell’albero sono definitive. Ogni cammino verso l’esterno attraversa il confine: con pesi positivi nessun cammino può battere l’offerta minima scelta."
+      ],
+      [
+        "p",
+        "Termina",
+        "n−1 aggiunte se n noto. Altrimenti convergecast con “nessun candidato” da tutti; connettività ⇒ tutti coperti. Infine stop."
+      ],
+      ["formula", "M = O(n²+m); Tᵢ = O(n²)"],
+      [
+        "p",
+        "Costo",
+        "Prima dello stop: M≤2(n−1)²+4m−2(n−1). Su grafo semplice è O(n²). Per n sorgenti, O(n³) invii; sovrapporre le istanze non riduce gli invii."
+      ],
+      [
+        "p",
+        "Attenzione",
+        "Dijkstra sceglie distanza dalla sorgente; Prim sceglie peso del solo arco per un MST. Sono problemi diversi."
+      ]
+    ],
+    "tag": null
+  },
+  "Una sorgente o tutte?": {
+    "title": "Una sorgente o tutte?",
+    "blocks": [
+      [
+        "p",
+        "Costo",
+        "Su grafo semplice, ciascun albero costa O(n²) invii. Ripetere da ogni sorgente costa O(n³) invii complessivi. Il tempo dipende dall’esecuzione concorrente o sequenziale."
+      ]
+    ],
+    "tag": null
+  },
+  "Specificare cosa può guastarsi": {
+    "title": "Specificare cosa può guastarsi",
+    "blocks": [
+      [
+        "p",
+        "Modello",
+        "Crash: il nodo si ferma, anche durante un invio. Omissione: un messaggio manca. Bizantino: comportamento arbitrario, anche valori diversi a destinatari diversi. Link e nodi sono componenti distinti."
+      ],
+      [
+        "p",
+        "Specifica",
+        "Consenso booleano: i nodi corretti decidono lo stesso bit e terminano; se tutti partono da v, decidono v. Nel modello con soli guasti di link tutti i nodi sono corretti."
+      ],
+      [
+        "p",
+        "Limite",
+        "Connettività per archi λ: il minimo numero di archi che disconnette. Per tollerare F omissioni permanenti occorre F<λ. Un taglio di ≤F archi può separare gruppi non coordinabili."
+      ]
+    ],
+    "tag": null
+  },
+  "Due generali: impossibilità": {
+    "title": "Due generali: impossibilità",
+    "blocks": [
+      [
+        "p",
+        "Ipotesi",
+        "Link che può perdere messaggi; protocollo deterministico che deve coordinare l’attacco, anche con clock sincroni."
+      ],
+      [
+        "p",
+        "Prova",
+        "Scegli un’esecuzione d’attacco con il minimo k di messaggi consegnati. k≥1: senza consegne manca il coordinamento. Elimina l’ultima consegna e ogni eventuale successiva."
+      ],
+      [
+        "p",
+        "Prova",
+        "Il mittente non distingue le due esecuzioni e attacca ancora. Agreement impone che attacchi anche l’altro: ora bastano k−1 consegne, contraddizione."
+      ],
+      [
+        "p",
+        "Limite",
+        "Contare le consegne è essenziale. Conferme ulteriori spostano soltanto l’ultimo messaggio che può andare perso."
+      ]
+    ],
+    "tag": null
+  },
+  "Flooding tollerante / TwoSteps": {
+    "title": "Flooding tollerante / TwoSteps",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "Completo Kₙ; sorgente x con I → tutti ricevono I. Nessun guasto dei nodi; ≤F<n−1 link con omissioni; x conosce F."
+      ],
+      [
+        "p",
+        "Passi",
+        "x invia a F+1 vicini distinti. Solo chi riceve direttamente da x inoltra a tutti gli altri, escluso x."
+      ],
+      [
+        "diagram",
+        "flow",
+        {
+          "labels": ["x", "F+1\nintermediari", "ogni y"],
+          "caption": "F guasti non bloccano F+1 vie disgiunte"
+        }
+      ],
+      [
+        "p",
+        "Prova",
+        "Se y è scelto: via diretta più F vie via altri intermediari. Altrimenti: F+1 vie di due archi. Le vie non condividono archi ⇒ almeno una sopravvive."
+      ],
+      ["formula", "M ≤ (F+1)(n−1); Tᵢ ≤ 2"],
+      [
+        "p",
+        "Attenzione",
+        "È broadcast, non ancora consenso. F=0 resta O(n). Su grafo generico, flooding opera nel grafo residuo connesso; il diametro rilevante è quello residuo."
+      ],
+      [
+        "p",
+        "Nota",
+        "Per consenso, tutti diffondono il proprio valore e applicano la stessa funzione quando la raccolta è completa. Il modello deve permettere di riconoscere il completamento. Non estendere questo argomento a corruzioni o aggiunte arbitrarie."
+      ]
+    ],
+    "tag": null
+  },
+  "TellAll_Crash": {
+    "title": "TellAll_Crash",
+    "blocks": [
+      [
+        "p",
+        "Modello",
+        "Completo, link affidabili, avvio simultaneo, round sincroni, ≤F<n crash; bit iniziali."
+      ],
+      [
+        "p",
+        "Passi",
+        "Report iniziale = proprio bit. Per F+1 round invia il report a tutti e sostituiscilo con l’AND del proprio e dei ricevuti. Messaggio assente entro fine round vale 1 (neutro). Poi decidi."
+      ],
+      [
+        "diagram",
+        "timeline",
+        {
+          "labels": ["0", "1", "…", "F", "F+1"],
+          "caption": "uno zero trattenuto richiede crash distinti"
+        }
+      ],
+      [
+        "p",
+        "Prova",
+        "Se un corretto vede 0 entro F, lo invia a tutti al round seguente. Se 0 arrivasse solo ad alcuni corretti al round F+1, la catena precedente richiederebbe un nuovo crash a ogni round: più di F. Impossibile."
+      ],
+      [
+        "p",
+        "Prova",
+        "Tutti 1 ⇒ solo 1; tutti 0 ⇒ ciascun corretto conserva 0. L’AND non crea uno zero mai visto."
+      ],
+      ["formula", "T = F+1 round"],
+      ["formula", "M ≤ n(n−1)(F+1)"],
+      [
+        "p",
+        "Passi",
+        "Variante “solo zero”: non inviare 1; ciascun nodo invia 0 una sola volta, appena lo conosce."
+      ],
+      [
+        "p",
+        "Costo",
+        "La variante usa ≤n(n−1)=O(n²) invii; servono ancora F+1 round. Il fattore F+1 copre anche F=0."
+      ]
+    ],
+    "tag": null
+  },
+  "FLP e Ben-Or con crash": {
+    "title": "FLP e Ben-Or con crash",
+    "blocks": [
+      [
+        "p",
+        "Teorema",
+        "Asincrono, deterministico, anche un solo possibile crash e rete completa ⇒ impossibile garantire consenso con terminazione in tutte le esecuzioni ammesse (FLP)."
+      ],
+      [
+        "p",
+        "Nota",
+        "Intuizione: un ritardo non si distingue da un crash. La prova completa di FLP non è sviluppata qui; il solo timeout non risolve questa indistinguibilità."
+      ],
+      [
+        "p",
+        "Modello",
+        "Ben-Or: completo affidabile, crash F<n/2; n,F noti; bit iniziali. Attendi n−F messaggi per fase; ignora round vecchi e conserva quelli futuri."
+      ],
+      [
+        "p",
+        "Passi",
+        "1. Invia MyValue(r,v). Fra n−F ricevuti, se >n/2 contengono v, invia Propose(r,v); altrimenti Propose(r,?)."
+      ],
+      [
+        "p",
+        "Passi",
+        "2. Fra n−F Propose, se almeno uno è definito adotta v. Se almeno F+1 riportano v, decidi. Se sono tutti ?, scegli un bit uniforme per il round successivo."
+      ],
+      [
+        "diagram",
+        "quorum",
+        {
+          "caption": "n=7, F=2: (F+1)+(n−F) = 3+5 > 7"
+        }
+      ],
+      [
+        "p",
+        "Prova",
+        "Due maggioranze strette non possono sostenere valori opposti con soli crash. Se x decide v, i suoi F+1 mittenti intersecano ogni quorum n−F: tutti adottano v. Il round seguente porta alla decisione."
+      ],
+      [
+        "p",
+        "Prova",
+        "Le preferenze adottate senza lancio hanno lo stesso valore. Con monete indipendenti, nel ragionamento per round del corso, la probabilità di allineamento è ≥2^(−n): terminazione quasi certa, O(2ⁿ) round attesi."
+      ],
+      [
+        "p",
+        "Costo",
+        "Due fasi: O(n²) invii per round. Il bound atteso conta round logici, non secondi né un massimo deterministico."
+      ],
+      [
+        "p",
+        "Nota",
+        "Dopo la decisione continua gli invii necessari al round seguente; un arresto immediato può impedire agli altri di completare il quorum."
+      ]
+    ],
+    "tag": null
+  },
+  "Bizantino randomizzato: soglie e prova": {
+    "title": "Bizantino randomizzato: soglie e prova",
+    "blocks": [
+      [
+        "p",
+        "Modello",
+        "Completo affidabile, round asincroni numerati, ID di mittente non falsificabili, bit iniziali, n,F noti, F<n/9. Attendi n−F mittenti distinti; conserva messaggi futuri. Include il proprio messaggio."
+      ],
+      [
+        "p",
+        "Passi",
+        "Avvia Propose col bit iniziale. Fra n−F ricevuti: se ≥n−2F riportano v, adotta e decidi. Altrimenti, se ≥n−4F riportano v: adotta. Altrimenti estrai un bit uniforme. Invia Propose per il round successivo prima di uscire per decisione."
+      ],
+      [
+        "diagram",
+        "flow",
+        {
+          "labels": ["n−F\nattendi", "n−4F\nadotta", "n−2F\ndecidi"],
+          "caption": "le soglie riguardano lo stesso valore"
+        }
+      ],
+      [
+        "p",
+        "Prova",
+        "Se x decide v, un altro quorum può perdere F mittenti e avere F equivoci: restano ≥n−2F−2F=n−4F copie v. Tutti adottano v; il round seguente conclude."
+      ],
+      [
+        "p",
+        "Prova",
+        "Due adozioni non casuali opposte richiederebbero almeno n−5F corretti per valore. Anche contando F faulty: 2(n−5F)+F=2n−9F>n, impossibile."
+      ],
+      [
+        "p",
+        "Prova",
+        "Tutti inizialmente v: anche sottraendo F mittenti mancanti e F faulty restano n−2F corretti per v. La validità segue senza fidarsi dei bizantini."
+      ],
+      [
+        "p",
+        "Costo",
+        "Monete indipendenti: probabilità di allineamento ≥2^(−n) nel ragionamento del corso ⇒ O(2ⁿ) round attesi. O(n²) invii dei corretti per round; il traffico faulty va limitato a parte."
+      ],
+      [
+        "p",
+        "Nota",
+        "Slide p. 474: variante con F<n/500 e O(n^2.5) round attesi, protocollo non sviluppato. Slide p. 431: variante crash con circa n/3 guasti e round attesi costanti; non è il Ben-Or qui descritto."
+      ]
+    ],
+    "tag": null
+  },
+  "RegisteredMail: proposta coerente": {
+    "title": "RegisteredMail: proposta coerente",
+    "blocks": [
+      [
+        "p",
+        "Modello",
+        "Sincrono, completo, F<n/3 bizantini. ID noti e non falsificabili; non si assumono firme digitali. Ogni identità può originare una sola proposta."
+      ],
+      [
+        "p",
+        "Passi",
+        "y invia init(0,y,t). Ricevuto direttamente da y al tempo t+1, invia echo(0,y,t). Rifiuta identità, tempi e nuove origini incoerenti."
+      ],
+      [
+        "p",
+        "Passi",
+        "Da t+2: F+1 echo distinti ⇒ ritrasmetti echo una volta; n−F echo distinti ⇒ accetta la proposta."
+      ],
+      [
+        "diagram",
+        "flow",
+        {
+          "labels": ["init valido", "F+1 echo\npropaga", "n−F echo\naccetta"],
+          "caption": "F+1 include almeno un corretto"
+        }
+      ],
+      [
+        "p",
+        "Prova",
+        "Se un corretto accetta, almeno n−2F≥F+1 echo sono corretti. Raggiungono tutti, che ritrasmettono; entro il round seguente tutti accettano."
+      ],
+      [
+        "p",
+        "Costo",
+        "Un’origine corretta è accettata in 2 unità. O(n²) invii dei corretti per proposta (ciascuno invia echo al più una volta); il traffico arbitrario richiede limiti espliciti."
+      ]
+    ],
+    "tag": "STATUS D’ESAME DA CONFERMARE"
+  },
+  "Soglia deterministica bizantina": {
+    "title": "Soglia deterministica bizantina",
+    "blocks": [
+      [
+        "p",
+        "Teorema",
+        "Nel modello sincrono senza firme, con rete completa, F≥n/3 impedisce il consenso deterministico. Gli ID non falsificabili non impediscono l’equivocazione del proprio mittente."
+      ],
+      [
+        "p",
+        "Nota",
+        "Le slide enunciano il limite; non ne ricostruiamo una prova completa. Ogni protocollo va letto con la propria soglia."
+      ]
+    ],
+    "tag": null
+  },
+  "TellZero-Byz": {
+    "title": "TellZero-Byz",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "Stesso modello di RegisteredMail, avvio simultaneo → accordo dei corretti sul bit. Si propagano soltanto prove per 0."
+      ],
+      [
+        "p",
+        "Passi",
+        "t=0: chi parte con 0 avvia RegisteredMail. t=2i, 1≤i≤F+1: se non hai già originato e hai accettato >F+i−1 identità, avvia la tua proposta."
+      ],
+      [
+        "p",
+        "Passi",
+        "t=2(F+2): decidi 0 se hai ≥2F+1 identità accettate; altrimenti 1."
+      ],
+      [
+        "p",
+        "Prova",
+        "Tutti 0 ⇒ almeno n−F≥2F+1 proposte. Tutti 1 ⇒ solo ≤F origini faulty: nessun corretto supera la prima soglia."
+      ],
+      [
+        "p",
+        "Prova",
+        "Una decisione 0 implica almeno F+1 origini corrette. Le proposte accettate si propagano; una nuova origine allo stage i porta tutti oltre F+i entro lo stage i+1. La crescita obbliga tutti a superare la soglia finale."
+      ],
+      ["formula", "T = 2(F+2); M = O(n³)"],
+      [
+        "p",
+        "Costo",
+        "Per contare anche i faulty: al più un messaggio per vicino per unità sincrona, come nelle slide. Nessun nodo può originare ripetutamente."
+      ]
+    ],
+    "tag": "STATUS D’ESAME DA CONFERMARE"
+  },
+  "La soglia cresce con lo stage": {
+    "title": "La soglia cresce con lo stage",
+    "blocks": [
+      [
+        "diagram",
+        "timeline",
+        {
+          "labels": ["0", "2", "2i", "2(F+2)"],
+          "caption": "origini con 0 → propagazione → soglia 2F+1"
+        }
+      ],
+      [
+        "p",
+        "Prova",
+        "Se un corretto origina allo stage i≤F, aveva >F+i−1 origini accettate. Entro 2i+2 tutti ricevono quelle e la sua: >F+i, abbastanza per originare allo stage successivo."
+      ],
+      [
+        "p",
+        "Prova",
+        "Se ci sono almeno F+1 origini corrette, o una nasce entro lo stage F e attiva la propagazione, oppure una nasce all’ultimo stage: le >2F prove già accettate raggiungono tutti entro il tempo finale."
+      ]
+    ],
+    "tag": null
+  },
+  "Assegnazione e lookup base": {
+    "title": "Assegnazione e lookup base",
+    "blocks": [
+      [
+        "p",
+        "Specifica",
+        "Nodi e chiavi hanno un ID hash nello stesso spazio. Chiave k → nodo successor(k), primo ID ≥k in senso circolare; dopo il massimo riparti da 0."
+      ],
+      [
+        "p",
+        "Modello",
+        "Overlay logico; conosci il successore. Per la garanzia di base: successori corretti e nessun guasto durante la ricerca."
+      ],
+      [
+        "p",
+        "Passi",
+        "Se ospiti k rispondi; altrimenti inoltra al successore. La visita progredisce sull’anello fino al responsabile."
+      ],
+      ["formula", "lookup base: O(n) hop"],
+      ["diagram", "chord", {}],
+      [
+        "p",
+        "Esempio",
+        "b=6, nodi 4,8,15,20,32,35,44,54: k=37 è di N44. Lo spazio ha 64 ID, ma i nodi sono soltanto 8."
+      ],
+      [
+        "p",
+        "Ricorda",
+        "Un hop overlay può attraversare molti link fisici. O(log n) hop non è un tempo di rete espresso in secondi."
+      ]
+    ],
+    "tag": null
+  },
+  "Finger table: saltare più lontano": {
+    "title": "Finger table: saltare più lontano",
+    "blocks": [
+      [
+        "p",
+        "Passi",
+        "Al nodo i, per j=1,…,b conserva finger[j]=successor((i+2^(j−1)) mod 2ᵇ). La prima finger è il successore."
+      ],
+      [
+        "p",
+        "Passi",
+        "Per lookup(k): controlla prima il nodo e il suo successore. Altrimenti scegli la finger che precede k più da vicino, senza superarlo. Se manca, usa il successore."
+      ],
+      [
+        "p",
+        "Prova",
+        "Con puntatori validi la ricerca avanza verso k senza scavalcare il responsabile. Con ID ben distribuiti, i salti riducono mediamente la distanza."
+      ],
+      ["formula", "lookup: O(log n) hop medi"],
+      [
+        "p",
+        "Spazio",
+        "b record per nodo; i bit dipendono dalla codifica di ID e indirizzi."
+      ],
+      [
+        "p",
+        "Limite",
+        "Il costo medio richiede distribuzione adeguata degli ID e tabelle mantenute. Non è un worst case per ogni disposizione o guasto."
+      ]
+    ],
+    "tag": null
+  },
+  "Join: assegnare anche i dati": {
+    "title": "Join: assegnare anche i dati",
+    "blocks": [
+      [
+        "p",
+        "Passi",
+        "Il nuovo nodo conosce un partecipante; trova il proprio successore, inizializza predecessore e finger, aggiorna i riferimenti coinvolti e riceve le chiavi del suo intervallo."
+      ],
+      [
+        "p",
+        "Costo",
+        "Le slide danno O(log²n) tempo medio per l’aggiornamento esplicito. Il trasferimento dei valori dipende dai dati."
+      ],
+      [
+        "p",
+        "Prova",
+        "Inserendo x tra p e s, le chiavi nell’intervallo (p,x] passano da s a x. Gli altri restano uguali."
+      ]
+    ],
+    "tag": null
+  },
+  "Stabilize e refresh": {
+    "title": "Stabilize e refresh",
+    "blocks": [
+      [
+        "p",
+        "Passi",
+        "A chiede a B=succ(A) il predecessore B′. Se B′∈(A,B), aggiorna succ(A)=B′. A notifica il successore scelto, che aggiorna il predecessore se opportuno."
+      ],
+      [
+        "p",
+        "Passi",
+        "Ricalcola periodicamente una finger. Con successori corretti e finger obsolete verso nodi vivi, il fallback permette di proseguire."
+      ],
+      [
+        "p",
+        "Costo",
+        "Scambi locali per chiamata; nessun bound globale di convergenza per join concorrenti arbitrari attestato dal corso."
+      ]
+    ],
+    "tag": null
+  },
+  "Leave, failure e replica": {
+    "title": "Leave, failure e replica",
+    "blocks": [
+      [
+        "p",
+        "Passi",
+        "Leave pulita: trasferisci dati al successore e collega predecessore e successore; poi aggiorna le finger."
+      ],
+      [
+        "p",
+        "Passi",
+        "Crash: prova i successori della lista di r nodi fino al primo vivo. Finger guasta: finger precedente o successor list. Stabilizza i puntatori."
+      ],
+      [
+        "p",
+        "Prova",
+        "Routing possibile se rimane un successore vivo raggiungibile e l’anello non è partizionato. I puntatori non recuperano i dati persi."
+      ],
+      [
+        "p",
+        "Passi",
+        "Replica i dati sui primi r successori. Il primo vivo diventa responsabile e ricostituisce le repliche."
+      ],
+      [
+        "p",
+        "Costo",
+        "O(b+r) record di routing. Spazio e traffico dei dati dipendono da r e dal volume replicato."
+      ],
+      [
+        "p",
+        "Limite",
+        "Nessuna garanzia generale su partizioni e interleaving arbitrari: vedere coverage.md."
+      ]
+    ],
+    "tag": null
+  }
+}

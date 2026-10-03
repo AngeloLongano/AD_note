@@ -1,0 +1,22 @@
+[
+  {
+    "family": "diffusione",
+    "pass": true
+  },
+  {
+    "family": "elezione",
+    "pass": true
+  },
+  {
+    "family": "routing",
+    "pass": true
+  },
+  {
+    "family": "consenso",
+    "pass": true
+  },
+  {
+    "family": "chord",
+    "pass": true
+  }
+]

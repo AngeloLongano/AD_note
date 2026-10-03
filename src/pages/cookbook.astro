@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import ProtocolCard from '../components/cookbook/ProtocolCard.astro';
+import {cards,groups} from '../lib/cookbook/content';
+import complexity from '../lib/cookbook/complexity.json';
+import katex from 'katex';
+import '../styles/cookbook.css';
+const base=import.meta.env.BASE_URL.replace(/\/$/,'');
+const maths:Record<string,string>={
+  'O(g): f(N) ≤ c g(N)':'O(g):\\quad f(N)\\le c\\,g(N)',
+  'Ω(g): f(N) ≥ c g(N)':'\\Omega(g):\\quad f(N)\\ge c\\,g(N)',
+  'Θ(g): c₁g(N) ≤ f(N) ≤ c₂g(N)':'\\Theta(g):\\quad c_1g(N)\\le f(N)\\le c_2g(N)',
+  'P ⊆ NP • P = NP è aperto':'P\\subseteq NP\\qquad P=NP\\text{ è aperto}',
+  'min: OPT ≤ ALG ≤ ρ OPT':'\\text{min: }OPT\\le ALG\\le\\rho\\,OPT',
+  'max: ALG ≤ OPT ≤ ρ ALG':'\\text{max: }ALG\\le OPT\\le\\rho\\,ALG'
+};
+---
+<BaseLayout title="Cookbook — Algoritmi Distribuiti" description="Schede di ripasso, esecuzioni animate dei protocolli e teoria della complessità.">
+  <SiteHeader/>
+  <div class="cookbook-shell">
+    <aside class="cookbook-index" aria-label="Indice del Cookbook">
+      <details open><summary>Indice per famiglie</summary><nav>
+        {groups.map(group=><a href={`#${group.id}`}>{group.title}</a>)}
+        <a href="#complessita">Teoria della complessità</a>
+        <a href={`${base}/cookbook.pdf`}>PDF originale ↗</a>
+      </nav></details>
+    </aside>
+    <main class="cookbook-main">
+      <header class="cookbook-intro">
+        <p class="intro-label">Algoritmi Distribuiti · Ripasso</p>
+        <h1>Cookbook</h1>
+        <p>Una scheda per protocollo. Aprila, ripassa le regole e segui un’esecuzione completa, un passo alla volta.</p>
+        <p class="cookbook-links"><a href={`${base}/cookbook.pdf`}>Consulta il PDF originale</a><a href={`${base}/cookbook.pdf`} download="cookbook-algoritmi-distribuiti.pdf">Scarica il PDF ↓</a></p>
+      </header>
+      <details class="model-key"><summary>Come leggere tempi e contatori</summary>
+        <p><b>n</b> = nodi; <b>m</b> = archi; <b>r(s)</b> = eccentricità della sorgente; <b>D</b> = diametro; <b>F</b> = massimo numero di guasti ammessi. In Chord <b>b</b> è il numero di bit degli ID.</p>
+        <p>Un invio su un link vale un messaggio, anche se viene perso. Le copie al mittente nei quorum sono locali e non incrementano gli invii. Gli elementi misurano separatamente il contenuto: un vettore di n costi è un invio e n elementi.</p>
+        <p>Gli eventi allo stesso istante sono concorrenti. Il passo della riproduzione è una fotografia dell’esecuzione, non un round. I round sono tali soltanto nei protocolli che li prevedono.</p>
+        <p>Il tempo ideale assume una unità per link; la catena causale conta dipendenze fra trasmissioni. Per gli esempi asincroni i ritardi sono dichiarati: non forniscono un bound al tempo fisico. Le simulazioni illustrano le regole e non dimostrano i bound asintotici.</p>
+        <p>Una decisione locale può precedere gli ultimi invii. Chord conserva la manutenzione periodica anche quando la configurazione mostrata è stabile.</p>
+      </details>
+      {groups.map(group=><section class="cookbook-family" id={group.id}><h2>{group.title}</h2>{cards.filter(card=>card.group===group.id).map(card=><ProtocolCard card={card}/>)}</section>)}
+      <section class="complexity-section" id="complessita"><h2>Teoria della complessità</h2><p class="section-intro">Contenuti statici dalla pagina 1 del cookbook PDF.</p>
+        {complexity.map(section=><article><h3>{section.title}</h3>{section.blocks.map(block=>block[0]==='p'?<p><strong>{String(block[1])}.</strong> {String(block[2])}</p>:block[0]==='formula'?<div class="cookbook-formula" set:html={katex.renderToString(maths[String(block[1])]!,{displayMode:true,throwOnError:true})}/>:block[0]==='diagram'?<p class="reduction-flow">Istanza A → trasformazione f in tempo polinomiale → istanza B<br/><span>B facile ⇒ A facile</span></p>:null)}</article>)}
+      </section>
+      <p class="cookbook-end"><a href={`${base}/cookbook.pdf`}>Cookbook completo in PDF · 16 pagine</a> — Gli algoritmi sequenziali del PDF restano una successiva estensione della pagina.</p>
+    </main>
+  </div>
+</BaseLayout>
+<script>
+  function reveal(){if(!location.hash)return;const id=decodeURIComponent(location.hash.slice(1));const target=document.getElementById(id);if(target instanceof HTMLDetailsElement)target.open=true;target?.scrollIntoView({block:'start',behavior:'instant'});}
+  addEventListener('hashchange',reveal);reveal();
+</script>

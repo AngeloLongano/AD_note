@@ -1,0 +1,23 @@
+---
+import ProtocolPlayer from './ProtocolPlayer.astro';
+import type { Card } from '../../lib/cookbook/content';
+interface Props { card:Card }
+const {card}=Astro.props;
+---
+<details class:list={['protocol-card',{'optional-card':card.optional}]} id={card.id}>
+  <summary><span class="card-heading"><span class="card-name">{card.title}</span><span class="card-preview">{card.objective}</span></span><span class="card-kind">{card.optional?'Facoltativo':'Apri scheda'}</span></summary>
+  <div class="card-body">
+    <a class="permalink" href={`#${card.id}`} aria-label={`Collegamento diretto a ${card.title}`}>Link a questa scheda ↗</a>
+    {card.optional ? <p class="optional-overview">{card.overview}</p> : <>
+      <section><h3>1. Obiettivo</h3><p>{card.objective}</p></section>
+      <section><h3>2. Topologia</h3><p>{card.topology}</p></section>
+      <section><h3>3. Modello e restrizioni</h3><p>{card.model}</p></section>
+      <section><h3>4. Stati e messaggi</h3><p>{card.states}</p></section>
+      <section><h3>5. Idea di base</h3><p>{card.idea}</p></section>
+      <section><h3>6. Algoritmo schematico</h3><ol>{card.rules.map(rule=><li>{rule}</li>)}</ol></section>
+      <section><h3>7. Animazione</h3>{card.warning&&<p class="coverage-note">{card.warning}</p>}<ProtocolPlayer protocol={card.id} title={card.title}/></section>
+      <section><h3>8. Complessità</h3><ul>{card.costs.map(cost=><li>{cost}</li>)}</ul></section>
+      <section><h3>9. Proprietà e limiti</h3><ul>{card.properties.map(property=><li>{property}</li>)}</ul></section>
+    </>}
+  </div>
+</details>

@@ -1,0 +1,152 @@
+[
+  {
+    "title": "Problema → algoritmo → costo",
+    "blocks": [
+      [
+        "p",
+        "Definizione",
+        "Un problema specifica input e output; un’istanza assegna valori concreti ai parametri. Un algoritmo corretto termina e restituisce l’output richiesto su ogni istanza."
+      ],
+      [
+        "p",
+        "Specifica",
+        "Decisione: sì/no. Ricerca: una soluzione ammissibile. Ottimizzazione: una soluzione di costo minimo o massimo."
+      ],
+      [
+        "p",
+        "Esempio",
+        "Cammini: “esiste un cammino s→v di costo ≤ k?” / “trovalo” / “trova quello di costo minimo”."
+      ],
+      [
+        "p",
+        "Costo",
+        "Dimensione N: bit dell’input (costo logaritmico) oppure elementi (costo uniforme). Tempo: operazioni; spazio: celle. Dichiarare modello e caso peggiore, medio o atteso."
+      ],
+      [
+        "p",
+        "Attenzione",
+        "Un intero K richiede Θ(log(K+1)) bit: un costo O(K) può essere esponenziale nella lunghezza della sua codifica."
+      ]
+    ],
+    "tag": null
+  },
+  {
+    "title": "Notazione asintotica",
+    "blocks": [
+      [
+        "p",
+        "Definizione",
+        "Per funzioni non negative, per ogni N ≥ N₀ e opportune costanti positive:"
+      ],
+      ["formula", "O(g): f(N) ≤ c g(N)"],
+      ["formula", "Ω(g): f(N) ≥ c g(N)"],
+      ["formula", "Θ(g): c₁g(N) ≤ f(N) ≤ c₂g(N)"],
+      [
+        "p",
+        "Ricorda",
+        "O è un limite superiore, non un’uguaglianza. Un upper bound di un algoritmo dà un upper bound del problema; un lower bound del problema vale per ogni algoritmo."
+      ]
+    ],
+    "tag": null
+  },
+  {
+    "title": "P, NP e certificati",
+    "blocks": [
+      [
+        "p",
+        "Definizione",
+        "P: problemi decisionali risolvibili in tempo polinomiale. NP: problemi decisionali con certificati positivi di lunghezza polinomiale verificabili in tempo polinomiale."
+      ],
+      [
+        "p",
+        "Prova",
+        "Istanza sì ⇒ esiste un certificato accettato. Istanza no ⇒ nessun certificato è accettato. Il verificatore riceve istanza e certificato, non deve cercare il certificato."
+      ],
+      [
+        "p",
+        "Esempio",
+        "HC: istanza = grafo; certificato = ordine dei vertici. Controlla che compaiano tutti una sola volta e che ogni coppia consecutiva, inclusa l’ultima con la prima, sia un arco."
+      ],
+      ["formula", "P ⊆ NP • P = NP è aperto"],
+      [
+        "p",
+        "Prova",
+        "Per P basta eseguire il risolutore ignorando il certificato. Questo non dimostra NP ⊆ P. SAT è NP-completo (Cook–Levin); un assegnamento è il suo certificato."
+      ]
+    ],
+    "tag": null
+  },
+  {
+    "title": "Quanto cresce il costo?",
+    "blocks": [
+      [
+        "p",
+        "Ricorda",
+        "1, log log N, log N, radici, N, N log N, N², N³, Nᵏ: limitati da un polinomio per k costante. aᴺ (a>1) e N! sono superpolinomiali."
+      ],
+      [
+        "p",
+        "Nota",
+        "“Polinomiale” non significa necessariamente “un polinomio”. La tesi estesa di Church–Turing motiva la stabilità della classe sui modelli classici ragionevoli."
+      ],
+      [
+        "p",
+        "Limite",
+        "NP-hard non significa irrisolvibile. Il problema della fermata è invece indecidibile: non ammette un algoritmo generale."
+      ]
+    ],
+    "tag": null
+  },
+  {
+    "title": "Come dimostrare NP-completezza",
+    "blocks": [
+      [
+        "p",
+        "Definizione",
+        "Karp A ≤ₚ B: trasformazione polinomiale f con x sì per A ⇔ f(x) sì per B. Conservare entrambi i versi."
+      ],
+      [
+        "diagram",
+        "flow",
+        {
+          "labels": ["istanza A", "f in tempo\npolinomiale", "istanza B"],
+          "caption": "B facile ⇒ A facile"
+        }
+      ],
+      [
+        "p",
+        "Passi",
+        "Per provare B NP-completo: 1) B ∈ NP; 2) scegli A NP-completo noto; 3) dimostra A ≤ₚ B. La transitività trasferisce la difficoltà verso B."
+      ],
+      [
+        "p",
+        "Definizione",
+        "NP-hard: ogni problema in NP si riduce a B; non si richiede B ∈ NP. Per ricerca/ottimizzazione precisare la riduzione con oracolo (Turing), anche con più chiamate adattive."
+      ],
+      [
+        "p",
+        "Teorema",
+        "Un solo NP-completo in P ⇒ P = NP. La NP-hardness è incondizionata; “nessun algoritmo polinomiale” richiede l’ipotesi P ≠ NP."
+      ]
+    ],
+    "tag": null
+  },
+  {
+    "title": "Approssimare con una garanzia",
+    "blocks": [
+      [
+        "p",
+        "Definizione",
+        "Algoritmo polinomiale, output ammissibile; fattore ρ ≥ 1. ALG e OPT sono i costi."
+      ],
+      ["formula", "min: OPT ≤ ALG ≤ ρ OPT"],
+      ["formula", "max: ALG ≤ OPT ≤ ρ ALG"],
+      [
+        "p",
+        "Prova",
+        "Per minimo: trova LB ≤ OPT e dimostra ALG ≤ ρ LB. Se OPT=0 la garanzia impone ALG=0; evita rapporti con denominatore nullo."
+      ]
+    ],
+    "tag": null
+  }
+]
