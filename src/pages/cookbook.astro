@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import ProtocolCard from '../components/cookbook/ProtocolCard.astro';
 import {cards,groups} from '../lib/cookbook/content';
+import {costSummary} from '../lib/cookbook/cost-summary';
 import complexity from '../lib/cookbook/complexity.json';
 import katex from 'katex';
 import '../styles/cookbook.css';
@@ -23,6 +24,7 @@ const maths:Record<string,string>={
       <details open><summary>Indice per famiglie</summary><nav>
         {groups.map(group=><a href={`#${group.id}`}>{group.title}</a>)}
         <a href="#complessita">Teoria della complessità</a>
+        <a href="#riepilogo-complessita">Riepilogo delle complessità</a>
         <a href={`${base}/cookbook.pdf`}>PDF originale ↗</a>
       </nav></details>
     </aside>
@@ -43,6 +45,11 @@ const maths:Record<string,string>={
       {groups.map(group=><section class="cookbook-family" id={group.id}><h2>{group.title}</h2>{cards.filter(card=>card.group===group.id).map(card=><ProtocolCard card={card}/>)}</section>)}
       <section class="complexity-section" id="complessita"><h2>Teoria della complessità</h2><p class="section-intro">Contenuti statici dalla pagina 1 del cookbook PDF.</p>
         {complexity.map(section=><article><h3>{section.title}</h3>{section.blocks.map(block=>block[0]==='p'?<p><strong>{String(block[1])}.</strong> {String(block[2])}</p>:block[0]==='formula'?<div class="cookbook-formula" set:html={katex.renderToString(maths[String(block[1])]!,{displayMode:true,throwOnError:true})}/>:block[0]==='diagram'?<p class="reduction-flow">Istanza A → trasformazione f in tempo polinomiale → istanza B<br/><span>B facile ⇒ A facile</span></p>:null)}</article>)}
+      </section>
+      <section class="complexity-recap" id="riepilogo-complessita"><h2>Riepilogo delle complessità</h2>
+        <p class="section-intro">Tutti i protocolli e le varianti, nello stesso ordine delle schede. I conteggi esatti, gli upper bound e i valori medi o attesi conservano le rispettive qualifiche. Nel modello asincrono il tempo ideale non è un bound al tempo fisico.</p>
+        <p class="section-intro">n = nodi; m = archi; D = diametro; r(s) = eccentricità della sorgente; F = guasti ammessi. I dettagli del modello e dei conteggi sono nelle schede collegate.</p>
+        {groups.map(group=><div class="recap-family"><h3>{group.title}</h3><table class="complexity-table"><caption class="sr-only">Complessità: {group.title}</caption><thead><tr><th scope="col">Algoritmo</th><th scope="col">Messaggi</th><th scope="col">Tempo</th></tr></thead><tbody>{cards.filter(card=>card.group===group.id).map(card=>{const cost=costSummary[card.id];return <tr><th scope="row"><a href={`#${card.id}`}>{card.title}</a>{cost.note&&<small>{cost.note}</small>}</th><td data-label="Messaggi"><strong>{cost.messages}</strong></td><td data-label="Tempo"><strong>{cost.time}</strong></td></tr>})}</tbody></table></div>)}
       </section>
       <p class="cookbook-end"><a href={`${base}/cookbook.pdf`}>Cookbook completo in PDF · 16 pagine</a> — Gli algoritmi sequenziali del PDF restano una successiva estensione della pagina.</p>
     </main>

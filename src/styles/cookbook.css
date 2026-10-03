@@ -49,11 +49,13 @@
   text-decoration: none;
 }
 .cookbook-family,
-.complexity-section {
+.complexity-section,
+.complexity-recap {
   scroll-margin-top: 5.5rem;
 }
 .cookbook-family h2,
-.complexity-section h2 {
+.complexity-section h2,
+.complexity-recap h2 {
   margin: 3rem 0 1rem;
   color: var(--green);
   font: 700 2rem/1.2 var(--font-serif);
@@ -397,6 +399,60 @@
 .cookbook-end {
   margin-top: 2rem;
 }
+.cost-summary {
+  margin: 0.7rem 0;
+}
+.cost-summary > div {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: 0.6rem;
+  margin: 0.35rem 0;
+}
+.cost-summary dt {
+  color: var(--muted);
+}
+.cost-summary dd {
+  margin: 0;
+}
+.recap-family {
+  margin: 1.8rem 0;
+}
+.recap-family h3 {
+  color: var(--green);
+  font: 700 1.3rem var(--font-serif);
+}
+.complexity-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font: 0.82rem/1.6 var(--font-sans);
+}
+.complexity-table th,
+.complexity-table td {
+  padding: 0.9rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+.complexity-table thead th {
+  background: #f4f7f3;
+  color: var(--green);
+}
+.complexity-table small {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 400;
+}
+.complexity-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
 @media (max-width: 900px) {
   .cookbook-shell {
     grid-template-columns: minmax(0, 53rem);
@@ -454,8 +510,31 @@
     font-size: 0.73rem;
   }
   .cookbook-family h2,
-  .complexity-section h2 {
+  .complexity-section h2,
+  .complexity-recap h2 {
     font-size: 1.75rem;
+  }
+  .complexity-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .complexity-table tr {
+    display: block;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .complexity-table th,
+  .complexity-table td {
+    display: block;
+    padding: 0.3rem 0;
+    border: 0;
+  }
+  .complexity-table td::before {
+    content: attr(data-label) ": ";
+    color: var(--muted);
   }
 }
 @media (prefers-reduced-motion: reduce) {

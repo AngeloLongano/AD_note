@@ -83,3 +83,9 @@ I tempi unitari nei protocolli asincroni sono scelte illustrative, non clock del
 - Audit rimanenti svolti da tre subagent, con responsabilità separate per famiglia; integrazione e verifiche finali nel root. Le analisi completate non sono state ripetute.
 - Le modifiche preesistenti dell’utente sono conservate. Nel Markdown canonico era già presente uno spazio finale segnalato dal controllo del diff; non è stato modificato.
 - Nessun deploy effettuato.
+
+## Presentazione delle complessità
+
+Su richiesta dell’utente, messaggi e tempo sono evidenziati in grassetto nelle 30 schede operative; un riepilogo finale contiene tutte le 32 schede, incluse le due facoltative senza approfondimento. `cost-summary.ts` alimenta entrambe le viste, conservando modelli, qualifiche e limiti dei conteggi già verificati. Dove il cookbook non dà un bound numerico del tempo, il riepilogo lo dichiara. Gossiping distingue gli invii di liste dai singoli elementi trasmessi.
+
+Controlli della modifica: `just check`, `just build`, `just pages` superati; browser desktop/mobile, 32 righe, 60 valori in grassetto nelle schede e collegamenti alle schede verificati. Screenshot `desktop-recap.png` e `mobile-recap.png` in `output/playwright/cookbook/`.

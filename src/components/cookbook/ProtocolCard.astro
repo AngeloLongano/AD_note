@@ -1,8 +1,10 @@
 ---
 import ProtocolPlayer from './ProtocolPlayer.astro';
 import type { Card } from '../../lib/cookbook/content';
+import { costSummary } from '../../lib/cookbook/cost-summary';
 interface Props { card:Card }
 const {card}=Astro.props;
+const cost = costSummary[card.id];
 ---
 <details class:list={['protocol-card',{'optional-card':card.optional}]} id={card.id}>
   <summary><span class="card-heading"><span class="card-name">{card.title}</span><span class="card-preview">{card.objective}</span></span><span class="card-kind">{card.optional?'Facoltativo':'Apri scheda'}</span></summary>
@@ -16,7 +18,7 @@ const {card}=Astro.props;
       <section><h3>5. Idea di base</h3><p>{card.idea}</p></section>
       <section><h3>6. Algoritmo schematico</h3><ol>{card.rules.map(rule=><li>{rule}</li>)}</ol></section>
       <section><h3>7. Animazione</h3>{card.warning&&<p class="coverage-note">{card.warning}</p>}<ProtocolPlayer protocol={card.id} title={card.title}/></section>
-      <section><h3>8. Complessità</h3><ul>{card.costs.map(cost=><li>{cost}</li>)}</ul></section>
+      <section><h3>8. Complessità</h3><dl class="cost-summary"><div><dt>Messaggi</dt><dd><strong>{cost.messages}</strong></dd></div><div><dt>Tempo</dt><dd><strong>{cost.time}</strong></dd></div></dl><ul>{card.costs.map(cost=><li>{cost}</li>)}</ul></section>
       <section><h3>9. Proprietà e limiti</h3><ul>{card.properties.map(property=><li>{property}</li>)}</ul></section>
     </>}
   </div>
