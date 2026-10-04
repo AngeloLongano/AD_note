@@ -23,6 +23,7 @@ const maths:Record<string,string>={
     <aside class="cookbook-index" aria-label="Indice del Cookbook">
       <details open><summary>Indice per famiglie</summary><nav>
         {groups.map(group=><a href={`#${group.id}`}>{group.title}</a>)}
+        <a href={`${base}/cookbook-complessita`}>Schede delle dimostrazioni ↗</a>
         <a href="#complessita">Teoria della complessità</a>
         <a href="#riepilogo-complessita">Riepilogo delle complessità</a>
         <a href={`${base}/cookbook.pdf`}>PDF originale ↗</a>
@@ -33,7 +34,7 @@ const maths:Record<string,string>={
         <p class="intro-label">Algoritmi Distribuiti · Ripasso</p>
         <h1>Cookbook</h1>
         <p>Una scheda per protocollo. Aprila, ripassa le regole e segui un’esecuzione completa, un passo alla volta.</p>
-        <p class="cookbook-links"><a href={`${base}/cookbook.pdf`}>Consulta il PDF originale</a><a href={`${base}/cookbook.pdf`} download="cookbook-algoritmi-distribuiti.pdf">Scarica il PDF ↓</a></p>
+        <p class="cookbook-links"><a href={`${base}/cookbook-complessita`}>Cookbook delle dimostrazioni ↗</a><a href={`${base}/cookbook.pdf`}>Consulta il PDF originale</a><a href={`${base}/cookbook.pdf`} download="cookbook-algoritmi-distribuiti.pdf">Scarica il PDF ↓</a></p>
       </header>
       <details class="model-key"><summary>Come leggere tempi e contatori</summary>
         <p><b>n</b> = nodi; <b>m</b> = archi; <b>r(s)</b> = eccentricità della sorgente; <b>D</b> = diametro; <b>F</b> = massimo numero di guasti ammessi. In Chord <b>b</b> è il numero di bit degli ID.</p>
@@ -43,7 +44,7 @@ const maths:Record<string,string>={
         <p>Una decisione locale può precedere gli ultimi invii. Chord conserva la manutenzione periodica anche quando la configurazione mostrata è stabile.</p>
       </details>
       {groups.map(group=><section class="cookbook-family" id={group.id}><h2>{group.title}</h2>{cards.filter(card=>card.group===group.id).map(card=><ProtocolCard card={card}/>)}</section>)}
-      <section class="complexity-section" id="complessita"><h2>Teoria della complessità</h2><p class="section-intro">Contenuti statici dalla pagina 1 del cookbook PDF.</p>
+      <section class="complexity-section" id="complessita"><h2>Teoria della complessità</h2><p class="section-intro">Definizioni dalla pagina 1 del cookbook PDF. <a href={`${base}/cookbook-complessita`}>Apri le schede delle dimostrazioni con esempi animati ↗</a></p>
         {complexity.map(section=><article><h3>{section.title}</h3>{section.blocks.map(block=>block[0]==='p'?<p><strong>{String(block[1])}.</strong> {String(block[2])}</p>:block[0]==='formula'?<div class="cookbook-formula" set:html={katex.renderToString(maths[String(block[1])]!,{displayMode:true,throwOnError:true})}/>:block[0]==='diagram'?<p class="reduction-flow">Istanza A → trasformazione f in tempo polinomiale → istanza B<br/><span>B facile ⇒ A facile</span></p>:null)}</article>)}
       </section>
       <section class="complexity-recap" id="riepilogo-complessita"><h2>Riepilogo delle complessità</h2>
@@ -51,7 +52,7 @@ const maths:Record<string,string>={
         <p class="section-intro">n = nodi; m = archi; D = diametro; r(s) = eccentricità della sorgente; F = guasti ammessi. I dettagli del modello e dei conteggi sono nelle schede collegate.</p>
         {groups.map(group=><div class="recap-family"><h3>{group.title}</h3><table class="complexity-table"><caption class="sr-only">Complessità: {group.title}</caption><thead><tr><th scope="col">Algoritmo</th><th scope="col">Messaggi</th><th scope="col">Tempo</th></tr></thead><tbody>{cards.filter(card=>card.group===group.id).map(card=>{const cost=costSummary[card.id];return <tr><th scope="row"><a href={`#${card.id}`}>{card.title}</a>{cost.note&&<small>{cost.note}</small>}</th><td data-label="Messaggi"><strong>{cost.messages}</strong></td><td data-label="Tempo"><strong>{cost.time}</strong></td></tr>})}</tbody></table></div>)}
       </section>
-      <p class="cookbook-end"><a href={`${base}/cookbook.pdf`}>Cookbook completo in PDF · 16 pagine</a> — Gli algoritmi sequenziali del PDF restano una successiva estensione della pagina.</p>
+      <p class="cookbook-end"><a href={`${base}/cookbook.pdf`}>Cookbook completo in PDF · 16 pagine</a> · <a href={`${base}/cookbook-complessita`}>Schede delle dimostrazioni di complessità ↗</a></p>
     </main>
   </div>
 </BaseLayout>

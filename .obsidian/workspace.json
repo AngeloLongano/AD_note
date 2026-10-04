@@ -224,8 +224,12 @@
   },
   "active": "26dba18ebd1471fc",
   "lastOpenFiles": [
-    "output/playwright/cookbook/mobile-recap.png",
-    "output/playwright/cookbook/desktop-recap.png",
+    "output/playwright/cookbook-proofs/mobile-rounding.png",
+    "output/playwright/cookbook-proofs/mobile.png",
+    "output/playwright/cookbook-proofs/christofides.png",
+    "output/playwright/cookbook-proofs/desktop.png",
+    "output/playwright/cookbook-proofs",
+    "tests/cookbook-proofs-browser.js",
     "dist/index.html",
     "dist/widgets/sat-fnc/index.html",
     "dist/widgets/master-theorem/index.html",
@@ -233,9 +237,7 @@
     "dist/widgets/master-theorem",
     "dist/widgets",
     "dist/cookbook.pdf",
-    "dist/cookbook/index.html",
-    "dist/cookbook",
-    "dist/_astro/protocols.CVEnFtGi.js",
+    "dist/cookbook-complessita/index.html",
     "dist/vertexcoverILP.png",
     "dist/vertex_covers.png",
     "dist/vertex-cover-stella-greedy.png",
@@ -243,8 +245,7 @@
     "dist/vertex-cover-matching-massimale.svg",
     "dist/vertex-cover-grado-massimo-famiglia-logaritmica.png",
     "dist/vertex-cover-grado-massimo-esempio.png",
-    "dist/tsp-pesi-01-12-triangolo.svg",
-    "dist/tsp-inapprossimabilita-due-casi.png",
+    "COOKBOOK-COMPLESSITA-VERIFICA.md",
     "docs/COOKBOOK-VERIFICA.md",
     "node_modules/undici-types/README.md",
     "node_modules/@types/node/README.md",
@@ -268,7 +269,6 @@
     "Algoritmi_Distribuiti_originale/pages/page-091.md",
     "Algoritmi_Distribuiti_originale/pages/page-090.md",
     "Algoritmi_Distribuiti_originale/pages/page-089.md",
-    "Algoritmi_Distribuiti_originale/pages/page-088.md",
-    "Algoritmi_Distribuiti_originale/pages/page-087.md"
+    "Algoritmi_Distribuiti_originale/pages/page-088.md"
   ]
 }

@@ -12,6 +12,7 @@ try {
     "consensus",
     "chord",
     "integration",
+    "proofs",
   ]) {
     const outfile = join(directory, `${name}.mjs`);
     await build({

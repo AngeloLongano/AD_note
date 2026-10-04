@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import ProofCard from '../components/cookbook/ProofCard.astro';
+import {proofs,proofGroups} from '../lib/cookbook/proofs';
+import {proofText} from '../lib/cookbook/proof-format';
+import '../styles/cookbook.css';
+import '../styles/cookbook-proofs.css';
+const base=import.meta.env.BASE_URL.replace(/\/$/,'');
+const classes=[
+  {name:'P',tag:'Risolvere',definition:'Problemi decisionali risolvibili da un algoritmo deterministico in tempo polinomiale nella dimensione dell’input.',flow:'Istanza → decisore polinomiale → SÌ / NO',test:'Per dimostrare appartenenza: esibire un decisore corretto e analizzarne il costo.'},
+  {name:'NP',tag:'Verificare',definition:'Problemi decisionali per cui ogni istanza positiva ammette un certificato di lunghezza polinomiale, verificabile in tempo polinomiale. Nessun certificato può far accettare un’istanza negativa.',flow:'Istanza + certificato candidato → verificatore polinomiale → accetta / rifiuta',test:'Per dimostrare appartenenza: descrivere certificato e verificatore. Un certificato rifiutato non implica che l’istanza sia negativa.'},
+  {name:'NP-hard',tag:'Almeno difficili quanto NP',definition:'Ogni problema di NP si riduce polinomialmente al problema considerato. Si usa anche per ricerca e ottimizzazione, dichiarando il tipo di riduzione.',flow:'Problema noto NP-completo → riduzione polinomiale → problema da classificare',test:'Per dimostrare difficoltà: partire dal problema già difficile. Il problema di arrivo non deve necessariamente appartenere a NP, né essere decisionale.'},
+  {name:'NP-completi',tag:'In NP e NP-hard',definition:'Problemi decisionali che appartengono a NP e ai quali ogni problema di NP si riduce tramite una riduzione di Karp.',flow:'Verificatore polinomiale + riduzione dal problema noto → NP-completezza',test:'Due obblighi distinti: appartenenza a NP e NP-hardness. Un algoritmo polinomiale per uno di questi problemi implicherebbe P = NP.'},
+];
+---
+<BaseLayout title="Cookbook delle dimostrazioni — Teoria della complessità" description="Schede delle dimostrazioni su P, NP, riduzioni, TSP e Vertex Cover, con esempi animati e calcoli della complessità.">
+  <SiteHeader/>
+  <div class="cookbook-shell">
+    <aside class="cookbook-index" aria-label="Indice delle dimostrazioni"><details open><summary>Indice delle schede</summary><nav>
+      <a href="#classi">P, NP, NP-hard, NP-completi</a>
+      {proofGroups.map(group=><><a class="proof-index-group" href={`#${group.id}`}>{group.title}</a>{proofs.filter(card=>card.group===group.id).map(card=><a href={`#${card.id}`}>{card.title}</a>)}</>)}
+      <a href={`${base}/cookbook`}>Cookbook dei protocolli ↗</a>
+    </nav></details></aside>
+    <main class="cookbook-main">
+      <header class="cookbook-intro"><p class="intro-label">Algoritmi Distribuiti · Ripasso</p><h1>Dimostrazioni</h1><p>Il cookbook della teoria della complessità. Una scheda per prova: enunciato, problemi confrontati, riduzione, strategia, passaggi e calcoli.</p><p class="cookbook-links"><a href={`${base}/cookbook`}>Cookbook dei protocolli</a><a href={`${base}/#2-teoria-della-complessità`}>Capitolo completo negli appunti ↗</a></p></header>
+      <section class="cookbook-family" id="classi"><h2>Prima delle prove: le classi di problemi</h2><p>Le classi P, NP e NP-completi riguardano problemi con risposta SÌ/NO. NP-hard si usa anche per problemi di ricerca e di ottimizzazione.</p>
+        <div class="class-grid">{classes.map(item=><article class="class-schema"><p class="class-tag">{item.tag}</p><h3>{item.name}</h3><p>{item.definition}</p><div class="class-flow">{item.flow}</div><p class="class-test">{item.test}</p></article>)}</div>
+        <div class="class-relations"><p set:html={proofText('$P\\subseteq NP$, mentre $P=NP$ è una questione aperta.')}/><p set:html={proofText('Per problemi decisionali e riduzioni di Karp: $\\text{NP-completi}=NP\\cap\\text{NP-hard}$.')}/><p>NP-hard non significa «fuori da NP» e NP non significa «non polinomiale». Se P = NP, anche i problemi NP-completi sono in P.</p></div>
+        <details class="model-key"><summary>Karp, Turing e fattore di approssimazione</summary>
+          <p><b>Karp:</b> una sola trasformazione polinomiale fra istanze di problemi decisionali, che conserva la risposta in entrambe le direzioni. Schema: istanza A → istanza B → stessa risposta.</p>
+          <p><b>Turing:</b> un algoritmo per A interroga un risolutore di B una o più volte, anche scegliendo la nuova domanda in base alle risposte precedenti. Il lavoro esterno e il numero di chiamate devono essere polinomiali. Il tempo dell’oracolo va dichiarato separatamente.</p>
+          <p set:html={proofText('Per minimizzazione: $OPT\\leq ALG\\leq r\\,OPT$, con $r\\geq1$, per ogni istanza. Il fattore limita la qualità della soluzione; non misura il tempo. Un lower bound $LB\\leq OPT$ permette di provare $ALG\\leq r\\,LB\\leq r\\,OPT$.')}/>
+        </details>
+      </section>
+      <p class="proof-scope">Le schede riprendono le prove e gli argomenti del capitolo 2 del riassunto. Cook–Levin e la NP-completezza di HC e VCD sono risultati usati dal corso: qui non viene aggiunta una loro dimostrazione. I risultati facoltativi e la prova esterna sul grado massimo sono segnalati nelle rispettive schede.</p>
+      {proofGroups.map(group=><section class="cookbook-family" id={group.id}><h2>{group.title}</h2>{proofs.filter(card=>card.group===group.id).map(card=><ProofCard card={card}/>)}</section>)}
+      <p class="cookbook-end"><a href={`${base}/#2-teoria-della-complessità`}>Continua nel riassunto completo ↗</a></p>
+    </main>
+  </div>
+</BaseLayout>
+<script>
+  function revealProof(){if(!location.hash)return;let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}const target=document.getElementById(id);if(target instanceof HTMLDetailsElement)target.open=true;target?.scrollIntoView({block:'start',behavior:'instant'});}
+  addEventListener('hashchange',revealProof);revealProof();
+</script>

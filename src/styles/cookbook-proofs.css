@@ -1,0 +1,272 @@
+.class-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.class-schema {
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  padding: 1.2rem;
+  background: #fff;
+  min-width: 0;
+}
+.class-schema h3 {
+  font: 700 1.6rem/1.2 var(--font-serif);
+  color: var(--green);
+  margin: 0.4rem 0 1rem;
+}
+.class-schema p {
+  margin: 0.7rem 0;
+}
+.class-tag {
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font: 650 0.68rem/1.5 var(--font-sans);
+  color: var(--muted);
+}
+.class-flow {
+  border-block: 1px solid var(--line);
+  padding: 0.9rem 0;
+  font: 650 0.83rem/1.6 var(--font-sans);
+  color: var(--green);
+}
+.class-test {
+  font: 400 0.82rem/1.65 var(--font-sans);
+  color: var(--muted);
+}
+.class-relations {
+  border-left: 3px solid var(--green);
+  padding: 0.1rem 1rem;
+  margin: 1.5rem 0;
+}
+.proof-scope,
+.proof-source,
+.proof-demo-note {
+  font: 400 0.8rem/1.65 var(--font-sans);
+  color: var(--muted);
+}
+.proof-index-group {
+  font-weight: 700;
+  margin-top: 0.75rem;
+}
+.cookbook-index {
+  max-height: calc(100vh - 7rem);
+  overflow: auto;
+}
+.proof-status {
+  font: 650 0.8rem/1.5 var(--font-sans);
+  color: #806024;
+}
+.proof-theorem {
+  padding: 1rem 1.2rem;
+  border-left: 3px solid var(--green);
+  background: #eef5f0;
+  border-radius: 0 0.35rem 0.35rem 0;
+}
+.proof-problems {
+  display: grid;
+  gap: 0.8rem;
+}
+.proof-problem {
+  border: 1px solid var(--line);
+  padding: 1rem;
+  min-width: 0;
+}
+.proof-problem h4 {
+  margin: 0 0 0.7rem;
+  font: 650 0.88rem/1.5 var(--font-sans);
+  color: var(--green);
+}
+.proof-problem dl {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  gap: 0.5rem 0.8rem;
+  margin: 0;
+  font-size: 0.92rem;
+}
+.proof-problem dt {
+  font-weight: 650;
+}
+.proof-problem dd {
+  margin: 0;
+}
+.proof-reduction {
+  border-block: 1px solid var(--line);
+  padding: 0.8rem 0;
+  overflow-wrap: anywhere;
+}
+.proof-observation {
+  border-left: 2px solid var(--line);
+  padding-left: 1rem;
+  font-size: 0.9rem;
+}
+.proof-source {
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+  margin-top: 1.5rem !important;
+}
+.proof-card .katex {
+  font-size: 1em;
+}
+.proof-card .katex-html {
+  white-space: normal;
+}
+.proof-math {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.proof-player {
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background: #fbfcfa;
+  font: 400 0.85rem/1.6 var(--font-sans);
+}
+.proof-player h4 {
+  margin: 0.2rem 0 0.6rem;
+  color: var(--green);
+  font-size: 0.9rem;
+}
+.proof-player label {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0.6rem 0;
+}
+.proof-player select {
+  max-width: 100%;
+  padding: 0.5rem;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  font: inherit;
+}
+.proof-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.proof-controls button {
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  padding: 0.45rem 0.65rem;
+  background: #fff;
+  color: var(--green);
+  cursor: pointer;
+  font: inherit;
+}
+.proof-controls button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.proof-controls [data-progress] {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+.proof-controls button:focus-visible,
+.proof-player select:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+.proof-player svg {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  margin: auto;
+  max-height: 20rem;
+}
+.demo-edge {
+  stroke: #56776c;
+  stroke-width: 3;
+}
+.demo-edge.chosen {
+  stroke: #0d6b50;
+  stroke-width: 5;
+}
+.demo-edge.added {
+  stroke: #b17b24;
+}
+.demo-edge.muted {
+  stroke: #cbd3cd;
+  stroke-dasharray: 4 5;
+}
+.demo-node {
+  fill: #fff;
+  stroke: #56776c;
+  stroke-width: 2;
+}
+.demo-node.selected {
+  fill: #d6eedc;
+  stroke: #0d6b50;
+  stroke-width: 3;
+}
+.demo-node-label,
+.demo-edge-label,
+.demo-value {
+  font: 650 14px var(--font-sans);
+  fill: #163a30;
+}
+.demo-edge-label {
+  paint-order: stroke;
+  stroke: #fbfcfa;
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+.demo-value {
+  fill: #0d6b50;
+}
+.proof-frame {
+  border-top: 1px solid var(--line);
+  padding-top: 0.8rem;
+  min-height: 9rem;
+}
+@media (max-width: 700px) {
+  .class-grid {
+    grid-template-columns: 1fr;
+  }
+  .proof-problem dl {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+  .proof-problem dd {
+    margin-bottom: 0.7rem;
+  }
+  .proof-card .card-kind {
+    white-space: normal;
+  }
+  .cookbook-index {
+    max-height: none;
+  }
+  .proof-player {
+    padding: 0.7rem;
+  }
+  .proof-frame {
+    min-height: 0;
+  }
+  .proof-controls {
+    gap: 0.4rem;
+  }
+  .proof-controls button {
+    font-size: 0.75rem;
+  }
+  .proof-card .katex {
+    overflow-wrap: normal;
+  }
+}
+@media print {
+  .proof-controls,
+  .proof-player select {
+    display: none;
+  }
+  .cookbook-index {
+    display: none;
+  }
+  .class-grid {
+    break-inside: avoid;
+  }
+  .proof-player {
+    break-inside: avoid;
+  }
+}

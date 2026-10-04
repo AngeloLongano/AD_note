@@ -1,0 +1,25 @@
+---
+import ProofPlayer from './ProofPlayer.astro';
+import type {ProofCard} from '../../lib/cookbook/proofs';
+import {proofText, noteAnchor} from '../../lib/cookbook/proof-format';
+interface Props { card: ProofCard }
+const {card}=Astro.props;
+const base=import.meta.env.BASE_URL.replace(/\/$/,'');
+---
+<details class:list={['protocol-card','proof-card',{'optional-card':!!card.status}]} id={card.id}>
+  <summary><span class="card-heading"><span class="card-name">{card.title}</span><span class="card-preview">{card.status??card.source}</span></span><span class="card-kind">Apri scheda</span></summary>
+  <div class="card-body">
+    <a class="permalink" href={`#${card.id}`}>Link a questa scheda ↗</a>
+    {card.status&&<p class="proof-status">{card.status}</p>}
+    <section><h3>1. Teorema da dimostrare</h3><div class="proof-theorem" set:html={proofText(card.theorem)}/></section>
+    <section><h3>2. Problemi e algoritmi confrontati</h3><div class="proof-problems">{card.problems.map(problem=><article class="proof-problem"><h4 set:html={proofText(problem.name)}/><dl><dt>Input</dt><dd set:html={proofText(problem.input)}/><dt>Output</dt><dd set:html={proofText(problem.output)}/><dt>Caratteristiche</dt><dd set:html={proofText(problem.properties)}/></dl></article>)}</div></section>
+    <section><h3>3. Schema di riduzione di Karp / Turing</h3><div class="proof-reduction" set:html={proofText(card.reduction)}/></section>
+    <section><h3>4. Strategia</h3><p set:html={proofText(card.strategy)}/></section>
+    <section><h3>5. Dimostrazione</h3><ol>{card.proof.map(step=><li set:html={proofText(step)}/>)}</ol></section>
+    <section><h3>6. Studio della complessità</h3><ul>{card.costs.map(cost=><li set:html={proofText(cost)}/>)}</ul></section>
+    {card.factor&&<section><h3>7. Fattore di approssimazione</h3>{card.factor.map(paragraph=><p set:html={proofText(paragraph)}/>)}</section>}
+    {card.demo&&<section><h3>{card.factor?'8':'7'}. Esempio animato, passo per passo</h3><ProofPlayer demo={card.demo}/></section>}
+    {card.note&&<p class="proof-observation" set:html={proofText(card.note)}/>}
+    <p class="proof-source">Riferimento: {card.source} · <a href={`${base}/#${noteAnchor(card.section)}`}>Leggi la sezione del riassunto ↗</a></p>
+  </div>
+</details>

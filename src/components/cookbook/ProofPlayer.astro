@@ -1,0 +1,77 @@
+---
+import { proofDemos } from '../../lib/cookbook/proof-demos';
+interface Props { demo: string }
+const {demo} = Astro.props;
+const data = proofDemos[demo]!;
+---
+<div class="proof-player" data-proof-demo={JSON.stringify(data)}>
+  <h4>{data.title}</h4>
+  {data.scenarios.length > 1 && <label>Istanza / scelta <select data-scenario>{data.scenarios.map((scenario,i)=><option value={i}>{scenario.name}</option>)}</select></label>}
+  <div class="proof-controls">
+    <button type="button" data-prev aria-label="Passo precedente">← Indietro</button>
+    <button type="button" data-play>Avvia</button>
+    <button type="button" data-next aria-label="Passo successivo">Avanti →</button>
+    <button type="button" data-reset>Ricomincia</button>
+    <span data-progress></span>
+  </div>
+  <svg viewBox="0 0 360 300" role="img" aria-label={data.title} data-graph></svg>
+  <div class="proof-frame" aria-live="polite" aria-atomic="true"><h4 data-frame-title></h4><p data-frame-text></p><div class="proof-math" data-frame-formula></div></div>
+  <p class="proof-demo-note">Esempio illustrativo. I passi sono trasformazioni o scelte dell’algoritmo, non unità di tempo. Verde: elementi scelti; tratteggio arancione: archi aggiunti o secondo matching.</p>
+  <noscript>Per seguire l’esempio interattivo abilita JavaScript. La dimostrazione completa è nel testo della scheda.</noscript>
+</div>
+<script>
+  import katex from 'katex';
+  import type {ProofDemo} from '../../lib/cookbook/proof-demos';
+  const ns='http://www.w3.org/2000/svg';
+  function svgEl(tag:string, attrs:Record<string,string|number>, text?:string){
+    const el=document.createElementNS(ns,tag);
+    for(const [key,value] of Object.entries(attrs))el.setAttribute(key,String(value));
+    if(text!==undefined)el.textContent=text;
+    return el;
+  }
+  document.querySelectorAll<HTMLElement>('[data-proof-demo]').forEach(host=>{
+    const demo=JSON.parse(host.dataset.proofDemo!) as ProofDemo;
+    let scenarioIndex=0,step=0,timer:ReturnType<typeof setInterval>|undefined;
+    const graph=host.querySelector<SVGElement>('[data-graph]')!;
+    const prev=host.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const next=host.querySelector<HTMLButtonElement>('[data-next]')!;
+    const play=host.querySelector<HTMLButtonElement>('[data-play]')!;
+    const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+    function stop(){if(timer!==undefined)clearInterval(timer);timer=undefined;play.textContent='Avvia';}
+    function render(){
+      const scenario=demo.scenarios[scenarioIndex]!,frame=scenario.frames[step]!;
+      graph.replaceChildren();
+      graph.append(svgEl('title',{},frame.title+' — '+frame.text));
+      for(const e of frame.edges){
+        const a=scenario.nodes.find(n=>n.id===e.a)!,b=scenario.nodes.find(n=>n.id===e.b)!;
+        graph.append(svgEl('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,class:`demo-edge ${e.tone??''}`, 'stroke-dasharray':e.dashed||e.tone==='added'?'7 5':'none'}));
+        if(e.label){const length=Math.hypot(b.x-a.x,b.y-a.y);
+          const x=(a.x+b.x)/2-14*(b.y-a.y)/length,y=(a.y+b.y)/2+14*(b.x-a.x)/length;
+          graph.append(svgEl('text',{x,y,class:'demo-edge-label','text-anchor':'middle'},e.label));}
+      }
+      for(const n of scenario.nodes){
+        graph.append(svgEl('circle',{cx:n.x,cy:n.y,r:19,class:frame.selected?.includes(n.id)?'demo-node selected':'demo-node'}));
+        graph.append(svgEl('text',{x:n.x,y:n.y+5,class:'demo-node-label','text-anchor':'middle'},n.id));
+        if(frame.labels?.[n.id])graph.append(svgEl('text',{x:n.x,y:n.y+43,class:'demo-value','text-anchor':'middle'},frame.labels[n.id]!));
+      }
+      host.querySelector('[data-frame-title]')!.textContent=frame.title;
+      host.querySelector('[data-frame-text]')!.textContent=frame.text;
+      host.querySelector('[data-frame-formula]')!.innerHTML=katex.renderToString(frame.formula.replaceAll('’',"'"),{displayMode:true,throwOnError:true});
+      host.querySelector('[data-progress]')!.textContent=`${step+1} / ${scenario.frames.length}`;
+      prev.disabled=step===0;next.disabled=step===scenario.frames.length-1;
+      play.disabled=reduced.matches;
+      if(reduced.matches)play.title='Usa Avanti: movimento ridotto attivo';
+      if(next.disabled)stop();
+    }
+    prev.addEventListener('click',()=>{stop();step=Math.max(0,step-1);render();});
+    next.addEventListener('click',()=>{stop();step=Math.min(demo.scenarios[scenarioIndex]!.frames.length-1,step+1);render();});
+    host.querySelector('[data-reset]')!.addEventListener('click',()=>{stop();step=0;render();});
+    host.querySelector<HTMLSelectElement>('[data-scenario]')?.addEventListener('change',e=>{stop();scenarioIndex=Number((e.target as HTMLSelectElement).value);step=0;render();});
+    play.addEventListener('click',()=>{if(timer!==undefined){stop();return;}if(reduced.matches)return;if(next.disabled)step=0;render();play.textContent='Pausa';timer=setInterval(()=>{step++;render();},2500);});
+    host.closest('details')?.addEventListener('toggle',e=>{if(!(e.target as HTMLDetailsElement).open)stop();});
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
+    new IntersectionObserver(entries=>{if(!entries[0]?.isIntersecting)stop();}).observe(host);
+    reduced.addEventListener('change',()=>{stop();render();});
+    render();
+  });
+</script>
